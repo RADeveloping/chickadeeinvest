@@ -82,6 +82,15 @@ const ERROR = {
   contrastText: '#fff',
 };
 
+const CHICKADEE_BEIGE = {
+  lighter: '#f1f2e5',
+  light: '#eff0e2',
+  main: '#eeefdf',
+  dark: '#d6d7c8',
+  darker: '#d6d7c8',
+  contrastText: '#fff',
+};
+
 const GRADIENTS = {
   primary: createGradient(PRIMARY.light, PRIMARY.main),
   info: createGradient(INFO.light, INFO.main),
