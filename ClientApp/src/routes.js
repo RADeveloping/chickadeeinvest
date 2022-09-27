@@ -17,27 +17,17 @@ import Register from "./pages/Register";
 export default function Router() {
   return useRoutes([
     {
-      path: '/dashboard',
-      element: <AuthorizeRoute element={<DashboardLayout />}/>,
-      children: [
-        { path: 'app', element: <DashboardApp /> },
-        // { path: 'user', element: <User /> },
-      ],
+      path: 'app',
+      element: <DashboardApp /> ,
     },
     {
-      path: '/',
-      element: <LogoOnlyLayout />,
-      children: [
-        { path: '/', element: <Navigate to="/dashboard/app" /> },
-        { path: '404', element: <NotFound /> },
-      ],
+      path: 'user',
+      element: <User /> ,
     },
     {
       path: '*',
-      element: <Navigate to="/404" replace />,
+      element: <Navigate to="app" replace />,
     },
-    ...ApiAuthorzationRoutes
-
   ]);
   
 }
