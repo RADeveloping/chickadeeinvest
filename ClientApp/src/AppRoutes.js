@@ -1,21 +1,28 @@
 import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
-import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
-import { Home } from "./components/Home";
-
+import DashboardLayout from "./layouts/dashboard";
+import NotFound from './pages/Page404';
+import LogoOnlyLayout from "./layouts/LogoOnlyLayout";
+import {Navigate} from "react-router-dom";
 const AppRoutes = [
   {
+    path: '/',
+    element: <Navigate to="dashboard" replace />
+  },
+  {
+    path: '*',
+    element: <Navigate to="404" replace />
+  },
+  {
+    path: '/404',
+    element: <><LogoOnlyLayout>
+      <NotFound />
+      </LogoOnlyLayout></>,
+  },
+  {
     index: true,
-    element: <Home />
-  },
-  {
-    path: '/counter',
-    element: <Counter />
-  },
-  {
-    path: '/fetch-data',
+    path: '/dashboard/*',
     requireAuth: true,
-    element: <FetchData />
+    element: <DashboardLayout />
   },
   ...ApiAuthorzationRoutes
 ];
