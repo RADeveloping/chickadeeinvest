@@ -14,10 +14,10 @@ const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props
   height: 48,
   position: 'relative',
   textTransform: 'capitalize',
-  color: theme.palette.text.secondary,
+  color: theme.palette.text.chickadeeY.main,
   borderRadius: theme.shape.borderRadius,
   '&:hover': {
-    color: theme.palette.primary.main,
+    color: theme.palette.text.chickadeeY.main,
   },
 }));
 
@@ -51,9 +51,9 @@ function NavItem({ item, active }) {
   };
 
   const activeRootStyle = {
-    color: 'primary.main',
+    color: 'secondary.main',
     fontWeight: 'fontWeightMedium',
-    bgcolor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
+    bgcolor: alpha(theme.palette.primary.darker, theme.palette.action.selectedOpacity),
   };
 
   const activeSubStyle = {
