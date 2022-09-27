@@ -115,6 +115,7 @@ const palette = {
   success: { ...SUCCESS },
   warning: { ...WARNING },
   error: { ...ERROR },
+  chickadeeBeige: { ...CHICKADEE_BEIGE},
   grey: GREY,
   gradients: GRADIENTS,
   chart: CHART_COLORS,
