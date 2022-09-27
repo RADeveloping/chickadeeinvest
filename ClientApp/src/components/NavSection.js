@@ -16,6 +16,9 @@ const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props
   textTransform: 'capitalize',
   color: theme.palette.text.secondary,
   borderRadius: theme.shape.borderRadius,
+  '&:hover': {
+    color: theme.palette.primary.main,
+  },
 }));
 
 const ListItemIconStyle = styled(ListItemIcon)({
