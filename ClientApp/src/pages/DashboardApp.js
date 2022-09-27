@@ -17,8 +17,6 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../sections/@dashboard/app';
-// override 
-import { chickadeePage } from '../theme/overrides/Page';
 
 // ----------------------------------------------------------------------
 
