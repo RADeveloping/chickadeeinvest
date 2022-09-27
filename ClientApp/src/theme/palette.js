@@ -38,11 +38,11 @@ const PRIMARY = {
 };
 
 const SECONDARY = {
-  lighter: '#D6E4FF',
-  light: '#84A9FF',
-  main: '#3366FF',
-  dark: '#1939B7',
-  darker: '#091A7A',
+  lighter: '#ffd45a',
+  light: '#ffcf45',
+  main: '#ffca31',
+  dark: '#e5b52c',
+  darker: '#cca127',
   contrastText: '#fff',
 };
 
@@ -110,7 +110,7 @@ const palette = {
   gradients: GRADIENTS,
   chart: CHART_COLORS,
   divider: GREY[500_24],
-  text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
+  text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500], chickadeeY: {...SECONDARY} },
   background: { paper: '#fff', default: GREY[100], neutral: GREY[200] },
   action: {
     active: GREY[600],
