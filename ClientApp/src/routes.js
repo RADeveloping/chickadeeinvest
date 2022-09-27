@@ -1,4 +1,7 @@
 import { Navigate, useRoutes } from 'react-router-dom';
+import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
+import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
+
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
@@ -15,19 +18,11 @@ export default function Router() {
   return useRoutes([
     {
       path: '/dashboard',
-      element: <DashboardLayout />,
+      element: <AuthorizeRoute element={<DashboardLayout />}/>,
       children: [
         { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
+        // { path: 'user', element: <User /> },
       ],
-    },
-    {
-      path: 'login',
-      element: <Login />,
-    },
-    {
-      path: 'register',
-      element: <Register />,
     },
     {
       path: '/',
@@ -35,12 +30,14 @@ export default function Router() {
       children: [
         { path: '/', element: <Navigate to="/dashboard/app" /> },
         { path: '404', element: <NotFound /> },
-        { path: '*', element: <Navigate to="/404" /> },
       ],
     },
     {
       path: '*',
       element: <Navigate to="/404" replace />,
     },
+    ...ApiAuthorzationRoutes
+
   ]);
+  
 }
