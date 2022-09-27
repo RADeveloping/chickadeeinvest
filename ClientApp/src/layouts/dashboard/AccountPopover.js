@@ -40,7 +40,9 @@ export default function AccountPopover() {
   };
 
   const handleClose = () => {
+    // make post request to /Account/Logout
     setOpen(null);
+
   };
 
   return (

@@ -14,6 +14,7 @@ import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 //
 import navConfig from './NavConfig';
+import { useTheme } from '@emotion/react';
 
 // ----------------------------------------------------------------------
 
@@ -53,9 +54,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const renderContent = (
+  const theme = useTheme();
+
+  const renderContent = (theme) => (
     <Scrollbar
       sx={{
+        backgroundColor: theme.palette.primary.main,
         height: 1,
         '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
       }}
@@ -66,10 +70,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
-          <AccountStyle>
+          <AccountStyle sx={{ backgroundColor: theme.palette.primary.light }}>
             <Avatar src={account.photoURL} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
+              <Typography variant="subtitle2" sx={{ color: 'text.chickadeeY.main' }}>
                 {account.displayName}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -96,7 +100,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             sx: { width: DRAWER_WIDTH },
           }}
         >
-          {renderContent}
+          {renderContent(theme)}
         </Drawer>
       )}
 
@@ -112,7 +116,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             },
           }}
         >
-          {renderContent}
+          {renderContent(theme)}
         </Drawer>
       )}
     </RootStyle>
