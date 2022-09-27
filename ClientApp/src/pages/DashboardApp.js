@@ -17,6 +17,8 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../sections/@dashboard/app';
+// override 
+import { chickadeePage } from '../theme/overrides/Page';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +26,7 @@ export default function DashboardApp() {
   const theme = useTheme();
 
   return (
-    <Page title="Dashboard">
+    <Page title="Dashboard" sx={{ backgroundColor: theme.palette.chickadeeBeige.main }}>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
