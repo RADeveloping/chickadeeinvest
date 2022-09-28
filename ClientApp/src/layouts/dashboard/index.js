@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 //
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
-import Router from "../../routes";
 
 // ----------------------------------------------------------------------
 
@@ -36,12 +36,12 @@ export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
 
   return (
-    <RootStyle>
-      <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
-      <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-      <MainStyle>
-        <Router />
-      </MainStyle>
-    </RootStyle>
+      <RootStyle>
+        <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
+        <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+        <MainStyle>
+          <Outlet />
+        </MainStyle>
+      </RootStyle>
   );
 }
