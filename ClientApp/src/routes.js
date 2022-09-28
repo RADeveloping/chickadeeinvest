@@ -8,6 +8,12 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import User from './pages/User';
 import NotFound from './pages/Page404';
 import DashboardApp from "./pages/DashboardApp";
+import {Login} from "./components/api-authorization/Login";
+import {
+    LoginActions,
+    LogoutActions,
+} from "./components/api-authorization/ApiAuthorizationConstants";
+import {Logout} from "./components/api-authorization/Logout";
 
 // ----------------------------------------------------------------------
 
@@ -27,20 +33,43 @@ const DashboardRoutes = [
 export default function Router() {
   return (
       <Routes>
+          {/*
+          Custom route to override the ASP.net routes
+          */}
 
+
+          <Route
+              path="login"
+              element={<Login action={LoginActions.Login} />}
+          />
+
+          <Route
+              path="logout"
+              element={<Logout action={LogoutActions.Logout} />}
+          />
+
+          <Route
+              path="authentication/logged-out"
+              element={<Navigate to="/dashboard/app" />}
+          />
+
+          {/*
+          Routes for layouts that only have logo.
+          */}
 
           <Route path="/" element={<LogoOnlyLayout />}>
-
-              <Route
-                  path="404"
-                  element={<NotFound />}
-              />
-
               <Route
                   path="/"
                   element={<Navigate to="/dashboard/app" />}
               />
-
+              <Route
+                  path="dashboard"
+                  element={<Navigate to="/dashboard/app" />}
+              />
+              <Route
+                  path="404"
+                  element={<NotFound />}
+              />
               <Route
                   path="*"
                   element={<Navigate to="/404" />}
