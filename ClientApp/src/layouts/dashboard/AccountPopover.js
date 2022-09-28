@@ -7,7 +7,6 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@
 import MenuPopover from '../../components/MenuPopover';
 // mocks_
 import account from '../../_mock/account';
-import authService from "../../components/api-authorization/AuthorizeService";
 
 // ----------------------------------------------------------------------
 
@@ -45,12 +44,6 @@ export default function AccountPopover() {
     setOpen(null);
 
   };
-
-    const handleLogout = () => {
-        // make post request to /Account/Logout
-        setOpen(null);
-        authService.completeSignOut('/login')
-    };
 
   return (
     <>
@@ -110,7 +103,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleLogout} to='/logout' component={RouterLink} sx={{ m: 1 }}>
+        <MenuItem onClick={handleClose} to='/logout' component={RouterLink} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>
