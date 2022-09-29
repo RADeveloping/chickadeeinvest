@@ -1,8 +1,23 @@
 import React, { Component, Fragment } from 'react';
 import { NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import {Link, RouterLink} from 'react-router-dom';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
+import NavSection from '../NavSection';
+import Iconify from '../../components/Iconify';
+import { Box, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
+const AccountStyle = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(2, 2.5),
+  borderRadius: Number(theme.shape.borderRadius) * 1.5,
+  backgroundColor: theme.palette.grey[500_12],
+  }));
+  
+
 
 export class LoginMenu extends Component {
   constructor(props) {
@@ -46,24 +61,63 @@ export class LoginMenu extends Component {
   }
 
   authenticatedView(userName, profilePath, logoutPath, logoutState) {
+
+// ----------------------------------------------------------------------
+
+const navConfig = [
+  {
+    title: 'dashboard',
+    path: '/dashboard/app',
+    icon: getIcon('eva:pie-chart-2-fill'),
+  },
+  {
+    title: 'profile',
+    path: profilePath,
+    icon: getIcon('eva:person-fill'),
+  },
+  {
+    title: 'Logout',
+    path: logoutPath,
+    icon: getIcon('eva:log-out-fill'),
+    state: logoutState
+  },
+];
+
+
     return (<Fragment>
-      <NavItem>
-        <NavLink tag={Link} className="text-dark" to={profilePath}>Profile</NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink replace tag={Link} className="text-dark" to={logoutPath} state={logoutState}>Logout</NavLink>
-      </NavItem>
+       {/* <Box sx={{ mb: 5, mx: 2.5 }}>
+       <Link underline="none" component={Link} to={profilePath}>
+          <AccountStyle>
+            <Box sx={{ ml: 2 , mt: 2, mb: 2 }}>
+              <Typography variant="subtitle2" sx={{ color: 'text.chickadeeY.main' }}>
+                   {`${userName}`}
+              </Typography>
+            </Box>
+          </AccountStyle>
+          </Link>
+      </Box>  */}
+      <NavSection navConfig={navConfig} /> 
     </Fragment>);
   }
 
   anonymousView(registerPath, loginPath) {
-    return (<Fragment>
-      <NavItem>
-        <NavLink tag={Link} className="text-dark" to={registerPath}>Register</NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink tag={Link} className="text-dark" to={loginPath}>Login</NavLink>
-      </NavItem>
+
+    const anonymousViewConfig = [
+      {
+        title: 'register',
+        path: registerPath,
+        icon: getIcon('eva:person-add-fill'),
+      },
+      {
+        title: 'login',
+        path: loginPath,
+        icon: getIcon('eva:lock-fill'),
+      },
+    ];
+
+
+ return (<Fragment>
+      <NavSection navConfig={anonymousViewConfig} /> 
     </Fragment>);
   }
 }

@@ -42,7 +42,7 @@ function NavItem({ item, active }) {
 
   const isActiveRoot = active(item.path);
 
-  const { title, path, icon, info, children } = item;
+  const { title, path, icon, info, children, state } = item;
 
   const [open, setOpen] = useState(isActiveRoot);
 
@@ -82,13 +82,14 @@ function NavItem({ item, active }) {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {children.map((item) => {
-              const { title, path } = item;
+              const { title, path, state } = item;
               const isActiveSub = active(path);
 
               return (
                 <ListItemStyle
                   key={title}
                   component={RouterLink}
+                  state={state}
                   to={path}
                   sx={{
                     ...(isActiveSub && activeSubStyle),
@@ -127,6 +128,7 @@ function NavItem({ item, active }) {
     <ListItemStyle
       component={RouterLink}
       to={path}
+      stat={state}
       sx={{
         ...(isActiveRoot && activeRootStyle),
       }}
