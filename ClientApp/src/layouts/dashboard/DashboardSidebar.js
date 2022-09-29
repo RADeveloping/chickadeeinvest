@@ -15,6 +15,7 @@ import NavSection from '../../components/NavSection';
 //
 import navConfig from './NavConfig';
 import { useTheme } from '@emotion/react';
+import { NavMenu } from '../../components/NavMenu';
 
 // ----------------------------------------------------------------------
 
@@ -64,28 +65,13 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
       }}
     >
-      <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
+       <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
         <Logo />
       </Box>
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
-        <Link underline="none" component={RouterLink} to="#">
-          <AccountStyle sx={{ backgroundColor: theme.palette.primary.light }}>
-            <Avatar src={account.photoURL} alt="photoURL" />
-            <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: 'text.chickadeeY.main' }}>
-                {account.displayName}
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {account.role}
-              </Typography>
-            </Box>
-          </AccountStyle>
-        </Link>
-      </Box>
+      <Box sx={{ px: 2.5, py: 5, display: 'inline-flex' }}></Box>
 
-      <NavSection navConfig={navConfig} />
-
+      <NavMenu />
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>
   );
