@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using chickadee.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace chickadee.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class UserRolesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

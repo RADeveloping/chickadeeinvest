@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using chickadee.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace chickadee.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class RoleManagerController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
