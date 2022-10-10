@@ -13,7 +13,10 @@ const context =  [
   "/ApplyDatabaseMigrations",
   "/_framework",
   "/RoleManager",
-  "/UserRoles"
+  "/UserRoles",
+    "/Identity/css",
+    "/css",
+    "/images"
 ];
 
 module.exports = function(app) {
