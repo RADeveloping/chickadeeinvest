@@ -1,9 +1,5 @@
 html,
 body {
-    height: 100%;
-}
-
-body {
     align-items: center;
     padding-bottom: 40px;
     background: #EEEFDF;
@@ -11,10 +7,8 @@ body {
 }
 
 
-
-
 .form-signin {
-    max-width: 330px;
+    max-width: 500px;
     padding: 15px;
 }
 
