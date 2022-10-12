@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using chickadee.Data;
 
 #nullable disable
 
-namespace chickadee.Data.Migrations
+namespace chickadee.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221010081615_seedMigration")]
+    partial class seedMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,6 +101,27 @@ namespace chickadee.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "b15287d3-ebfd-4ce6-8c67-59117ae17a6a",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "57f56d2c-3c61-4c51-a0ea-89bf4f95accf",
+                            Email = "superadmin@chickadeeinvest.ca",
+                            EmailConfirmed = true,
+                            FirstName = "Matt",
+                            LastName = "Hardwick",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "SUPERADMIN@CHICKADEEINVEST.CA",
+                            NormalizedUserName = "SUPERADMIN@CHICKADEEINVEST.CA",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKoJ1p3FILnMuIonM9pCwAnVo8B0B3bKQCQ0mKZoTZ9LuJCyVKb4OvhO71GxYmU29Q==",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "cf30db27-1bd5-420d-8590-6e847079677a",
+                            TwoFactorEnabled = false,
+                            UserName = "superadmin@chickadeeinvest.ca",
+                            UsernameChangeLimit = 10
+                        });
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -267,6 +290,36 @@ namespace chickadee.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "6f09ad28-c19a-44c7-a479-6b77a25a075d",
+                            ConcurrencyStamp = "c7580e1c-2ec6-4ddd-8769-f05c70c59345",
+                            Name = "SuperAdmin",
+                            NormalizedName = "SUPERADMIN"
+                        },
+                        new
+                        {
+                            Id = "6be51102-0055-4670-85de-7ce1509c756a",
+                            ConcurrencyStamp = "01eb91b8-52cc-43dd-b2cc-2c6798acc2c0",
+                            Name = "PropertyManager",
+                            NormalizedName = "PROPERTYMANAGER"
+                        },
+                        new
+                        {
+                            Id = "033cad03-6574-4cda-9a9a-7c20a38a2fc6",
+                            ConcurrencyStamp = "45a78b8b-7353-4655-b77a-01ce03ba2bb1",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "d3c16b81-4a71-4a04-ae7c-852ad839904a",
+                            ConcurrencyStamp = "69bb48a9-d9dd-4467-a7b1-94b835592e60",
+                            Name = "Tenant",
+                            NormalizedName = "TENANT"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -322,12 +375,10 @@ namespace chickadee.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -356,6 +407,28 @@ namespace chickadee.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "b15287d3-ebfd-4ce6-8c67-59117ae17a6a",
+                            RoleId = "d3c16b81-4a71-4a04-ae7c-852ad839904a"
+                        },
+                        new
+                        {
+                            UserId = "b15287d3-ebfd-4ce6-8c67-59117ae17a6a",
+                            RoleId = "6be51102-0055-4670-85de-7ce1509c756a"
+                        },
+                        new
+                        {
+                            UserId = "b15287d3-ebfd-4ce6-8c67-59117ae17a6a",
+                            RoleId = "033cad03-6574-4cda-9a9a-7c20a38a2fc6"
+                        },
+                        new
+                        {
+                            UserId = "b15287d3-ebfd-4ce6-8c67-59117ae17a6a",
+                            RoleId = "6f09ad28-c19a-44c7-a479-6b77a25a075d"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -364,12 +437,10 @@ namespace chickadee.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");

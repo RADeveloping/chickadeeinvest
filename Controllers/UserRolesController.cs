@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace chickadee.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class UserRolesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
