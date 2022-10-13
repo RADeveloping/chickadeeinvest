@@ -72,7 +72,8 @@ export default function AccountPopover() {
                     }),
                 }}
             >
-                <Avatar src={account.photo} alt="photoURL" />
+                
+                <Avatar src={`data:image/jpeg;base64,${profilePicture}`} alt={displayName} />
             </IconButton>
 
             <MenuPopover
