@@ -5,6 +5,7 @@ export class AuthorizeService {
   _callbacks = [];
   _nextSubscriptionId = 0;
   _user = null;
+  _userProfile = null;
   _isAuthenticated = false;
 
   // By default pop ups are disabled because they don't work properly on Edge.
@@ -16,6 +17,14 @@ export class AuthorizeService {
     return !!user;
   }
 
+  async getUserProfile() {
+    const token = await authService.getAccessToken();
+    const response = await fetch('api/Accounts', {
+      headers: !token ? {} : {'Authorization': `Bearer ${token}`}
+    });
+    return await response.json();
+  }
+
   async getUser() {
     if (this._user && this._user.profile) {
       return this._user.profile;
@@ -23,6 +32,8 @@ export class AuthorizeService {
 
     await this.ensureUserManagerInitialized();
     const user = await this.userManager.getUser();
+    
+    
     return user && user.profile;
   }
 
