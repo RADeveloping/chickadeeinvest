@@ -42,3 +42,4 @@ jobs:
           eslint: true
           eslint_dir: ClientApp/
           prettier: true
+          prettier_dir: ClientApp/
