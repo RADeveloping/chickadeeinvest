@@ -40,4 +40,5 @@ jobs:
         with:
           dotnet_format: true
           eslint: true
+          eslint_dir: ClientApp/
           prettier: true
