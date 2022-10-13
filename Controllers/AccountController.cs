@@ -1,27 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Identity;
 
-namespace chickadee.Controllers
-{
- 
-    using Microsoft.AspNetCore.Identity;
+namespace chickadee.Controllers;
 
-    [Route("api/[controller]")]
+[Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationDbContext _context;
 
-        public AccountsController(
+        public AccountController(
             ApplicationDbContext context,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _context = context;
         }
 
@@ -31,7 +26,7 @@ namespace chickadee.Controllers
         {
             var user = _userManager.GetUserAsync(User).Result;
             
-            if (_signInManager.IsSignedIn(User) && user != null)
+            if (user != null)
             {
                 var roles = _userManager.GetRolesAsync(user).Result;
 
@@ -39,10 +34,10 @@ namespace chickadee.Controllers
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    ProfilePicture = user.ProfilePicture,
                     Id = user.Id,
                     Email = user.Email,
-                    roles = roles
+                    Roles = roles,
+                    ProfilePicture = user.ProfilePicture,
                 };
                 
                 
@@ -55,4 +50,3 @@ namespace chickadee.Controllers
         }
 
     }
-}
