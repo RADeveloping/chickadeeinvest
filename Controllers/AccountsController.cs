@@ -33,6 +33,8 @@ namespace chickadee.Controllers
             
             if (_signInManager.IsSignedIn(User) && user != null)
             {
+                var roles = _userManager.GetRolesAsync(user).Result;
+
                 var simpleUser = new
                 {
                     FirstName = user.FirstName,
@@ -40,6 +42,7 @@ namespace chickadee.Controllers
                     ProfilePicture = user.ProfilePicture,
                     Id = user.Id,
                     Email = user.Email,
+                    roles = roles
                 };
                 
                 
