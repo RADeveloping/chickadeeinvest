@@ -17,11 +17,11 @@ export default function StickyHeadTable({ props }) {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.background.paper,
-      color: theme.palette.text.primary,
+      color: theme.palette.text.primary
     },
     [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
+      fontSize: 14
+    }
   }));
 
   const handleChangePage = (event, newPage) => {
@@ -54,11 +54,13 @@ export default function StickyHeadTable({ props }) {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <Toolbar sx={{
-        backgroundColor: (theme) => theme.palette.primary.main,
-        color: (theme) => theme.palette.secondary.main,
-        fontWeight: 'bold'
-      }}>
+      <Toolbar
+        sx={{
+          backgroundColor: (theme) => theme.palette.primary.main,
+          color: (theme) => theme.palette.secondary.main,
+          fontWeight: 'bold'
+        }}
+      >
         Unit Tickets
       </Toolbar>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -79,47 +81,40 @@ export default function StickyHeadTable({ props }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((ticket) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={ticket.ticketId}>
-                    {columns.map((column) => {
-                      const value = ticket[column.id];
-                      if (column.id === 'severity') {
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {value === 0
-                              ?
-                              <Chip label='Low' color="success" />
-                              : value === 1
-                                ?
-                                <Chip label='Medium' color="warning" />
-                                : <Chip label='High' color="error" />}
-                          </TableCell>
-                        );
-                      } else if (column.id === 'status') {
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {value === 0
-                              ?
-                              <Chip label='Open' color="info" />
-                              : null}
-                          </TableCell>
-                        )
-                      } else {
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.id === "createdOn"
-                              ? fToNow(value)
-                              : value}
-                          </TableCell>
-                        );
-                      }
-                    })}
-                  </TableRow>
-                );
-              })}
+            {props.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((ticket) => {
+              return (
+                <TableRow hover role="checkbox" tabIndex={-1} key={ticket.ticketId}>
+                  {columns.map((column) => {
+                    const value = ticket[column.id];
+                    if (column.id === 'severity') {
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {value === 0 ? (
+                            <Chip label="Low" color="success" />
+                          ) : value === 1 ? (
+                            <Chip label="Medium" color="warning" />
+                          ) : (
+                            <Chip label="High" color="error" />
+                          )}
+                        </TableCell>
+                      );
+                    } else if (column.id === 'status') {
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {value === 0 ? <Chip label="Open" color="info" /> : null}
+                        </TableCell>
+                      );
+                    } else {
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.id === 'createdOn' ? fToNow(value) : value}
+                        </TableCell>
+                      );
+                    }
+                  })}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

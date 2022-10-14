@@ -11,10 +11,10 @@ import TicketList from '../components/TicketList';
 
 export default function DashboardApp() {
   // const [ticketData, setTicketData] = useState([]);
-  const url = "/api/Ticket";
+  const url = '/api/Ticket';
   const { data, error } = useFetch(url);
 
-  const openTickets = data.filter(ticket => ticket.status === 0);
+  const openTickets = data.filter((ticket) => ticket.status === 0);
   // const url = "/api/Ticket";
 
   console.log(data);
@@ -22,24 +22,23 @@ export default function DashboardApp() {
     return (
       <Page title="Dashboard">
         <Container maxWidth="xl">
-          <Typography variant="h4" sx ={{ mb: 5 }}>
+          <Typography variant="h4" sx={{ mb: 5 }}>
             Hi, Welcome back
           </Typography>
 
           <p>Nothing here</p>
         </Container>
       </Page>
-    )
+    );
   }
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5}}>
+        <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
         </Typography>
 
         <TicketList props={openTickets} />
-
       </Container>
     </Page>
   );

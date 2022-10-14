@@ -34,7 +34,7 @@ const PRIMARY = {
   main: '#103A31',
   dark: '#0e342c',
   darker: '#0c2e27',
-  contrastText: '#fff',
+  contrastText: '#fff'
 };
 
 const SECONDARY = {
@@ -43,13 +43,13 @@ const SECONDARY = {
   main: '#FFC933',
   dark: '#e5b42d',
   darker: '#cca028',
-  contrastText: '#fff',
+  contrastText: '#fff'
 };
 
 const CHICKADEE_CREAM = {
   main: '#EEEFDF',
-  contrastText: '#fff',
-}
+  contrastText: '#fff'
+};
 
 const INFO = {
   lighter: '#D0F2FF',
@@ -116,7 +116,12 @@ const palette = {
   gradients: GRADIENTS,
   chart: CHART_COLORS,
   divider: GREY[500_24],
-  text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500], chickadeeY: {...SECONDARY} },
+  text: {
+    primary: GREY[800],
+    secondary: GREY[600],
+    disabled: GREY[500],
+    chickadeeY: { ...SECONDARY }
+  },
   background: { paper: '#fff', default: CHICKADEE_CREAM.main, neutral: GREY[200] },
   action: {
     active: GREY[600],
