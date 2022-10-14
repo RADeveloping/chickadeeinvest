@@ -18,6 +18,7 @@ const context = [
   '/RoleManager',
   '/UserRoles',
   '/Identity/css',
+  '/api/Accounts',
   '/css',
   '/images'
 ];
