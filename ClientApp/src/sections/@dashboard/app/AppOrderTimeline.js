@@ -1,7 +1,14 @@
 // @mui
 import PropTypes from 'prop-types';
 import { Card, Typography, CardHeader, CardContent } from '@mui/material';
-import { Timeline, TimelineDot, TimelineItem, TimelineContent, TimelineSeparator, TimelineConnector } from '@mui/lab';
+import {
+  Timeline,
+  TimelineDot,
+  TimelineItem,
+  TimelineContent,
+  TimelineSeparator,
+  TimelineConnector
+} from '@mui/lab';
 // utils
 import { fDateTime } from '../../../utils/formatTime';
 
@@ -10,7 +17,7 @@ import { fDateTime } from '../../../utils/formatTime';
 AppOrderTimeline.propTypes = {
   title: PropTypes.string,
   subheader: PropTypes.string,
-  list: PropTypes.array.isRequired,
+  list: PropTypes.array.isRequired
 };
 
 export default function AppOrderTimeline({ title, subheader, list, ...other }) {
@@ -21,8 +28,8 @@ export default function AppOrderTimeline({ title, subheader, list, ...other }) {
       <CardContent
         sx={{
           '& .MuiTimelineItem-missingOppositeContent:before': {
-            display: 'none',
-          },
+            display: 'none'
+          }
         }}
       >
         <Timeline>
@@ -42,8 +49,8 @@ OrderItem.propTypes = {
   item: PropTypes.shape({
     time: PropTypes.instanceOf(Date),
     title: PropTypes.string,
-    type: PropTypes.string,
-  }),
+    type: PropTypes.string
+  })
 };
 
 function OrderItem({ item, isLast }) {

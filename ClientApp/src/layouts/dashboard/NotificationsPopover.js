@@ -17,7 +17,7 @@ import {
   ListItemText,
   ListSubheader,
   ListItemAvatar,
-  ListItemButton,
+  ListItemButton
 } from '@mui/material';
 // utils
 import { fToNow } from '../../utils/formatTime';
@@ -36,7 +36,7 @@ const NOTIFICATIONS = [
     avatar: null,
     type: 'order_placed',
     createdAt: set(new Date(), { hours: 10, minutes: 30 }),
-    isUnRead: true,
+    isUnRead: true
   },
   {
     id: faker.datatype.uuid(),
@@ -45,7 +45,7 @@ const NOTIFICATIONS = [
     avatar: '/static/mock-images/avatars/avatar_2.jpg',
     type: 'friend_interactive',
     createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
-    isUnRead: true,
+    isUnRead: true
   },
   {
     id: faker.datatype.uuid(),
@@ -54,7 +54,7 @@ const NOTIFICATIONS = [
     avatar: null,
     type: 'chat_message',
     createdAt: sub(new Date(), { days: 1, hours: 3, minutes: 30 }),
-    isUnRead: false,
+    isUnRead: false
   },
   {
     id: faker.datatype.uuid(),
@@ -63,7 +63,7 @@ const NOTIFICATIONS = [
     avatar: null,
     type: 'mail',
     createdAt: sub(new Date(), { days: 2, hours: 3, minutes: 30 }),
-    isUnRead: false,
+    isUnRead: false
   },
   {
     id: faker.datatype.uuid(),
@@ -72,8 +72,8 @@ const NOTIFICATIONS = [
     avatar: null,
     type: 'order_shipped',
     createdAt: sub(new Date(), { days: 3, hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
+    isUnRead: false
+  }
 ];
 
 export default function NotificationsPopover() {
@@ -97,7 +97,7 @@ export default function NotificationsPopover() {
     setNotifications(
       notifications.map((notification) => ({
         ...notification,
-        isUnRead: false,
+        isUnRead: false
       }))
     );
   };
@@ -190,8 +190,8 @@ NotificationItem.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
     type: PropTypes.string,
-    avatar: PropTypes.any,
-  }),
+    avatar: PropTypes.any
+  })
 };
 
 function NotificationItem({ notification }) {
@@ -204,8 +204,8 @@ function NotificationItem({ notification }) {
         px: 2.5,
         mt: '1px',
         ...(notification.isUnRead && {
-          bgcolor: 'action.selected',
-        }),
+          bgcolor: 'action.selected'
+        })
       }}
     >
       <ListItemAvatar>
@@ -220,7 +220,7 @@ function NotificationItem({ notification }) {
               mt: 0.5,
               display: 'flex',
               alignItems: 'center',
-              color: 'text.disabled',
+              color: 'text.disabled'
             }}
           >
             <Iconify icon="eva:clock-outline" sx={{ mr: 0.5, width: 16, height: 16 }} />
@@ -247,29 +247,29 @@ function renderContent(notification) {
   if (notification.type === 'order_placed') {
     return {
       avatar: <img alt={notification.title} src="/static/icons/ic_notification_package.svg" />,
-      title,
+      title
     };
   }
   if (notification.type === 'order_shipped') {
     return {
       avatar: <img alt={notification.title} src="/static/icons/ic_notification_shipping.svg" />,
-      title,
+      title
     };
   }
   if (notification.type === 'mail') {
     return {
       avatar: <img alt={notification.title} src="/static/icons/ic_notification_mail.svg" />,
-      title,
+      title
     };
   }
   if (notification.type === 'chat_message') {
     return {
       avatar: <img alt={notification.title} src="/static/icons/ic_notification_chat.svg" />,
-      title,
+      title
     };
   }
   return {
     avatar: notification.avatar ? <img alt={notification.title} src={notification.avatar} /> : null,
-    title,
+    title
   };
 }

@@ -3,7 +3,16 @@ import { useState } from 'react';
 // form
 import { useForm, Controller } from 'react-hook-form';
 // @mui
-import { Card, Stack, Divider, Checkbox, MenuItem, IconButton, CardHeader, FormControlLabel } from '@mui/material';
+import {
+  Card,
+  Stack,
+  Divider,
+  Checkbox,
+  MenuItem,
+  IconButton,
+  CardHeader,
+  FormControlLabel
+} from '@mui/material';
 // components
 import Iconify from '../../../components/Iconify';
 import MenuPopover from '../../../components/MenuPopover';
@@ -13,14 +22,14 @@ import MenuPopover from '../../../components/MenuPopover';
 AppTasks.propTypes = {
   title: PropTypes.string,
   subheader: PropTypes.string,
-  list: PropTypes.array.isRequired,
+  list: PropTypes.array.isRequired
 };
 
 export default function AppTasks({ title, subheader, list, ...other }) {
   const { control } = useForm({
     defaultValues: {
-      taskCompleted: ['2'],
-    },
+      taskCompleted: ['2']
+    }
   });
 
   return (
@@ -31,7 +40,9 @@ export default function AppTasks({ title, subheader, list, ...other }) {
         control={control}
         render={({ field }) => {
           const onSelected = (task) =>
-            field.value.includes(task) ? field.value.filter((value) => value !== task) : [...field.value, task];
+            field.value.includes(task)
+              ? field.value.filter((value) => value !== task)
+              : [...field.value, task];
 
           return (
             <>
@@ -58,8 +69,8 @@ TaskItem.propTypes = {
   onChange: PropTypes.func,
   task: PropTypes.shape({
     id: PropTypes.string,
-    label: PropTypes.string,
-  }),
+    label: PropTypes.string
+  })
 };
 
 function TaskItem({ task, checked, onChange }) {
@@ -101,8 +112,8 @@ function TaskItem({ task, checked, onChange }) {
         py: 0.75,
         ...(checked && {
           color: 'text.disabled',
-          textDecoration: 'line-through',
-        }),
+          textDecoration: 'line-through'
+        })
       }}
     >
       <FormControlLabel
@@ -151,7 +162,7 @@ MoreMenuButton.propTypes = {
   actions: PropTypes.node.isRequired,
   onClose: PropTypes.func,
   onOpen: PropTypes.func,
-  open: PropTypes.bool,
+  open: PropTypes.bool
 };
 
 function MoreMenuButton({ actions, open, onOpen, onClose }) {
@@ -175,8 +186,8 @@ function MoreMenuButton({ actions, open, onOpen, onClose }) {
             px: 1,
             typography: 'body2',
             borderRadius: 0.75,
-            '& svg': { mr: 2, width: 20, height: 20 },
-          },
+            '& svg': { mr: 2, width: 20, height: 20 }
+          }
         }}
       >
         {actions}

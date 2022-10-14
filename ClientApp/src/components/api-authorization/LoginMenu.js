@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { NavItem, NavLink } from 'reactstrap';
-import {Link, RouterLink} from 'react-router-dom';
+import { Link, RouterLink } from 'react-router-dom';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
 import NavSection from '../NavSection';
@@ -14,10 +14,8 @@ const AccountStyle = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: theme.palette.grey[500_12],
-  }));
-  
-
+  backgroundColor: theme.palette.grey[500_12]
+}));
 
 export class LoginMenu extends Component {
   constructor(props) {
@@ -39,7 +37,10 @@ export class LoginMenu extends Component {
   }
 
   async populateState() {
-    const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()])
+    const [isAuthenticated, user] = await Promise.all([
+      authService.isAuthenticated(),
+      authService.getUser()
+    ]);
     this.setState({
       isAuthenticated,
       userName: user && user.name
@@ -61,31 +62,30 @@ export class LoginMenu extends Component {
   }
 
   authenticatedView(userName, profilePath, logoutPath, logoutState) {
+    // ----------------------------------------------------------------------
 
-// ----------------------------------------------------------------------
+    const navConfig = [
+      {
+        title: 'dashboard',
+        path: '/dashboard/app',
+        icon: getIcon('eva:pie-chart-2-fill')
+      },
+      {
+        title: 'profile',
+        path: profilePath,
+        icon: getIcon('eva:person-fill')
+      },
+      {
+        title: 'Logout',
+        path: logoutPath,
+        icon: getIcon('eva:log-out-fill'),
+        state: logoutState
+      }
+    ];
 
-const navConfig = [
-  {
-    title: 'dashboard',
-    path: '/dashboard/app',
-    icon: getIcon('eva:pie-chart-2-fill'),
-  },
-  {
-    title: 'profile',
-    path: profilePath,
-    icon: getIcon('eva:person-fill'),
-  },
-  {
-    title: 'Logout',
-    path: logoutPath,
-    icon: getIcon('eva:log-out-fill'),
-    state: logoutState
-  },
-];
-
-
-    return (<Fragment>
-       {/* <Box sx={{ mb: 5, mx: 2.5 }}>
+    return (
+      <Fragment>
+        {/* <Box sx={{ mb: 5, mx: 2.5 }}>
        <Link underline="none" component={Link} to={profilePath}>
           <AccountStyle>
             <Box sx={{ ml: 2 , mt: 2, mb: 2 }}>
@@ -96,28 +96,29 @@ const navConfig = [
           </AccountStyle>
           </Link>
       </Box>  */}
-      <NavSection navConfig={navConfig} /> 
-    </Fragment>);
+        <NavSection navConfig={navConfig} />
+      </Fragment>
+    );
   }
 
   anonymousView(registerPath, loginPath) {
-
     const anonymousViewConfig = [
       {
         title: 'register',
         path: registerPath,
-        icon: getIcon('eva:person-add-fill'),
+        icon: getIcon('eva:person-add-fill')
       },
       {
         title: 'login',
         path: loginPath,
-        icon: getIcon('eva:lock-fill'),
-      },
+        icon: getIcon('eva:lock-fill')
+      }
     ];
 
-
- return (<Fragment>
-      <NavSection navConfig={anonymousViewConfig} /> 
-    </Fragment>);
+    return (
+      <Fragment>
+        <NavSection navConfig={anonymousViewConfig} />
+      </Fragment>
+    );
   }
 }
