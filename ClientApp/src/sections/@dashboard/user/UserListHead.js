@@ -13,7 +13,7 @@ const visuallyHidden = {
   overflow: 'hidden',
   position: 'absolute',
   whiteSpace: 'nowrap',
-  clip: 'rect(0 0 0 0)',
+  clip: 'rect(0 0 0 0)'
 };
 
 UserListHead.propTypes = {
@@ -23,7 +23,7 @@ UserListHead.propTypes = {
   headLabel: PropTypes.array,
   numSelected: PropTypes.number,
   onRequestSort: PropTypes.func,
-  onSelectAllClick: PropTypes.func,
+  onSelectAllClick: PropTypes.func
 };
 
 export default function UserListHead({
@@ -33,7 +33,7 @@ export default function UserListHead({
   headLabel,
   numSelected,
   onRequestSort,
-  onSelectAllClick,
+  onSelectAllClick
 }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -63,7 +63,9 @@ export default function UserListHead({
             >
               {headCell.label}
               {orderBy === headCell.id ? (
-                <Box sx={{ ...visuallyHidden }}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</Box>
+                <Box sx={{ ...visuallyHidden }}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </Box>
               ) : null}
             </TableSortLabel>
           </TableCell>

@@ -9,17 +9,19 @@ import Iconify from './Iconify';
 
 // ----------------------------------------------------------------------
 
-const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props} />)(({ theme }) => ({
-  ...theme.typography.body2,
-  height: 48,
-  position: 'relative',
-  textTransform: 'capitalize',
-  color: theme.palette.text.chickadeeY.main,
-  borderRadius: theme.shape.borderRadius,
-  '&:hover': {
+const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props} />)(
+  ({ theme }) => ({
+    ...theme.typography.body2,
+    height: 48,
+    position: 'relative',
+    textTransform: 'capitalize',
     color: theme.palette.text.chickadeeY.main,
-  },
-}));
+    borderRadius: theme.shape.borderRadius,
+    '&:hover': {
+      color: theme.palette.text.chickadeeY.main
+    }
+  })
+);
 
 const ListItemIconStyle = styled(ListItemIcon)({
   width: 22,
@@ -27,14 +29,14 @@ const ListItemIconStyle = styled(ListItemIcon)({
   color: 'inherit',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'center'
 });
 
 // ----------------------------------------------------------------------
 
 NavItem.propTypes = {
   item: PropTypes.object,
-  active: PropTypes.func,
+  active: PropTypes.func
 };
 
 function NavItem({ item, active }) {
@@ -53,12 +55,12 @@ function NavItem({ item, active }) {
   const activeRootStyle = {
     color: 'secondary.main',
     fontWeight: 'fontWeightMedium',
-    bgcolor: alpha(theme.palette.primary.darker, theme.palette.action.selectedOpacity),
+    bgcolor: alpha(theme.palette.primary.darker, theme.palette.action.selectedOpacity)
   };
 
   const activeSubStyle = {
     color: 'text.primary',
-    fontWeight: 'fontWeightMedium',
+    fontWeight: 'fontWeightMedium'
   };
 
   if (children) {
@@ -67,7 +69,7 @@ function NavItem({ item, active }) {
         <ListItemStyle
           onClick={handleOpen}
           sx={{
-            ...(isActiveRoot && activeRootStyle),
+            ...(isActiveRoot && activeRootStyle)
           }}
         >
           <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
@@ -92,7 +94,7 @@ function NavItem({ item, active }) {
                   state={state}
                   to={path}
                   sx={{
-                    ...(isActiveSub && activeSubStyle),
+                    ...(isActiveSub && activeSubStyle)
                   }}
                 >
                   <ListItemIconStyle>
@@ -109,8 +111,8 @@ function NavItem({ item, active }) {
                         transition: (theme) => theme.transitions.create('transform'),
                         ...(isActiveSub && {
                           transform: 'scale(2)',
-                          bgcolor: 'primary.main',
-                        }),
+                          bgcolor: 'primary.main'
+                        })
                       }}
                     />
                   </ListItemIconStyle>
@@ -130,7 +132,7 @@ function NavItem({ item, active }) {
       to={path}
       stat={state}
       sx={{
-        ...(isActiveRoot && activeRootStyle),
+        ...(isActiveRoot && activeRootStyle)
       }}
     >
       <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
@@ -141,7 +143,7 @@ function NavItem({ item, active }) {
 }
 
 NavSection.propTypes = {
-  navConfig: PropTypes.array,
+  navConfig: PropTypes.array
 };
 
 export default function NavSection({ navConfig, ...other }) {
