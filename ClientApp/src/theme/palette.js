@@ -29,22 +29,27 @@ const GREY = {
 };
 
 const PRIMARY = {
-  lighter: '#41cbb5',
-  light: '#39b39d',
-  main: '#268370',
-  dark: '#154d41',
-  darker: '#103a31',
-  contrastText: '#fff'
+  lighter: '#3f615a',
+  light: '#274d45',
+  main: '#103A31',
+  dark: '#0e342c',
+  darker: '#0c2e27',
+  contrastText: '#fff',
 };
 
 const SECONDARY = {
-  lighter: '#ffd45a',
-  light: '#ffcf45',
-  main: '#ffca31',
-  dark: '#e5b52c',
-  darker: '#cca127',
-  contrastText: '#fff'
+  lighter: '#ffd35b',
+  light: '#ffce47',
+  main: '#FFC933',
+  dark: '#e5b42d',
+  darker: '#cca028',
+  contrastText: '#fff',
 };
+
+const CHICKADEE_CREAM = {
+  main: '#EEEFDF',
+  contrastText: '#fff',
+}
 
 const INFO = {
   lighter: '#D0F2FF',
@@ -102,6 +107,7 @@ const palette = {
   common: { black: '#000', white: '#fff' },
   primary: { ...PRIMARY },
   secondary: { ...SECONDARY },
+  chickadee_cream: { ...CHICKADEE_CREAM },
   info: { ...INFO },
   success: { ...SUCCESS },
   warning: { ...WARNING },
@@ -110,13 +116,8 @@ const palette = {
   gradients: GRADIENTS,
   chart: CHART_COLORS,
   divider: GREY[500_24],
-  text: {
-    primary: GREY[800],
-    secondary: GREY[600],
-    disabled: GREY[500],
-    chickadeeY: { ...SECONDARY }
-  },
-  background: { paper: '#fff', default: GREY[100], neutral: GREY[200] },
+  text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500], chickadeeY: {...SECONDARY} },
+  background: { paper: '#fff', default: CHICKADEE_CREAM.main, neutral: GREY[200] },
   action: {
     active: GREY[600],
     hover: GREY[500_8],
