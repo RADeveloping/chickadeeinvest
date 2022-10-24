@@ -20,7 +20,7 @@ export class AuthorizeService {
   async getUserProfile() {
     const token = await authService.getAccessToken();
     const response = await fetch('api/Accounts', {
-      headers: !token ? {} : {'Authorization': `Bearer ${token}`}
+      headers: !token ? {} : { Authorization: `Bearer ${token}` }
     });
     return await response.json();
   }
@@ -32,8 +32,7 @@ export class AuthorizeService {
 
     await this.ensureUserManagerInitialized();
     const user = await this.userManager.getUser();
-    
-    
+
     return user && user.profile;
   }
 
@@ -59,22 +58,24 @@ export class AuthorizeService {
       return this.success(state);
     } catch (silentError) {
       // User might not be authenticated, fallback to popup authentication
-      console.log("Silent authentication error: ", silentError);
+      console.log('Silent authentication error: ', silentError);
 
       try {
         if (this._popUpDisabled) {
-          throw new Error('Popup disabled. Change \'AuthorizeService.js:AuthorizeService._popupDisabled\' to false to enable it.')
+          throw new Error(
+            "Popup disabled. Change 'AuthorizeService.js:AuthorizeService._popupDisabled' to false to enable it."
+          );
         }
 
         const popUpUser = await this.userManager.signinPopup(this.createArguments());
         this.updateState(popUpUser);
         return this.success(state);
       } catch (popUpError) {
-        if (popUpError.message === "Popup window closed") {
+        if (popUpError.message === 'Popup window closed') {
           // The user explicitly cancelled the login action by closing an opened popup.
-          return this.error("The user closed the window.");
+          return this.error('The user closed the window.');
         } else if (!this._popUpDisabled) {
-          console.log("Popup authentication error: ", popUpError);
+          console.log('Popup authentication error: ', popUpError);
         }
 
         // PopUps might be blocked by the user, fallback to redirect
@@ -82,7 +83,7 @@ export class AuthorizeService {
           await this.userManager.signinRedirect(this.createArguments(state));
           return this.redirect();
         } catch (redirectError) {
-          console.log("Redirect authentication error: ", redirectError);
+          console.log('Redirect authentication error: ', redirectError);
           return this.error(redirectError);
         }
       }
@@ -110,19 +111,21 @@ export class AuthorizeService {
     await this.ensureUserManagerInitialized();
     try {
       if (this._popUpDisabled) {
-        throw new Error('Popup disabled. Change \'AuthorizeService.js:AuthorizeService._popupDisabled\' to false to enable it.')
+        throw new Error(
+          "Popup disabled. Change 'AuthorizeService.js:AuthorizeService._popupDisabled' to false to enable it."
+        );
       }
 
       await this.userManager.signoutPopup(this.createArguments());
       this.updateState(undefined);
       return this.success(state);
     } catch (popupSignOutError) {
-      console.log("Popup signout error: ", popupSignOutError);
+      console.log('Popup signout error: ', popupSignOutError);
       try {
         await this.userManager.signoutRedirect(this.createArguments(state));
         return this.redirect();
       } catch (redirectSignOutError) {
-        console.log("Redirect signout error: ", redirectSignOutError);
+        console.log('Redirect signout error: ', redirectSignOutError);
         return this.error(redirectSignOutError);
       }
     }
@@ -153,8 +156,10 @@ export class AuthorizeService {
 
   unsubscribe(subscriptionId) {
     const subscriptionIndex = this._callbacks
-      .map((element, index) => element.subscription === subscriptionId ? { found: true, index } : { found: false })
-      .filter(element => element.found === true);
+      .map((element, index) =>
+        element.subscription === subscriptionId ? { found: true, index } : { found: false }
+      )
+      .filter((element) => element.found === true);
     if (subscriptionIndex.length !== 1) {
       throw new Error(`Found an invalid number of subscriptions ${subscriptionIndex.length}`);
     }
@@ -210,7 +215,9 @@ export class AuthorizeService {
     });
   }
 
-  static get instance() { return authService }
+  static get instance() {
+    return authService;
+  }
 }
 
 const authService = new AuthorizeService();
