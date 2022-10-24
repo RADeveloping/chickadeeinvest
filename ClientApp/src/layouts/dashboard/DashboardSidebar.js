@@ -24,8 +24,8 @@ const DRAWER_WIDTH = 280;
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
     flexShrink: 0,
-    width: DRAWER_WIDTH,
-  },
+    width: DRAWER_WIDTH
+  }
 }));
 
 const AccountStyle = styled('div')(({ theme }) => ({
@@ -33,14 +33,14 @@ const AccountStyle = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: theme.palette.grey[500_12],
+  backgroundColor: theme.palette.grey[500_12]
 }));
 
 // ----------------------------------------------------------------------
 
 DashboardSidebar.propTypes = {
   isOpenSidebar: PropTypes.bool,
-  onCloseSidebar: PropTypes.func,
+  onCloseSidebar: PropTypes.func
 };
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
@@ -62,10 +62,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       sx={{
         backgroundColor: theme.palette.primary.main,
         height: 1,
-        '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
+        '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' }
       }}
     >
-       <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
+      <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
         <Logo />
       </Box>
 
@@ -83,7 +83,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           open={isOpenSidebar}
           onClose={onCloseSidebar}
           PaperProps={{
-            sx: { width: DRAWER_WIDTH },
+            sx: { width: DRAWER_WIDTH }
           }}
         >
           {renderContent(theme)}
@@ -98,8 +98,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             sx: {
               width: DRAWER_WIDTH,
               bgcolor: 'background.default',
-              borderRightStyle: 'dashed',
-            },
+              borderRightStyle: 'dashed'
+            }
           }}
         >
           {renderContent(theme)}
