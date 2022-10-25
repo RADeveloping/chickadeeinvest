@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -53,7 +53,7 @@
             
             <div class="row g-1 mb-4">
                 <div class="col form-floating">
-                    <select asp-for="Input.Role" id="Input.Role" asp-items="Html.GetEnumSelectList<chickadee.Enums.Roles>()" class="form-control" aria-required="true">
+                    <select asp-for="Input.Role" id="Input.Role" asp-items="Html.GetEnumSelectList<chickadee.Enums.PublicRoles>()" class="form-control" aria-required="true">
                         <option selected="selected" value="" for="Input.Role">Please select</option>
                     </select>
                     <label asp-for="Input.Role"></label>

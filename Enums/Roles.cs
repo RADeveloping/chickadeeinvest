@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace chickadee.Enums
 {
     public enum Roles
@@ -8,5 +8,12 @@ namespace chickadee.Enums
         PropertyManager,
         Tenant
     }
+	
+	public enum PublicRoles
+	{
+		[Display(Name="Property Manager")]
+		PropertyManager = Roles.PropertyManager,
+		Tenant = Roles.Tenant
+	}
 }
 
