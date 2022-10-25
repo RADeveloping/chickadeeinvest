@@ -128,8 +128,8 @@ export default function Tickets() {
         .then((data) => {
           data.forEach((d)=> {
             d.tickets.forEach((ticket) => {
-              ticket.createdOn = new Date(d.createdOn)
-              ticket.estimatedDate = new Date(d.estimatedDate)
+              ticket.createdOn = new Date(ticket.createdOn)
+              ticket.estimatedDate = new Date(ticket.estimatedDate)
               ticketsData.push(ticket);
             })
           })
