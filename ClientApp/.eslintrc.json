@@ -10,5 +10,10 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "rules": {}
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "comma-dangle": ["error", "never"],
+    "react/prop-types": "off",
+    "indent": [ "error", 2 ]
+  }
 }
