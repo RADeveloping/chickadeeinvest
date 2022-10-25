@@ -21,7 +21,7 @@ function LandingPage() {
                             <li className="nav-item"><a className="nav-link" href="#team">Team</a></li>
                             <li className="nav-item d-none d-lg-block"><a className="nav-link"> | </a></li>
                             <li className="nav-item"><a className="nav-link" href="/login">Login</a></li>
-                            <li className="nav-item"><a className="nav-link" href="/register">Register</a></li>
+                            <li className="nav-item"><a className="nav-link" href="/signup">Signup</a></li>
                         </ul>
                     </div>
                 </div>

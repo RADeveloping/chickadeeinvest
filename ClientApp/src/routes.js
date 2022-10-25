@@ -43,8 +43,8 @@ export default function Router() {
         <Route path="login" element={<Login action={LoginActions.Login} />} />
 
           <Route
-              path="login"
-              element={<Login action={LoginActions.Login} />}
+              path="signup"
+              element={<Login action={LoginActions.Register} />}
           />
 
           <Route
