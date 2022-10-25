@@ -16,7 +16,7 @@ namespace chickadee.Controllers
     public class UnitController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-                private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
 
         public UnitController(ApplicationDbContext context,  UserManager<ApplicationUser> userManager)
@@ -34,7 +34,6 @@ namespace chickadee.Controllers
           {
               return NotFound();
           }
-            var user = _userManager.GetUserAsync(User).Result;
 
 
             return await _context.Units

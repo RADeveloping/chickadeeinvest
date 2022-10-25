@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
@@ -15,10 +16,12 @@ namespace chickadee.Controllers
     public class PropertyController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PropertyController(ApplicationDbContext context)
+        public PropertyController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Property
@@ -29,7 +32,31 @@ namespace chickadee.Controllers
           {
               return NotFound();
           }
-            return await _context.Properties.ToListAsync();
+            return await _context.Properties
+              .Include(u => u.Units)
+                .ThenInclude(t => t.Tickets)
+              .Include(p => p.PropertyManager)
+              .ToListAsync();
+        }
+
+         // GET: api/Property/current
+        [HttpGet]
+        [Route("current")]
+        public async Task<ActionResult<IEnumerable<Property>>> GetSpecificPropertyForUser()
+        {
+          if (_context.Units == null)
+          {
+              return NotFound();
+          }
+            var user = _userManager.GetUserAsync(User).Result;
+
+
+            return await _context.Properties
+              .Include(j => j.PropertyManager)
+              .Where(t => t.PropertyManager == user)
+              .Include(t => t.Units)
+                .ThenInclude(s => s.Tickets)
+              .ToListAsync();
         }
 
         // GET: api/Property/5
