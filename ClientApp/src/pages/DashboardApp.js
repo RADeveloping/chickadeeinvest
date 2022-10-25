@@ -5,6 +5,7 @@ import {Container, Grid, Typography} from '@mui/material';
 import Page from '../components/Page';
 import useFetch from '../components/FetchData';
 import {AppWidgetSummary} from "../sections/@dashboard/app";
+import {Link} from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,9 @@ export default function DashboardApp() {
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
+            <Link to="/dashboard/tickets" style={{textDecoration: 'none'}}>
             <AppWidgetSummary title="Open Tickets" total={openTickets.length} color="error" icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
+            </Link>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Units" total={units.length} color="info" icon={'bxs:door-open'} loading={unitsLoading} />
