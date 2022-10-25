@@ -5,7 +5,6 @@ import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizati
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
-import User from './pages/User';
 import NotFound from './pages/Page404';
 import DashboardApp from './pages/DashboardApp';
 import { Login } from './components/api-authorization/Login';
@@ -14,6 +13,7 @@ import {
   LogoutActions
 } from './components/api-authorization/ApiAuthorizationConstants';
 import { Logout } from './components/api-authorization/Logout';
+import Tickets from "./pages/Tickets";
 
 // ----------------------------------------------------------------------
 
@@ -24,9 +24,9 @@ const DashboardRoutes = [
     element: <DashboardApp />
   },
   {
-    path: 'user',
+    path: 'tickets',
     requireAuth: true,
-    element: <User />
+    element: <Tickets />
   }
 ];
 

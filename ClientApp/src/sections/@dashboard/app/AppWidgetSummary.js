@@ -1,7 +1,7 @@
 // @mui
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
-import {Card, CircularProgress, Fade, LinearProgress, Typography} from '@mui/material';
+import {Card, CircularProgress, Fade, Grow, LinearProgress, Typography} from '@mui/material';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
 // components
@@ -32,6 +32,7 @@ AppWidgetSummary.propTypes = {
 
 export default function AppWidgetSummary({ title, total, icon, color = 'primary', loading, sx, ...other }) {
   return (
+      <Grow in={true}>
     <Card
       sx={{
         py: 5,
@@ -64,9 +65,12 @@ export default function AppWidgetSummary({ title, total, icon, color = 'primary'
           {fShortenNumber(total)}
       </Typography>
         </Fade>
+        <Fade in={!loading}>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title}
       </Typography>
+        </Fade>
     </Card>
+      </Grow>
   );
 }

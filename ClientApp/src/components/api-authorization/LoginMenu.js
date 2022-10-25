@@ -71,6 +71,11 @@ export class LoginMenu extends Component {
         icon: getIcon('eva:pie-chart-2-fill')
       },
       {
+        title: 'tickets',
+        path: '/dashboard/tickets',
+        icon: getIcon('ant-design:folder-open-outlined')
+      },
+      {
         title: 'profile',
         path: profilePath,
         icon: getIcon('eva:person-fill')

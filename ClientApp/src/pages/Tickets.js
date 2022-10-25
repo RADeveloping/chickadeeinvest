@@ -1,6 +1,6 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
@@ -16,7 +16,7 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
+  TablePagination, CircularProgress, Box, Fade, Grow
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -24,20 +24,32 @@ import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import { ListHead, ListToolbar, MoreMenu } from '../sections/@dashboard/list';
 // mock
-import USERLIST from '../_mock/user';
+import useFetch from "../components/FetchData";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'problem', label: 'Problem', alignRight: false },
+  { id: 'description', label: 'Description', alignRight: false },
+  { id: 'createdOn', label: 'Created', alignRight: false },
+  { id: 'estimatedDate', label: 'Estimated', alignRight: false },
+  { id: 'severity', label: 'Severity', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' }
 ];
+
+const SEVERITY = {
+  0: {color: 'success', text: 'Low'},
+  1: {color: 'warning', text: 'Medium'},
+  2: {color: 'error', text: 'High'}
+}
+
+const STATUS = {
+  0: {color: 'info', text: 'Open'},
+  1: {color: 'primary', text: 'Closed'},
+}
 
 // ----------------------------------------------------------------------
 
@@ -65,19 +77,41 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (ticket) => ticket.problem.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Tickets() {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    fetch('/api/Ticket')
+        .then((res) => res.json())
+        .then((data) => {
+          data.forEach((d)=> {
+            d.createdOn = new Date(d.createdOn)
+            d.estimatedDate = new Date(d.estimatedDate)
+          })
+          setData(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setError(err);
+          setLoading(false);
+        });
+  }, []);
+  
   const [page, setPage] = useState(0);
 
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState('desc');
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState('createdOn');
 
   const [filterName, setFilterName] = useState('');
 
@@ -91,7 +125,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = data.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -129,59 +163,66 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredData = applySortFilter(data, getComparator(order, orderBy), filterName);
 
-  const isUserNotFound = filteredUsers.length === 0;
+  const isDataNotFound = filteredData.length === 0;
 
   return (
-    <Page title="User">
+    <Page title={"Tickets"}>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Tickets
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="#"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-          >
-            New User
-          </Button>
+          {/*<Button*/}
+          {/*  variant="contained"*/}
+          {/*  component={RouterLink}*/}
+          {/*  to="#"*/}
+          {/*  startIcon={<Iconify icon="eva:plus-fill" />}*/}
+          {/*>*/}
+          {/*  New User*/}
+          {/*</Button>*/}
         </Stack>
-
-        <Card>
-          <UserListToolbar
+        {loading ?
+            <Box   display="flex"
+                   justifyContent="center"
+                   alignItems="center"
+            height="50vh">
+              <CircularProgress />
+            </Box> : null }
+        <Grow in={!loading}>
+        <Card sx={{display: loading ? 'none' : undefined}}>
+          <ListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
-
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
+   
+ 
+            <TableContainer >
               <Table>
-                <UserListHead
+                <ListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={data.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers
+                  {filteredData
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { createdOn, description, estimatedDate, problem, severity, status, ticketId } = row;
+                      const isItemSelected = selected.indexOf(ticketId) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={ticketId}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
@@ -190,31 +231,32 @@ export default function User() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, ticketId)}
                             />
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                          <TableCell align="left">{problem}</TableCell>
+                          <TableCell align="left">{description}</TableCell>
+                          <TableCell align="left">{createdOn.toLocaleDateString('en-CA', {dateStyle: 'medium'})} </TableCell>
+                          <TableCell align="left">{estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'})}</TableCell>
                           <TableCell align="left">
                             <Label
                               variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
+                              color={SEVERITY[severity].color}
                             >
-                              {sentenceCase(status)}
+                              {SEVERITY[severity].text}
+                            </Label>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Label
+                                variant="ghost"
+                                color={STATUS[status].color}
+                            >
+                              {STATUS[status].text}
                             </Label>
                           </TableCell>
 
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <MoreMenu />
                           </TableCell>
                         </TableRow>
                       );
@@ -226,29 +268,28 @@ export default function User() {
                   )}
                 </TableBody>
 
-                {isUserNotFound && (
+                {isDataNotFound && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
+                        <SearchNotFound searchQuery={filterName} sx={{width: '100%'}} />
                       </TableCell>
                     </TableRow>
                   </TableBody>
                 )}
               </Table>
             </TableContainer>
-          </Scrollbar>
-
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={data.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        </Grow>
       </Container>
     </Page>
   );
