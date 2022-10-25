@@ -16,9 +16,9 @@ function LandingPage() {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarResponsive">
                         <ul className="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
-                            <li className="nav-item"><a className="nav-link" href="#about">About</a></li>
-                            <li className="nav-item"><a className="nav-link" href="#services">Services</a></li>
-                            <li className="nav-item"><a className="nav-link" href="#team">Team</a></li>
+                            <li className="nav-item"><a className="nav-link" href="landing#about">About</a></li>
+                            <li className="nav-item"><a className="nav-link" href="landing#services">Services</a></li>
+                            <li className="nav-item"><a className="nav-link" href="landing#team">Team</a></li>
                             <li className="nav-item d-none d-lg-block"><a className="nav-link"> | </a></li>
                             <li className="nav-item"><a className="nav-link" href="/login">Login</a></li>
                             <li className="nav-item"><a className="nav-link" href="/signup">Signup</a></li>
@@ -33,7 +33,7 @@ function LandingPage() {
                     <a className="btn btn-primary btn-xl text-uppercase" href="#about">Learn More</a>
                 </div>
             </header>
-            <section className="page-section" id="about">
+            <section className="page-section cream" id="about">
                 <div className="container">
                     <div className="text-center">
                         <h2 className="section-heading text-uppercase">About Us</h2>
@@ -50,7 +50,7 @@ function LandingPage() {
                     </div>
                 </div>
             </section>
-            <section className="page-section cream" id="services">
+            <section className="page-section bg-white" id="services">
                 <div className="container">
                     <div className="text-center">
                         <h2 className="section-heading text-uppercase">Services</h2>
@@ -87,7 +87,7 @@ function LandingPage() {
                     </div>
                 </div>
             </section>
-            <section className="page-section" id="team">
+            <section className="page-section cream" id="team">
                 <div className="container">
                     <div className="text-center">
                         <h2 className="section-heading text-uppercase">Our Amazing Team</h2>
