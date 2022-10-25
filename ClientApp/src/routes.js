@@ -33,8 +33,8 @@ const DashboardRoutes = [
 
 export default function Router() {
   return (
-      <Routes>
-          {/*
+    <Routes>
+      {/*
           Custom route to override the ASP.net routes
           */}
 

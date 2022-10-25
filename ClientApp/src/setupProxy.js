@@ -20,7 +20,7 @@ const context = [
   '/RoleManager',
   '/UserRoles',
   '/Identity/css',
-  '/api/Accounts',
+  '/api/Account',
   '/css',
   '/images',
   '/api/Ticket',
