@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { env } = require('process');
 

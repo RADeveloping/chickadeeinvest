@@ -25,7 +25,6 @@ export default function DashboardApp() {
           <Typography variant="h4" sx={{ mb: 5 }}>
             Hi, Welcome back
           </Typography>
-
           <p>Nothing here</p>
         </Container>
       </Page>
@@ -37,7 +36,6 @@ export default function DashboardApp() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
         </Typography>
-
         <TicketList props={openTickets} />
       </Container>
     </Page>
