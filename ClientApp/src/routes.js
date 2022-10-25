@@ -14,6 +14,7 @@ import {
 } from './components/api-authorization/ApiAuthorizationConstants';
 import { Logout } from './components/api-authorization/Logout';
 import Tickets from "./pages/Tickets";
+import LandingPage from "./pages/LandingPage";
 
 // ----------------------------------------------------------------------
 
