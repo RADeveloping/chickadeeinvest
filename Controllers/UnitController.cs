@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+    using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
@@ -15,10 +16,14 @@ namespace chickadee.Controllers
     public class UnitController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+                private readonly UserManager<ApplicationUser> _userManager;
 
-        public UnitController(ApplicationDbContext context)
+
+        public UnitController(ApplicationDbContext context,  UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: api/Unit
@@ -29,7 +34,33 @@ namespace chickadee.Controllers
           {
               return NotFound();
           }
-            return await _context.Units.ToListAsync();
+            var user = _userManager.GetUserAsync(User).Result;
+
+
+            return await _context.Units
+              .Include(t => t.Tenants)
+              .Include(i => i.Tickets)
+              .Include(j => j.Property)
+              .ToListAsync();
+        }
+
+         // GET: api/Unit/current
+        [HttpGet("/current")]
+        public async Task<ActionResult<IEnumerable<Unit>>> GetSpecificUnitForUser()
+        {
+          if (_context.Units == null)
+          {
+              return NotFound();
+          }
+            var user = _userManager.GetUserAsync(User).Result;
+
+
+            return await _context.Units
+              .Include(t => t.Tenants)
+              .Where(unit => unit.Tenants.Contains(user))
+              .Include(i => i.Tickets)
+              .Include(j => j.Property)
+              .ToListAsync();
         }
 
         // GET: api/Unit/5
