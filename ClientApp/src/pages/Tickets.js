@@ -1,4 +1,4 @@
-import { filter } from 'lodash';
+import { filter, forEach } from 'lodash';
 import { sentenceCase } from 'change-case';
 import {useEffect, useState} from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -86,16 +86,33 @@ export default function Tickets() {
   const [data, setData] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [roles, setRoles] = useState([]);
   
   useEffect(() => {
-    fetch('/api/Ticket')
+    fetch('/api/Account')
+      .then((res) => res.json())
+      .then((data) => {
+        setRoles(data.roles);
+      })
+  }, []);
+
+  useEffect(() => {
+    if (roles.includes("PropertyManager")) {
+      const ticketsData = [];
+      fetch('/api/Property/current')
         .then((res) => res.json())
         .then((data) => {
           data.forEach((d)=> {
-            d.createdOn = new Date(d.createdOn)
-            d.estimatedDate = new Date(d.estimatedDate)
+            console.log(d.units);
+            d.units.forEach((unit) => {
+              unit.tickets.forEach((ticket) => {
+                ticket.createdOn = new Date(ticket.createdOn)
+                ticket.estimatedDate = new Date(ticket.estimatedDate)
+                ticketsData.push(ticket);
+              })
+            })
           })
-          setData(data);
+          setData(ticketsData);
           setLoading(false);
         })
         .catch((err) => {
@@ -103,7 +120,29 @@ export default function Tickets() {
           setError(err);
           setLoading(false);
         });
-  }, []);
+    }
+    if (roles.includes("Tenant")) {
+      const ticketsData = [];
+      fetch('/api/Unit/current')
+        .then((res) => res.json())
+        .then((data) => {
+          data.forEach((d)=> {
+            d.tickets.forEach((ticket) => {
+              ticket.createdOn = new Date(d.createdOn)
+              ticket.estimatedDate = new Date(d.estimatedDate)
+              ticketsData.push(ticket);
+            })
+          })
+          setData(ticketsData);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setError(err);
+          setLoading(false);
+        });
+    }
+  }, [roles, setData, setLoading]);
   
   const [page, setPage] = useState(0);
 
