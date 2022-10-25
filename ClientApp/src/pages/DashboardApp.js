@@ -15,7 +15,7 @@ import {
   AppTrafficBySite,
   AppWidgetSummary,
   AppCurrentSubject,
-  AppConversionRates
+  AppConversionRates,
 } from '../sections/@dashboard/app';
 
 // ----------------------------------------------------------------------
@@ -32,38 +32,19 @@ export default function DashboardApp() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="Weekly Sales"
-              total={714000}
-              icon={'ant-design:android-filled'}
-            />
+            <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="New Users"
-              total={1352831}
-              color="info"
-              icon={'ant-design:apple-filled'}
-            />
+            <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="Item Orders"
-              total={1723315}
-              color="warning"
-              icon={'ant-design:windows-filled'}
-            />
+            <AppWidgetSummary title="Item Orders" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="Bug Reports"
-              total={234}
-              color="error"
-              icon={'ant-design:bug-filled'}
-            />
+            <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
@@ -81,27 +62,27 @@ export default function DashboardApp() {
                 '08/01/2003',
                 '09/01/2003',
                 '10/01/2003',
-                '11/01/2003'
+                '11/01/2003',
               ]}
               chartData={[
                 {
                   name: 'Team A',
                   type: 'column',
                   fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
+                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
                 },
                 {
                   name: 'Team B',
                   type: 'area',
                   fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
+                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
                 },
                 {
                   name: 'Team C',
                   type: 'line',
                   fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
-                }
+                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                },
               ]}
             />
           </Grid>
@@ -113,13 +94,13 @@ export default function DashboardApp() {
                 { label: 'America', value: 4344 },
                 { label: 'Asia', value: 5435 },
                 { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 }
+                { label: 'Africa', value: 4443 },
               ]}
               chartColors={[
                 theme.palette.primary.main,
                 theme.palette.chart.blue[0],
                 theme.palette.chart.violet[0],
-                theme.palette.chart.yellow[0]
+                theme.palette.chart.yellow[0],
               ]}
             />
           </Grid>
@@ -138,7 +119,7 @@ export default function DashboardApp() {
                 { label: 'South Korea', value: 690 },
                 { label: 'Netherlands', value: 1100 },
                 { label: 'United States', value: 1200 },
-                { label: 'United Kingdom', value: 1380 }
+                { label: 'United Kingdom', value: 1380 },
               ]}
             />
           </Grid>
@@ -150,7 +131,7 @@ export default function DashboardApp() {
               chartData={[
                 { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
                 { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] }
+                { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
               ]}
               chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
             />
@@ -164,7 +145,7 @@ export default function DashboardApp() {
                 title: faker.name.jobTitle(),
                 description: faker.name.jobTitle(),
                 image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent()
+                postedAt: faker.date.recent(),
               }))}
             />
           </Grid>
@@ -179,10 +160,10 @@ export default function DashboardApp() {
                   '12 Invoices have been paid',
                   'Order #37745 from September',
                   'New order placed #XF-2356',
-                  'New order placed #XF-2346'
+                  'New order placed #XF-2346',
                 ][index],
                 type: `order${index + 1}`,
-                time: faker.date.past()
+                time: faker.date.past(),
               }))}
             />
           </Grid>
@@ -194,27 +175,23 @@ export default function DashboardApp() {
                 {
                   name: 'FaceBook',
                   value: 323234,
-                  icon: (
-                    <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} height={32} />
-                  )
+                  icon: <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} height={32} />,
                 },
                 {
                   name: 'Google',
                   value: 341212,
-                  icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} height={32} />
+                  icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} height={32} />,
                 },
                 {
                   name: 'Linkedin',
                   value: 411213,
-                  icon: (
-                    <Iconify icon={'eva:linkedin-fill'} color="#006097" width={32} height={32} />
-                  )
+                  icon: <Iconify icon={'eva:linkedin-fill'} color="#006097" width={32} height={32} />,
                 },
                 {
                   name: 'Twitter',
                   value: 443232,
-                  icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} height={32} />
-                }
+                  icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} height={32} />,
+                },
               ]}
             />
           </Grid>
@@ -227,7 +204,7 @@ export default function DashboardApp() {
                 { id: '2', label: 'Add SCSS and JS files if required' },
                 { id: '3', label: 'Stakeholder Meeting' },
                 { id: '4', label: 'Scoping & Estimations' },
-                { id: '5', label: 'Sprint Showcase' }
+                { id: '5', label: 'Sprint Showcase' },
               ]}
             />
           </Grid>
