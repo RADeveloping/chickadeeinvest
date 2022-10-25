@@ -19,7 +19,7 @@ export class AuthorizeService {
 
   async getUserProfile() {
     const token = await authService.getAccessToken();
-    const response = await fetch('api/Accounts', {
+    const response = await fetch('api/Account', {
       headers: !token ? {} : { Authorization: `Bearer ${token}` }
     });
     return await response.json();
