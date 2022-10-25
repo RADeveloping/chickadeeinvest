@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { env } = require('process');
 
@@ -27,6 +26,7 @@ const context = [
   '/api/Ticket',
   '/api/Unit',
   '/api/Property'
+  '/api/Unit/current'
 ];
 
 module.exports = function (app) {

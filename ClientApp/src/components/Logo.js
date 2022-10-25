@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 
 Logo.propTypes = {
   disabledLink: PropTypes.bool,
-  sx: PropTypes.object
+  sx: PropTypes.object,
 };
 
 export default function Logo({ disabledLink = false, sx }) {

@@ -6,8 +6,8 @@ import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import NotFound from './pages/Page404';
-import DashboardApp from './pages/DashboardApp';
-import { Login } from './components/api-authorization/Login';
+import DashboardApp from "./pages/DashboardApp";
+import {Login} from "./components/api-authorization/Login";
 import {
   LoginActions,
   LogoutActions
@@ -32,51 +32,65 @@ const DashboardRoutes = [
 
 export default function Router() {
   return (
-    <Routes>
-      {/*
+      <Routes>
+          {/*
           Custom route to override the ASP.net routes
           */}
 
-      <Route path="login" element={<Login action={LoginActions.Login} />} />
+        <Route path="landing" element={<LandingPage/>} />
 
-      <Route path="logout" element={<Logout action={LogoutActions.Logout} />} />
+        <Route path="login" element={<Login action={LoginActions.Login} />} />
 
-      <Route path="authentication/logged-out" element={<Navigate to="/dashboard/app" />} />
+          <Route
+              path="signup"
+              element={<Login action={LoginActions.Register} />}
+          />
 
-      {/*
+          <Route
+              path="logout"
+              element={<Logout action={LogoutActions.Logout} />}
+          />
+
+          <Route
+              path="authentication/logged-out"
+              element={<Navigate to="/dashboard/app" />}
+          />
+
+          {/*
           Routes for layouts that only have logo.
           */}
 
-      <Route path="/" element={<LogoOnlyLayout />}>
-        <Route path="/" element={<Navigate to="/dashboard/app" />} />
-        <Route path="dashboard" element={<Navigate to="/dashboard/app" />} />
-        <Route path="404" element={<NotFound />} />
-        <Route path="*" element={<Navigate to="/404" />} />
-      </Route>
+          <Route path="/" element={<LogoOnlyLayout />}>
+              <Route
+                  path="/"
+                  element={<Navigate to="/dashboard/app" />}
+              />
+              <Route
+                  path="dashboard"
+                  element={<Navigate to="/dashboard/app" />}
+              />
+              <Route
+                  path="404"
+                  element={<NotFound />}
+              />
+              <Route
+                  path="*"
+                  element={<Navigate to="/404" />}
+              />
+          </Route>
 
-      <Route path="/dashboard" element={<DashboardLayout />}>
-        {DashboardRoutes.map((route, index) => {
-          route.path = '/dashboard/'.concat(route.path);
-          const { element, requireAuth, ...rest } = route;
-          return (
-            <Route
-              key={index}
-              {...rest}
-              element={requireAuth ? <AuthorizeRoute {...rest} element={element} /> : element}
-            />
-          );
-        })}
-      </Route>
-      {ApiAuthorzationRoutes.map((route, index) => {
-        const { element, requireAuth, ...rest } = route;
-        return (
-          <Route
-            key={index}
-            {...rest}
-            element={requireAuth ? <AuthorizeRoute {...rest} element={element} /> : element}
-          />
-        );
-      })}
-    </Routes>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+              {DashboardRoutes.map((route, index) => {
+                  route.path = "/dashboard/".concat(route.path)
+                  const { element, requireAuth, ...rest} = route;
+                  return <Route key={index} {...rest} element={requireAuth ? <AuthorizeRoute {...rest} element={element} /> : element} />;
+              })}
+          </Route>
+          {ApiAuthorzationRoutes.map((route, index) => {
+              const { element, requireAuth, ...rest } = route;
+              return <Route key={index} {...rest} element={requireAuth ? <AuthorizeRoute {...rest} element={element} /> : element} />;
+          })}
+      </Routes>
+
   );
 }

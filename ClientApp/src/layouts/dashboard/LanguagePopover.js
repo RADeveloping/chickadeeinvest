@@ -11,18 +11,18 @@ const LANGS = [
   {
     value: 'en',
     label: 'English',
-    icon: '/static/icons/ic_flag_en.svg'
+    icon: '/static/icons/ic_flag_en.svg',
   },
   {
     value: 'de',
     label: 'German',
-    icon: '/static/icons/ic_flag_de.svg'
+    icon: '/static/icons/ic_flag_de.svg',
   },
   {
     value: 'fr',
     label: 'French',
-    icon: '/static/icons/ic_flag_fr.svg'
-  }
+    icon: '/static/icons/ic_flag_fr.svg',
+  },
 ];
 
 // ----------------------------------------------------------------------
@@ -49,8 +49,8 @@ export default function LanguagePopover() {
           width: 44,
           height: 44,
           ...(open && {
-            bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity)
-          })
+            bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity),
+          }),
         }}
       >
         <img src={LANGS[0].icon} alt={LANGS[0].label} />
@@ -64,16 +64,12 @@ export default function LanguagePopover() {
           mt: 1.5,
           ml: 0.75,
           width: 180,
-          '& .MuiMenuItem-root': { px: 1, typography: 'body2', borderRadius: 0.75 }
+          '& .MuiMenuItem-root': { px: 1, typography: 'body2', borderRadius: 0.75 },
         }}
       >
         <Stack spacing={0.75}>
           {LANGS.map((option) => (
-            <MenuItem
-              key={option.value}
-              selected={option.value === LANGS[0].value}
-              onClick={() => handleClose()}
-            >
+            <MenuItem key={option.value} selected={option.value === LANGS[0].value} onClick={() => handleClose()}>
               <Box component="img" alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} />
 
               {option.label}
