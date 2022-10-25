@@ -14,6 +14,7 @@ import {
     LogoutActions,
 } from "./components/api-authorization/ApiAuthorizationConstants";
 import {Logout} from "./components/api-authorization/Logout";
+import LandingPage from "./pages/LandingPage";
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +38,9 @@ export default function Router() {
           Custom route to override the ASP.net routes
           */}
 
+        <Route path="landing" element={<LandingPage/>} />
+
+        <Route path="login" element={<Login action={LoginActions.Login} />} />
 
           <Route
               path="login"
