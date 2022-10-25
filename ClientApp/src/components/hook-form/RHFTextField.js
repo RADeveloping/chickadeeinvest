@@ -7,7 +7,7 @@ import { TextField } from '@mui/material';
 // ----------------------------------------------------------------------
 
 RHFTextField.propTypes = {
-  name: PropTypes.string
+  name: PropTypes.string,
 };
 
 export default function RHFTextField({ name, ...other }) {

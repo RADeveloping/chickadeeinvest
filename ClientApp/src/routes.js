@@ -5,16 +5,16 @@ import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizati
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
-import User from './pages/User';
 import NotFound from './pages/Page404';
-import DashboardApp from './pages/DashboardApp';
-import { Login } from './components/api-authorization/Login';
+import DashboardApp from "./pages/DashboardApp";
+import {Login} from "./components/api-authorization/Login";
 import {
   LoginActions,
   LogoutActions
 } from './components/api-authorization/ApiAuthorizationConstants';
 import { Logout } from './components/api-authorization/Logout';
-import LandingPage from "./pages/landingpage/LandingPage";
+import Tickets from "./pages/Tickets";
+import LandingPage from "./pages/LandingPage";
 
 // ----------------------------------------------------------------------
 
@@ -25,9 +25,9 @@ const DashboardRoutes = [
     element: <DashboardApp />
   },
   {
-    path: 'user',
+    path: 'tickets',
     requireAuth: true,
-    element: <User />
+    element: <Tickets />
   }
 ];
 
@@ -42,44 +42,56 @@ export default function Router() {
 
         <Route path="login" element={<Login action={LoginActions.Login} />} />
 
-      <Route path="logout" element={<Logout action={LogoutActions.Logout} />} />
+          <Route
+              path="signup"
+              element={<Login action={LoginActions.Register} />}
+          />
 
-      <Route path="authentication/logged-out" element={<Navigate to="/dashboard/app" />} />
+          <Route
+              path="logout"
+              element={<Logout action={LogoutActions.Logout} />}
+          />
 
-      {/*
+          <Route
+              path="authentication/logged-out"
+              element={<Navigate to="/dashboard/app" />}
+          />
+
+          {/*
           Routes for layouts that only have logo.
           */}
 
-      <Route path="/" element={<LogoOnlyLayout />}>
-        <Route path="/" element={<Navigate to="/dashboard/app" />} />
-        <Route path="dashboard" element={<Navigate to="/dashboard/app" />} />
-        <Route path="404" element={<NotFound />} />
-        <Route path="*" element={<Navigate to="/404" />} />
-      </Route>
+          <Route path="/" element={<LogoOnlyLayout />}>
+              <Route
+                  path="/"
+                  element={<Navigate to="/dashboard/app" />}
+              />
+              <Route
+                  path="dashboard"
+                  element={<Navigate to="/dashboard/app" />}
+              />
+              <Route
+                  path="404"
+                  element={<NotFound />}
+              />
+              <Route
+                  path="*"
+                  element={<Navigate to="/404" />}
+              />
+          </Route>
 
-      <Route path="/dashboard" element={<DashboardLayout />}>
-        {DashboardRoutes.map((route, index) => {
-          route.path = '/dashboard/'.concat(route.path);
-          const { element, requireAuth, ...rest } = route;
-          return (
-            <Route
-              key={index}
-              {...rest}
-              element={requireAuth ? <AuthorizeRoute {...rest} element={element} /> : element}
-            />
-          );
-        })}
-      </Route>
-      {ApiAuthorzationRoutes.map((route, index) => {
-        const { element, requireAuth, ...rest } = route;
-        return (
-          <Route
-            key={index}
-            {...rest}
-            element={requireAuth ? <AuthorizeRoute {...rest} element={element} /> : element}
-          />
-        );
-      })}
-    </Routes>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+              {DashboardRoutes.map((route, index) => {
+                  route.path = "/dashboard/".concat(route.path)
+                  const { element, requireAuth, ...rest} = route;
+                  return <Route key={index} {...rest} element={requireAuth ? <AuthorizeRoute {...rest} element={element} /> : element} />;
+              })}
+          </Route>
+          {ApiAuthorzationRoutes.map((route, index) => {
+              const { element, requireAuth, ...rest } = route;
+              return <Route key={index} {...rest} element={requireAuth ? <AuthorizeRoute {...rest} element={element} /> : element} />;
+          })}
+      </Routes>
+
   );
 }

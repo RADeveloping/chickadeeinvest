@@ -15,13 +15,13 @@ const MENU_OPTIONS = [
   {
     label: 'Home',
     icon: 'eva:home-fill',
-    linkTo: '/'
+    linkTo: '/',
   },
   {
     label: 'Profile',
     icon: 'eva:person-fill',
-    linkTo: '/authentication/profile'
-  }
+    linkTo: '/authentication/profile',
+  },
 ];
 
 // ----------------------------------------------------------------------
@@ -49,6 +49,7 @@ export default function AccountPopover() {
   const handleClose = () => {
     // make post request to /Account/Logout
     setOpen(null);
+
   };
 
   return (
@@ -66,9 +67,9 @@ export default function AccountPopover() {
               height: '100%',
               borderRadius: '50%',
               position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8)
-            }
-          })
+              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
+            },
+          }),
         }}
       >
         <Avatar src={`data:image/jpeg;base64,${profilePicture}`} alt={displayName} />
@@ -84,8 +85,8 @@ export default function AccountPopover() {
           ml: 0.75,
           '& .MuiMenuItem-root': {
             typography: 'body2',
-            borderRadius: 0.75
-          }
+            borderRadius: 0.75,
+          },
         }}
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
