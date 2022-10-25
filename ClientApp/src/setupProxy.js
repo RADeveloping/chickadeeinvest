@@ -25,6 +25,7 @@ const context = [
   '/images',
   '/api/Ticket',
   '/api/Unit',
+  '/api/Property',
   '/api/Unit/current'
 ];
 

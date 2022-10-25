@@ -5,30 +5,30 @@ import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizati
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
-import User from './pages/User';
 import NotFound from './pages/Page404';
 import DashboardApp from "./pages/DashboardApp";
 import {Login} from "./components/api-authorization/Login";
 import {
-    LoginActions,
-    LogoutActions,
-} from "./components/api-authorization/ApiAuthorizationConstants";
-import {Logout} from "./components/api-authorization/Logout";
+  LoginActions,
+  LogoutActions
+} from './components/api-authorization/ApiAuthorizationConstants';
+import { Logout } from './components/api-authorization/Logout';
+import Tickets from "./pages/Tickets";
 import LandingPage from "./pages/LandingPage";
 
 // ----------------------------------------------------------------------
 
 const DashboardRoutes = [
-    {
-        path: 'app',
-        requireAuth: true,
-        element: <DashboardApp />
-    },
-    {
-        path: 'user',
-        requireAuth: true,
-        element: <User />
-    },
+  {
+    path: 'app',
+    requireAuth: true,
+    element: <DashboardApp />
+  },
+  {
+    path: 'tickets',
+    requireAuth: true,
+    element: <Tickets />
+  }
 ];
 
 export default function Router() {
