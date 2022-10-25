@@ -45,7 +45,8 @@ namespace chickadee.Controllers
         }
 
          // GET: api/Unit/current
-        [HttpGet("/current")]
+        [HttpGet]
+        [Route("current")]
         public async Task<ActionResult<IEnumerable<Unit>>> GetSpecificUnitForUser()
         {
           if (_context.Units == null)
