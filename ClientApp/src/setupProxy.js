@@ -26,6 +26,7 @@ const context = [
   '/images',
   '/api/Ticket',
   '/api/Unit',
+  '/api/Property'
 ];
 
 module.exports = function (app) {
