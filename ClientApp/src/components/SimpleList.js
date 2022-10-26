@@ -3,7 +3,7 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import {Box, Card, Grow, IconButton, ListItemButton, ListSubheader, Slide, Stack} from "@mui/material";
+import {Box, Card, Collapse, Grow, IconButton, ListItemButton, ListSubheader, Slide, Stack} from "@mui/material";
 import Iconify from "./Iconify";
 
 export default function SimpleList({items, title, setSelect, setNestedSelect, path, selected, skinny, isDesktop}) {
@@ -14,7 +14,8 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
                 <ListSubheader component="div" id="nested-list-subheader">
                     <Stack direction={'column'}>
                        
-                    {!isDesktop && setNestedSelect &&
+                  
+                        <Collapse orientation="vertical" in={!isDesktop && setNestedSelect }>
                         <Box>
                         <IconButton onClick={() => {
                             setNestedSelect(null)
@@ -23,7 +24,8 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
                         </IconButton>
                     {path && `${path}`}
                         </Box>
-                    }
+                        </Collapse>
+                    
                     
                         {title}
                     </Stack>
