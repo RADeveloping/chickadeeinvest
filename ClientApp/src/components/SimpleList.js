@@ -8,7 +8,8 @@ import Iconify from "./Iconify";
 
 export default function SimpleList({items, title, setSelect, setNestedSelect, path, selected, skinny, isDesktop}) {
     return (
-        <Card sx={{height:450}}>
+        <Card sx={{height:450, width: isDesktop && skinny ? 200 : 
+        !isDesktop ? undefined : 360}}>
            
         <List  subheader={
                 <ListSubheader component="div" id="nested-list-subheader">
