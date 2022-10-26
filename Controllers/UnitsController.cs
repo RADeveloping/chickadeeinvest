@@ -39,11 +39,29 @@ namespace chickadee.Controllers
 
           var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
+          var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
+
           if (isTenant || isAdmin)
           {
             return NoContent();
           }
 
+          if (isPropertyManager && _context.Properties != null)
+          {
+            var unitList = new List<Unit>();
+            var specificProperties = await _context.Properties
+              .Include(m => m.PropertyManager)
+              .Where(p => p.PropertyManager == user)
+              .Include(u => u.Units)
+              .ToListAsync();
+            specificProperties.ForEach((property) => {
+              property.Units.ForEach((unit) => {
+                unitList.Add(unit);
+              });
+            });
+            return unitList;
+          }
+            // Ideally for super admins to get ALL units
             return await _context.Units
               .Include(t => t.Tenants)
               .Include(i => i.Tickets)
