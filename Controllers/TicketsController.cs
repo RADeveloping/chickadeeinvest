@@ -39,6 +39,13 @@ namespace chickadee.Controllers
 
           var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
 
+          var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+          if (isAdmin)
+          {
+            return NoContent();
+          }
+
           if (isTenant && _context.Units != null)
           {
             var ticketList = new List<Ticket>();

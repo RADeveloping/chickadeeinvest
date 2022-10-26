@@ -37,11 +37,13 @@ namespace chickadee.Controllers
 
           var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
 
-          if (isTenant)
+          var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+          if (isTenant || isAdmin)
           {
             return NoContent();
           }
-          
+
             return await _context.Units
               .Include(t => t.Tenants)
               .Include(i => i.Tickets)

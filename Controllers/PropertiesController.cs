@@ -37,7 +37,9 @@ namespace chickadee.Controllers
 
           var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
 
-          if (isTenant)
+          var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+          if (isTenant || isAdmin)
           {
             return NoContent();
           }
