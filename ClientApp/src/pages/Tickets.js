@@ -91,7 +91,7 @@ export default function Tickets() {
     return data;
   }
   
-  const [data, errorData, loadingData] = useFetch('/api/Ticket', filterTicket)
+  const [data, errorData, loadingData] = useFetch('/api/Tickets', filterTicket)
 
   const [page, setPage] = useState(0);
 

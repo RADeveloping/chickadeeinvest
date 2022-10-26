@@ -10,9 +10,9 @@ import {Link} from "react-router-dom";
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
-  const ticketUri = '/api/Ticket';
-  const unitUri = '/api/Unit';
-  const propertyUri = '/api/Property';
+  const ticketUri = '/api/Tickets';
+  const unitUri = '/api/Units';
+  const propertyUri = '/api/Properties';
   
   const [tickets, ticketsError, ticketsLoading] = useFetch(ticketUri);
   const [units, unitsError, unitsLoading] = useFetch(unitUri);
