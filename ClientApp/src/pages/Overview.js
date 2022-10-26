@@ -5,6 +5,7 @@ import Page from "../components/Page";
 import SimpleList from "../components/SimpleList";
 import {useEffect, useState} from "react";
 import PageLoading from "../components/PageLoading";
+import useResponsive from "../hooks/useResponsive";
 
 export default function Overview() {
     const filterProperties = (data) => {
@@ -46,16 +47,49 @@ export default function Overview() {
     const [selectedTicket, setSelectedTicket] = useState(null);
     const loadingData = loadingProperties && loadingUnits && loadingTickets;
     
+    const [path, setPath] = useState('');
+
+    const isDesktop = useResponsive('up', 'lg');
+
+    const title = "Overview"
+    
     useEffect(()=> {
+        if (selectedProperty) {
+            setPath(`${selectedProperty.primary}`)
+        }
         setSelectedUnit(null);
     }, [selectedProperty])
 
     useEffect(()=> {
+        if (selectedUnit) {
+            setPath(`${selectedProperty.primary}/Units/${selectedUnit.primary}`)
+        } else if(selectedProperty) {
+            setPath(`${selectedProperty.primary}`)
+        }
         setSelectedTicket(null);
     }, [selectedUnit])
     
+    const viewList = [
+        <SimpleList items={properties} title={"Properties"} setSelect={setSelectedProperty} selected={selectedProperty}
+         isDesktop={isDesktop} />,
+        <SimpleList skinny items={ selectedProperty ?
+            units.filter((u)=> u.fid === selectedProperty.id) : []}
+                    title={"Units"} setNestedSelect={setSelectedProperty} path={path} setSelect={setSelectedUnit} selected={selectedUnit}
+                    isDesktop={isDesktop} />,
+        <SimpleList items={ selectedUnit ? tickets.filter((t)=> t.fid === selectedUnit.id) : []}
+                    title={"Tickets"} setNestedSelect={setSelectedUnit} path={path} setSelect={setSelectedTicket} selected={selectedTicket}
+                    isDesktop={isDesktop} />
+    ]
     
-    const title = "Overview"
+    function getActiveList() {
+        if (selectedProperty && selectedUnit) {
+            return viewList[2]
+        } else if (selectedProperty) {
+            return viewList[1]
+        } else {
+            return viewList[0]
+        }
+    }
     
     return(
         
@@ -67,23 +101,16 @@ export default function Overview() {
                     </Typography>
                 </Stack>
                 <PageLoading loadingData={loadingData} />
-                <Grow in={!loadingProperties && !loadingUnits && !loadingTickets}>
-                <Stack direction="row">
-                    
-                    <SimpleList items={properties} title={"Properties"} setSelect={setSelectedProperty} selected={selectedProperty}/>
-
-                    <SimpleList items={ selectedProperty ?
-                        units.filter((u)=> u.fid === selectedProperty.id) : []} 
-                                title={"Units"}  setSelect={setSelectedUnit} selected={selectedUnit}/>
-
-             
-                       <SimpleList items={ selectedUnit ? tickets.filter((t)=> t.fid === selectedUnit.id) : []} 
-                                   title={"Tickets"}  setSelect={setSelectedTicket} selected={selectedTicket}/>
-                  
-              
-
-                </Stack>
+                {isDesktop &&
+                <Grow in={!loadingData}>
+                    <Stack direction="row">
+                        {viewList}
+                    </Stack>
                 </Grow>
+                }
+                {!isDesktop &&
+                    getActiveList()
+                }
             </Container>
         </Page>
       

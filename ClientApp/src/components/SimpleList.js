@@ -3,17 +3,29 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import {Box, Card, Grow, ListItemButton, ListSubheader, Slide} from "@mui/material";
+import {Box, Card, Grow, IconButton, ListItemButton, ListSubheader, Slide, Stack} from "@mui/material";
+import Iconify from "./Iconify";
 
-export default function SimpleList({items, title, setSelect, selected}) {
+export default function SimpleList({items, title, setSelect, setNestedSelect, path, selected, skinny, isDesktop}) {
     return (
         <Card sx={{height:450}}>
+           
         <List  subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-                {title}
-            </ListSubheader>
+            <Stack direction={'row'}>
+                {!isDesktop && setNestedSelect &&
+                    <IconButton onClick={() => {
+                        setNestedSelect(null)
+                    }}>
+                        <Iconify icon="eva:arrow-back-outline" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+                    </IconButton>
+                }
+                <ListSubheader component="div" id="nested-list-subheader">
+                    {isDesktop ? title : 
+                        path ? `${path}/${title}` : title}
+                </ListSubheader>
+            </Stack>
         }
-                sx={{ width: '100%', minWidth: 360, maxWidth: 200, bgcolor: 'background.paper'}}>
+                sx={{ width: '100%', minWidth: isDesktop && skinny ? 200 : 360, bgcolor: 'background.paper'}}>
 
             {items.length > 0 && items.map((item, index)=>
                 <>
