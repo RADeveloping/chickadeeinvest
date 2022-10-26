@@ -27,6 +27,8 @@ import SearchNotFound from '../components/SearchNotFound';
 import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from '../sections/@dashboard/list';
 // mock
 import useFetch from "../components/FetchData";
+import PageLoading from "../components/PageLoading";
+import * as React from "react";
 
 // ----------------------------------------------------------------------
 
@@ -56,6 +58,7 @@ const STATUS = {
 export default function Tickets() {
 
   // CONFIG ---------------------------------------------------------------
+  const title = "Tickets"
   const filterData = (data) => {
     data.forEach((d)=> {
       d.createdOn = new Date(d.createdOn)
@@ -130,11 +133,11 @@ export default function Tickets() {
   const isDataNotFound = filteredData.length === 0;
 
   return (
-    <Page title={`${dataName}s`}>
+    <Page title={title}>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Tickets
+            {title}
           </Typography>
           <Button
             variant="contained"
@@ -145,13 +148,7 @@ export default function Tickets() {
             {`New ${dataName}`}
           </Button>
         </Stack>
-        {loadingData ?
-            <Box   display="flex"
-                   justifyContent="center"
-                   alignItems="center"
-            height="50vh">
-              <CircularProgress />
-            </Box> : null }
+        <PageLoading loadingData={loadingData} />
         <Grow in={!loadingData}>
         <Card sx={{display: loadingData ? 'none' : undefined}}>
           <ListToolbar
