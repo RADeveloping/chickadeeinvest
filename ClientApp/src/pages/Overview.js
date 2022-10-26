@@ -8,26 +8,25 @@ import PageLoading from "../components/PageLoading";
 import useResponsive from "../hooks/useResponsive";
 
 export default function Overview() {
-    const getFilter = (idKey, fidKey, primaryKey, secondaryKey, tertiaryKey) => {
-        return (data) => {
-            let simpleData = []
-            data.forEach((d) => {
-                simpleData.push({
-                    id: d[idKey],
-                    primary: d[primaryKey],
-                    secondary: d[secondaryKey],
-                    tertiary: d[tertiaryKey],
-                    fid: d[fidKey],
-                    data: d
-                });
-            })
-            return simpleData;
-        };
+    const filterProperties = (data) => {
+        let simpleData = []
+        data.forEach((d)=> {
+            simpleData.push({
+                id: d.propertyId,
+                primary: d.address});
+        })
+        return simpleData;
     }
-
-    const filterProperties = getFilter("propertyId", null, "address")
-    const filterUnit = getFilter("unitId", "propertyId", "unitNo")
-
+    const filterUnit = (data) => {
+        let simpleData = []
+        data.forEach((d)=> {
+            simpleData.push({
+                id: d.unitId,
+                fid: d.propertyId,
+                primary: `${d.unitNo}`});
+        })
+        return simpleData;
+    }
     const filterTicket = (data) => {
         let simpleData = []
         data.forEach((d)=> {
@@ -35,8 +34,7 @@ export default function Overview() {
                 id: d.ticketId,
                 fid: d.unitId,
                 primary: `#${d.ticketId} ${d.problem}`,
-                secondary: d.description,
-                data: d});
+                secondary: d.description});
         })
         return simpleData;
     }
