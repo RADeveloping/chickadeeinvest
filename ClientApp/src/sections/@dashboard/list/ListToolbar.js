@@ -1,9 +1,20 @@
 import PropTypes from 'prop-types';
 // material
 import { styled } from '@mui/material/styles';
-import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
+import {
+  Toolbar,
+  Tooltip,
+  IconButton,
+  Typography,
+  OutlinedInput,
+  InputAdornment,
+  Popover,
+  MenuItem
+} from '@mui/material';
 // component
 import Iconify from '../../../components/Iconify';
+import * as React from "react";
+import BasicPopover from "../../../components/BasicPopover";
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +46,19 @@ ListToolbar.propTypes = {
   onFilterName: PropTypes.func,
 };
 
-export default function ListToolbar({ numSelected, filterName, onFilterName }) {
+export default function ListToolbar({ numSelected, filterQuery, onFilterQuery, properties, filterQueryProperty }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleFilterClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleFilterClose = () => {
+    setAnchorEl(null);
+  };
+
+  const filterOpen = Boolean(anchorEl);
+  
   return (
     <RootStyle
       sx={{
@@ -51,8 +74,8 @@ export default function ListToolbar({ numSelected, filterName, onFilterName }) {
         </Typography>
       ) : (
         <SearchStyle
-          value={filterName}
-          onChange={onFilterName}
+          value={filterQuery}
+          onChange={onFilterQuery}
           placeholder="Search"
           startAdornment={
             <InputAdornment position="start">
@@ -61,7 +84,6 @@ export default function ListToolbar({ numSelected, filterName, onFilterName }) {
           }
         />
       )}
-
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
@@ -70,7 +92,7 @@ export default function ListToolbar({ numSelected, filterName, onFilterName }) {
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
-          <IconButton>
+          <IconButton onClick={handleFilterClick}>
             <Iconify icon="ic:round-filter-list" />
           </IconButton>
         </Tooltip>
@@ -78,3 +100,5 @@ export default function ListToolbar({ numSelected, filterName, onFilterName }) {
     </RootStyle>
   );
 }
+
+

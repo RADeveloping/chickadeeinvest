@@ -24,7 +24,7 @@ import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
-import { ListHead, ListToolbar, MoreMenu } from '../sections/@dashboard/list';
+import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from '../sections/@dashboard/list';
 // mock
 import useFetch from "../components/FetchData";
 
@@ -53,58 +53,30 @@ const STATUS = {
 
 // ----------------------------------------------------------------------
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(array, (ticket) => ticket.problem.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-  return stabilizedThis.map((el) => el[0]);
-}
-
 export default function Tickets() {
-  const filterTicket = (data) => {
+
+  // CONFIG ---------------------------------------------------------------
+  const filterData = (data) => {
     data.forEach((d)=> {
       d.createdOn = new Date(d.createdOn)
       d.estimatedDate = new Date(d.estimatedDate)
     })
     return data;
   }
-  
-  const [data, errorData, loadingData] = useFetch('/api/Ticket', filterTicket)
+  const properties = TABLE_HEAD.map((d) => d.label)
+  const dataName = 'Ticket';
+  const dataId = 'ticketId';
+  const [filterQueryProperty, setFilterQueryProperty] = useState('problem')
+  const [orderBy, setOrderBy] = useState('createdOn');
+  const [data, errorData, loadingData] = useFetch('/api/Ticket', filterData);
+  // ----------------------------------------------------------------------
 
   const [page, setPage] = useState(0);
-
   const [order, setOrder] = useState('desc');
-
   const [selected, setSelected] = useState([]);
-
-  const [orderBy, setOrderBy] = useState('createdOn');
-
-  const [filterName, setFilterName] = useState('');
-
+  const [filterQuery, setFilterQuery] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -113,18 +85,18 @@ export default function Tickets() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = data.map((n) => n.name);
+      const newSelecteds = data.map((n) => n[dataId]);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, property) => {
+    const selectedIndex = selected.indexOf(property);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, property);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -147,31 +119,31 @@ export default function Tickets() {
     setPage(0);
   };
 
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
+  const handleFilterByQuery = (event) => {
+    setFilterQuery(event.target.value);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-  const filteredData = applySortFilter(data, getComparator(order, orderBy), filterName);
+  const filteredData = applySortFilter(data, getComparator(order, orderBy), filterQuery, filterQueryProperty);
 
   const isDataNotFound = filteredData.length === 0;
 
   return (
-    <Page title={"Tickets"}>
+    <Page title={`${dataName}s`}>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Tickets
           </Typography>
-          {/*<Button*/}
-          {/*  variant="contained"*/}
-          {/*  component={RouterLink}*/}
-          {/*  to="#"*/}
-          {/*  startIcon={<Iconify icon="eva:plus-fill" />}*/}
-          {/*>*/}
-          {/*  New User*/}
-          {/*</Button>*/}
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="#"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
+            {`New ${dataName}`}
+          </Button>
         </Stack>
         {loadingData ?
             <Box   display="flex"
@@ -184,8 +156,9 @@ export default function Tickets() {
         <Card sx={{display: loadingData ? 'none' : undefined}}>
           <ListToolbar
             numSelected={selected.length}
-            filterName={filterName}
-            onFilterName={handleFilterByName}
+            filterName={filterQuery}
+            onFilterName={handleFilterByQuery}
+            properties={properties}
           />
    
  
@@ -260,7 +233,7 @@ export default function Tickets() {
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} sx={{width: '100%'}} />
+                        <SearchNotFound searchQuery={filterQuery} sx={{width: '100%'}} />
                       </TableCell>
                     </TableRow>
                   </TableBody>
