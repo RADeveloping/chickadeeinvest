@@ -83,67 +83,16 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function Tickets() {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [roles, setRoles] = useState([]);
+  const filterTicket = (data) => {
+    data.forEach((d)=> {
+      d.createdOn = new Date(d.createdOn)
+      d.estimatedDate = new Date(d.estimatedDate)
+    })
+    return data;
+  }
   
-  useEffect(() => {
-    fetch('/api/Account')
-      .then((res) => res.json())
-      .then((data) => {
-        setRoles(data.roles);
-      })
-  }, []);
+  const [data, errorData, loadingData] = useFetch('/api/Ticket', filterTicket)
 
-  useEffect(() => {
-    if (roles.includes("PropertyManager")) {
-      const ticketsData = [];
-      fetch('/api/Property/current')
-        .then((res) => res.json())
-        .then((data) => {
-          data.forEach((d)=> {
-            console.log(d.units);
-            d.units.forEach((unit) => {
-              unit.tickets.forEach((ticket) => {
-                ticket.createdOn = new Date(ticket.createdOn)
-                ticket.estimatedDate = new Date(ticket.estimatedDate)
-                ticketsData.push(ticket);
-              })
-            })
-          })
-          setData(ticketsData);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error(err);
-          setError(err);
-          setLoading(false);
-        });
-    }
-    if (roles.includes("Tenant")) {
-      const ticketsData = [];
-      fetch('/api/Unit/current')
-        .then((res) => res.json())
-        .then((data) => {
-          data.forEach((d)=> {
-            d.tickets.forEach((ticket) => {
-              ticket.createdOn = new Date(ticket.createdOn)
-              ticket.estimatedDate = new Date(ticket.estimatedDate)
-              ticketsData.push(ticket);
-            })
-          })
-          setData(ticketsData);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error(err);
-          setError(err);
-          setLoading(false);
-        });
-    }
-  }, [roles, setData, setLoading]);
-  
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('desc');
@@ -224,15 +173,15 @@ export default function Tickets() {
           {/*  New User*/}
           {/*</Button>*/}
         </Stack>
-        {loading ?
+        {loadingData ?
             <Box   display="flex"
                    justifyContent="center"
                    alignItems="center"
             height="50vh">
               <CircularProgress />
             </Box> : null }
-        <Grow in={!loading}>
-        <Card sx={{display: loading ? 'none' : undefined}}>
+        <Grow in={!loadingData}>
+        <Card sx={{display: loadingData ? 'none' : undefined}}>
           <ListToolbar
             numSelected={selected.length}
             filterName={filterName}
