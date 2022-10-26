@@ -1,32 +1,33 @@
 ﻿import * as React from 'react';
+import {useEffect, useState} from 'react';
 import useFetch from "../components/FetchData";
-import {Box, CircularProgress, Container, Grow, Stack, Typography} from "@mui/material";
+import {Container, Grow, Stack, Typography} from "@mui/material";
 import Page from "../components/Page";
 import SimpleList from "../components/SimpleList";
-import {useEffect, useState} from "react";
 import PageLoading from "../components/PageLoading";
 import useResponsive from "../hooks/useResponsive";
 
 export default function Overview() {
-    const filterProperties = (data) => {
-        let simpleData = []
-        data.forEach((d)=> {
-            simpleData.push({
-                id: d.propertyId,
-                primary: d.address});
-        })
-        return simpleData;
+    const getFilter = (idKey, fidKey, primaryKey, secondaryKey, tertiaryKey) => {
+        return (data) => {
+            let simpleData = []
+            data.forEach((d) => {
+                simpleData.push({
+                    id: d[idKey],
+                    primary: d[primaryKey],
+                    secondary: d[secondaryKey],
+                    tertiary: d[tertiaryKey],
+                    fid: d[fidKey],
+                    data: d
+                });
+            })
+            return simpleData;
+        };
     }
-    const filterUnit = (data) => {
-        let simpleData = []
-        data.forEach((d)=> {
-            simpleData.push({
-                id: d.unitId,
-                fid: d.propertyId,
-                primary: `${d.unitNo}`});
-        })
-        return simpleData;
-    }
+
+    const filterProperties = getFilter("propertyId", null, "address")
+    const filterUnit = getFilter("unitId", "propertyId", "unitNo")
+
     const filterTicket = (data) => {
         let simpleData = []
         data.forEach((d)=> {
@@ -34,7 +35,8 @@ export default function Overview() {
                 id: d.ticketId,
                 fid: d.unitId,
                 primary: `#${d.ticketId} ${d.problem}`,
-                secondary: d.description});
+                secondary: d.description,
+                data: d});
         })
         return simpleData;
     }
@@ -54,20 +56,20 @@ export default function Overview() {
     const title = "Overview"
     
     useEffect(()=> {
-        if (selectedProperty) {
-            setPath(`${selectedProperty.primary}`)
-        }
         setSelectedUnit(null);
     }, [selectedProperty])
 
     useEffect(()=> {
+        setSelectedTicket(null);
+    }, [selectedUnit])
+    
+    useEffect(() => {
         if (selectedUnit) {
             setPath(`${selectedProperty.primary}/Units/${selectedUnit.primary}`)
         } else if(selectedProperty) {
             setPath(`${selectedProperty.primary}`)
         }
-        setSelectedTicket(null);
-    }, [selectedUnit])
+    }, [selectedUnit, selectedProperty])
     
     const viewList = [
         <SimpleList items={properties} title={"Properties"} setSelect={setSelectedProperty} selected={selectedProperty}

@@ -11,24 +11,29 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
         <Card sx={{height:450}}>
            
         <List  subheader={
-            <Stack direction={'row'}>
-                {!isDesktop && setNestedSelect &&
-                    <IconButton onClick={() => {
-                        setNestedSelect(null)
-                    }}>
-                        <Iconify icon="eva:arrow-back-outline" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-                    </IconButton>
-                }
                 <ListSubheader component="div" id="nested-list-subheader">
-                    {isDesktop ? title : 
-                        path ? `${path}/${title}` : title}
+                    <Stack direction={'column'}>
+                       
+                    {!isDesktop && setNestedSelect &&
+                        <Box>
+                        <IconButton onClick={() => {
+                            setNestedSelect(null)
+                        }}>
+                            <Iconify icon="eva:arrow-back-outline" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+                        </IconButton>
+                    {path && `${path}`}
+                        </Box>
+                    }
+                    
+                        {title}
+                    </Stack>
                 </ListSubheader>
-            </Stack>
         }
                 sx={{ width: '100%', minWidth: isDesktop && skinny ? 200 : 360, bgcolor: 'background.paper'}}>
 
             {items.length > 0 && items.map((item, index)=>
                 <>
+                    <Divider key={`${item.id}-${title}-dvd1`} component="li" />
                     <ListItemButton key={`${item.id}-${title}-btn`} onClick={()=>setSelect(item)} alignItems="flex-start"
                     selected={selected && (item.id === selected.id)}>
                         <ListItemText key={`${item.id}-${title}-txt`}
@@ -48,7 +53,7 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
                             }
                         />
                     </ListItemButton>
-                    {index !== items.length - 1 && <Divider key={`${item.id}-${title}-dvd`} component="li" />}
+                    {index === items.length - 1 && <Divider key={`${item.id}-${title}-dvd`} component="li" />}
                 </>)
             }
         </List>
