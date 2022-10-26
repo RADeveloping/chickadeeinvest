@@ -41,12 +41,38 @@ namespace chickadee.Controllers
 
           if (isTenant && _context.Units != null)
           {
-            var tenantUnit = await _context.Units
+            var ticketList = new List<Ticket>();
+            var tenantUnits = await _context.Units
               .Include(t => t.Tenants)
               .Where(unit => unit.Tenants.Contains(user))
               .Include(i => i.Tickets)
               .Include(j => j.Property)
               .ToListAsync();
+            tenantUnits.ForEach((unit) => {
+              unit.Tickets.ForEach((ticket) => {
+                ticketList.Add(ticket);
+              });
+            });
+            return ticketList;
+          }
+
+          if (isPropertyManager && _context.Properties != null)
+          {
+            var ticketList = new List<Ticket>();
+            var properties = await _context.Properties
+              .Include(j => j.PropertyManager)
+              .Where(t => t.PropertyManager == user)
+              .Include(t => t.Units)
+                .ThenInclude(s => s.Tickets)
+              .ToListAsync();
+            properties.ForEach((property) => {
+              property.Units.ForEach((unit) => {
+                unit.Tickets.ForEach((ticket) => {
+                  ticketList.Add(ticket);
+                });
+              });
+            });
+            return ticketList;
           }
             return await _context.Tickets.ToListAsync();
         }
