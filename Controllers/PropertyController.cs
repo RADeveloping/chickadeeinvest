@@ -17,13 +17,11 @@ namespace chickadee.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationUser> _roleManager;
 
-        public PropertyController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<ApplicationUser> roleManager)
+        public PropertyController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         // GET: api/Property
@@ -37,9 +35,9 @@ namespace chickadee.Controllers
 
           var user = _userManager.GetUserAsync(User).Result;
 
-          var roles = await _roleManager.GetRoleNameAsync(user);
+          var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
 
-          if (roles.Contains("Tenant"))
+          if (isTenant)
           {
             return NoContent();
           }
@@ -60,7 +58,6 @@ namespace chickadee.Controllers
               return NotFound();
           }
             var user = _userManager.GetUserAsync(User).Result;
-
 
             return await _context.Properties
               .Include(j => j.PropertyManager)
