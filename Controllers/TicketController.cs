@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
@@ -15,10 +16,12 @@ namespace chickadee.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TicketController(ApplicationDbContext context)
+        public TicketController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Ticket
@@ -28,6 +31,22 @@ namespace chickadee.Controllers
           if (_context.Tickets == null)
           {
               return NotFound();
+          }
+
+          var user = _userManager.GetUserAsync(User).Result;
+
+          var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
+
+          var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
+
+          if (isTenant && _context.Units != null)
+          {
+            var tenantUnit = await _context.Units
+              .Include(t => t.Tenants)
+              .Where(unit => unit.Tenants.Contains(user))
+              .Include(i => i.Tickets)
+              .Include(j => j.Property)
+              .ToListAsync();
           }
             return await _context.Tickets.ToListAsync();
         }
