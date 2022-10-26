@@ -64,24 +64,29 @@ export class LoginMenu extends Component {
 
 // ----------------------------------------------------------------------
 
-const navConfig = [
-  {
-    title: 'dashboard',
-    path: '/dashboard/app',
-    icon: getIcon('eva:pie-chart-2-fill'),
-  },
-  {
-    title: 'profile',
-    path: profilePath,
-    icon: getIcon('eva:person-fill'),
-  },
-  {
-    title: 'Logout',
-    path: logoutPath,
-    icon: getIcon('eva:log-out-fill'),
-    state: logoutState
-  },
-];
+    const navConfig = [
+      {
+        title: 'dashboard',
+        path: '/dashboard/app',
+        icon: getIcon('eva:pie-chart-2-fill')
+      },
+      {
+        title: 'tickets',
+        path: '/dashboard/tickets',
+        icon: getIcon('ant-design:folder-open-outlined')
+      },
+      {
+        title: 'profile',
+        path: profilePath,
+        icon: getIcon('eva:person-fill')
+      },
+      {
+        title: 'Logout',
+        path: logoutPath,
+        icon: getIcon('eva:log-out-fill'),
+        state: logoutState
+      }
+    ];
 
 
     return (<Fragment>
