@@ -14,8 +14,6 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
         <List  subheader={
                 <ListSubheader component="div" id="nested-list-subheader">
                     <Stack direction={'column'}>
-                       
-                  
                         <Collapse orientation="vertical" in={!isDesktop && setNestedSelect }>
                         <Box>
                         <IconButton onClick={() => {
@@ -26,8 +24,6 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
                     {path && `${path}`}
                         </Box>
                         </Collapse>
-                    
-                    
                         {title}
                     </Stack>
                 </ListSubheader>
@@ -42,7 +38,7 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
                         <ListItemText key={`${item.id}-${title}-txt`}
                             primary={item.primary}
                             secondary={
-                                <React.Fragment>
+                                <>
                                     <Typography key={`${item.id}-${title}-typ`}
                                         sx={{ display: 'inline' }}
                                         component="span"
@@ -52,7 +48,7 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
                                         {item.secondary}
                                     </Typography>
                                     {item.tertiary}
-                                </React.Fragment>
+                                </>
                             }
                         />
                     </ListItemButton>
@@ -68,7 +64,6 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
                 justifyContent: 'center',
                 color: 'gainsboro'
             }}>{`No ${title}`}</Box>}
-           
         </Card>
     );
 }

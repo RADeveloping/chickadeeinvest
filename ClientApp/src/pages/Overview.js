@@ -1,13 +1,47 @@
 ﻿import * as React from 'react';
 import {useEffect, useState} from 'react';
 import useFetch from "../components/FetchData";
-import {Container, Grow, Stack, Typography} from "@mui/material";
+import {Box, Container, Grow, Stack, Typography} from "@mui/material";
 import Page from "../components/Page";
 import SimpleList from "../components/SimpleList";
 import PageLoading from "../components/PageLoading";
 import useResponsive from "../hooks/useResponsive";
+import Label from "../components/Label";
+
+const SEVERITY = {
+    0: {color: 'success', text: 'Low'},
+    1: {color: 'warning', text: 'Medium'},
+    2: {color: 'error', text: 'High'}
+}
+
+const STATUS = {
+    0: {color: 'info', text: 'Open'},
+    1: {color: 'primary', text: 'Closed'},
+}
 
 export default function Overview() {
+    const getTicketBox = (ticket) => {
+        return (
+            <>
+            #{ticket.ticketId} {ticket.problem}
+            <Stack direction={'row'} spacing={1}>
+                <Label
+                    variant="ghost"
+                    color={STATUS[ticket.status].color}
+                >
+                    {STATUS[ticket.status].text}
+                </Label>
+                <Label
+                    variant="ghost"
+                    color={SEVERITY[ticket.severity].color}
+                >
+                    {SEVERITY[ticket.severity].text}
+                </Label>
+            </Stack>
+            </>
+        )
+    }
+    
     const filterProperties = (data) => {
         let simpleData = []
         data.forEach((d)=> {
@@ -31,10 +65,12 @@ export default function Overview() {
         let simpleData = []
         data.forEach((d)=> {
             simpleData.push({
-                id: d.ticketId,
-                fid: d.unitId,
-                primary: `#${d.ticketId} ${d.problem}`,
-                secondary: d.description});
+                    id: d.ticketId,
+                    fid: d.unitId,
+                    primary: getTicketBox(d),
+                    tertiary: d.description,
+                }
+            );
         })
         return simpleData;
     }
