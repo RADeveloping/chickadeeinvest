@@ -63,7 +63,7 @@ export default function Tickets() {
     })
     return data;
   }
-  const properties = TABLE_HEAD.map((d) => d.label)
+  const properties = TABLE_HEAD.slice(0, -1);
   const dataName = 'Ticket';
   const dataId = 'ticketId';
   const [filterQueryProperty, setFilterQueryProperty] = useState('problem')
@@ -156,9 +156,12 @@ export default function Tickets() {
         <Card sx={{display: loadingData ? 'none' : undefined}}>
           <ListToolbar
             numSelected={selected.length}
-            filterName={filterQuery}
-            onFilterName={handleFilterByQuery}
+            filterQuery={filterQuery}
+            onFilterQuery={handleFilterByQuery}
             properties={properties}
+            filterQueryProperty={filterQueryProperty}
+            setFilterQueryProperty={setFilterQueryProperty}
+            setFilterQuery={setFilterQuery}
           />
    
  
@@ -232,7 +235,7 @@ export default function Tickets() {
                 {isDataNotFound && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                      <TableCell align="center" colSpan={TABLE_HEAD.length} sx={{ py: 3 }}>
                         <SearchNotFound searchQuery={filterQuery} sx={{width: '100%'}} />
                       </TableCell>
                     </TableRow>

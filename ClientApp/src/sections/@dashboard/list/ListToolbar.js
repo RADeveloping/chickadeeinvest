@@ -9,12 +9,12 @@ import {
   OutlinedInput,
   InputAdornment,
   Popover,
-  MenuItem
+  MenuItem, Select, Box, Fade, InputLabel, FormControl
 } from '@mui/material';
 // component
 import Iconify from '../../../components/Iconify';
 import * as React from "react";
-import BasicPopover from "../../../components/BasicPopover";
+import {useRef, useState} from "react";
 
 // ----------------------------------------------------------------------
 
@@ -26,12 +26,13 @@ const RootStyle = styled(Toolbar)(({ theme }) => ({
 }));
 
 const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
-  width: 240,
+  width: 150,
   transition: theme.transitions.create(['box-shadow', 'width'], {
     easing: theme.transitions.easing.easeInOut,
     duration: theme.transitions.duration.shorter,
   }),
-  '&.Mui-focused': { width: 320, boxShadow: theme.customShadows.z8 },
+  '&.Mui-focused': { boxShadow: theme.customShadows.z8 },
+  '&.extend': { width: 280},
   '& fieldset': {
     borderWidth: `1px !important`,
     borderColor: `${theme.palette.grey[500_32]} !important`,
@@ -46,19 +47,12 @@ ListToolbar.propTypes = {
   onFilterName: PropTypes.func,
 };
 
-export default function ListToolbar({ numSelected, filterQuery, onFilterQuery, properties, filterQueryProperty }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleFilterClick = (event) => {
-    setAnchorEl(event.currentTarget);
+export default function ListToolbar({ numSelected, filterQuery, setFilterQuery, onFilterQuery, properties, filterQueryProperty, setFilterQueryProperty }) {
+  const handleChange = (event) => {
+    setFilterQueryProperty(event.target.value);
   };
-
-  const handleFilterClose = () => {
-    setAnchorEl(null);
-  };
-
-  const filterOpen = Boolean(anchorEl);
   
+  const [filterVisible, setFilterVisible] = useState(false);
   return (
     <RootStyle
       sx={{
@@ -73,16 +67,49 @@ export default function ListToolbar({ numSelected, filterQuery, onFilterQuery, p
           {numSelected} selected
         </Typography>
       ) : (
+          <>
+            <Box>
         <SearchStyle
+            className={filterVisible ? 'extend' : undefined}
           value={filterQuery}
           onChange={onFilterQuery}
+          onFocus={()=>setFilterVisible(true)}
           placeholder="Search"
           startAdornment={
             <InputAdornment position="start">
               <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
             </InputAdornment>
           }
+
+          endAdornment= {
+            <Fade in={filterVisible}>
+              <IconButton onClick={() => {
+                setFilterQuery('')
+                setFilterVisible(false);
+              }}>
+                <Iconify icon="material-symbols:cancel" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+              </IconButton>
+            </Fade>
+            }
         />
+              &nbsp;
+              <Fade in={filterVisible}>
+                <FormControl>
+                <InputLabel id="query-property">By</InputLabel>
+            <Select
+                labelId="query-property"
+                value={filterQueryProperty}
+                label="By"
+                onChange={handleChange}
+            >
+              {properties.map((p) => 
+                <MenuItem key={p.id} value={p.id}>{p.label}</MenuItem>
+              )}
+            </Select>
+                </FormControl>
+              </Fade>
+            </Box>
+          </>
       )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
@@ -90,13 +117,7 @@ export default function ListToolbar({ numSelected, filterQuery, onFilterQuery, p
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>
         </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton onClick={handleFilterClick}>
-            <Iconify icon="ic:round-filter-list" />
-          </IconButton>
-        </Tooltip>
-      )}
+      ) : null}
     </RootStyle>
   );
 }
