@@ -41,12 +41,16 @@ namespace chickadee.Controllers
 
           var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
 
-          if (isTenant || isAdmin)
+          var isSuperAdmin = await _userManager.IsInRoleAsync(user, "Admin") && 
+                             await _userManager.IsInRoleAsync(user, "PropertyManager") &&
+                             await _userManager.IsInRoleAsync(user, "Tenant");
+
+          if ((isTenant || isAdmin) && !isSuperAdmin)
           {
             return NoContent();
           }
 
-          if (isPropertyManager && _context.Properties != null)
+          if (isPropertyManager && _context.Properties != null && !isSuperAdmin)
           {
             var unitList = new List<Unit>();
             var specificProperties = await _context.Properties

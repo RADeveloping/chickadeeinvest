@@ -41,12 +41,16 @@ namespace chickadee.Controllers
 
           var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
-          if (isAdmin)
+          var isSuperAdmin = await _userManager.IsInRoleAsync(user, "Admin") && 
+                             await _userManager.IsInRoleAsync(user, "PropertyManager") &&
+                             await _userManager.IsInRoleAsync(user, "Tenant");
+
+          if (isAdmin && !isSuperAdmin)
           {
             return NoContent();
           }
 
-          if (isTenant && _context.Units != null)
+          if (isTenant && _context.Units != null && !isSuperAdmin)
           {
             var ticketList = new List<Ticket>();
             var tenantUnits = await _context.Units
@@ -63,7 +67,7 @@ namespace chickadee.Controllers
             return ticketList;
           }
 
-          if (isPropertyManager && _context.Properties != null)
+          if (isPropertyManager && _context.Properties != null && !isSuperAdmin)
           {
             var ticketList = new List<Ticket>();
             var properties = await _context.Properties
