@@ -23,7 +23,21 @@ export default function Overview() {
     const getTicketBox = (ticket) => {
         return (
             <>
-            #{ticket.ticketId} {ticket.problem}
+                <Grid container justifyContent={'space-between'} alignItems={'center'}>
+                    <Grid item>
+                    #{ticket.ticketId} {ticket.problem}
+                    </Grid>
+                    <Grid item>
+                        <Typography
+                                    sx={{ display: 'inline' }}
+                                    component="span"
+                                    variant="body2"
+                                    color="text.secondary">
+                            {new Date(ticket.createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
+                        </Typography>
+                    </Grid>
+                </Grid>
+        
             <Stack direction={'row'} spacing={1}>
                 <Label
                     variant="ghost"
