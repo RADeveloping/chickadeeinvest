@@ -13,24 +13,50 @@ namespace chickadee.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PropertyController : ControllerBase
+    public class PropertiesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public PropertyController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public PropertiesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // GET: api/Property
+        // GET: api/Properties
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Property>>> GetProperties()
         {
           if (_context.Properties == null)
           {
               return NotFound();
+          }
+
+          var user = _userManager.GetUserAsync(User).Result;
+
+          var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
+
+          var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+          var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
+
+          var isSuperAdmin = await _userManager.IsInRoleAsync(user, "Admin") && 
+                             await _userManager.IsInRoleAsync(user, "PropertyManager") &&
+                             await _userManager.IsInRoleAsync(user, "Tenant");
+          
+          if ((isTenant || isAdmin) && !isSuperAdmin)
+          {
+            return NoContent();
+          }
+
+          if (isPropertyManager && !isSuperAdmin)
+          {
+            return await _context.Properties
+              .Include(p => p.PropertyManager)
+              .Where(d => d.PropertyManager == user)
+              .Include(u => u.Units)
+              .ToListAsync();
           }
             return await _context.Properties
               .Include(u => u.Units)
@@ -39,17 +65,16 @@ namespace chickadee.Controllers
               .ToListAsync();
         }
 
-         // GET: api/Property/current
+         // GET: api/Properties/current
         [HttpGet]
         [Route("current")]
         public async Task<ActionResult<IEnumerable<Property>>> GetSpecificPropertyForUser()
         {
-          if (_context.Units == null)
+          if (_context.Properties == null)
           {
               return NotFound();
           }
             var user = _userManager.GetUserAsync(User).Result;
-
 
             return await _context.Properties
               .Include(j => j.PropertyManager)
@@ -59,7 +84,7 @@ namespace chickadee.Controllers
               .ToListAsync();
         }
 
-        // GET: api/Property/5
+        // GET: api/Properties/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Property>> GetProperty(int id)
         {
@@ -77,7 +102,7 @@ namespace chickadee.Controllers
             return @property;
         }
 
-        // PUT: api/Property/5
+        // PUT: api/Properties/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProperty(int id, Property @property)
@@ -108,7 +133,7 @@ namespace chickadee.Controllers
             return NoContent();
         }
 
-        // POST: api/Property
+        // POST: api/Properties
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Property>> PostProperty(Property @property)
@@ -123,7 +148,7 @@ namespace chickadee.Controllers
             return CreatedAtAction("GetProperty", new { id = @property.PropertyId }, @property);
         }
 
-        // DELETE: api/Property/5
+        // DELETE: api/Properties/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProperty(int id)
         {
