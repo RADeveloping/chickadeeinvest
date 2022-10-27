@@ -6,10 +6,14 @@ import Typography from '@mui/material/Typography';
 import {Box, Card, Collapse, Grow, IconButton, ListItemButton, ListSubheader, Slide, Stack} from "@mui/material";
 import Iconify from "./Iconify";
 
-export default function SimpleList({items, title, setSelect, setNestedSelect, path, selected, skinny, isDesktop}) {
+export default function SimpleList({items, title, setSelect, setNestedSelect, path, selected, skinny, isDesktop, leftRound, rightRound, noRound}) {
+    const borderStyles = isDesktop ? {
+        borderTopRightRadius: leftRound ? 0 : undefined, borderBottomRightRadius: leftRound ? 0 : undefined,
+        borderTopLeftRadius: rightRound ? 0 : undefined, borderBottomLeftRadius: rightRound ? 0 : undefined,
+        borderRadius: noRound ? 0 : undefined} : null
+    
     return (
-        <Card sx={{height:450, width: isDesktop && skinny ? 200 : 
-        !isDesktop ? undefined : 360}}>
+        <Card sx={{height:450, width: skinny && isDesktop ? '60%' : '100%', ...borderStyles}}>
            
         <List  subheader={
                 <ListSubheader component="div" id="nested-list-subheader">

@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import {useEffect, useState} from 'react';
 import useFetch from "../components/FetchData";
-import {Box, Container, Grow, Stack, Typography} from "@mui/material";
+import {Box, Chip, Container, Grid, Grow, Stack, Typography} from "@mui/material";
 import Page from "../components/Page";
 import SimpleList from "../components/SimpleList";
 import PageLoading from "../components/PageLoading";
@@ -42,12 +42,43 @@ export default function Overview() {
         )
     }
     
+    const getUnitBox = (unit) => {
+        return (
+            <>
+                <Grid container justifyContent={'space-between'} alignItems={'center'}>
+                    <Grid item>
+                        {unit.unitNo}
+                    </Grid>
+                      <Grid item>
+                          <Chip label={unit.tickets.length} />
+                      </Grid>
+                </Grid>
+            </>
+        )
+    }
+
+    const getPropertiesBox = (property) => {
+        return (
+            <>
+                <Grid container justifyContent={'space-between'} alignItems={'center'}>
+                    <Grid item>
+                        {property.address}
+                    </Grid>
+                    <Grid item>
+                        <Chip label={property.units.length} />
+                    </Grid>
+                </Grid>
+            </>
+        )
+    }
+    
     const filterProperties = (data) => {
         let simpleData = []
         data.forEach((d)=> {
             simpleData.push({
                 id: d.propertyId,
-                primary: d.address});
+                primary: getPropertiesBox(d),
+                dir: d.address});
         })
         return simpleData;
     }
@@ -57,7 +88,8 @@ export default function Overview() {
             simpleData.push({
                 id: d.unitId,
                 fid: d.propertyId,
-                primary: `${d.unitNo}`});
+                primary: getUnitBox(d),
+                dir: d.unitNo});
         })
         return simpleData;
     }
@@ -69,6 +101,7 @@ export default function Overview() {
                     fid: d.unitId,
                     primary: getTicketBox(d),
                     tertiary: d.description,
+                     dir: `#${d.ticketId}`,
                 }
             );
         })
@@ -99,20 +132,20 @@ export default function Overview() {
     
     useEffect(() => {
         if (selectedUnit) {
-            setPath(`${selectedProperty.primary}/Units/${selectedUnit.primary}`)
+            setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
         } else if(selectedProperty) {
-            setPath(`${selectedProperty.primary}`)
+            setPath(`${selectedProperty.dir}`)
         }
     }, [selectedUnit, selectedProperty])
     
     const viewList = [
-        <SimpleList items={properties} title={"Properties"} setSelect={setSelectedProperty} selected={selectedProperty}
+        <SimpleList leftRound items={properties} title={"Properties"} setSelect={setSelectedProperty} selected={selectedProperty}
          isDesktop={isDesktop} />,
-        <SimpleList skinny items={ selectedProperty ?
+        <SimpleList noRound skinny items={ selectedProperty ?
             units.filter((u)=> u.fid === selectedProperty.id) : []}
                     title={"Units"} setNestedSelect={setSelectedProperty} path={path} setSelect={setSelectedUnit} selected={selectedUnit}
                     isDesktop={isDesktop} />,
-        <SimpleList items={ selectedUnit ? tickets.filter((t)=> t.fid === selectedUnit.id) : []}
+        <SimpleList rightRound items={ selectedUnit ? tickets.filter((t)=> t.fid === selectedUnit.id) : []}
                     title={"Tickets"} setNestedSelect={setSelectedUnit} path={path} setSelect={setSelectedTicket} selected={selectedTicket}
                     isDesktop={isDesktop} />
     ]
@@ -145,7 +178,11 @@ export default function Overview() {
                 </Grow>
                 }
                 {!isDesktop &&
-                    getActiveList()
+                    <Grow in={!loadingData}>
+                        <Box>
+                        {getActiveList()}
+                        </Box>
+                    </Grow>
                 }
             </Container>
         </Page>
