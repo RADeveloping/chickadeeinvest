@@ -86,6 +86,8 @@ namespace chickadee.Controllers
 
 
             return await _context.Units
+			  .Include(i => i.Tickets)
+              .Include(j => j.Property)
 			  .Select(unit => new
 				  {
 					  Unit = unit,
@@ -97,9 +99,7 @@ namespace chickadee.Controllers
 						  })
 				  })
               .Where(unit => unit.Tenants.Any(tenant => tenant.Id == user.Id))
-              .Include(i => i.Tickets)
-              .Include(j => j.Property)
-              .ToListAsync();
+			  .ToListAsync();
         }
 
         // GET: api/Units/5
