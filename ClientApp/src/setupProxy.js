@@ -23,11 +23,11 @@ const context = [
   '/api/Account',
   '/css',
   '/images',
-  '/api/Ticket',
-  '/api/Unit',
-  '/api/Property',
-  '/api/Unit/current',
-  '/api/Property/current'
+  '/api/Tickets',
+  '/api/Units',
+  '/api/Properties',
+  '/api/Units/current',
+  '/api/Properties/current'
 ];
 
 module.exports = function (app) {

@@ -7,21 +7,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TicketController : ControllerBase
+    public class TicketsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TicketController(ApplicationDbContext context)
+        public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: api/Ticket
+        // GET: api/Tickets
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
         {
@@ -29,10 +32,63 @@ namespace chickadee.Controllers
           {
               return NotFound();
           }
+
+          var user = _userManager.GetUserAsync(User).Result;
+
+          var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
+
+          var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
+
+          var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+          var isSuperAdmin = await _userManager.IsInRoleAsync(user, "Admin") && 
+                             await _userManager.IsInRoleAsync(user, "PropertyManager") &&
+                             await _userManager.IsInRoleAsync(user, "Tenant");
+
+          if (isAdmin && !isSuperAdmin)
+          {
+            return NoContent();
+          }
+
+          if (isTenant && _context.Units != null && !isSuperAdmin)
+          {
+            var ticketList = new List<Ticket>();
+            var tenantUnits = await _context.Units
+              .Include(t => t.Tenants)
+              .Where(unit => unit.Tenants.Contains(user))
+              .Include(i => i.Tickets)
+              .Include(j => j.Property)
+              .ToListAsync();
+            tenantUnits.ForEach((unit) => {
+              unit.Tickets.ForEach((ticket) => {
+                ticketList.Add(ticket);
+              });
+            });
+            return ticketList;
+          }
+
+          if (isPropertyManager && _context.Properties != null && !isSuperAdmin)
+          {
+            var ticketList = new List<Ticket>();
+            var properties = await _context.Properties
+              .Include(j => j.PropertyManager)
+              .Where(t => t.PropertyManager == user)
+              .Include(t => t.Units)
+                .ThenInclude(s => s.Tickets)
+              .ToListAsync();
+            properties.ForEach((property) => {
+              property.Units.ForEach((unit) => {
+                unit.Tickets.ForEach((ticket) => {
+                  ticketList.Add(ticket);
+                });
+              });
+            });
+            return ticketList;
+          }
             return await _context.Tickets.ToListAsync();
         }
 
-        // GET: api/Ticket/5
+        // GET: api/Tickets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
@@ -50,7 +106,7 @@ namespace chickadee.Controllers
             return ticket;
         }
 
-        // PUT: api/Ticket/5
+        // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTicket(int id, Ticket ticket)
@@ -81,7 +137,7 @@ namespace chickadee.Controllers
             return NoContent();
         }
 
-        // POST: api/Ticket
+        // POST: api/Tickets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
@@ -96,7 +152,7 @@ namespace chickadee.Controllers
             return CreatedAtAction("GetTicket", new { id = ticket.TicketId }, ticket);
         }
 
-        // DELETE: api/Ticket/5
+        // DELETE: api/Tickets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket(int id)
         {
