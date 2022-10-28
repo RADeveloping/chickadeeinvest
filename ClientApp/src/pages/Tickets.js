@@ -33,6 +33,8 @@ import * as React from "react";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: 'property', label: 'Property', alignRight: false },
+  { id: 'unit', label: 'Unit', alignRight: false },
   { id: 'problem', label: 'Problem', alignRight: false },
   { id: 'description', label: 'Description', alignRight: false },
   { id: 'createdOn', label: 'Created', alignRight: false },
@@ -61,6 +63,8 @@ export default function Tickets() {
   const title = "Tickets"
   const filterData = (data) => {
     data.forEach((d)=> {
+      d.property = d.unit.property.address
+      d.unit = d.unit.unitNo
       d.createdOn = new Date(d.createdOn)
       d.estimatedDate = new Date(d.estimatedDate)
     })
@@ -69,13 +73,14 @@ export default function Tickets() {
   const properties = TABLE_HEAD.slice(0, -1);
   const dataName = 'Ticket';
   const dataId = 'ticketId';
-  const [filterQueryProperty, setFilterQueryProperty] = useState('problem')
-  const [orderBy, setOrderBy] = useState('createdOn');
+  const [filterQueryProperty, setFilterQueryProperty] = useState('property')
+  const [orderBy, setOrderBy] = useState('status');
   const [data, errorData, loadingData] = useFetch('/api/Tickets', filterData);
+  console.log(data)
   // ----------------------------------------------------------------------
 
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('desc');
+  const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [filterQuery, setFilterQuery] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -177,7 +182,7 @@ export default function Tickets() {
                   {filteredData
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { createdOn, description, estimatedDate, problem, severity, status, ticketId } = row;
+                      const { createdOn, description, estimatedDate, problem, severity, status, ticketId, unit, property } = row;
                       const isItemSelected = selected.indexOf(ticketId) !== -1;
 
                       return (
@@ -195,6 +200,8 @@ export default function Tickets() {
                               onChange={(event) => handleClick(event, ticketId)}
                             />
                           </TableCell>
+                          <TableCell align="left">{property}</TableCell>
+                          <TableCell align="left">{unit}</TableCell>
                           <TableCell align="left">{problem}</TableCell>
                           <TableCell align="left">{description}</TableCell>
                           <TableCell align="left">{createdOn.toLocaleDateString('en-CA', {dateStyle: 'medium'})} </TableCell>
