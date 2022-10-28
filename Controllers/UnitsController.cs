@@ -86,8 +86,17 @@ namespace chickadee.Controllers
 
 
             return await _context.Units
-              .Include(t => t.Tenants)
-              .Where(unit => unit.Tenants.Contains(user))
+			  .Select(unit => new
+				  {
+					  Unit = unit,
+					  Tenants = unit.Tenants.Select(tenant => new
+						  {
+							  tenant.Id,
+							  tenant.FirstName,
+							  tenant.LastName
+						  })
+				  })
+              .Where(unit => unit.Tenants.Any(tenant => tenant.Id == user.Id))
               .Include(i => i.Tickets)
               .Include(j => j.Property)
               .ToListAsync();
