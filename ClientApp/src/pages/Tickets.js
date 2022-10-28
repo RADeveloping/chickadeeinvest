@@ -135,7 +135,9 @@ export default function Tickets() {
 
   const filteredData = applySortFilter(data, getComparator(order, orderBy), filterQuery, filterQueryProperty);
 
-  const isDataNotFound = filteredData.length === 0;
+  const isDataNotFound = filteredData.length === 0 && data.length > 0;
+  
+  const noData = data.length === 0;
 
   return (
     <Page title={title}>
@@ -245,17 +247,30 @@ export default function Tickets() {
                     </TableRow>
                   </TableBody>
                 )}
+                {noData && (
+                    <TableBody>
+                      <TableRow>
+                        <TableCell align="center" colSpan={TABLE_HEAD.length} sx={{ py: 3 }}>
+                    <Box sx={{
+                      color: 'gainsboro'
+                    }}>{`No ${title}`}</Box>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                )}
               </Table>
             </TableContainer>
+          {filteredData.length > 4 ?
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={data.length}
+            count={filteredData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          /> : <Box height={15}></Box>
+          }
         </Card>
         </Grow>
       </Container>
