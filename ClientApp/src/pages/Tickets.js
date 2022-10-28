@@ -71,7 +71,7 @@ export default function Tickets() {
   const dataId = 'ticketId';
   const [filterQueryProperty, setFilterQueryProperty] = useState('problem')
   const [orderBy, setOrderBy] = useState('createdOn');
-  const [data, errorData, loadingData] = useFetch('/api/Ticket', filterData);
+  const [data, errorData, loadingData] = useFetch('/api/Tickets', filterData);
   // ----------------------------------------------------------------------
 
   const [page, setPage] = useState(0);

@@ -121,9 +121,9 @@ export default function Overview() {
         })
         return simpleData;
     }
-    const [properties, errorProperties, loadingProperties] = useFetch('/api/Property', filterProperties);
-    const [units, errorUnits, loadingUnits] = useFetch('/api/Unit', filterUnit);
-    const [tickets, errorTickets, loadingTickets] = useFetch('/api/Ticket', filterTicket);
+    const [properties, errorProperties, loadingProperties] = useFetch('/api/Properties', filterProperties);
+    const [units, errorUnits, loadingUnits] = useFetch('/api/Units', filterUnit);
+    const [tickets, errorTickets, loadingTickets] = useFetch('/api/Tickets', filterTicket);
     
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [selectedUnit, setSelectedUnit] = useState(null);

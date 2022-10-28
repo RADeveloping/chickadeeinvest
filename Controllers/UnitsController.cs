@@ -56,7 +56,7 @@ namespace chickadee.Controllers
             var specificProperties = await _context.Properties
               .Include(m => m.PropertyManager)
               .Where(p => p.PropertyManager == user)
-              .Include(u => u.Units)
+              .Include(u => u.Units).ThenInclude(t => t.Tickets)
               .ToListAsync();
             specificProperties.ForEach((property) => {
               property.Units.ForEach((unit) => {
