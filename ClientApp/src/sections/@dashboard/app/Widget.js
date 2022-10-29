@@ -1,27 +1,14 @@
 // @mui
-import PropTypes from 'prop-types';
-import { alpha, styled } from '@mui/material/styles';
-import {Card, CardHeader, CircularProgress, Fade, Grid, Grow, LinearProgress, Typography} from '@mui/material';
-// utils
-import { fShortenNumber } from '../../../utils/formatNumber';
+import {
+    Card,
+    Grid,
+    Grow,
+    IconButton,
+    Typography
+} from '@mui/material';
 // components
 import Iconify from '../../../components/Iconify';
 import ListItems from '../../../components/ListItems';
-// ----------------------------------------------------------------------
-
-const IconWrapperStyle = styled('div')(({ theme }) => ({
-  margin: 'auto',
-  display: 'flex',
-  borderRadius: '50%',
-  alignItems: 'center',
-  width: theme.spacing(8),
-  height: theme.spacing(8),
-  justifyContent: 'center',
-  marginBottom: theme.spacing(3),
-}));
-
-// ----------------------------------------------------------------------
-
 export default function Widget({ title, total, items, icon, loading}) {
     
   return (
@@ -64,7 +51,10 @@ export default function Widget({ title, total, items, icon, loading}) {
                   </Grid>
               </Grid>
           </Grid>
-          <Grid  marginRight={3} item>
+          <Grid  marginRight={2} item>
+              <IconButton>
+              <Iconify icon={'dashicons:plus-alt2'} sx={{color:(theme) => theme.palette['primary'].lighter}}/>
+              </IconButton>
           </Grid>
         </Grid>
       </div>
