@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Duende.IdentityServer.EntityFramework.Options;
@@ -25,4 +25,5 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<Property>? Properties { get; set; }
     public DbSet<Unit>? Units { get; set; }
     public DbSet<Ticket>? Tickets { get; set; }
+    public DbSet<chickadee.Models.Company>? Company { get; set; }
 }

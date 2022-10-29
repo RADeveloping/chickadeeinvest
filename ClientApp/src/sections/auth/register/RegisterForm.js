@@ -8,7 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Stack, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
-import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -64,7 +63,7 @@ export default function RegisterForm() {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton edge="end" onClick={() => setShowPassword(!showPassword)}>
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                  {/*<Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />*/}
                 </IconButton>
               </InputAdornment>
             ),

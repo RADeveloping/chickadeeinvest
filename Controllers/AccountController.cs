@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers;
 
+using Microsoft.EntityFrameworkCore;
+
 [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -20,9 +22,10 @@ namespace chickadee.Controllers;
             _context = context;
         }
 
+
         // GET: api/Accounts
         [HttpGet]
-        public  IActionResult GetUser()
+        public  IActionResult GetApplicationUser()
         {
             var user = _userManager.GetUserAsync(User).Result;
             
@@ -34,8 +37,10 @@ namespace chickadee.Controllers;
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
+                    Username = user.UserName,
+                    EmailAddress = user.Email,
+                    PhoneNumber = user.PhoneNumber,
                     Id = user.Id,
-                    Email = user.Email,
                     Roles = roles,
                     ProfilePicture = user.ProfilePicture,
                 };
@@ -47,6 +52,92 @@ namespace chickadee.Controllers;
             
             return NoContent();
 
+        }
+
+
+        // PUT: api/User/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutApplicationUser(string id, ApplicationUser applicationUser)
+        {
+            if (id != applicationUser.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(applicationUser).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ApplicationUserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/User
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<ApplicationUser>> PostApplicationUser(ApplicationUser applicationUser)
+        {
+          if (_context.Users == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Users'  is null.");
+          }
+            _context.Users.Add(applicationUser);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (ApplicationUserExists(applicationUser.Id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetApplicationUser", new { id = applicationUser.Id }, applicationUser);
+        }
+
+        // DELETE: api/User/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteApplicationUser(string id)
+        {
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+            var applicationUser = await _context.Users.FindAsync(id);
+            if (applicationUser == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(applicationUser);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool ApplicationUserExists(string id)
+        {
+            return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
     }
