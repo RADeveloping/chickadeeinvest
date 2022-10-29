@@ -9,11 +9,11 @@ public class ApplicationUser : IdentityUser
     public string LastName { get; set; }
     public int UsernameChangeLimit { get; set; } = 10;
     public byte[]? ProfilePicture { get; set; }
+    
+    [ForeignKey("CompanyId")]
+
+    public Company? Company { get; set; }
     [ForeignKey("UnitId")]
     public int? UnitId { get; set;}
     public Unit? Unit { get; set; }
-    
-    public Company? Company { get; set; }
-
-    
 }

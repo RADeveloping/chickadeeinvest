@@ -228,7 +228,7 @@ public static class ModelBuilderExtensions {
 
             List<Company> companies = new List<Company>() {
                 new Company() {
-                    Id = 1,
+                    CompanyId = 1,
                     Name = "Company One",
                     Logo = logoByte,
                     PhoneNumber = "6045000098",
