@@ -51,7 +51,7 @@ export default function Widget({ title, total, items, icon, loading}) {
                   </Grid>
               </Grid>
           </Grid>
-          <Grid  marginRight={2} item>
+          <Grid  marginRight={2.25} item>
               <IconButton>
               <Iconify icon={'dashicons:plus-alt2'} sx={{color:(theme) => theme.palette['primary'].lighter}}/>
               </IconButton>
