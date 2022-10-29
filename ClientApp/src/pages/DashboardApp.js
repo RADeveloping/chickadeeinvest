@@ -52,7 +52,7 @@ export default function DashboardApp() {
             </Link>
           </Grid>
           <Grid item xs={12} sm={6} md={7}>
-            <Link to="" style={{textDecoration: 'none'}}>
+            <Link to="/dashboard/tickets" style={{textDecoration: 'none'}}>
               <Widget title="Open Tickets" total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
             </Link>
           </Grid>
