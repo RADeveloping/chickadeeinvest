@@ -12,7 +12,16 @@ This repo has two major branches: `main` and `develop`, and feature branches for
 ## Setup
 
 ```bash
-# Serve both front end and back end.
+# Run SQL Server in Linux Container.
+docker run --cap-add SYS_PTRACE -e ACCEPT_EULA=1 -e MSSQL_SA_PASSWORD=SqlPassword! -p 1444:1433 --name azsql -d mcr.microsoft.com/azure-sql-edge
+
+# Install the necessary CLI tools for Entity Framework Core.
+dotnet tool install -g dotnet-ef
+
+# Apply database migrations to update the database.
+dotnet ef database update
+
+# Serve both front end and back end at https://localhost:7114.
 dotnet run
 ```
 
@@ -25,7 +34,7 @@ cd ClientApp
 # Install dependencies.
 npm install
 
-# Serve with hot reload.
+# Serve with hot reload at https://localhost:44443.
 npm start
 ```
 
