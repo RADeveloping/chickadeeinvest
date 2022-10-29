@@ -36,7 +36,7 @@ export default function DashboardApp() {
 console.log(currentUnit)
   return (
     <Page title="Dashboard">
-      <Container maxWidth="l">
+      <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Dashboard
