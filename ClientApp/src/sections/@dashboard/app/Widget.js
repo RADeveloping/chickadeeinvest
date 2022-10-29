@@ -6,7 +6,7 @@ import {Card, CardHeader, CircularProgress, Fade, Grid, Grow, LinearProgress, Ty
 import { fShortenNumber } from '../../../utils/formatNumber';
 // components
 import Iconify from '../../../components/Iconify';
-
+import ListItems from '../../../components/ListItems';
 // ----------------------------------------------------------------------
 
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -22,15 +22,8 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-Widget.propTypes = {
-  color: PropTypes.string,
-  icon: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired,
-  sx: PropTypes.object,
-};
-
-export default function Widget({ title, total, icon, loading}) {
+export default function Widget({ title, total, items, icon, loading}) {
+    
   return (
       <Grow in={!loading}>
     <Card
@@ -63,8 +56,8 @@ export default function Widget({ title, total, icon, loading}) {
                       </Typography>
                   </Grid>
                   <Grid item>
-                      <Typography variant="h7">
-                          245 units
+                      <Typography variant="h7" sx={{color:(theme) => theme.palette['primary'].lighter}}>
+                          {total} {title.toLowerCase()}
                       </Typography>
                   </Grid>
                  </Grid>
@@ -74,11 +67,8 @@ export default function Widget({ title, total, icon, loading}) {
           <Grid  marginRight={3} item>
           </Grid>
         </Grid>
-         
-        
-       
       </div>
-
+        <ListItems items={items}/>
     </Card>
       </Grow>
   );

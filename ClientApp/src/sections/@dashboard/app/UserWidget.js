@@ -35,7 +35,7 @@ export default function UserWidget({ account, unit, loading}) {
         </Typography>
             <br/>
         <Typography variant="h5" sx={{lineHeight: 1.25}}>
-            Unit #{unitNo}
+            {unitNo && <>Unit #{unitNo}</>}
         </Typography>
 
         </div>

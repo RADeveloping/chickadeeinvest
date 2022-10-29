@@ -8,10 +8,12 @@ import {Link} from "react-router-dom";
 import {UserWidget, Widget} from "../sections/@dashboard/app";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
+import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
+  
   const ticketUri = '/api/Tickets';
   const unitUri = '/api/Units';
   const propertyUri = '/api/Properties';
@@ -19,9 +21,9 @@ export default function DashboardApp() {
   const accountUri = '/api/Account';
   const currentUnitUri = '/api/Units/current';
   
-  const [tickets, ticketsError, ticketsLoading] = useFetch(ticketUri);
-  const [units, unitsError, unitsLoading] = useFetch(unitUri);
-  const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri);
+  const [tickets, ticketsError, ticketsLoading] = useFetch(ticketUri, filterTicket);
+  const [units, unitsError, unitsLoading] = useFetch(unitUri, filterUnit);
+  const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri, filterProperties);
 
   const [account, accountError, accountLoading] = useFetch(accountUri);
   const [currentUnit, currentUnitError, currentUnitLoading] = useFetch(currentUnitUri, (d) => {
@@ -33,7 +35,7 @@ export default function DashboardApp() {
   const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
   
   const openTickets = tickets.filter((ticket) => ticket.status === 0);
-console.log(currentUnit)
+console.log(tickets)
   return (
     <Page title="Dashboard">
       <Container>
@@ -51,14 +53,14 @@ console.log(currentUnit)
           </Grid>
           <Grid item xs={12} sm={6} md={7}>
             <Link to="" style={{textDecoration: 'none'}}>
-              <Widget title="Open Tickets" total={openTickets.length} color="error" icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
+              <Widget title="Open Tickets" total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
             </Link>
           </Grid>
           <Grid item xs={12} sm={6} md={7}>
-            <Widget title="Units" total={units.length} color="info" icon={'bxs:door-open'} loading={unitsLoading} />
+            <Widget title="Properties" total={properties.length} items={properties} icon={'bxs:building-house'} loading={propertiesLoading} />
           </Grid>
           <Grid item xs={12} sm={6} md={5}>
-            <Widget title="Properties" color="success" total={properties.length} icon={'bxs:building-house'} loading={propertiesLoading} />
+            <Widget title="Units" total={units.length} items={units} icon={'bxs:door-open'} loading={unitsLoading} />
           </Grid>
         </Grid>
       </Container>
