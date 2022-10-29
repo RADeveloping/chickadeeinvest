@@ -1,7 +1,7 @@
 // @mui
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
-import {Card, CircularProgress, Fade, Grow, LinearProgress, Typography} from '@mui/material';
+import {Card, CardHeader, CircularProgress, Fade, Grid, Grow, LinearProgress, Typography} from '@mui/material';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
 // components
@@ -30,47 +30,55 @@ Widget.propTypes = {
   sx: PropTypes.object,
 };
 
-export default function Widget({ title, total, icon, color = 'primary', loading, sx, ...other }) {
+export default function Widget({ title, total, icon, loading}) {
   return (
-      <Grow in={true}>
+      <Grow in={!loading}>
     <Card
       sx={{
-        height: '100%',
+          height: 375,
         py: 5,
-        boxShadow: 0,
+        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
         textAlign: 'center',
-        color: (theme) => theme.palette[color].darker,
-        bgcolor: (theme) => theme.palette[color].lighter,
-        ...sx,
+        paddingTop: 0,
+      }}>
+      <div
+          style={{
+            display:'absolute',
+            background: 'linear-gradient(60deg, #D9D7C3 ,#C7D9C9 )',
+            height: 80,
+            top: 0,
       }}
-      {...other}
-    >
-      <IconWrapperStyle
-        sx={{
-          color: (theme) => theme.palette[color].dark,
-          backgroundImage: (theme) =>
-            `linear-gradient(135deg, ${alpha(theme.palette[color].dark, 0)} 0%, ${alpha(
-              theme.palette[color].dark,
-              0.24
-            )} 100%)`,
-        }}
       >
-          {!loading ?
-              <Iconify icon={icon} width={24} height={24} /> :
-              <CircularProgress sx={{color: (theme) => theme.palette[color].darker}} size={30}/>
-          }
+        <Grid height={'100%'} alignItems={'center'} justifyContent={'space-between'} container>
+          <Grid marginLeft={3} item>
+              <Grid direction={'row'} gap={1.5} alignItems={'center'}  container>
+                  <Grid item>
+              <Iconify icon={icon} width={32} height={32} />
+                  </Grid>
+                  <Grid item>
+              <Grid direction={'column'} alignItems={'flex-start'} container>
+                  <Grid item>
+                      <Typography fontSize={18} fontWeight={'bold'} lineHeight={1.25}>
+                          {title}    
+                      </Typography>
+                  </Grid>
+                  <Grid item>
+                      <Typography variant="h7">
+                          245 units
+                      </Typography>
+                  </Grid>
+                 </Grid>
+                  </Grid>
+              </Grid>
+          </Grid>
+          <Grid  marginRight={3} item>
+          </Grid>
+        </Grid>
+         
+        
        
-      </IconWrapperStyle>
-        <Fade in={!loading}>
-      <Typography variant="h3">
-          {fShortenNumber(total)}
-      </Typography>
-        </Fade>
-        <Fade in={!loading}>
-      <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        {title}
-      </Typography>
-        </Fade>
+      </div>
+
     </Card>
       </Grow>
   );

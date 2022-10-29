@@ -11,7 +11,7 @@ export default function UserWidget({ account, unit, loading}) {
       <Grow in={!loading}>
     <Card
       sx={{
-        height: '100%',
+        height: 375,
         py: 5,
           boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
         textAlign: 'left',
