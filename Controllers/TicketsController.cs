@@ -41,9 +41,7 @@ namespace chickadee.Controllers
 
           var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
-          var isSuperAdmin = await _userManager.IsInRoleAsync(user, "Admin") && 
-                             await _userManager.IsInRoleAsync(user, "PropertyManager") &&
-                             await _userManager.IsInRoleAsync(user, "Tenant");
+          var isSuperAdmin = await _userManager.IsInRoleAsync(user, "SuperAdmin");
 
           if (isAdmin && !isSuperAdmin)
           {
