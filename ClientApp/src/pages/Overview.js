@@ -73,14 +73,14 @@ export default function Overview() {
                     </Typography>
                 </Stack>
                 <PageLoading loadingData={loadingData} />
-                {isDesktop &&
+                {!loadingData && isDesktop &&
                 <Grow in={!loadingData}>
                     <Stack direction="row">
                         {viewList}
                     </Stack>
                 </Grow>
                 }
-                {!isDesktop &&
+                {!loadingData && !isDesktop &&
                     <Grow in={!loadingData}>
                         <Box>
                         {getActiveList()}
