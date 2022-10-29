@@ -76,7 +76,6 @@ export default function Tickets() {
   const [filterQueryProperty, setFilterQueryProperty] = useState('property')
   const [orderBy, setOrderBy] = useState('status');
   const [data, errorData, loadingData] = useFetch('/api/Tickets', filterData);
-  console.log(data)
   // ----------------------------------------------------------------------
 
   const [page, setPage] = useState(0);

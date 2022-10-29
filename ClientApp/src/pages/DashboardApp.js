@@ -35,7 +35,7 @@ export default function DashboardApp() {
   const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
   
   const openTickets = tickets.filter((ticket) => ticket.status === 0);
-console.log(tickets)
+
   return (
     <Page title="Dashboard">
       <Container>
