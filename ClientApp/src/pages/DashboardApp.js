@@ -42,7 +42,8 @@ export default function DashboardApp() {
       <UserWidget account={account} unit={currentUnit} loading={userLoading} />
     </Link>,
       for: [
-        "Tenant"
+        "Tenant",
+        "PropertyManager"
       ]
     },
     {item:
