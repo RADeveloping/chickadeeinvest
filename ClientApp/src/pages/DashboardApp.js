@@ -36,7 +36,7 @@ console.log(currentUnit)
       <Container maxWidth="l">
         <Grid height={'100%'} container spacing={3}>
           <Grid item xs={12} sm={6} md={5}>
-            <Link to="/dashboard/tickets" style={{textDecoration: 'none'}}>
+            <Link to="/authentication/profile" style={{textDecoration: 'none'}}>
             <UserWidget account={account} unit={currentUnit} loading={userLoading} />
             </Link>
           </Grid>
