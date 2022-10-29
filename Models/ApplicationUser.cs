@@ -12,8 +12,4 @@ public class ApplicationUser : IdentityUser
     [ForeignKey("UnitId")]
     public int? UnitId { get; set;}
     public Unit? Unit { get; set; }
-    
-    public Company? Company { get; set; }
-
-    
 }
