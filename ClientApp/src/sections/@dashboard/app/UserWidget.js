@@ -6,8 +6,6 @@ export default function UserWidget({ account, unit, loading}) {
     const {profilePicture, firstName} = account;
     const {unitNo, property} = unit;
   return (
-      <>
-      <Loading loading={loading}/>
       <Grow in={!loading}>
     <Card
       sx={{
@@ -44,6 +42,5 @@ export default function UserWidget({ account, unit, loading}) {
   
     </Card>
       </Grow>
-      </>
   );
 }

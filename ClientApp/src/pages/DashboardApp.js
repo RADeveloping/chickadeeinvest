@@ -1,11 +1,13 @@
 // @mui
 import { useTheme } from '@mui/material/styles';
-import {Container, Grid, Typography} from '@mui/material';
+import {Container, Grid, Stack, Typography} from '@mui/material';
 // components
 import Page from '../components/Page';
 import useFetch from '../components/FetchData';
 import {Link} from "react-router-dom";
 import {UserWidget, Widget} from "../sections/@dashboard/app";
+import PageLoading from "../components/PageLoading";
+import * as React from "react";
 
 // ----------------------------------------------------------------------
 
@@ -28,12 +30,19 @@ export default function DashboardApp() {
     return d;
   });
   const userLoading = accountLoading && currentUnitLoading
+  const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
   
   const openTickets = tickets.filter((ticket) => ticket.status === 0);
 console.log(currentUnit)
   return (
     <Page title="Dashboard">
       <Container maxWidth="l">
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4" gutterBottom>
+            Dashboard
+          </Typography>
+        </Stack>
+        <PageLoading loadingData={loadingData} />
         <Grid height={'100%'} container spacing={3}>
           <Grid item xs={12} sm={6} md={5}>
             <Link to="/authentication/profile" style={{textDecoration: 'none'}}>
