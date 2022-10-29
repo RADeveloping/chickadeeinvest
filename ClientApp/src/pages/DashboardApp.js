@@ -35,7 +35,68 @@ export default function DashboardApp() {
   const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
   
   const openTickets = tickets.filter((ticket) => ticket.status === 0);
-
+  console.log(account)
+  const dashboardItems = [
+    {item:
+      <Link to="/authentication/profile" style={{textDecoration: 'none'}}>
+      <UserWidget account={account} unit={currentUnit} loading={userLoading} />
+    </Link>,
+      for: [
+        "Tenant"
+      ]
+    },
+    {item:
+          <Link to="/dashboard/tickets" style={{textDecoration: 'none'}}>
+            <Widget title="Open Tickets" total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
+          </Link>,
+      for: [
+        "Tenant",
+        "PropertyManager"
+      ]
+    },
+    {item:
+          <Widget title="Properties" total={properties.length} items={properties} icon={'bxs:building-house'} loading={propertiesLoading} />,
+      for: [
+        "PropertyManager"
+      ]
+    },
+    {item:
+          <Widget title="Units" total={units.length} items={units} icon={'bxs:door-open'} loading={unitsLoading} />,
+      for: [
+        "PropertyManager"
+      ]
+    }
+  ]
+  
+  const isMemberOf = (userRoles, roles) => {
+    if (!userRoles) return false
+    for (let i = 0; i < userRoles.length; i++) {
+      for (let j = 0; j < roles.length; j++) {
+        if (userRoles[i] === roles[j]) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+  
+  const isBigWidget = (index) => {
+    let remainder = index % 2
+    let row = Math.ceil((index + 1) / 2)
+    let remainderRow = row % 2
+    return (remainderRow === 0 ? remainder === 0 : remainder !== 0)
+  }
+  
+  const getDashboardLayout = () => {
+    let items = dashboardItems.filter(item => isMemberOf(account.roles, item.for))
+    return items.map((item, index) =>
+        (
+            <Grid item xs={12} sm={6} md={isBigWidget(index) ? 7 : 5}>
+              {item.item}
+            </Grid>
+        ))
+  }
+  
   return (
     <Page title="Dashboard">
       <Container>
@@ -46,22 +107,7 @@ export default function DashboardApp() {
         </Stack>
         <PageLoading loadingData={loadingData} />
         <Grid height={'100%'} container spacing={3}>
-          <Grid item xs={12} sm={6} md={5}>
-            <Link to="/authentication/profile" style={{textDecoration: 'none'}}>
-            <UserWidget account={account} unit={currentUnit} loading={userLoading} />
-            </Link>
-          </Grid>
-          <Grid item xs={12} sm={6} md={7}>
-            <Link to="/dashboard/tickets" style={{textDecoration: 'none'}}>
-              <Widget title="Open Tickets" total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
-            </Link>
-          </Grid>
-          <Grid item xs={12} sm={6} md={7}>
-            <Widget title="Properties" total={properties.length} items={properties} icon={'bxs:building-house'} loading={propertiesLoading} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={5}>
-            <Widget title="Units" total={units.length} items={units} icon={'bxs:door-open'} loading={unitsLoading} />
-          </Grid>
+          {getDashboardLayout()}
         </Grid>
       </Container>
     </Page>
