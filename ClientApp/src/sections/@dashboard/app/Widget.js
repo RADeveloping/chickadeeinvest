@@ -38,7 +38,7 @@ export default function Widget({ title, total, items, icon, loading}) {
                   <Grid item>
               <Grid direction={'column'} alignItems={'flex-start'} container>
                   <Grid item>
-                      <Typography fontSize={18} fontWeight={'bold'} lineHeight={1.25}>
+                      <Typography variant="h6" fontWeight={'bold'} lineHeight={1.25}>
                           {title}    
                       </Typography>
                   </Grid>
