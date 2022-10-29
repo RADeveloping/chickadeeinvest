@@ -13,10 +13,10 @@ export default function UserWidget({ account, unit, loading}) {
       sx={{
         height: '100%',
         py: 5,
-        boxShadow: 0,
+          boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
         textAlign: 'left',
         color: 'black',
-        background: 'linear-gradient(#D9D7C3, #C7D9C9)',
+        background: 'linear-gradient(60deg, #D9D7C3 ,#C7D9C9 )',
       }}
     >
         <div style={{
