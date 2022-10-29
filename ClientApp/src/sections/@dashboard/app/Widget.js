@@ -22,7 +22,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-AppWidgetSummary.propTypes = {
+Widget.propTypes = {
   color: PropTypes.string,
   icon: PropTypes.string,
   title: PropTypes.string.isRequired,
@@ -30,11 +30,12 @@ AppWidgetSummary.propTypes = {
   sx: PropTypes.object,
 };
 
-export default function AppWidgetSummary({ title, total, icon, color = 'primary', loading, sx, ...other }) {
+export default function Widget({ title, total, icon, color = 'primary', loading, sx, ...other }) {
   return (
       <Grow in={true}>
     <Card
       sx={{
+        height: '100%',
         py: 5,
         boxShadow: 0,
         textAlign: 'center',
