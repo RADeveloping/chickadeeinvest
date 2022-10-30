@@ -14,18 +14,24 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace chickadee.Areas.Identity.Pages.Account.Manage
 {
     using System.ComponentModel;
+    using Data;
+    using Microsoft.EntityFrameworkCore;
 
     public class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
+
         }
 
         /// <summary>
@@ -64,7 +70,6 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
             [Required]
             public string LastName { get; set; }
             [Display(Name = "Username")]
-            [Required]
             [ReadOnly(true)]
             public string Username { get; set; }
 
@@ -87,9 +92,26 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
             var firstName = user.FirstName;
             var lastName = user.LastName;
             var profilePicture = user.ProfilePicture;
-            
-            ViewData["address"] = "ADDRESS";
-            ViewData["unit"] = "UNIT";
+
+            try
+           {
+               // fetch data from route
+               var list = await _context.Units
+                   .Include(t => t.Tenants)
+                   .Where(unit => unit.Tenants.Contains(user))
+                   .Include(j => j.Property)
+                   .ToListAsync();
+               
+               ViewData["address"] = list[0].Property.Address;
+               ViewData["unit"] = list[0].UnitNo;
+           }
+           catch (Exception e)
+           {
+               ViewData["address"] = null;
+               ViewData["unit"] = null;
+           }
+           
+           
             Username = userName;
 
             Input = new InputModel
@@ -127,6 +149,11 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
             if (!ModelState.IsValid)
             {
                 await LoadAsync(user);
+                var message = string.Join(" | ", ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage));
+                Console.WriteLine(message);
+
                 return Page();
             }
 
