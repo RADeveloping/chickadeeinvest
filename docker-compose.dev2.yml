@@ -24,6 +24,7 @@ services:
       - chickadee-db
     ports:
       - "80:80"
+      - "443:443"
     restart: always
     environment:
       - DBHOST=chickadee-db
