@@ -9,8 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var host = builder.Configuration["DBHOST"] ?? "localhost";
-var port = builder.Configuration["DBPORT"] ?? "1433";
+var host = builder.Configuration["DBHOST"] ?? "127.0.0.1";
+var port = builder.Configuration["DBPORT"] ?? "1444";
 var user = builder.Configuration["DBUSER"] ?? "sa";
 var password = builder.Configuration["DBPASSWORD"] ?? "SqlPassword!";
 var db = builder.Configuration["DBNAME"] ?? "chickadee";
