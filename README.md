@@ -13,6 +13,17 @@ This repo has two major branches: `main` and `develop`, and feature branches for
 
 Use the following instructions to start the project on your local machine:
 
+### Docker Compose
+
+1. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+2. Serve both the front end and back end at https://localhost:8888.
+
+```bash
+docker-compose up
+```
+
+### Manual
+
 1. Download and install dependencies:
 
 - [.NET SDK](https://dotnet.microsoft.com/en-us/download)
