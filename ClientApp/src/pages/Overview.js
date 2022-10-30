@@ -8,16 +8,18 @@ import PageLoading from "../components/PageLoading";
 import useResponsive from "../hooks/useResponsive";
 import Label from "../components/Label";
 import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
+import {useSearchParams} from "react-router-dom";
 
 export default function Overview() {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [properties, errorProperties, loadingProperties] = useFetch('/api/Properties', filterProperties);
     const [units, errorUnits, loadingUnits] = useFetch('/api/Units', filterUnit);
     const [tickets, errorTickets, loadingTickets] = useFetch('/api/Tickets', filterTicket);
     
-    const [selectedProperty, setSelectedProperty] = useState(null);
-    const [selectedUnit, setSelectedUnit] = useState(null);
-    const [selectedTicket, setSelectedTicket] = useState(null);
-    const loadingData = loadingProperties && loadingUnits && loadingTickets;
+    const [selectedPropertyId, setSelectedPropertyId] = useState(null);
+    const [selectedUnitId, setSelectedUnitId] = useState(null);
+    const [selectedTicketId, setSelectedTicketId] = useState(null);
+    const loadingData = loadingProperties || loadingUnits || loadingTickets;
     
     const [path, setPath] = useState('');
 
@@ -25,38 +27,60 @@ export default function Overview() {
 
     const title = "Overview"
     
+    useEffect(() => {
+        if (!loadingData) {
+            let propertyId = parseInt(searchParams.get('property'))
+            let unitId = parseInt(searchParams.get('unit'))
+            if (propertyId) setSelectedPropertyId(propertyId)
+            if (unitId) setSelectedUnitId(unitId)
+        }
+    }, [loadingData])
+    
     useEffect(()=> {
-        setSelectedUnit(null);
-    }, [selectedProperty])
+        setSelectedUnitId(null)
+    }, [selectedPropertyId])
 
     useEffect(()=> {
-        setSelectedTicket(null);
-    }, [selectedUnit])
+        setSelectedTicketId(null);
+    }, [selectedUnitId])
     
     useEffect(() => {
-        if (selectedUnit) {
+        if (selectedUnitId) {
+            let selectedProperty = getItem(properties, selectedPropertyId)
+            let selectedUnit = getItem(units, selectedUnitId)
+            searchParams.set('property', selectedPropertyId)
+            searchParams.set('unit', selectedUnitId)
+            setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
-        } else if(selectedProperty) {
+        } else if(selectedPropertyId) {
+            let selectedProperty = getItem(properties, selectedPropertyId)
+            searchParams.set('property', selectedPropertyId)
+            searchParams.delete('unit')
+            setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}`)
         }
-    }, [selectedUnit, selectedProperty])
+    }, [selectedUnitId, selectedPropertyId])
+    
+    const getItem = (items, id) => {
+        return items.find(item => item.id === id)
+    }
     
     const viewList = [
-        <SimpleList leftRound items={properties} title={"Properties"} setSelect={setSelectedProperty} selected={selectedProperty}
+        <SimpleList leftRound items={properties} title={"Properties"} setSelectedId={setSelectedPropertyId} selectedId={selectedPropertyId}
          isDesktop={isDesktop} />,
-        <SimpleList noRound skinny items={ selectedProperty ?
-            units.filter((u)=> u.fid === selectedProperty.id) : []}
-                    title={"Units"} setNestedSelect={setSelectedProperty} path={path} setSelect={setSelectedUnit} selected={selectedUnit}
+        <SimpleList noRound skinny items={ selectedPropertyId ?
+            units.filter((u)=> u.fid === selectedPropertyId) : []}
+                    title={"Units"} setNestedSelect={setSelectedPropertyId} path={path} setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
                     isDesktop={isDesktop} />,
-        <SimpleList rightRound items={ selectedUnit ? tickets.filter((t)=> t.fid === selectedUnit.id) : []}
-                    title={"Tickets"} setNestedSelect={setSelectedUnit} path={path} setSelect={setSelectedTicket} selected={selectedTicket}
+        <SimpleList rightRound items={ selectedUnitId ? tickets.filter((t)=> t.fid === selectedUnitId) : []}
+                    title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path} setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
                     isDesktop={isDesktop} />
     ]
     
     function getActiveList() {
-        if (selectedProperty && selectedUnit) {
+        if (selectedPropertyId && selectedUnitId) {
             return viewList[2]
-        } else if (selectedProperty) {
+        } else if (selectedPropertyId) {
             return viewList[1]
         } else {
             return viewList[0]

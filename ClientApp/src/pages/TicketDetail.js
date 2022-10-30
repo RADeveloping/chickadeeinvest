@@ -14,7 +14,7 @@ export default function TicketDetail() {
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Button
                         variant="contained"
-                        startIcon={<Iconify icon="eva:plus-fill" />}
+                        startIcon={<Iconify icon="eva:arrow-back-outline" />}
                         onClick={()=>navigate(-1)}
                     >
                         Back

@@ -5,12 +5,12 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import {Link} from "react-router-dom";
 
-export default function ListItems({items}) {
+export default function ListItems({uri, items}) {
     return (<>
     {items && items.length > 0 && items.map((item, index)=>
         <>
             {index !== 0 && <Divider sx={{marginLeft: 3}} key={`${item.id}-dvd1`} />}
-            <ListItemButton key={`${item.id}-btn`} component={Link} to={`/dashboard/tickets/${item.id}`} alignItems="flex-start"
+            <ListItemButton key={`${item.id}-btn`} component={Link} to={`/dashboard/${uri}/${item.id}`} alignItems="flex-start"
             >
                 <ListItemText sx={{marginLeft:1}} key={`${item.id}-txt`}
                               primary={item.primary}

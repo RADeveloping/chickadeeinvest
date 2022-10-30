@@ -5,8 +5,10 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import {Box, Card, Collapse, Grow, IconButton, ListItemButton, ListSubheader, Slide, Stack} from "@mui/material";
 import Iconify from "./Iconify";
+import {useNavigate} from "react-router-dom";
 
-export default function SimpleList({items, title, setSelect, setNestedSelect, path, selected, skinny, isDesktop, leftRound, rightRound, noRound}) {
+export default function SimpleList({items, title, setSelectedId, setNestedSelect, path, selectedId, skinny, isDesktop, leftRound, rightRound, noRound}) {
+    const navigate = useNavigate();
     const borderStyles = isDesktop ? {
         borderTopRightRadius: leftRound ? 0 : undefined, borderBottomRightRadius: leftRound ? 0 : undefined,
         borderTopLeftRadius: rightRound ? 0 : undefined, borderBottomLeftRadius: rightRound ? 0 : undefined,
@@ -37,8 +39,15 @@ export default function SimpleList({items, title, setSelect, setNestedSelect, pa
             {items.length > 0 && items.map((item, index)=>
                 <>
                     <Divider key={`${item.id}-${title}-dvd1`} component="li" />
-                    <ListItemButton key={`${item.id}-${title}-btn`} onClick={()=>setSelect(item)} alignItems="flex-start"
-                    selected={selected && (item.id === selected.id)}>
+                    <ListItemButton key={`${item.id}-${title}-btn`} onClick={()=>{
+                        if (selectedId && selectedId === item.id) {
+                            navigate(`/dashboard/${title.toLowerCase()}/${item.id}`);
+                        } else {
+                            setSelectedId(item.id)
+                        }
+                        
+                    }} alignItems="flex-start"
+                    selected={selectedId && (item.id === selectedId)}>
                         <ListItemText key={`${item.id}-${title}-txt`}
                             primary={item.primary}
                             secondary={

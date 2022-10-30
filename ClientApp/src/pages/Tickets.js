@@ -1,13 +1,10 @@
-import { filter, forEach } from 'lodash';
-import { sentenceCase } from 'change-case';
-import {useEffect, useState} from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import {useState} from 'react';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -16,7 +13,7 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination, CircularProgress, Box, Fade, Grow
+  TablePagination, Box, Grow
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -58,7 +55,7 @@ const STATUS = {
 // ----------------------------------------------------------------------
 
 export default function Tickets() {
-
+  const navigate = useNavigate();
   // CONFIG ---------------------------------------------------------------
   const title = "Tickets"
   const filterData = (data) => {
@@ -194,6 +191,7 @@ export default function Tickets() {
                           role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
+                          onClick={()=>{navigate(`/dashboard/${title.toLowerCase()}/${ticketId}`);}}
                         >
                           <TableCell padding="checkbox">
                             <Checkbox

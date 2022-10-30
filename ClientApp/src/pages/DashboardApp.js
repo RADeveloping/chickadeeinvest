@@ -47,7 +47,7 @@ export default function DashboardApp() {
       ]
     },
     {item:
-            <Widget title="Open Tickets" total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
+            <Widget title="Open Tickets" uri={'tickets'} total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
       ,
       for: [
         "Tenant",
@@ -55,13 +55,13 @@ export default function DashboardApp() {
       ]
     },
     {item:
-          <Widget title="Properties" total={properties.length} items={properties} icon={'bxs:building-house'} loading={propertiesLoading} />,
+          <Widget title="Properties" uri={'properties'} total={properties.length} items={properties} icon={'bxs:building-house'} loading={propertiesLoading} />,
       for: [
         "PropertyManager"
       ]
     },
     {item:
-          <Widget title="Units" total={units.length} items={units} icon={'bxs:door-open'} loading={unitsLoading} />,
+          <Widget title="Units" uri={'units'} total={units.length} items={units} icon={'bxs:door-open'} loading={unitsLoading} />,
       for: [
         "PropertyManager"
       ]
