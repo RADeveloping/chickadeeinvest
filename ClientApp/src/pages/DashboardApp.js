@@ -47,9 +47,8 @@ export default function DashboardApp() {
       ]
     },
     {item:
-          <Link to="/dashboard/tickets" style={{textDecoration: 'none'}}>
             <Widget title="Open Tickets" total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
-          </Link>,
+      ,
       for: [
         "Tenant",
         "PropertyManager"
