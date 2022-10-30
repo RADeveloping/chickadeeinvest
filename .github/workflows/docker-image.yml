@@ -16,6 +16,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build and push the Docker image
       run: |
-        docker build . --file Dockerfile --tag chickadeeinvest/chickadee:$(date +%s)
+        TAG="$(date +%s)"
+        docker build . --file Dockerfile --tag chickadeeinvest/chickadee:$TAG
         docker login --username=chickadeeinvest --password=*uW5jp9bDqh*FlxUFxOMIFqJ1VtFjGn82b5T0L2Ka^!li!lGC*
-        docker push chickadeeinvest/chickadee:$(date +%s)
+        docker push chickadeeinvest/chickadee:$TAG
