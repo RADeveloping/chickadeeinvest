@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace chickadee.Areas.Identity.Pages.Account.Manage
 {
+    using System.ComponentModel;
+
     public class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -56,10 +58,14 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Display(Name = "First Name")]
+            [Required]
             public string FirstName { get; set; }
             [Display(Name = "Last Name")]
+            [Required]
             public string LastName { get; set; }
             [Display(Name = "Username")]
+            [Required]
+            [ReadOnly(true)]
             public string Username { get; set; }
 
             /// <summary>
@@ -81,7 +87,9 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
             var firstName = user.FirstName;
             var lastName = user.LastName;
             var profilePicture = user.ProfilePicture;
-
+            
+            ViewData["address"] = "ADDRESS";
+            ViewData["unit"] = "UNIT";
             Username = userName;
 
             Input = new InputModel
