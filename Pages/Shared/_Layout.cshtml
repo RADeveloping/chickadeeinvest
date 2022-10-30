@@ -1,7 +1,12 @@
 @using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Mvc.ViewEngines
+@using chickadee.Models
 @inject IWebHostEnvironment Environment
 @inject ICompositeViewEngine Engine
+@inject SignInManager<ApplicationUser> SignInManager
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,8 +16,10 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/Identity/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/Identity/css/site.css" />
+        @* <link rel="stylesheet" href="~/Identity/css/site.css" /> *@
         <link rel="stylesheet" href="~/css/custom.css" />
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
 
     </environment>
     <environment exclude="Development">
@@ -23,53 +30,47 @@
     </environment>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark green border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand headingFont" href="~/">chickadee</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    @{
-                        var result = Engine.FindView(ViewContext, "_LoginPartial", isMainPage: false);
-                    }
-                    @if (result.Success)
-                    {
-                        await Html.RenderPartialAsync("_LoginPartial");
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("The default Identity UI layout requires a partial view '_LoginPartial' " +
-                            "usually located at '/Pages/_LoginPartial' or at '/Views/Shared/_LoginPartial' to work. Based on your configuration " +
-                            $"we have looked at it in the following locations: {System.Environment.NewLine}{string.Join(System.Environment.NewLine, result.SearchedLocations)}.");
-                    }
-                </div>
-            </div>
-        </nav>
-    </header>
 
-    <div class="container">
-        <partial name="_CookieConsentPartial" optional />
-        <main role="main" class="pb-1">
-            @RenderBody()
-        </main>
-    </div>
-    <footer class="footer green text-white border-top pl-3 textFont">
-        <div class="container">
-        &copy; 2022 - Chickadee
-            @{
-                var foundPrivacy = Url.Page("/Privacy", new { area = "" });
-            }
-            @if (foundPrivacy != null)
-            {
-                <a asp-area="" asp-page="/Privacy">Privacy</a>
-            }
+ @if (SignInManager.IsSignedIn(User))
+ {
+   <div class="row cream">
+       <nav class="navbar navbar-expand-md green col-md-5" id="navbar">
+        <div class="sidebar">
+         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+           <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse flex-column p-3" id="navbarNav">
+         <a href="/" class="navbar-brand collapse navbar-collapse">
+           <img src="~/images/logoWhite.svg" class="logo mb-5" width="115" height="65">
+         </a>
+        
+              <ul class="nav nav-pills flex-column w-100">
+                              <partial name="_ManageNav"/>
+                              <partial name="_LoginPartial"/>
+              </ul>
         </div>
-    </footer>
+        </div> 
+        </nav>
+       <div class="col-md-7">
+           <partial name="_CookieConsentPartial" optional />
+                 <main role="main" class="p-5">
+                     @RenderBody()
+                 </main>
+       </div>
+     </div>
+ }
+ else
+ {
+    <div class="container">
+         <partial name="_CookieConsentPartial" optional />
+         <main role="main">
+           @RenderBody()
+         </main>
+       </div>
+       
+ }
 
-    <environment include="Development">
+<environment include="Development">
         <script src="~/Identity/lib/jquery/dist/jquery.js"></script>
         <script src="~/Identity/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script src="~/Identity/js/site.js" asp-append-version="true"></script>
