@@ -41,6 +41,12 @@
     font-size: 21px;
 }
 
+.subheadingFont {
+    font-family: "chickadeeHeading", serif;
+    font-size: 15px;
+}
+
+
 .textFont {
     font-family: "chickadeeText", serif;
 }
