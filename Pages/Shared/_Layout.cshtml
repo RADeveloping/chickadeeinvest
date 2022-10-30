@@ -33,7 +33,7 @@
 
  @if (SignInManager.IsSignedIn(User))
  {
-   <div class="row">
+   <div class="row cream">
        <nav class="navbar navbar-expand-md green col-md-5" id="navbar">
         <div class="sidebar">
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@
         </nav>
        <div class="col-md-7">
            <partial name="_CookieConsentPartial" optional />
-                 <main role="main" class="pb-1">
+                 <main role="main" class="p-5">
                      @RenderBody()
                  </main>
        </div>
@@ -63,16 +63,12 @@
  {
     <div class="container">
          <partial name="_CookieConsentPartial" optional />
-         <main role="main" class="pb-1">
+         <main role="main">
            @RenderBody()
          </main>
        </div>
        
  }
-
-
-
-
 
 <environment include="Development">
         <script src="~/Identity/lib/jquery/dist/jquery.js"></script>

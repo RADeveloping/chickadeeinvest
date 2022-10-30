@@ -10,7 +10,7 @@
 <main class="form-signin w-100 m-auto">
     <div class="text-center">
         <img class="mb-2 float-left" src="/images/logo2.svg" alt="" width="180" height="100">
-        <h1 class="h3 mb-3 headingFont">Sign in</h1>
+        <h1 class="h3 mb-3 headingFont">Sign in to chickadee</h1>
     </div>
 
     <form id="account" method="post" class="text-left">
@@ -40,11 +40,13 @@
             <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
         </div>
         <div class="mt-2">
-                <a id="forgot-password" class="text-decoration-none" asp-page="./ForgotPassword">Forgot your password?</a>
-            @* <p> *@
-            @*     <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a> *@
-            @* </p> *@
+            <a id="forgot-password" class="text-decoration-none" asp-page="./ForgotPassword">Forgot your password?</a>
+            <p>
+                <a id="resend-confirmation" class="text-decoration-none" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+            </p>
         </div>
+        <hr/>
+        <p class="text-muted">Don’t have an account? <a id="register" class="text-decoration-none" asp-page="./Register">Get Started</a></p>
         
     </form>
 </main>
