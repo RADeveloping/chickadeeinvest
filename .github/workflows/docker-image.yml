@@ -2,21 +2,19 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: ["main", "develop"]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: ["main", "develop"]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build and push the Docker image
-      run: |
-        TAG="$(date +%s)"
-        docker build . --file Dockerfile --tag chickadeeinvest/chickadee:$TAG
-        docker login --username=chickadeeinvest --password=*uW5jp9bDqh*FlxUFxOMIFqJ1VtFjGn82b5T0L2Ka^!li!lGC*
-        docker push chickadeeinvest/chickadee:$TAG
+      - uses: actions/checkout@v3
+      - name: Build and push the Docker image
+        run: |
+          TAG="$(date +%s)"
+          docker build . --file Dockerfile --tag chickadeeinvest/chickadee:$TAG
+          docker login --username=chickadeeinvest --password=*uW5jp9bDqh*FlxUFxOMIFqJ1VtFjGn82b5T0L2Ka^!li!lGC*
+          docker push chickadeeinvest/chickadee:$TAG
