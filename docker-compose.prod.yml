@@ -23,7 +23,7 @@ services:
     depends_on:
       - chickadee-db
     ports:
-      - "8888:80"
+      - "80:80"
     restart: always
     environment:
       - DBHOST=chickadee-db
