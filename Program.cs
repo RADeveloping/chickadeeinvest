@@ -39,6 +39,7 @@ builder.Services.AddIdentityServer()
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
 
+builder.Services.AddCors();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
@@ -61,6 +62,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseIdentityServer();
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
 app.UseAuthorization();
 
 app.MapControllerRoute(
