@@ -17,7 +17,7 @@ export const getTicketBox = (ticket) => {
         <>
             <Grid container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
-                    #{ticket.ticketId} {ticket.problem}
+                    <b>#{ticket.ticketId} {ticket.problem}</b>
                 </Grid>
                 <Grid item>
                     <Typography
@@ -53,7 +53,7 @@ export const getUnitBox = (unit) => {
         <>
             <Grid container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
-                    {unit.unitNo}
+                    <b>{unit.unitNo}</b>
                 </Grid>
                 <Grid item>
                     <Chip label={unit.tickets.length} />
@@ -68,7 +68,7 @@ export const getPropertiesBox = (property) => {
         <>
             <Grid container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
-                    {property.address}
+                    <b>{property.address}</b>
                 </Grid>
                 <Grid item>
                     <Chip label={property.units.length} />
