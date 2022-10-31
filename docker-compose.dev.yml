@@ -20,7 +20,7 @@ services:
       MSSQL_SA_PASSWORD: SqlPassword!
 
   chickadee:
-    image: chickadeeinvest/chickadee:1667099502
+    image: chickadeeinvest/chickadee:1667203966
     depends_on:
       - chickadee-db
     ports:
