@@ -81,6 +81,11 @@ export class LoginMenu extends Component {
         icon: getIcon('ant-design:folder-open-outlined')
       },
       {
+        title: 'properties',
+        path: '/dashboard/properties',
+        icon: getIcon('bxs:building-house')
+      },
+      {
         title: 'profile',
         path: profilePath,
         icon: getIcon('eva:person-fill')
