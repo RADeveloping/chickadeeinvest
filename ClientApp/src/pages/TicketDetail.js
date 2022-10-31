@@ -23,7 +23,7 @@ export default function TicketDetail() {
     const [property, errorProperty, loadingProperty] = useFetch(unit.propertyId ? `/api/Properties/${unit.propertyId}` : null);
     const [propertyManager, errorPropertyManager, loadingPropertyManager] = useFetch(property.propertyManagerId ? `/api/Account/${property.propertyManagerId}` : null);
 
-    const {createdOn, description, estimatedDate, problem, severity, status} = ticket;
+    const {createdOn, description, estimatedDate, problem, severity, status, tenant} = ticket;
     const {unitNo} = unit;
     const {address} = property;
     const loadingData = loadingTicket || loadingUnit || loadingProperty || loadingPropertyManager;
@@ -127,7 +127,7 @@ export default function TicketDetail() {
                                                 Tenant
                                             </Typography>
                                             <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                Jane Doe
+                                                {tenant.firstName} {tenant.lastName}
                                             </Typography>
                                         </Grid>
                                     </Grid>
