@@ -115,7 +115,7 @@ namespace chickadee.Controllers
          // GET: api/Properties/current
         [HttpGet]
         [Route("current")]
-        public async Task<ActionResult<IEnumerable<Property>>> GetSpecificPropertyForUser()
+        public async Task<ActionResult> GetSpecificPropertiesForUser()
         {
           if (_context.Properties == null)
           {
@@ -123,12 +123,31 @@ namespace chickadee.Controllers
           }
             var user = _userManager.GetUserAsync(User).Result;
 
-            return await _context.Properties
-              .Include(j => j.PropertyManager)
-              .Where(t => t.PropertyManager == user)
-              .Include(t => t.Units)
-                .ThenInclude(s => s.Tickets)
-              .ToListAsync();
+            return Ok(
+              _context.Properties
+                .Include(j => j.PropertyManager)
+                .Where(d => d.PropertyManager == user)
+                .Select(property => new {
+                  propertyId = property.PropertyId,
+                  address = property.Address,
+                  propertyManagerId = property.PropertyManagerId,
+                  propertyManagerFirstName = property.PropertyManager.FirstName,
+                  propertyManagerLastName = property.PropertyManager.LastName,
+                  propertyManagerPhoneNumber = property.PropertyManager.PhoneNumber,
+                  units = property.Units
+                    .Select(unit => new {
+                        unitId = unit.UnitId,
+                        unitNo = unit.UnitNo,
+                        tenants = unit.Tenants
+                            .Select(tenant => new {
+                                FirstName = tenant.FirstName,
+                                LastName = tenant.LastName,
+                                Id = tenant.Id,
+                                Email = tenant.Email
+                            }),
+                        tickets = unit.Tickets
+                    })
+                }));
         }
 
         // GET: api/Properties/5

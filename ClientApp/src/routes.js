@@ -15,6 +15,7 @@ import {
 import { Logout } from './components/api-authorization/Logout';
 import Tickets from "./pages/Tickets";
 import LandingPage from "./pages/LandingPage";
+import Overview from "./pages/Overview";
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +29,12 @@ const DashboardRoutes = [
     path: 'tickets',
     requireAuth: true,
     element: <Tickets />
-  }
+  },
+    {
+        path: 'overview',
+        requireAuth: true,
+        element: <Overview />
+    }
 ];
 
 export default function Router() {

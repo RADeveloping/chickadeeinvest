@@ -83,7 +83,7 @@ namespace chickadee.Controllers
             });
             return ticketList;
           }
-            return await _context.Tickets.ToListAsync();
+            return await _context.Tickets.Include(t => t.Unit).ThenInclude(t => t.Property).ToListAsync();
         }
 
         // GET: api/Tickets/5

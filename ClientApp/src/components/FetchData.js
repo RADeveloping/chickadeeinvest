@@ -8,7 +8,7 @@ const useFetch = (url, filter) => {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        if (filter) {
+        if (data.length > 0 && filter) {
           data = filter(data);
         }
         setData(data);

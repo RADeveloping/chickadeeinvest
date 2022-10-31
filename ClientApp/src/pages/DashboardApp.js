@@ -1,43 +1,114 @@
 // @mui
 import { useTheme } from '@mui/material/styles';
-import {Container, Grid, Typography} from '@mui/material';
+import {Container, Grid, Stack, Typography} from '@mui/material';
 // components
 import Page from '../components/Page';
 import useFetch from '../components/FetchData';
-import {AppWidgetSummary} from "../sections/@dashboard/app";
 import {Link} from "react-router-dom";
+import {UserWidget, Widget} from "../sections/@dashboard/app";
+import PageLoading from "../components/PageLoading";
+import * as React from "react";
+import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
+  
   const ticketUri = '/api/Tickets';
   const unitUri = '/api/Units';
   const propertyUri = '/api/Properties';
   
-  const [tickets, ticketsError, ticketsLoading] = useFetch(ticketUri);
-  const [units, unitsError, unitsLoading] = useFetch(unitUri);
-  const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri);
+  const accountUri = '/api/Account';
+  const currentUnitUri = '/api/Units/current';
+  
+  const [tickets, ticketsError, ticketsLoading] = useFetch(ticketUri, filterTicket);
+  const [units, unitsError, unitsLoading] = useFetch(unitUri, filterUnit);
+  const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri, filterProperties);
+
+  const [account, accountError, accountLoading] = useFetch(accountUri);
+  const [currentUnit, currentUnitError, currentUnitLoading] = useFetch(currentUnitUri, (d) => {
+    d = d[0];
+    d.property = d.property.address;
+    return d;
+  });
+  const userLoading = accountLoading && currentUnitLoading
+  const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
   
   const openTickets = tickets.filter((ticket) => ticket.status === 0);
-
+  console.log(account)
+  const dashboardItems = [
+    {item:
+      <Link to="/authentication/profile" style={{textDecoration: 'none'}}>
+      <UserWidget account={account} unit={currentUnit} loading={userLoading} />
+    </Link>,
+      for: [
+        "Tenant",
+        "PropertyManager"
+      ]
+    },
+    {item:
+          <Link to="/dashboard/tickets" style={{textDecoration: 'none'}}>
+            <Widget title="Open Tickets" total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
+          </Link>,
+      for: [
+        "Tenant",
+        "PropertyManager"
+      ]
+    },
+    {item:
+          <Widget title="Properties" total={properties.length} items={properties} icon={'bxs:building-house'} loading={propertiesLoading} />,
+      for: [
+        "PropertyManager"
+      ]
+    },
+    {item:
+          <Widget title="Units" total={units.length} items={units} icon={'bxs:door-open'} loading={unitsLoading} />,
+      for: [
+        "PropertyManager"
+      ]
+    }
+  ]
+  
+  const isMemberOf = (userRoles, roles) => {
+    if (!userRoles) return false
+    for (let i = 0; i < userRoles.length; i++) {
+      for (let j = 0; j < roles.length; j++) {
+        if (userRoles[i] === roles[j]) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+  
+  const isBigWidget = (index) => {
+    let remainder = index % 2
+    let row = Math.ceil((index + 1) / 2)
+    let remainderRow = row % 2
+    return (remainderRow === 0 ? remainder === 0 : remainder !== 0)
+  }
+  
+  const getDashboardLayout = () => {
+    let items = dashboardItems.filter(item => isMemberOf(account.roles, item.for))
+    return items.map((item, index) =>
+        (
+            <Grid item xs={12} sm={6} md={isBigWidget(index) ? 7 : 5}>
+              {item.item}
+            </Grid>
+        ))
+  }
+  
   return (
     <Page title="Dashboard">
-      <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Welcome back
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Link to="/dashboard/tickets" style={{textDecoration: 'none'}}>
-            <AppWidgetSummary title="Open Tickets" total={openTickets.length} color="error" icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
-            </Link>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Units" total={units.length} color="info" icon={'bxs:door-open'} loading={unitsLoading} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Properties" color="success" total={properties.length} icon={'bxs:building-house'} loading={propertiesLoading} />
-          </Grid>
+      <Container>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4" gutterBottom>
+            Dashboard
+          </Typography>
+        </Stack>
+        <PageLoading loadingData={loadingData} />
+        <Grid height={'100%'} container spacing={3}>
+          {getDashboardLayout()}
         </Grid>
       </Container>
     </Page>
