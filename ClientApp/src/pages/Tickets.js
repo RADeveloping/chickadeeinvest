@@ -26,6 +26,7 @@ import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from '.
 import useFetch from "../components/FetchData";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
+import {SEVERITY, STATUS} from "../utils/filters";
 
 // ----------------------------------------------------------------------
 
@@ -40,17 +41,6 @@ const TABLE_HEAD = [
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' }
 ];
-
-const SEVERITY = {
-  0: {color: 'success', text: 'Low'},
-  1: {color: 'warning', text: 'Medium'},
-  2: {color: 'error', text: 'High'}
-}
-
-const STATUS = {
-  0: {color: 'info', text: 'Open'},
-  1: {color: 'primary', text: 'Closed'},
-}
 
 // ----------------------------------------------------------------------
 

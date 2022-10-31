@@ -1,13 +1,13 @@
 ﻿import {Chip, Grid, Stack, Typography} from "@mui/material";
 import Label from "../components/Label";
 import * as React from "react";
-const SEVERITY = {
+export const SEVERITY = {
     0: {color: 'success', text: 'Low'},
     1: {color: 'warning', text: 'Medium'},
     2: {color: 'error', text: 'High'}
 }
 
-const STATUS = {
+export const STATUS = {
     0: {color: 'info', text: 'Open'},
     1: {color: 'primary', text: 'Closed'},
 }

@@ -35,7 +35,7 @@ export default function DashboardApp() {
   const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
   
   const openTickets = tickets.filter((ticket) => ticket.status === 0);
-  console.log(account)
+
   const dashboardItems = [
     {item:
       <Link to="/authentication/profile" style={{textDecoration: 'none'}}>
