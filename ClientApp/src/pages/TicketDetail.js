@@ -1,10 +1,12 @@
 import {Link as RouterLink, useNavigate, useParams} from "react-router-dom";
-import {Button, Card, Container, Grow, Stack, Typography} from "@mui/material";
+import {Button, Card, CardContent, Container, Grid, Grow, Stack, Typography} from "@mui/material";
 import * as React from "react";
 import Page from "../components/Page";
 import Iconify from "../components/Iconify";
 import PageLoading from "../components/PageLoading";
 import useFetch from "../components/FetchData";
+import {SEVERITY, STATUS} from "../utils/filters";
+import Label from "../components/Label";
 
 export default function TicketDetail() {
     const filterTickets = (data) => {
@@ -48,7 +50,37 @@ export default function TicketDetail() {
                 <PageLoading loadingData={loadingData} />
                 <Grow in={!loadingData}>
                     <Card sx={{display: loadingData ? 'none' : undefined}}>
-                        {createdOn}
+                        {!loadingData &&
+                            <Grid container padding={4} spacing={5} direction={'column'}>
+                        
+                        <Grid item>
+                            <Stack direction={'row'} alignItems={'center'} gap={1}>
+                                <Typography variant={'h4'}>
+                                    {problem}
+                                </Typography>
+                                <Label
+                                    variant="ghost"
+                                    color={SEVERITY[severity].color}
+                                >
+                                    {SEVERITY[severity].text}
+                                </Label>
+                                <Label
+                                    variant="ghost"
+                                    color={STATUS[status].color}
+                                >
+                                    {STATUS[status].text}
+                                </Label>
+                            </Stack>
+                        </Grid>
+                      
+                        <Grid item>
+                            <Typography variant={'h6'}>
+                                {description}
+                            </Typography>
+                        </Grid>
+                        
+                    </Grid>
+                        }
                     </Card>
                 </Grow>
             </Container>
