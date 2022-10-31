@@ -176,7 +176,7 @@ public static class ModelBuilderExtensions {
 
         builder.Entity<IdentityUserRole<string>>().HasData(userRoles);
         builder.Entity<Unit>().HasData(SeedUnits());
-        builder.Entity<Ticket>().HasData(SeedTickets());
+        builder.Entity<Ticket>().HasData(SeedTickets(tenants));
         builder.Entity<Property>().HasData(SeedProperties(propertyManagers));
     }
     public static List<Unit> SeedUnits()
@@ -215,7 +215,7 @@ public static class ModelBuilderExtensions {
             return properties;
         }
 
-        public static List<Ticket> SeedTickets()
+        public static List<Ticket> SeedTickets(List<ApplicationUser> tenants)
         {
             List<Ticket> tickets = new List<Ticket>() {
                 new Ticket() {
@@ -226,7 +226,8 @@ public static class ModelBuilderExtensions {
                     Description = "Massive Leak from the Kitchen pipe",
                     Status = Enums.TicketStatus.Open,
                     Severity = Enums.TicketSeverity.High,
-                    UnitId = 1
+                    UnitId = 1,
+                    TenantId = tenants[0].Id
                 },
                 new Ticket() {
                     TicketId = 2,
@@ -236,7 +237,8 @@ public static class ModelBuilderExtensions {
                     Description = "Need repairing the floors from last earthquake",
                     Status = Enums.TicketStatus.Open,
                     Severity = Enums.TicketSeverity.Medium,
-                    UnitId = 1
+                    UnitId = 1,
+                    TenantId = tenants[0].Id
                 },
                 new Ticket() {
                     TicketId = 3,
@@ -246,7 +248,8 @@ public static class ModelBuilderExtensions {
                     Description = "Need to fix the roof that was damaged by the tornado",
                     Status = Enums.TicketStatus.Closed,
                     Severity = Enums.TicketSeverity.High,
-                    UnitId = 2
+                    UnitId = 2,
+                    TenantId = tenants[1].Id
                 },
                 new Ticket() {
                     TicketId = 4,
@@ -256,7 +259,8 @@ public static class ModelBuilderExtensions {
                     Description = "Currently getting by with rat traps",
                     Status = Enums.TicketStatus.Open,
                     Severity = Enums.TicketSeverity.Medium,
-                    UnitId = 2
+                    UnitId = 2,
+                    TenantId = tenants[1].Id
                 },
             };
 
