@@ -7,6 +7,7 @@ import Page from "../components/Page";
 import {applySortFilter, getComparator, ListToolbar} from "../sections/@dashboard/list";
 import {useState} from "react";
 import useFetch from "../components/FetchData";
+import useResponsive from "../hooks/useResponsive";
 
 const properties = [
     {id: 'address', label: 'Address'},
@@ -29,7 +30,7 @@ export default function Properties() {
     };
 
     const filteredData = applySortFilter(data, getComparator(order, orderBy), filterQuery, filterQueryProperty);
-
+    const isSmall = useResponsive('up', 'sm');
     const isDataNotFound = filteredData.length === 0 && data.length > 0;
 
     const noData = data.length === 0;
@@ -55,7 +56,7 @@ export default function Properties() {
                     <Card sx={{
                         boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
                         display: loadingData ? 'none' : undefined,
-                        width: 'fit-content',
+                        width: isSmall ? 'fit-content' : '100%',
                         background: 'linear-gradient(60deg, #D9D7C3 ,#C7D9C9 )',
                     }}>
                         <ListToolbar
@@ -68,11 +69,12 @@ export default function Properties() {
                         />
                     </Card>
                 </Grow>
+                <br/>
                 <Grow in={!loadingData && filteredData.length > 0}>
-                    <Grid container direction={'row'} gap={1}>
+                    <Grid container spacing={1}>
                         {filteredData.map((data) =>
-                            <Grid item>
-                                <Card sx={{maxWidth: 500, minHeight: 200}}>
+                            <Grid xs={6} sm={6} md={4} item>
+                                <Card sx={{height: 300}}>
                                     <CardContent>
                                         <Typography variant={'h4'}>
                                             {data.address}
