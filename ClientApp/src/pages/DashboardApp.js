@@ -1,5 +1,4 @@
 // @mui
-import { useTheme } from '@mui/material/styles';
 import {Container, Grid, Stack, Typography} from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -31,8 +30,8 @@ export default function DashboardApp() {
     d.property = d.property.address;
     return d;
   });
-  const userLoading = accountLoading && currentUnitLoading
-  const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
+  const userLoading = accountLoading || currentUnitLoading
+  const loadingData = ticketsLoading || unitsLoading || propertiesLoading || userLoading
   
   const openTickets = tickets.filter((ticket) => ticket.status === 0);
 

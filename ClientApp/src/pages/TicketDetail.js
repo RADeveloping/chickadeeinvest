@@ -1,5 +1,5 @@
-import {Link as RouterLink, useNavigate, useParams} from "react-router-dom";
-import {Button, Card, CardContent, Container, Divider, Grid, Grow, Stack, Typography} from "@mui/material";
+import {useNavigate, useParams} from "react-router-dom";
+import {Button, Card, Container, Grid, Grow, Stack, Typography} from "@mui/material";
 import * as React from "react";
 import Page from "../components/Page";
 import Iconify from "../components/Iconify";
@@ -7,6 +7,7 @@ import PageLoading from "../components/PageLoading";
 import useFetch from "../components/FetchData";
 import {SEVERITY, STATUS} from "../utils/filters";
 import Label from "../components/Label";
+import useResponsive from "../hooks/useResponsive";
 
 export default function TicketDetail() {
     const filterTickets = (data) => {
@@ -17,6 +18,7 @@ export default function TicketDetail() {
     const title = "Ticket"
     const {id} = useParams();
     const navigate = useNavigate();
+    const isDesktop = useResponsive('up', 'lg');
 
     const [ticket, errorTicket, loadingTicket] = useFetch(`/api/Tickets/${id}`, filterTickets);
     const [unit, errorUnit, loadingUnit] = useFetch(ticket.unitId ? `/api/Units/${ticket.unitId}` : null);
@@ -63,7 +65,7 @@ export default function TicketDetail() {
                                     <Typography variant={'h4'}>
                                         {problem}
                                     </Typography>
-                                    <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
+                                    <Stack direction={isDesktop ? 'row' : 'column'} justifyContent={'space-between'} gap={1}>
                                         <Stack direction={'row'} alignItems={'center'} gap={1}>
                                             <Label
                                                 variant="ghost"
