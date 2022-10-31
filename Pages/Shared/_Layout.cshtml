@@ -3,9 +3,14 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Mvc.ViewEngines
 @using chickadee.Models
+@using chickadee.Data
+@using Microsoft.EntityFrameworkCore
 @inject IWebHostEnvironment Environment
 @inject ICompositeViewEngine Engine
 @inject SignInManager<ApplicationUser> SignInManager
+@inject ApplicationDbContext DbContext;
+@inject UserManager<ApplicationUser> UserManager
+
 
 <!DOCTYPE html>
 <html>
@@ -19,6 +24,8 @@
         @* <link rel="stylesheet" href="~/Identity/css/site.css" /> *@
         <link rel="stylesheet" href="~/css/custom.css" />
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+            <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+            <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
 
     </environment>
@@ -33,7 +40,8 @@
 
  @if (SignInManager.IsSignedIn(User))
  {
-   <div class="row cream">
+
+     <div class="row cream">
        <nav class="navbar navbar-expand-md green col-md-5" id="navbar">
         <div class="sidebar w-100">
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,12 +59,47 @@
         </div>
         </div> 
         </nav>
-       <div class="col-md-7">
-           <partial name="_CookieConsentPartial" optional />
-                 <main role="main" class="p-5">
-                     @RenderBody()
-                 </main>
-       </div>
+         <div class="col-md-7">
+               @{
+                   Document? document = null;
+             
+                   try
+                   {
+                       document = await DbContext.Document!.FirstOrDefaultAsync(m => m.UserId == UserManager.GetUserAsync(User).Result.Id);
+                   }
+                   catch (Exception e)
+                   {
+                       Console.WriteLine("NO DOCUMENT FOUND");
+                   }
+             
+                   if (document.IdPhoto.ToString().Length < 10 || document.LeasePhoto.ToString().Length < 10)
+                   {
+                       <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                           <strong>Warning!</strong> You have not uploaded a document yet. Please upload the required documents to verify your account.
+                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                       </div>
+                   }
+                   else if (document.IsIdVerified == false)
+                   {
+                          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Pending Verification!</strong> Your ID has been uploaded and is pending verification.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          </div>
+                   }
+                   else
+                   {
+                       <div class="alert alert-success alert-dismissible fade show" role="alert">
+                           <strong>Verified</strong> Your account has been fully verified.
+                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                       </div>
+                   }
+               }
+                  
+             <partial name="_CookieConsentPartial" optional/>
+             <main role="main" class="p-5">
+                 @RenderBody()
+             </main>
+         </div>
      </div>
  }
  else
