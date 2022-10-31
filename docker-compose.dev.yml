@@ -27,7 +27,7 @@ services:
       - "443:443"
     restart: always
     environment:
-      - DBHOST=127.0.0.1
+      - DBHOST=chickadee-db
       - DBPORT=1433
       - DBUSER=sa
       - DBPASSWORD=SqlPassword!
