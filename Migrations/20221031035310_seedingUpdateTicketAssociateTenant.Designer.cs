@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using chickadee.Data;
 
@@ -11,9 +12,10 @@ using chickadee.Data;
 namespace chickadee.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221031035310_seedingUpdateTicketAssociateTenant")]
+    partial class seedingUpdateTicketAssociateTenant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,7 +113,6 @@ namespace chickadee.Migrations
                             Id = "2c0371e9-cb83-45ce-b106-fe470e34fae5",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "ea4a362b-f79e-4b5a-88eb-ed37090ab6d3",
-
                             Email = "superadmin@chickadeeinvest.ca",
                             EmailConfirmed = true,
                             FirstName = "Matt",
@@ -203,43 +204,6 @@ namespace chickadee.Migrations
                             UnitId = 2,
                             UserName = "tenant2@gmail.com",
                             UsernameChangeLimit = 10
-                        });
-                });
-
-            modelBuilder.Entity("chickadee.Models.Document", b =>
-                {
-                    b.Property<string>("DocumentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<byte[]>("IdPhoto")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<bool>("IsIdVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<byte[]>("LeasePhoto")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("DocumentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Document");
-
-                    b.HasData(
-                        new
-                        {
-                            DocumentId = "c6056ea9-e8a5-483c-881a-3f1d5c56b5fe",
-                            IdPhoto = new byte[0],
-                            IsIdVerified = false,
-                            LeasePhoto = new byte[0],
-                            UserId = "2fb259f5-b2e1-49fa-a96e-334d71de3392"
                         });
                 });
 
@@ -761,17 +725,6 @@ namespace chickadee.Migrations
                         .HasForeignKey("UnitId");
 
                     b.Navigation("Unit");
-                });
-
-            modelBuilder.Entity("chickadee.Models.Document", b =>
-                {
-                    b.HasOne("chickadee.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("chickadee.Models.Property", b =>

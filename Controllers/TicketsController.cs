@@ -50,38 +50,90 @@ namespace chickadee.Controllers
 
           if (isTenant && _context.Units != null && !isSuperAdmin)
           {
-            var ticketList = new List<Ticket>();
-            var tenantUnits = await _context.Units
-              .Include(t => t.Tenants)
-              .Where(unit => unit.Tenants.Contains(user))
-              .Include(i => i.Tickets)
-              .Include(j => j.Property)
-              .ToListAsync();
-            tenantUnits.ForEach((unit) => {
-              unit.Tickets.ForEach((ticket) => {
-                ticketList.Add(ticket);
-              });
-            });
-            return ticketList;
+            var tenantTickets = _context.Units
+                  .Include(t => t.Tenants)
+                  .Include(t => t.Tickets)
+                  .Where(unit => unit.Tenants.Contains(user))
+                  .SelectMany(unit => unit.Tickets.Where(ticket => ticket.TenantId == user.Id))
+                  .Select(ticket => new
+                  {
+                      TicketId = ticket.TicketId,
+                      CreatedOn = ticket.CreatedOn,
+                      EstimatedDate = ticket.EstimatedDate,
+                      Problem = ticket.Problem,
+                      Description = ticket.Description,
+                      Status = ticket.Status,
+                      Severity = ticket.Severity,
+                      UnitId = ticket.UnitId,
+                      Unit = new {
+                        UnitNo = ticket.Unit.UnitNo,
+                        Property = new {
+                          PropertyId = ticket.Unit.Property.PropertyId,
+                          Address = ticket.Unit.Property.Address,
+                          PropertyManagerId = ticket.Unit.Property.PropertyManagerId,
+                          PropertyManager = new {
+                            FirstName = ticket.Unit.Property.PropertyManager.FirstName,
+                            LastName = ticket.Unit.Property.PropertyManager.LastName,
+                            Email = ticket.Unit.Property.PropertyManager.Email,
+                            PhoneNumber = ticket.Unit.Property.PropertyManager.PhoneNumber
+                          }
+                        }
+                      },
+                      TenantId = ticket.TenantId,
+                      Tenant = new
+                      {
+                          FirstName = ticket.Tenant.FirstName,
+                          LastName = ticket.Tenant.LastName,
+                          Id = ticket.Tenant.Id,
+                          UserName = ticket.Tenant.UserName,
+                          ProfilePicture = ticket.Tenant.ProfilePicture
+                      }
+                  });
+            return Ok(tenantTickets);
           }
 
           if (isPropertyManager && _context.Properties != null && !isSuperAdmin)
           {
-            var ticketList = new List<Ticket>();
-            var properties = await _context.Properties
-              .Include(j => j.PropertyManager)
+            var propManTickets = _context.Properties
+              .Include(t => t.PropertyManager)
               .Where(t => t.PropertyManager == user)
-              .Include(t => t.Units)
-                .ThenInclude(s => s.Tickets)
-              .ToListAsync();
-            properties.ForEach((property) => {
-              property.Units.ForEach((unit) => {
-                unit.Tickets.ForEach((ticket) => {
-                  ticketList.Add(ticket);
-                });
-              });
-            });
-            return ticketList;
+              .SelectMany(property => property.Units)
+              .SelectMany(tickets => tickets.Tickets)
+              .Select(ticket => new
+                  {
+                      TicketId = ticket.TicketId,
+                      CreatedOn = ticket.CreatedOn,
+                      EstimatedDate = ticket.EstimatedDate,
+                      Problem = ticket.Problem,
+                      Description = ticket.Description,
+                      Status = ticket.Status,
+                      Severity = ticket.Severity,
+                      UnitId = ticket.UnitId,
+                      Unit = new {
+                      UnitNo = ticket.Unit.UnitNo,
+                      Property = new {
+                        PropertyId = ticket.Unit.Property.PropertyId,
+                        Address = ticket.Unit.Property.Address,
+                        PropertyManagerId = ticket.Unit.Property.PropertyManagerId,
+                        PropertyManager = new {
+                          FirstName = ticket.Unit.Property.PropertyManager.FirstName,
+                          LastName = ticket.Unit.Property.PropertyManager.LastName,
+                          Email = ticket.Unit.Property.PropertyManager.Email,
+                          PhoneNumber = ticket.Unit.Property.PropertyManager.PhoneNumber
+                        }
+                      }
+                      },
+                      TenantId = ticket.TenantId,
+                      Tenant = new
+                      {
+                          FirstName = ticket.Tenant.FirstName,
+                          LastName = ticket.Tenant.LastName,
+                          Id = ticket.Tenant.Id,
+                          UserName = ticket.Tenant.UserName,
+                          ProfilePicture = ticket.Tenant.ProfilePicture
+                      }
+                    });
+            return Ok(propManTickets);
           }
             return await _context.Tickets.Include(t => t.Unit).ThenInclude(t => t.Property).ToListAsync();
         }
