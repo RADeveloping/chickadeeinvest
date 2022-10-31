@@ -22,6 +22,7 @@ services:
     image: chickadeeinvest/chickadee:1667248472
     depends_on:
       - chickadee-db
+    entrypoint: [ "/wait-for-it.sh", "chickadee-db:1433", "-t", "120", "--", "dotnet", "chickadee.dll" ]
     ports:
       - "80:80"
       - "443:443"
