@@ -51,37 +51,66 @@ namespace chickadee.Controllers
           if (isTenant && _context.Units != null && !isSuperAdmin)
           {
             var ticketList = new List<Ticket>();
-            var tenantUnits = await _context.Units
+            var tenantTickets = await _context.Units
               .Include(t => t.Tenants)
               .Where(unit => unit.Tenants.Contains(user))
-              .Include(i => i.Tickets)
-              .Include(j => j.Property)
+              .Select(unit => new {
+                Tickets = unit.Tickets
+                  .Select(ticket => new {
+                    TicketId = ticket.TicketId,
+                    CreatedOn = ticket.CreatedOn,
+                    EstimatedDate = ticket.EstimatedDate,
+                    Problem = ticket.Problem,
+                    Description = ticket.Description,
+                    Status = ticket.Status,
+                    Severity = ticket.Severity,
+                    UnitId = ticket.UnitId,
+                    TenantId = ticket.TenantId,
+                    Tenant = new {
+                      FirstName = ticket.Tenant.FirstName,
+                      LastName = ticket.Tenant.LastName,
+                      Id = ticket.Tenant.Id,
+                      UserName = ticket.Tenant.UserName,
+                      ProfilePicture = ticket.Tenant.ProfilePicture
+                    }
+                  })
+              })
               .ToListAsync();
-            tenantUnits.ForEach((unit) => {
-              unit.Tickets.ForEach((ticket) => {
-                ticketList.Add(ticket);
-              });
-            });
-            return ticketList;
+            return Ok(tenantTickets);
           }
 
           if (isPropertyManager && _context.Properties != null && !isSuperAdmin)
           {
-            var ticketList = new List<Ticket>();
+            var ticketsList = new List<Ticket>();
             var properties = await _context.Properties
               .Include(j => j.PropertyManager)
               .Where(t => t.PropertyManager == user)
-              .Include(t => t.Units)
-                .ThenInclude(s => s.Tickets)
+              .Select(property => new {
+                Units = property.Units
+                  .Select(unit => new {
+                    Tickets = unit.Tickets
+                      .Select(ticket => new {
+                        TicketId = ticket.TicketId,
+                        CreatedOn = ticket.CreatedOn,
+                        EstimatedDate = ticket.EstimatedDate,
+                        Problem = ticket.Problem,
+                        Description = ticket.Description,
+                        Status = ticket.Status,
+                        Severity = ticket.Severity,
+                        UnitId = ticket.UnitId,
+                        TenantId = ticket.TenantId,
+                        Tenant = new {
+                          FirstName = ticket.Tenant.FirstName,
+                          LastName = ticket.Tenant.LastName,
+                          Id = ticket.Tenant.Id,
+                          UserName = ticket.Tenant.UserName,
+                          ProfilePicture = ticket.Tenant.ProfilePicture
+                        }
+                      })
+                  })}
+              )
               .ToListAsync();
-            properties.ForEach((property) => {
-              property.Units.ForEach((unit) => {
-                unit.Tickets.ForEach((ticket) => {
-                  ticketList.Add(ticket);
-                });
-              });
-            });
-            return ticketList;
+            return Ok(properties);
           }
             return await _context.Tickets.Include(t => t.Unit).ThenInclude(t => t.Property).ToListAsync();
         }
