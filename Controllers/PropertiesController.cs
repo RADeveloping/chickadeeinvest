@@ -154,18 +154,97 @@ namespace chickadee.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Property>> GetProperty(int id)
         {
-          if (_context.Properties == null)
+          var user = _userManager.GetUserAsync(User).Result;
+          
+          var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+          var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
+
+          var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
+
+          var isSuperAdmin = await _userManager.IsInRoleAsync(user, "SuperAdmin");
+
+          if (_context.Properties == null || user == null)
           {
               return NotFound();
           }
-            var @property = await _context.Properties.FindAsync(id);
 
-            if (@property == null)
+          if (isSuperAdmin)
+          {
+            var superAdminProperty = await _context.Properties
+                .Where(p => p.PropertyId == id)
+                .Select(property => new
+                {
+                    PropertyId = property.PropertyId,
+                    Address = property.Address,
+                    PropertyManagerId = property.PropertyManagerId,
+                    PropertyManager = new 
+                    {
+                        FirstName = property.PropertyManager.FirstName,
+                        LastName = property.PropertyManager.LastName,
+                        Id = property.PropertyManager.Id,
+                        UserName = property.PropertyManager.UserName,
+                        ProfilePicture = property.PropertyManager.ProfilePicture
+                    }
+                }).FirstOrDefaultAsync(i => i.PropertyId == id);
+
+            if (superAdminProperty == null)
+            {
+                return NotFound();
+            }
+            return Ok(superAdminProperty);
+          }
+
+          if(isPropertyManager)
+          {
+            var propManProperties = await _context.Properties
+              .Where(p => p.PropertyManager == user)
+              .Select(property => new
+                {
+                    PropertyId = property.PropertyId,
+                    Address = property.Address,
+                    PropertyManagerId = property.PropertyManagerId,
+                    PropertyManager = new 
+                    {
+                        FirstName = property.PropertyManager.FirstName,
+                        LastName = property.PropertyManager.LastName,
+                        Id = property.PropertyManager.Id,
+                        UserName = property.PropertyManager.UserName,
+                        ProfilePicture = property.PropertyManager.ProfilePicture
+                    }
+                }).FirstOrDefaultAsync(i => i.PropertyId == id);
+            if (propManProperties == null)
             {
                 return NotFound();
             }
 
-            return @property;
+            return Ok(propManProperties);
+          }
+
+          if (isTenant)
+          {
+            var tenantProperty = await _context.Properties
+                .SelectMany(p => p.Units.Where(unit => unit.Tenants.Contains(user)))
+                .Select(unit => new {
+                    PropertyId = unit.Property.PropertyId,
+                    Address = unit.Property.Address,
+                    PropertyManagerId = unit.Property.PropertyManagerId,
+                    PropertyManager = new 
+                    {
+                        FirstName = unit.Property.PropertyManager.FirstName,
+                        LastName = unit.Property.PropertyManager.LastName,
+                        Id = unit.Property.PropertyManager.Id,
+                        UserName = unit.Property.PropertyManager.UserName,
+                        ProfilePicture = unit.Property.PropertyManager.ProfilePicture
+                    }
+                }).FirstOrDefaultAsync(i => i.PropertyId == id);
+            if (tenantProperty == null)
+            {
+                return NotFound();
+            }
+            return Ok(tenantProperty);
+          }
+          return NotFound();
         }
         
 
