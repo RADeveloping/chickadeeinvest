@@ -155,8 +155,7 @@ namespace chickadee.Controllers
 
             if (isSuperAdmin)
             {
-                var superAdminTicket = _context.Tickets
-                    .Where(p => p.TicketId == id)
+                var superAdminTicket = await _context.Tickets
                     .Select(ticket => new
                     {
                         TicketId = ticket.TicketId,
@@ -176,7 +175,7 @@ namespace chickadee.Controllers
                             UserName = ticket.Tenant.UserName,
                             ProfilePicture = ticket.Tenant.ProfilePicture
                         }
-                    });
+                    }).FirstOrDefaultAsync(i => i.TicketId == id);
                 if (superAdminTicket == null)
                 {
                     return NotFound();
@@ -187,8 +186,8 @@ namespace chickadee.Controllers
 
             if (isPropertyManager)
             {
-                var pmTicket = _context.Tickets
-                    .SelectMany(t => t.Unit.Tickets).Where(t => t.TicketId == id && t.Unit.Property.PropertyManager == user)
+                var pmTicket = await _context.Tickets
+                    .SelectMany(t => t.Unit.Tickets).Where(t => t.Unit.Property.PropertyManager == user)
                     .Select(ticket => new
                     {
                         TicketId = ticket.TicketId,
@@ -208,19 +207,19 @@ namespace chickadee.Controllers
                             UserName = ticket.Tenant.UserName,
                             ProfilePicture = ticket.Tenant.ProfilePicture
                         }
-                    });
+                    }).FirstOrDefaultAsync(i => i.TicketId == id);
                 
-                if(!pmTicket.Any())
+                if(pmTicket == null)
                 {
                     return NotFound();
                 }
-                return Ok(pmTicket.First());
+                return Ok(pmTicket);
             }
             
             if (isTenant)
             {
-                var tenantTicket = _context.Tickets
-                    .SelectMany(t => t.Unit.Tickets.Where(ticket => ticket.TicketId == id && t.Unit.Tenants.Contains(user)))
+                var tenantTicket = await _context.Tickets
+                    .SelectMany(t => t.Unit.Tickets.Where(ticket => ticket.Unit.Tenants.Contains(user)))
                     .Select(ticket => new
                     {
                         TicketId = ticket.TicketId,
@@ -240,14 +239,14 @@ namespace chickadee.Controllers
                             UserName = ticket.Tenant.UserName,
                             ProfilePicture = ticket.Tenant.ProfilePicture
                         }
-                    });
+                    }).FirstOrDefaultAsync(i => i.TicketId == id);
                 
-                if(!tenantTicket.Any())
+                if(tenantTicket == null)
                 {
                     return NotFound();
                 }
                 
-                return Ok(tenantTicket.First());
+                return Ok(tenantTicket);
             }
 
             return NotFound();
