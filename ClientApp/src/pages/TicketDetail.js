@@ -32,7 +32,7 @@ export default function TicketDetail() {
     return (
         <Page title={`${title} #${id}`}>
             <Container>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+                <Stack direction="row" alignItems={'flex-end'} justifyContent="space-between" mb={5}>
                     <Stack direction="column">
                         <Typography variant="h4" gutterBottom>
                             {title} #{id}
@@ -45,6 +45,13 @@ export default function TicketDetail() {
                             Back
                         </Button>
                     </Stack>
+                    <Button
+                        variant="contained"
+                        to="#"
+                        startIcon={<Iconify icon="akar-icons:check" />}
+                    >
+                        {`Complete`}
+                    </Button>
                 </Stack>
                 <PageLoading loadingData={loadingData}/>
                 <Grow in={!loadingData}>
@@ -101,10 +108,26 @@ export default function TicketDetail() {
                                         </Grid>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                                                Location
+                                                Address
                                             </Typography>
                                             <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
                                                 Unit #{unitNo}, {address}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
+                                                Property Manager
+                                            </Typography>
+                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
+                                                John Doe
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
+                                                Tenant
+                                            </Typography>
+                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
+                                                Jane Doe
                                             </Typography>
                                         </Grid>
                                     </Grid>
