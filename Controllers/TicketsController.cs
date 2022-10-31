@@ -140,25 +140,93 @@ namespace chickadee.Controllers
 
         // GET: api/Tickets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetTicket(int id)
+         public async Task<ActionResult> GetTicket(int id)
         {
-            if (_context.Tickets == null)
-            {
-                return NotFound();
-            }
-            var ticket = await _context.Tickets.FindAsync(id);
-          
-            if (ticket == null)
+
+            var user = _userManager.GetUserAsync(User).Result;
+            var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
+            var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
+            var isSuperAdmin = await _userManager.IsInRoleAsync(user, "SuperAdmin");
+
+            if (_context.Tickets == null || user == null)
             {
                 return NotFound();
             }
 
-            if (_userManager.GetUserAsync(User).Result.UnitId != ticket.UnitId)
+            if (isPropertyManager)
+            {
+                var pmTicket = _context.Tickets
+                    .SelectMany(t => t.Unit.Tickets).Where(t => t.TicketId == id && t.Unit.Property.PropertyManager == user)
+                    .Select(ticket => new
+                    {
+                        TicketId = ticket.TicketId,
+                        CreatedOn = ticket.CreatedOn,
+                        EstimatedDate = ticket.EstimatedDate,
+                        Problem = ticket.Problem,
+                        Description = ticket.Description,
+                        Status = ticket.Status,
+                        Severity = ticket.Severity,
+                        UnitId = ticket.UnitId,
+                        TenantId = ticket.TenantId,
+                        Tenant = new
+                        {
+                            FirstName = ticket.Tenant.FirstName,
+                            LastName = ticket.Tenant.LastName,
+                            Id = ticket.Tenant.Id,
+                            UserName = ticket.Tenant.UserName,
+                            ProfilePicture = ticket.Tenant.ProfilePicture
+                        }
+                    });
+                
+                if(!pmTicket.Any())
+                {
+                    return NotFound();
+                }
+                return Ok(pmTicket.First());
+            }
+            
+            if (isTenant)
+            {
+                var tenantTicket = _context.Tickets
+                    .SelectMany(t => t.Unit.Tickets.Where(ticket => ticket.TicketId == id && t.Unit.Tenants.Contains(user)))
+                    .Select(ticket => new
+                    {
+                        TicketId = ticket.TicketId,
+                        CreatedOn = ticket.CreatedOn,
+                        EstimatedDate = ticket.EstimatedDate,
+                        Problem = ticket.Problem,
+                        Description = ticket.Description,
+                        Status = ticket.Status,
+                        Severity = ticket.Severity,
+                        UnitId = ticket.UnitId,
+                        TenantId = ticket.TenantId,
+                        Tenant = new
+                        {
+                            FirstName = ticket.Tenant.FirstName,
+                            LastName = ticket.Tenant.LastName,
+                            Id = ticket.Tenant.Id,
+                            UserName = ticket.Tenant.UserName,
+                            ProfilePicture = ticket.Tenant.ProfilePicture
+                        }
+                    });
+                
+                if(!tenantTicket.Any())
+                {
+                    return NotFound();
+                }
+                
+                return Ok(tenantTicket.First());
+            }
+
+            if (!isSuperAdmin) return NotFound();
+            var superAdminTicket = await _context.Tickets.FindAsync(id);
+
+            if (superAdminTicket == null)
             {
                 return NotFound();
             }
-
-            return ticket;
+            return Ok(superAdminTicket);
+            
         }
         // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
