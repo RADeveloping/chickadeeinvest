@@ -19,7 +19,7 @@ services:
       MSSQL_SA_PASSWORD: SqlPassword!
 
   chickadee:
-    image: chickadeeinvest/chickadee:1667099502
+    image: chickadeeinvest/chickadee:1667246741
     depends_on:
       - chickadee-db
     ports:
@@ -27,7 +27,7 @@ services:
       - "443:443"
     restart: always
     environment:
-      - DBHOST=chickadee-dev2_chickadee-db_1
+      - DBHOST=chickadee-db
       - DBPORT=1433
       - DBUSER=sa
       - DBPASSWORD=SqlPassword!
