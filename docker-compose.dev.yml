@@ -3,6 +3,7 @@ version: "3.8"
 services:
   chickadee-db:
     image: mcr.microsoft.com/azure-sql-edge
+    container_name: chickadee-db
 
     volumes:
       - sqlsystem:/var/opt/mssql/
@@ -27,7 +28,7 @@ services:
       - "443:443"
     restart: always
     environment:
-      - DBHOST=chickadee-dev_chickadee-db_1
+      - DBHOST=chickadee-db
       - DBPORT=1433
       - DBUSER=sa
       - DBPASSWORD=SqlPassword!
