@@ -121,7 +121,7 @@ export default function TicketDetail() {
                                                 Property Manager
                                             </Typography>
                                             <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                John Doe
+                                                {property.propertyManager.firstName} {property.propertyManager.lastName}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
