@@ -155,7 +155,8 @@ namespace chickadee.Controllers
 
             if (isSuperAdmin)
             {
-                var superAdminTicket = await _context.Tickets
+                var superAdminTicket = _context.Tickets
+                    .Where(p => p.TicketId == id)
                     .Select(ticket => new
                     {
                         TicketId = ticket.TicketId,
@@ -175,8 +176,7 @@ namespace chickadee.Controllers
                             UserName = ticket.Tenant.UserName,
                             ProfilePicture = ticket.Tenant.ProfilePicture
                         }
-                    })
-                    .FirstOrDefaultAsync(i => i.TicketId == id);
+                    });
                 if (superAdminTicket == null)
                 {
                     return NotFound();
