@@ -1,13 +1,10 @@
-import { filter, forEach } from 'lodash';
-import { sentenceCase } from 'change-case';
-import {useEffect, useState} from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import {useState} from 'react';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -16,7 +13,7 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination, CircularProgress, Box, Fade, Grow
+  TablePagination, Box, Grow
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -29,6 +26,7 @@ import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from '.
 import useFetch from "../components/FetchData";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
+import {SEVERITY, STATUS} from "../utils/filters";
 
 // ----------------------------------------------------------------------
 
@@ -44,21 +42,10 @@ const TABLE_HEAD = [
   { id: '' }
 ];
 
-const SEVERITY = {
-  0: {color: 'success', text: 'Low'},
-  1: {color: 'warning', text: 'Medium'},
-  2: {color: 'error', text: 'High'}
-}
-
-const STATUS = {
-  0: {color: 'info', text: 'Open'},
-  1: {color: 'primary', text: 'Closed'},
-}
-
 // ----------------------------------------------------------------------
 
 export default function Tickets() {
-
+  const navigate = useNavigate();
   // CONFIG ---------------------------------------------------------------
   const title = "Tickets"
   const filterData = (data) => {
@@ -194,6 +181,7 @@ export default function Tickets() {
                           role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
+                          onClick={()=>{navigate(`/dashboard/${title.toLowerCase()}/${ticketId}`);}}
                         >
                           <TableCell padding="checkbox">
                             <Checkbox

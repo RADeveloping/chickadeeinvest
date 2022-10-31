@@ -1,13 +1,13 @@
 ﻿import {Chip, Grid, Stack, Typography} from "@mui/material";
 import Label from "../components/Label";
 import * as React from "react";
-const SEVERITY = {
+export const SEVERITY = {
     0: {color: 'success', text: 'Low'},
     1: {color: 'warning', text: 'Medium'},
     2: {color: 'error', text: 'High'}
 }
 
-const STATUS = {
+export const STATUS = {
     0: {color: 'info', text: 'Open'},
     1: {color: 'primary', text: 'Closed'},
 }
@@ -17,7 +17,7 @@ export const getTicketBox = (ticket) => {
         <>
             <Grid container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
-                    #{ticket.ticketId} {ticket.problem}
+                    <b>#{ticket.ticketId} {ticket.problem}</b>
                 </Grid>
                 <Grid item>
                     <Typography
@@ -53,7 +53,7 @@ export const getUnitBox = (unit) => {
         <>
             <Grid container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
-                    {unit.unitNo}
+                    <b>{unit.unitNo}</b>
                 </Grid>
                 <Grid item>
                     <Chip label={unit.tickets.length} />
@@ -68,7 +68,7 @@ export const getPropertiesBox = (property) => {
         <>
             <Grid container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
-                    {property.address}
+                    <b>{property.address}</b>
                 </Grid>
                 <Grid item>
                     <Chip label={property.units.length} />

@@ -24,6 +24,54 @@ namespace chickadee.Controllers
             _userManager = userManager;
         }
 
+        
+       
+        // GET: api/Properties/count
+        [HttpGet]
+        [Route("count")]
+        public async Task<ActionResult> GetPropertiesCount()
+        {
+            if (_context.Properties == null)
+            {
+                return NotFound();
+            }
+
+            var user = _userManager.GetUserAsync(User).Result;
+
+            var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
+
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+            var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
+
+            var isSuperAdmin = await _userManager.IsInRoleAsync(user, "SuperAdmin");
+          
+            Console.WriteLine( await _context.Properties.Where(p => p.PropertyManagerId == user.Id).CountAsync());
+
+            
+            if ((isTenant || isAdmin) && !isSuperAdmin)
+            {
+                return NoContent();
+            }
+
+            
+            if (isPropertyManager && !isSuperAdmin)
+            {
+                var pmPropertiesCount = await _context.Properties.Where(p => p.PropertyManagerId == user.Id).CountAsync();
+                return Ok(
+                new {
+                    count = pmPropertiesCount
+                });
+            }
+            
+            var allPropertiesCount = await _context.Properties.CountAsync();
+            return Ok(
+            new {
+                count = allPropertiesCount
+            });
+        }
+        
+        
         // GET: api/Properties
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Property>>> GetProperties()
@@ -63,6 +111,7 @@ namespace chickadee.Controllers
               .ToListAsync();
         }
 
+        
          // GET: api/Properties/current
         [HttpGet]
         [Route("current")]
@@ -118,6 +167,7 @@ namespace chickadee.Controllers
 
             return @property;
         }
+        
 
         // PUT: api/Properties/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

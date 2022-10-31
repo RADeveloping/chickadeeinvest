@@ -4,5 +4,14 @@
     ViewData["Title"] = "Confirm email";
 }
 
-<h1>@ViewData["Title"]</h1>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+<link href="/css/auth.css" rel="stylesheet">
+
+<main class="form-signin w-100 m-auto">
+    <div class="text-center">
+        <img class="mb-2 float-left" src="/images/logo2.svg" alt="" width="180" height="100">
+        <h1 class="mb-3 headingFont">Confirm Email</h1>
+        <partial name="_StatusMessage" model="Model.StatusMessage" />
+    </div>
+    <hr/>
+    <p class="text-muted">Return to <a id="login" class="text-decoration-none" asp-page="./login">login</a></p>
+</main>

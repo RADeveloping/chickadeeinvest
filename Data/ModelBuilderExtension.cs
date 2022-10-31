@@ -178,6 +178,8 @@ public static class ModelBuilderExtensions {
         builder.Entity<Unit>().HasData(SeedUnits());
         builder.Entity<Ticket>().HasData(SeedTickets(tenants));
         builder.Entity<Property>().HasData(SeedProperties(propertyManagers));
+        builder.Entity<Document>().HasData(SeedDocuments(tenants));
+
     }
     public static List<Unit> SeedUnits()
         {
@@ -266,5 +268,23 @@ public static class ModelBuilderExtensions {
 
             return tickets;
         }
+        
+        
+          public static List<Document> SeedDocuments(List<ApplicationUser> tenants)
+        {
+            List<Document> documents = new List<Document>() {
+                new Document() {
+                    DocumentId = Guid.NewGuid().ToString(),
+                    IdPhoto = Array.Empty<byte>(),
+                    LeasePhoto = Array.Empty<byte>(),
+                    IsIdVerified = false,
+                    UserId = tenants[0].Id
+                },
+            };
+
+            return documents;
+        }
+
+          
 
 }
