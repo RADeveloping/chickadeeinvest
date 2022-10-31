@@ -9,7 +9,7 @@ import {
 // components
 import Iconify from '../../../components/Iconify';
 import ListItems from '../../../components/ListItems';
-export default function Widget({ title, total, items, icon, loading}) {
+export default function Widget({ title, uri, total, items, icon, loading}) {
     
   return (
       <Grow in={!loading}>
@@ -58,7 +58,7 @@ export default function Widget({ title, total, items, icon, loading}) {
           </Grid>
         </Grid>
       </div>
-        <ListItems items={items}/>
+        <ListItems uri={uri} items={items}/>
     </Card>
       </Grow>
   );

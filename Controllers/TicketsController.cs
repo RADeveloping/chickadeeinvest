@@ -90,20 +90,24 @@ namespace chickadee.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
-          if (_context.Tickets == null)
-          {
-              return NotFound();
-          }
+            if (_context.Tickets == null)
+            {
+                return NotFound();
+            }
             var ticket = await _context.Tickets.FindAsync(id);
-
+          
             if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            if (_userManager.GetUserAsync(User).Result.UnitId != ticket.UnitId)
             {
                 return NotFound();
             }
 
             return ticket;
         }
-
         // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

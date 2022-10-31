@@ -5,11 +5,11 @@ import {Container, Grid, Stack, Typography} from '@mui/material';
 import Page from '../components/Page';
 import useFetch from '../components/FetchData';
 import {Link} from "react-router-dom";
-import {UserWidget, Widget} from "../sections/@dashboard/app";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
 import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
-
+import Widget from "../sections/@dashboard/app/Widget";
+import UserWidget from "../sections/@dashboard/app/UserWidget";
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
@@ -35,7 +35,7 @@ export default function DashboardApp() {
   const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
   
   const openTickets = tickets.filter((ticket) => ticket.status === 0);
-  console.log(account)
+
   const dashboardItems = [
     {item:
       <Link to="/authentication/profile" style={{textDecoration: 'none'}}>
@@ -47,22 +47,21 @@ export default function DashboardApp() {
       ]
     },
     {item:
-          <Link to="/dashboard/tickets" style={{textDecoration: 'none'}}>
-            <Widget title="Open Tickets" total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
-          </Link>,
+            <Widget title="Open Tickets" uri={'tickets'} total={openTickets.length} items={openTickets} icon={'ant-design:folder-open-outlined'} loading={ticketsLoading} />
+      ,
       for: [
         "Tenant",
         "PropertyManager"
       ]
     },
     {item:
-          <Widget title="Properties" total={properties.length} items={properties} icon={'bxs:building-house'} loading={propertiesLoading} />,
+          <Widget title="Properties" uri={'properties'} total={properties.length} items={properties} icon={'bxs:building-house'} loading={propertiesLoading} />,
       for: [
         "PropertyManager"
       ]
     },
     {item:
-          <Widget title="Units" total={units.length} items={units} icon={'bxs:door-open'} loading={unitsLoading} />,
+          <Widget title="Units" uri={'units'} total={units.length} items={units} icon={'bxs:door-open'} loading={unitsLoading} />,
       for: [
         "PropertyManager"
       ]
