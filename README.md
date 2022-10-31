@@ -9,10 +9,48 @@ This repo has two major branches: `main` and `develop`, and feature branches for
 - `main` - Has the most recent stable version of the application
 - `develop` - Has the most recent in-development versions of the application; used for development and integration testing of front end and back end before merging to `main`
 
-## Setup
+## Local Environment Setup
+
+Use the following instructions to start the project on your local machine:
+
+### Docker Compose
+
+1. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+2. Serve both the front end and back end at https://localhost:8888.
 
 ```bash
-# Serve both front end and back end.
+docker-compose up
+```
+
+### Manual
+
+1. Download and install dependencies:
+
+- [.NET SDK](https://dotnet.microsoft.com/en-us/download)
+- [Node.js](https://nodejs.org/en/download/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+2. Run SQL Server in Linux Container.
+
+```bash
+docker run --cap-add SYS_PTRACE -e ACCEPT_EULA=1 -e MSSQL_SA_PASSWORD=SqlPassword! -p 1444:1433 --name azsql -d mcr.microsoft.com/azure-sql-edge
+```
+
+3. Install the necessary CLI tools for Entity Framework Core.
+
+```bash
+dotnet tool install -g dotnet-ef
+```
+
+4. Apply database migrations to update the database.
+
+```bash
+dotnet ef database update
+```
+
+5. Serve both the front end and back end at https://localhost:7114.
+
+```bash
 dotnet run
 ```
 
@@ -25,7 +63,7 @@ cd ClientApp
 # Install dependencies.
 npm install
 
-# Serve with hot reload.
+# Serve with hot reload at https://localhost:44443.
 npm start
 ```
 
