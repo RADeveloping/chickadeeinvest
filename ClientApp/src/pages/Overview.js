@@ -22,7 +22,7 @@ export default function Overview() {
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
     
     const [path, setPath] = useState('');
-
+    const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'lg');
 
     const title = "Overview"
@@ -31,20 +31,28 @@ export default function Overview() {
         if (!loadingData) {
             let propertyId = parseInt(searchParams.get('property'))
             let unitId = parseInt(searchParams.get('unit'))
+            console.log(unitId)
             if (propertyId) setSelectedPropertyId(propertyId)
             if (unitId) setSelectedUnitId(unitId)
         }
     }, [loadingData])
     
     useEffect(()=> {
-        setSelectedUnitId(null)
+        if(selectedPropertyId) {
+            let selectedProperty = getItem(properties, selectedPropertyId)
+            searchParams.set('property', selectedPropertyId)
+            if (!firstLoad) {
+                setSelectedUnitId(null)
+                searchParams.delete('unit')
+            } else {
+                setFirstLoad(false)
+            }
+            setSearchParams(searchParams)
+            setPath(`${selectedProperty.dir}`)
+        }
     }, [selectedPropertyId])
 
     useEffect(()=> {
-        setSelectedTicketId(null);
-    }, [selectedUnitId])
-    
-    useEffect(() => {
         if (selectedUnitId) {
             let selectedProperty = getItem(properties, selectedPropertyId)
             let selectedUnit = getItem(units, selectedUnitId)
@@ -52,14 +60,9 @@ export default function Overview() {
             searchParams.set('unit', selectedUnitId)
             setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
-        } else if(selectedPropertyId) {
-            let selectedProperty = getItem(properties, selectedPropertyId)
-            searchParams.set('property', selectedPropertyId)
-            searchParams.delete('unit')
-            setSearchParams(searchParams)
-            setPath(`${selectedProperty.dir}`)
         }
-    }, [selectedUnitId, selectedPropertyId])
+        setSelectedTicketId(null);
+    }, [selectedUnitId])
     
     const getItem = (items, id) => {
         return items.find(item => item.id === id)
