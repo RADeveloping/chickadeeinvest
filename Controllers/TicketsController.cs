@@ -153,6 +153,38 @@ namespace chickadee.Controllers
                 return NotFound();
             }
 
+            if (isSuperAdmin)
+            {
+                var superAdminTicket = await _context.Tickets
+                    .Select(ticket => new
+                    {
+                        TicketId = ticket.TicketId,
+                        CreatedOn = ticket.CreatedOn,
+                        EstimatedDate = ticket.EstimatedDate,
+                        Problem = ticket.Problem,
+                        Description = ticket.Description,
+                        Status = ticket.Status,
+                        Severity = ticket.Severity,
+                        UnitId = ticket.UnitId,
+                        TenantId = ticket.TenantId,
+                        Tenant = new 
+                        {
+                            FirstName = ticket.Tenant.FirstName,
+                            LastName = ticket.Tenant.LastName,
+                            Id = ticket.Tenant.Id,
+                            UserName = ticket.Tenant.UserName,
+                            ProfilePicture = ticket.Tenant.ProfilePicture
+                        }
+                    })
+                    .FirstOrDefaultAsync(i => i.TicketId == id);
+                if (superAdminTicket == null)
+                {
+                    return NotFound();
+                }
+                return Ok(superAdminTicket);
+
+            }
+
             if (isPropertyManager)
             {
                 var pmTicket = _context.Tickets
@@ -218,14 +250,7 @@ namespace chickadee.Controllers
                 return Ok(tenantTicket.First());
             }
 
-            if (!isSuperAdmin) return NotFound();
-            var superAdminTicket = await _context.Tickets.FindAsync(id);
-
-            if (superAdminTicket == null)
-            {
-                return NotFound();
-            }
-            return Ok(superAdminTicket);
+            return NotFound();
             
         }
         // PUT: api/Tickets/5
