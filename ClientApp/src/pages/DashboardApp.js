@@ -30,8 +30,8 @@ export default function DashboardApp() {
     d.property = d.property.address;
     return d;
   });
-  const userLoading = accountLoading || currentUnitLoading
-  const loadingData = ticketsLoading || unitsLoading || propertiesLoading || userLoading
+  const userLoading = accountLoading && currentUnitLoading
+  const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
   
   const openTickets = tickets.filter((ticket) => ticket.status === 0);
 
