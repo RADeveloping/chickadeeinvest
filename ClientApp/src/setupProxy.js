@@ -7,7 +7,7 @@ const target = env.ASPNETCORE_HTTPS_PORT
     // eslint-disable-next-line prettier/prettier
     ? env.ASPNETCORE_URLS.split(';')[0]
     // eslint-disable-next-line prettier/prettier
-    : 'http://localhost:24088';
+    : 'https://localhost:24088';
 
 const context = [
   '/weatherforecast',
@@ -33,7 +33,7 @@ const context = [
 module.exports = function (app) {
   const appProxy = createProxyMiddleware(context, {
     target,
-    secure: false,
+    secure: true,
     headers: {
       Connection: 'Keep-Alive'
     },
