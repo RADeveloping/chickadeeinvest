@@ -5,11 +5,11 @@ import {Container, Grid, Stack, Typography} from '@mui/material';
 import Page from '../components/Page';
 import useFetch from '../components/FetchData';
 import {Link} from "react-router-dom";
-import {UserWidget, Widget} from "../sections/@dashboard/app";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
 import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
-
+import Widget from "../sections/@dashboard/app/Widget";
+import UserWidget from "../sections/@dashboard/app/UserWidget";
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
