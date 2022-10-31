@@ -94,6 +94,7 @@ html {
     .navbar{
         width: 280px;
         margin-left: 10px;
+        display: inline-block
     }
     .sidebar{
         height: 100vh;
