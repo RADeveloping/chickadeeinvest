@@ -1,4 +1,4 @@
-import {Button, Card, CardContent, Container, Grid, Grow, Stack, Typography} from "@mui/material";
+import {Button, Card, CardContent, Container, Grid, Grow, ListItemButton, Stack, Typography} from "@mui/material";
 import {Link as RouterLink, useNavigate} from "react-router-dom";
 import Iconify from "../components/Iconify";
 import PageLoading from "../components/PageLoading";
@@ -8,20 +8,41 @@ import {applySortFilter, getComparator, ListToolbar} from "../sections/@dashboar
 import {useState} from "react";
 import useFetch from "../components/FetchData";
 import useResponsive from "../hooks/useResponsive";
+import {getUnitBox} from "../utils/filters";
+import Label from "../components/Label";
 
 const properties = [
     {id: 'address', label: 'Address'},
     {id: 'propertyId', label: 'Id'},
+    {id: 'openTicketCount', label: 'Open Ticket Count'},
+    {id: 'unitCount', label: 'Unit Count'},
+    {id: 'propertyManagerName', label: 'Property Manager Name'},
 ];
 
 export default function Properties() {
+    const filterData = (data) => {
+        data.forEach((d) => {
+            let openTicketCount = 0;
+            d.units.forEach((unit) => {
+                for (let i = 0; i < unit.tickets.length; i++) {
+                    if (unit.tickets[i].status === 0) {
+                        openTicketCount++
+                    }
+                }
+            })
+            d.openTicketCount = openTicketCount
+            d.unitCount = d.units.length
+            d.propertyManagerName = `${d.propertyManager.firstName} ${d.propertyManager.lastName}`
+        })
+        return data;
+    }
     const navigate = useNavigate();
     const title = "Properties"
     const dataName = 'Property';
     const dataId = 'propertyId';
     const [filterQueryProperty, setFilterQueryProperty] = useState('address')
     const [orderBy, setOrderBy] = useState('status');
-    const [data, errorData, loadingData] = useFetch('/api/Properties');
+    const [data, errorData, loadingData] = useFetch('/api/Properties', filterData);
     const [order, setOrder] = useState('asc');
     const [filterQuery, setFilterQuery] = useState('');
 
@@ -35,6 +56,7 @@ export default function Properties() {
 
     const noData = data.length === 0;
 
+    console.log(filteredData)
     return (
         <Page title={title}>
             <Container>
@@ -72,18 +94,50 @@ export default function Properties() {
                 <br/>
                 <Grow in={!loadingData && filteredData.length > 0}>
                     <Grid container spacing={1}>
-                        {filteredData.map((data) =>
-                            <Grow in={true}>
-                            <Grid xs={6} sm={6} md={4} item>
-                                <Card sx={{height: 300}}>
-                                    <CardContent>
-                                        <Typography variant={'h4'}>
-                                            {data.address}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            </Grow>
+                        {filteredData.map((data) => {
+                                const {address, propertyId, openTicketCount, unitCount, propertyManagerName} = data
+                                return (<Grow in={true}>
+                                    <Grid xs={6} sm={6} md={6} l={4} xl={4} item>
+                                        <Card sx={{height:200}}>
+                                            <CardContent>
+                                                <Stack direction={'column'}  justifyContent={'center'}>
+                                                <Typography variant={'h4'}>
+                                                    {address}
+                                                </Typography>
+                                                <Stack direction={'row'} alignItems={'center'} gap={1}>
+                                                    <Label>
+                                                        {unitCount} unit{unitCount !== 1 && 's'}
+                                                    </Label>
+                                                    <Label color={'info'}>
+                                                        {openTicketCount} open ticket{openTicketCount !== 1 && 's'}
+                                                    </Label>
+                                                </Stack>
+                                                <br/>
+                                                <Grid container spacing={4} alignItems={'center'}
+                                                      justifyContent={'space-between'}>
+                                                    <Grid item>
+                                                        <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
+                                                            Property Manager
+                                                        </Typography>
+                                                        <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
+                                                            {propertyManagerName}
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
+                                                            Id
+                                                        </Typography>
+                                                        <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
+                                                            {propertyId}
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                                </Stack>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                </Grow>)
+                            }
                         )}
                     </Grid>
                 </Grow>
