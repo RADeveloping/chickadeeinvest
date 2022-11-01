@@ -57,7 +57,7 @@ export default function Properties() {
                         boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
                         display: loadingData ? 'none' : undefined,
                         width: isSmall ? 'fit-content' : '100%',
-                        background: 'linear-gradient(60deg, #D9D7C3 ,#C7D9C9 )',
+                        backgroundColor: (theme) => theme.palette['background'].default
                     }}>
                         <ListToolbar
                             filterQuery={filterQuery}
@@ -73,6 +73,7 @@ export default function Properties() {
                 <Grow in={!loadingData && filteredData.length > 0}>
                     <Grid container spacing={1}>
                         {filteredData.map((data) =>
+                            <Grow in={true}>
                             <Grid xs={6} sm={6} md={4} item>
                                 <Card sx={{height: 300}}>
                                     <CardContent>
@@ -82,6 +83,7 @@ export default function Properties() {
                                     </CardContent>
                                 </Card>
                             </Grid>
+                            </Grow>
                         )}
                     </Grid>
                 </Grow>
