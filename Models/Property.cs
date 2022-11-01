@@ -11,11 +11,8 @@ namespace chickadee.Models
     {
         [Key]
         public int PropertyId { get; set; }
+        public string Name { get; set; }
         public string Address { get; set; }
-        public List<Unit> Units { get; set; }
-
-        [ForeignKey("PropertyManagerId")]
-        public string PropertyManagerId { get; set; }
-        public ApplicationUser PropertyManager { get; set; }
+        
     }
 }

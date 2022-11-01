@@ -18,11 +18,11 @@ namespace chickadee.Models
        public string Description { get; set; }
        public TicketStatus Status { get; set; }
        public TicketSeverity Severity { get; set; }
+       public int UnitId { get; set; }
        [ForeignKey("UnitId")]
        public Unit Unit { get; set; }
-       public int UnitId { get; set; }
-       [ForeignKey("UserId")]
        public String? TenantId { get; set; }
+       [ForeignKey("UserId")]
        public ApplicationUser? Tenant { get; set; }
     }
 }
