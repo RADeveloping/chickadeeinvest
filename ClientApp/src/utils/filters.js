@@ -84,7 +84,9 @@ export const filterProperties = (data) => {
         simpleData.push({
             id: d.propertyId,
             primary: getPropertiesBox(d),
-            dir: d.address});
+            dir: d.address,
+            unitCount: d.units ? d.units.length : 0,
+            ...d});
     })
     return simpleData;
 }
@@ -96,7 +98,9 @@ export const filterUnit = (data) => {
             id: d.unitId,
             fid: d.propertyId,
             primary: getUnitBox(d),
-            dir: d.unitNo});
+            dir: d.unitNo,
+            tenantCount: d.tenants ? d.tenants.length : 0,
+            ...d});
     })
     return simpleData;
 }
@@ -111,6 +115,9 @@ export const filterTicket = (data) => {
                 tertiary: d.description,
                 status: d.status,
                 dir: `#${d.ticketId}`,
+            ...d,
+            createdOn: new Date(d.createdOn),
+            estimatedDate: new Date(d.estimatedDate),
             }
         );
     })

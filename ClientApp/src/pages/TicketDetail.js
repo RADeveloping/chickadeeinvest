@@ -23,12 +23,11 @@ export default function TicketDetail() {
     const [ticket, errorTicket, loadingTicket] = useFetch(`/api/Tickets/${id}`, filterTickets);
     const [unit, errorUnit, loadingUnit] = useFetch(ticket.unitId ? `/api/Units/${ticket.unitId}` : null);
     const [property, errorProperty, loadingProperty] = useFetch(unit.propertyId ? `/api/Properties/${unit.propertyId}` : null);
-    const [propertyManager, errorPropertyManager, loadingPropertyManager] = useFetch(property.propertyManagerId ? `/api/Account/${property.propertyManagerId}` : null);
 
     const {createdOn, description, estimatedDate, problem, severity, status, tenant} = ticket;
     const {unitNo} = unit;
     const {address} = property;
-    const loadingData = loadingTicket || loadingUnit || loadingProperty || loadingPropertyManager;
+    const loadingData = loadingTicket || loadingUnit || loadingProperty;
 
     console.log(ticket, unit, property)
     return (
