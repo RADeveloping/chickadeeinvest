@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers;
 
-[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {

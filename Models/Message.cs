@@ -23,5 +23,10 @@ namespace chickadee.Models {
         [DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
 
+        public int TicketId { get; set; }
+        [ForeignKey("TicketId")]
+        public Ticket Ticket { get; set; } 
+
+                
     }
 }

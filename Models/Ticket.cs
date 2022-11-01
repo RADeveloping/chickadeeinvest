@@ -12,17 +12,47 @@ namespace chickadee.Models
     {
        [Key] 
        public int TicketId { get; set; } 
-       public DateTime CreatedOn { get; set; }
-       public DateTime EstimatedDate { get; set; }
+       [Required]
+       [Display(Name = "Problem")]
        public string Problem { get; set; }
+       
+       [Required]
+       [Display(Name = "Description")]
        public string Description { get; set; }
+       
+       [Required] 
+       [Display(Name = "Created On")] 
+       [DataType(DataType.DateTime)]
+       public DateTime CreatedOn { get; set; }
+       
+       [Display(Name = "Estimated Completion Date")] 
+       [DataType(DataType.DateTime)]
+       public DateTime EstimatedDate { get; set; }
+ 
+       [Display(Name = "Status")] 
        public TicketStatus Status { get; set; }
+       
+       [Display(Name = "Severity")] 
+
        public TicketSeverity Severity { get; set; }
+       
+       [Display(Name = "Closed Date")] 
+       [DataType(DataType.DateTime)]
+       public DateTime ClosedDate { get; set; }
+
+       
        public int UnitId { get; set; }
        [ForeignKey("UnitId")]
        public Unit Unit { get; set; }
-       public String? TenantId { get; set; }
+       
+       public String OwnerId { get; set; } // OWNER OF TICKET
        [ForeignKey("UserId")]
        public ApplicationUser? Tenant { get; set; }
+       
+       
+       public String ClosedById { get; set; }
+       [ForeignKey("UserId")]
+       public ApplicationUser? User { get; set; }
+       
     }
 }
