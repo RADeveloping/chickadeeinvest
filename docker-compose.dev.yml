@@ -19,9 +19,10 @@ services:
       MSSQL_SA_PASSWORD: SqlPassword!
 
   chickadee:
-    image: chickadeeinvest/chickadee:1667246741
+    image: chickadeeinvest/chickadee:1667262772
     depends_on:
       - chickadee-db
+    entrypoint: [ "/wait-for-it.sh", "chickadee-db:1433", "-t", "120", "--", "dotnet", "chickadee.dll" ]
     ports:
       - "80:80"
       - "443:443"
@@ -33,6 +34,7 @@ services:
       - DBPASSWORD=SqlPassword!
       - DBNAME=chickadee
       - ASPNETCORE_ENVIRONMENT=Development
+      - ENV_HOST=https://chickadee-dev.azurewebsites.net
 
 volumes:
   sqlsystem:
