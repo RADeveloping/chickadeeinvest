@@ -34,6 +34,7 @@ services:
       - DBPASSWORD=SqlPassword!
       - DBNAME=chickadee
       - ASPNETCORE_ENVIRONMENT=Development
+      - ENV_HOST=https://chickadee-dev2.azurewebsites.net
 
 volumes:
   sqlsystem:

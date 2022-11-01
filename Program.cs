@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Duende.IdentityServer.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +57,13 @@ else
     app.UseHsts();
 }
 
-// app.UseHttpsRedirection();
+app.Use(async (ctx, next) =>
+{
+    ctx.SetIdentityServerOrigin(builder.Configuration["ENV_HOST"] ?? "https://localhost:8888");
+    await next();
+});
+
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
