@@ -8,7 +8,8 @@ namespace chickadee.Models {
         [Key]
         public int VerificationDocumentId { get; set; }
         
-        public byte[]? data { get; set; }
+        [Required]
+        public byte[] data { get; set; }
         
         [Required]
         public DocumentType DocumentType { get; set; }

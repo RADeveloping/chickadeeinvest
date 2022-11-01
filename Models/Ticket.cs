@@ -45,9 +45,9 @@ namespace chickadee.Models
        [ForeignKey("UnitId")]
        public Unit Unit { get; set; }
        
-       public String OwnerId { get; set; } // OWNER OF TICKET
+       public String OwnerId { get; set; } // OWNER OF TICKET. Anyone can create ticket but only owner can edit it.
        [ForeignKey("UserId")]
-       public ApplicationUser? Tenant { get; set; }
+       public ApplicationUser Owner { get; set; }
        
        
        public String ClosedById { get; set; }

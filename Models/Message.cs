@@ -5,7 +5,7 @@ namespace chickadee.Models {
     public class Message {
         
         [Key]
-        public int Id { get; set; }
+        public int MessageId { get; set; }
 
         [Required]
         [Display(Name = "Message")]
