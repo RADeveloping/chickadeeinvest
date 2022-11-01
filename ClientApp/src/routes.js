@@ -15,20 +15,32 @@ import {
 import { Logout } from './components/api-authorization/Logout';
 import Tickets from "./pages/Tickets";
 import LandingPage from "./pages/LandingPage";
+import Overview from "./pages/Overview";
+import TicketDetail from "./pages/TicketDetail";
 
 // ----------------------------------------------------------------------
 
 const DashboardRoutes = [
-  {
-    path: 'app',
-    requireAuth: true,
-    element: <DashboardApp />
-  },
-  {
-    path: 'tickets',
-    requireAuth: true,
-    element: <Tickets />
-  }
+    {
+        path: 'app',
+        requireAuth: true,
+        element: <DashboardApp />
+    },
+    {
+        path: 'tickets/:id',
+        requireAuth: true,
+        element: <TicketDetail />
+    },
+    {
+        path: 'tickets',
+        requireAuth: true,
+        element: <Tickets />
+    },
+    {
+        path: 'overview',
+        requireAuth: true,
+        element: <Overview />
+    }
 ];
 
 export default function Router() {

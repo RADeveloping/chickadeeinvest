@@ -21,5 +21,8 @@ namespace chickadee.Models
        [ForeignKey("UnitId")]
        public Unit Unit { get; set; }
        public int UnitId { get; set; }
+       [ForeignKey("UserId")]
+       public String? TenantId { get; set; }
+       public ApplicationUser? Tenant { get; set; }
     }
 }

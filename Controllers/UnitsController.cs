@@ -54,7 +54,7 @@ namespace chickadee.Controllers
             var specificProperties = await _context.Properties
               .Include(m => m.PropertyManager)
               .Where(p => p.PropertyManager == user)
-              .Include(u => u.Units)
+              .Include(u => u.Units).ThenInclude(t => t.Tickets)
               .ToListAsync();
             specificProperties.ForEach((property) => {
               property.Units.ForEach((unit) => {
@@ -74,7 +74,7 @@ namespace chickadee.Controllers
          // GET: api/Units/current
         [HttpGet]
         [Route("current")]
-        public async Task<ActionResult<IEnumerable<Unit>>> GetSpecificUnitForUser()
+        public async Task<ActionResult> GetSpecificUnitForUser()
         {
           if (_context.Units == null)
           {
@@ -83,12 +83,24 @@ namespace chickadee.Controllers
             var user = _userManager.GetUserAsync(User).Result;
 
 
-            return await _context.Units
-              .Include(t => t.Tenants)
-              .Where(unit => unit.Tenants.Contains(user))
-              .Include(i => i.Tickets)
-              .Include(j => j.Property)
-              .ToListAsync();
+            return Ok(_context.Units
+                .Include(t => t.Tenants)
+                .Where(unit => unit.Tenants.Contains(user))
+                .Select(p => new
+                {
+                    unitId = p.UnitId,
+                    unitNo = p.UnitNo,
+                    tenants = p.Tenants
+                        .Select(t => new
+                        {
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Id = user.Id,
+                            Email = user.Email,
+                        }),
+                    Tickets = p.Tickets,
+                    Property = p.Property
+                }));
         }
 
         // GET: api/Units/5

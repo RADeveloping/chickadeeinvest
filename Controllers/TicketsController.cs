@@ -50,60 +50,208 @@ namespace chickadee.Controllers
 
           if (isTenant && _context.Units != null && !isSuperAdmin)
           {
-            var ticketList = new List<Ticket>();
-            var tenantUnits = await _context.Units
-              .Include(t => t.Tenants)
-              .Where(unit => unit.Tenants.Contains(user))
-              .Include(i => i.Tickets)
-              .Include(j => j.Property)
-              .ToListAsync();
-            tenantUnits.ForEach((unit) => {
-              unit.Tickets.ForEach((ticket) => {
-                ticketList.Add(ticket);
-              });
-            });
-            return ticketList;
+            var tenantTickets = _context.Units
+                  .Include(t => t.Tenants)
+                  .Include(t => t.Tickets)
+                  .Where(unit => unit.Tenants.Contains(user))
+                  .SelectMany(unit => unit.Tickets.Where(ticket => ticket.TenantId == user.Id))
+                  .Select(ticket => new
+                  {
+                      TicketId = ticket.TicketId,
+                      CreatedOn = ticket.CreatedOn,
+                      EstimatedDate = ticket.EstimatedDate,
+                      Problem = ticket.Problem,
+                      Description = ticket.Description,
+                      Status = ticket.Status,
+                      Severity = ticket.Severity,
+                      UnitId = ticket.UnitId,
+                      Unit = new {
+                        UnitNo = ticket.Unit.UnitNo,
+                        Property = new {
+                          PropertyId = ticket.Unit.Property.PropertyId,
+                          Address = ticket.Unit.Property.Address,
+                          PropertyManagerId = ticket.Unit.Property.PropertyManagerId,
+                          PropertyManager = new {
+                            FirstName = ticket.Unit.Property.PropertyManager.FirstName,
+                            LastName = ticket.Unit.Property.PropertyManager.LastName,
+                            Email = ticket.Unit.Property.PropertyManager.Email,
+                            PhoneNumber = ticket.Unit.Property.PropertyManager.PhoneNumber
+                          }
+                        }
+                      },
+                      TenantId = ticket.TenantId,
+                      Tenant = new
+                      {
+                          FirstName = ticket.Tenant.FirstName,
+                          LastName = ticket.Tenant.LastName,
+                          Id = ticket.Tenant.Id,
+                          UserName = ticket.Tenant.UserName,
+                          ProfilePicture = ticket.Tenant.ProfilePicture
+                      }
+                  });
+            return Ok(tenantTickets);
           }
 
           if (isPropertyManager && _context.Properties != null && !isSuperAdmin)
           {
-            var ticketList = new List<Ticket>();
-            var properties = await _context.Properties
-              .Include(j => j.PropertyManager)
+            var propManTickets = _context.Properties
+              .Include(t => t.PropertyManager)
               .Where(t => t.PropertyManager == user)
-              .Include(t => t.Units)
-                .ThenInclude(s => s.Tickets)
-              .ToListAsync();
-            properties.ForEach((property) => {
-              property.Units.ForEach((unit) => {
-                unit.Tickets.ForEach((ticket) => {
-                  ticketList.Add(ticket);
-                });
-              });
-            });
-            return ticketList;
+              .SelectMany(property => property.Units)
+              .SelectMany(tickets => tickets.Tickets)
+              .Select(ticket => new
+                  {
+                      TicketId = ticket.TicketId,
+                      CreatedOn = ticket.CreatedOn,
+                      EstimatedDate = ticket.EstimatedDate,
+                      Problem = ticket.Problem,
+                      Description = ticket.Description,
+                      Status = ticket.Status,
+                      Severity = ticket.Severity,
+                      UnitId = ticket.UnitId,
+                      Unit = new {
+                      UnitNo = ticket.Unit.UnitNo,
+                      Property = new {
+                        PropertyId = ticket.Unit.Property.PropertyId,
+                        Address = ticket.Unit.Property.Address,
+                        PropertyManagerId = ticket.Unit.Property.PropertyManagerId,
+                        PropertyManager = new {
+                          FirstName = ticket.Unit.Property.PropertyManager.FirstName,
+                          LastName = ticket.Unit.Property.PropertyManager.LastName,
+                          Email = ticket.Unit.Property.PropertyManager.Email,
+                          PhoneNumber = ticket.Unit.Property.PropertyManager.PhoneNumber
+                        }
+                      }
+                      },
+                      TenantId = ticket.TenantId,
+                      Tenant = new
+                      {
+                          FirstName = ticket.Tenant.FirstName,
+                          LastName = ticket.Tenant.LastName,
+                          Id = ticket.Tenant.Id,
+                          UserName = ticket.Tenant.UserName,
+                          ProfilePicture = ticket.Tenant.ProfilePicture
+                      }
+                    });
+            return Ok(propManTickets);
           }
-            return await _context.Tickets.ToListAsync();
+            return await _context.Tickets.Include(t => t.Unit).ThenInclude(t => t.Property).ToListAsync();
         }
 
         // GET: api/Tickets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetTicket(int id)
+         public async Task<ActionResult> GetTicket(int id)
         {
-          if (_context.Tickets == null)
-          {
-              return NotFound();
-          }
-            var ticket = await _context.Tickets.FindAsync(id);
 
-            if (ticket == null)
+            var user = _userManager.GetUserAsync(User).Result;
+            var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
+            var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
+            var isSuperAdmin = await _userManager.IsInRoleAsync(user, "SuperAdmin");
+
+            if (_context.Tickets == null || user == null)
             {
                 return NotFound();
             }
 
-            return ticket;
-        }
+            if (isSuperAdmin)
+            {
+                var superAdminTicket = await _context.Tickets
+                    .Select(ticket => new
+                    {
+                        TicketId = ticket.TicketId,
+                        CreatedOn = ticket.CreatedOn,
+                        EstimatedDate = ticket.EstimatedDate,
+                        Problem = ticket.Problem,
+                        Description = ticket.Description,
+                        Status = ticket.Status,
+                        Severity = ticket.Severity,
+                        UnitId = ticket.UnitId,
+                        TenantId = ticket.TenantId,
+                        Tenant = new 
+                        {
+                            FirstName = ticket.Tenant.FirstName,
+                            LastName = ticket.Tenant.LastName,
+                            Id = ticket.Tenant.Id,
+                            UserName = ticket.Tenant.UserName,
+                            ProfilePicture = ticket.Tenant.ProfilePicture
+                        }
+                    }).FirstOrDefaultAsync(i => i.TicketId == id);
+                if (superAdminTicket == null)
+                {
+                    return NotFound();
+                }
+                return Ok(superAdminTicket);
 
+            }
+
+            if (isPropertyManager)
+            {
+                var pmTicket = await _context.Tickets
+                    .SelectMany(t => t.Unit.Tickets).Where(t => t.Unit.Property.PropertyManager == user)
+                    .Select(ticket => new
+                    {
+                        TicketId = ticket.TicketId,
+                        CreatedOn = ticket.CreatedOn,
+                        EstimatedDate = ticket.EstimatedDate,
+                        Problem = ticket.Problem,
+                        Description = ticket.Description,
+                        Status = ticket.Status,
+                        Severity = ticket.Severity,
+                        UnitId = ticket.UnitId,
+                        TenantId = ticket.TenantId,
+                        Tenant = new
+                        {
+                            FirstName = ticket.Tenant.FirstName,
+                            LastName = ticket.Tenant.LastName,
+                            Id = ticket.Tenant.Id,
+                            UserName = ticket.Tenant.UserName,
+                            ProfilePicture = ticket.Tenant.ProfilePicture
+                        }
+                    }).FirstOrDefaultAsync(i => i.TicketId == id);
+                
+                if(pmTicket == null)
+                {
+                    return NotFound();
+                }
+                return Ok(pmTicket);
+            }
+            
+            if (isTenant)
+            {
+                var tenantTicket = await _context.Tickets
+                    .SelectMany(t => t.Unit.Tickets.Where(ticket => ticket.Unit.Tenants.Contains(user)))
+                    .Select(ticket => new
+                    {
+                        TicketId = ticket.TicketId,
+                        CreatedOn = ticket.CreatedOn,
+                        EstimatedDate = ticket.EstimatedDate,
+                        Problem = ticket.Problem,
+                        Description = ticket.Description,
+                        Status = ticket.Status,
+                        Severity = ticket.Severity,
+                        UnitId = ticket.UnitId,
+                        TenantId = ticket.TenantId,
+                        Tenant = new
+                        {
+                            FirstName = ticket.Tenant.FirstName,
+                            LastName = ticket.Tenant.LastName,
+                            Id = ticket.Tenant.Id,
+                            UserName = ticket.Tenant.UserName,
+                            ProfilePicture = ticket.Tenant.ProfilePicture
+                        }
+                    }).FirstOrDefaultAsync(i => i.TicketId == id);
+                
+                if(tenantTicket == null)
+                {
+                    return NotFound();
+                }
+                
+                return Ok(tenantTicket);
+            }
+
+            return NotFound();
+            
+        }
         // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

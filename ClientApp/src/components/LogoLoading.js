@@ -13,7 +13,7 @@ export default function LogoLoading() {
         <CircularProgress size={180} thickness={2} />
             </div>
             <div style={{position: 'absolute'}}>
-                <Logo sx={{width: 100, height: 100}}/>
+                <Logo dark sx={{width: 100, height: 100}}/>
             </div>
     </div>
     </Grow>

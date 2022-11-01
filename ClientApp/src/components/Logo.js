@@ -11,7 +11,7 @@ Logo.propTypes = {
   sx: PropTypes.object,
 };
 
-export default function Logo({ disabledLink = false, sx }) {
+export default function Logo({ disabledLink = false, dark = false, sx }) {
   const theme = useTheme();
 
   const PRIMARY_LIGHT = theme.palette.primary.light;
@@ -21,7 +21,7 @@ export default function Logo({ disabledLink = false, sx }) {
   const PRIMARY_DARK = theme.palette.primary.dark;
 
   const logo = (
-    <Box component="img" src="/images/logo4.svg" sx={{ width: 115, height: 65, ...sx }} />
+    <Box component="img" src={!dark ? "/images/logo4.svg" : "/images/logo.svg"} sx={{ width: 115, height: 65, ...sx }} />
   );
 
   if (disabledLink) {

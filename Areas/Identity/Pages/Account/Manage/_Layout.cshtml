@@ -8,18 +8,9 @@
         Layout = "/Areas/Identity/Pages/_Layout.cshtml";
     }
 }
-<link href="/css/auth.css" rel="stylesheet">
 
 <div>
-    <div class="row">
-        <div class="col-md-3 mb-3">
-            
-            <partial name="_ManageNav"/>
-        </div>
-        <div class="col-md-9">
-            @RenderBody()
-        </div>
-    </div>
+        @RenderBody()
 </div>
 
 @section Scripts {
