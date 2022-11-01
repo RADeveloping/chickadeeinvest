@@ -105,12 +105,12 @@ export default function ListToolbar({
                         &nbsp;
                         {filterVisible && 
                         <Fade in={filterVisible}>
-                            <FormControl>
-                                <InputLabel id="query-property">By</InputLabel>
+                            <FormControl sx={{minWidth: 80}}>
+                                <InputLabel id="query-property">Filter by</InputLabel>
                                 <Select
                                     labelId="query-property"
                                     value={filterQueryProperty}
-                                    label="By"
+                                    label="Filter by"
                                     onChange={handleChange}
                                 >
                                     {properties.map((p) =>
