@@ -22,6 +22,7 @@ import useFetch from "../components/FetchData";
 import useResponsive from "../hooks/useResponsive";
 import {getUnitBox} from "../utils/filters";
 import Label from "../components/Label";
+import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
 
 const properties = [
     {id: 'address', label: 'Address'},
@@ -65,6 +66,10 @@ export default function Properties() {
         setOrderBy(event.target.value);
     };
 
+    const handleOrderChange = (event, newOrder) => {
+        setOrder(newOrder);
+    };
+
     const filteredData = applySortFilter(data, getComparator(order, orderBy), filterQuery, filterQueryProperty);
     const isDesktop = useResponsive('up', 'sm');
     const isDataNotFound = filteredData.length === 0 && data.length > 0;
@@ -91,7 +96,8 @@ export default function Properties() {
                 </Stack>
                 <PageLoading loadingData={loadingData}/>
                 <Grow in={!loadingData}>
-                    <Stack direction={isDesktop ? 'row' : 'column'} gap={1} alignItems={'center'} justifyContent={'space-between'}>
+                    <Stack direction={isDesktop ? 'row' : 'column'} gap={1} alignItems={'center'}
+                           justifyContent={'space-between'}>
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
                             display: loadingData ? 'none' : undefined,
@@ -116,6 +122,7 @@ export default function Properties() {
                             backgroundColor: (theme) => theme.palette['background'].default,
                             padding: 2.5
                         }}>
+                            <Stack direction={'row'} alignItems={'stretch'} gap={1}>
                             <FormControl sx={{minWidth: 80}}>
                                 <InputLabel id="sort-property">Order by</InputLabel>
                                 <Select
@@ -129,6 +136,16 @@ export default function Properties() {
                                     )}
                                 </Select>
                             </FormControl>
+                            <ToggleButtonGroup
+                                color="primary"
+                                value={order}
+                                exclusive
+                                onChange={handleOrderChange}
+                            >
+                                <ToggleButton value="desc"><Iconify sx={{height: 14 , width: 'auto'}} icon="cil:sort-ascending"/></ToggleButton>
+                                <ToggleButton value="asc"><Iconify sx={{height: 14, width: 'auto'}} icon="cil:sort-descending"/></ToggleButton>
+                            </ToggleButtonGroup>
+                            </Stack>
                         </Card>
                     </Stack>
                 </Grow>
