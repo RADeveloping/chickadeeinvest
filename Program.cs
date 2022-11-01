@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Duende.IdentityServer.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services.AddIdentityServer()
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
 
+builder.Services.AddCors();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
@@ -55,12 +57,19 @@ else
     app.UseHsts();
 }
 
+app.Use(async (ctx, next) =>
+{
+    ctx.SetIdentityServerOrigin(builder.Configuration["ENV_HOST"] ?? "https://localhost:44443");
+    await next();
+});
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseIdentityServer();
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -73,10 +82,8 @@ app.MapFallbackToFile("index.html"); ;
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
     var context = services.GetRequiredService<ApplicationDbContext>();
     context.Database.Migrate();
 }
-
 
 app.Run();

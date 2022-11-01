@@ -37,10 +37,11 @@ module.exports = function (app) {
 
   app.use(appProxy);
   app.use(
-    '/api',
-    createProxyMiddleware({
-      target,
-      changeOrigin: true
-    }),
+      '/api',
+      createProxyMiddleware({
+        target,
+        changeOrigin: true
+      }),
   );
+ 
 };

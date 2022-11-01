@@ -14,4 +14,6 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /App
 COPY --from=build-env /App/out .
+COPY --from=build-env /App/wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
 ENTRYPOINT ["dotnet", "chickadee.dll"]
