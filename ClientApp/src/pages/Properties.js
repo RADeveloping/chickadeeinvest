@@ -63,13 +63,12 @@ export default function Properties() {
     const handleOrderByChange = (event) => {
         setOrderBy(event.target.value);
     };
-    
+
     const filteredData = applySortFilter(data, getComparator(order, orderBy), filterQuery, filterQueryProperty);
-    const isSmall = useResponsive('up', 'sm');
+    const isDesktop = useResponsive('up', 'sm');
     const isDataNotFound = filteredData.length === 0 && data.length > 0;
 
     const noData = data.length === 0;
-
 
 
     console.log(filteredData)
@@ -91,7 +90,7 @@ export default function Properties() {
                 </Stack>
                 <PageLoading loadingData={loadingData}/>
                 <Grow in={!loadingData}>
-                    <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
+                    <Stack direction={isDesktop ? 'row' : 'column'} gap={1} alignItems={'center'} justifyContent={'space-between'}>
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
                             display: loadingData ? 'none' : undefined,
