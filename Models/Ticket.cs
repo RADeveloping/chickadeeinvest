@@ -54,5 +54,9 @@ namespace chickadee.Models
        [ForeignKey("UserId")]
        public ApplicationUser? User { get; set; }
        
+       public List<Message>? Messages { get; set; }
+       public ICollection<TicketImage>? TicketImages { get; set; } // Many to Many Relationship between ticket and ticket image
+       
+       
     }
 }

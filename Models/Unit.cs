@@ -28,7 +28,12 @@ namespace chickadee.Models
         [ForeignKey("PropertyManagerId")]
         public PropertyManager PropertyManager { get; set; }
         
-        
-        
+        public List<UnitImage>? Images { get; set; }
+        public List<Tenant>? Tenants { get; set; }
+        public List<Ticket>? Tickets { get; set; }
+        public List<UnitNotes>? Notes { get; set; }
+
+
+
     }
 }

@@ -31,4 +31,6 @@ public class ApplicationUser : IdentityUser
     
     public bool IsIdVerified { get; set; } = false;
     
+    public List<Message>? Messages { get; set; }
+
 }

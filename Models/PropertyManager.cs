@@ -8,6 +8,8 @@ namespace chickadee.Models {
         public int? CompanyId { get; set;}
         [ForeignKey("CompanyId")]
         public Company? Company { get; set; }
-        
+
+        public List<Unit>? Units { get; set; }
+
     }
 }

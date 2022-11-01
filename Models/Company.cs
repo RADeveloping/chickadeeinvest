@@ -24,5 +24,8 @@ namespace chickadee.Models {
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
+        
+        public List<PropertyManager>? PropertyManagers { get; set; }
+
     }
 }

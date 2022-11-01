@@ -1,6 +1,7 @@
 namespace chickadee.Models {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Enums;
 
     public class Tenant  : ApplicationUser{
         
@@ -12,5 +13,7 @@ namespace chickadee.Models {
         [ForeignKey("UnitId")]
         public Unit? Unit { get; set; }
         
+        public List<VerificationDocument>? VerificationDocuments { get; set; }
+
     }
 }

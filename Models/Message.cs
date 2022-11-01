@@ -16,7 +16,7 @@ namespace chickadee.Models {
         [Display(Name = "Sender")]
         public string SenderId { get; set; }
         [ForeignKey("UserId")]
-        public Tenant Sender { get; set; } 
+        public ApplicationUser Sender { get; set; } 
         
         [Required]
         [Display(Name = "Created Date")]
