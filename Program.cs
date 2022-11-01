@@ -59,7 +59,7 @@ else
 
 app.Use(async (ctx, next) =>
 {
-    ctx.SetIdentityServerOrigin(builder.Configuration["ENV_HOST"] ?? "https://localhost:7114");
+    ctx.SetIdentityServerOrigin(builder.Configuration["ENV_HOST"] ?? "https://localhost:44443");
     await next();
 });
 
