@@ -10,6 +10,27 @@ import Label from "../components/Label";
 import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
 import {useSearchParams} from "react-router-dom";
 
+const propertyProperties = [
+    {id: 'propertyId', label: 'Property Id'},
+    {id: 'address', label: 'Address'},
+    {id: 'unitCount', label: 'Unit Count'},
+];
+
+const unitProperties = [
+    {id: 'unitId', label: 'Unit Id'},
+    {id: 'unitNo', label: 'Unit Number'},
+    {id: 'tenantCount', label: 'Tenant Count'},
+];
+
+const ticketProperties = [
+    {id: 'ticketId', label: 'Ticket Id'},
+    {id: 'createdOn', label: 'Created On'},
+    {id: 'estimatedDate', label: 'Estimated Date'},
+    {id: 'problem', label: 'Problem'},
+    {id: 'severity', label: 'Severity'},
+    {id: 'status', label: 'Status'},
+];
+
 export default function ColumnOverview() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [properties, errorProperties, loadingProperties] = useFetch('/api/Properties', filterProperties);
@@ -24,8 +45,6 @@ export default function ColumnOverview() {
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'lg');
-
-    const title = "Overview"
 
     useEffect(() => {
         if (!loadingData) {
@@ -71,16 +90,16 @@ export default function ColumnOverview() {
     const viewList = [
         <SimpleList leftRound items={properties} title={"Properties"} setSelectedId={setSelectedPropertyId}
                     selectedId={selectedPropertyId}
-                    isDesktop={isDesktop}/>,
+                    isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}/>,
         <SimpleList noRound skinny items={selectedPropertyId ?
             units.filter((u) => u.fid === selectedPropertyId) : []}
                     title={"Units"} setNestedSelect={setSelectedPropertyId} path={path}
                     setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
-                    isDesktop={isDesktop}/>,
+                    isDesktop={isDesktop} properties={unitProperties}/>,
         <SimpleList rightRound items={selectedUnitId ? tickets.filter((t) => t.fid === selectedUnitId) : []}
                     title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
-                    isDesktop={isDesktop}/>
+                    isDesktop={isDesktop} properties={ticketProperties}/>
     ]
 
     function getActiveList() {

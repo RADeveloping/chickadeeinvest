@@ -37,9 +37,11 @@ export default function Properties() {
         data.forEach((d) => {
             let openTicketCount = 0;
             d.units.forEach((unit) => {
-                for (let i = 0; i < unit.tickets.length; i++) {
-                    if (unit.tickets[i].status === 0) {
-                        openTicketCount++
+                if (unit.tickets) {
+                    for (let i = 0; i < unit.tickets.length; i++) {
+                        if (unit.tickets[i].status === 0) {
+                            openTicketCount++
+                        }
                     }
                 }
             })
@@ -76,8 +78,6 @@ export default function Properties() {
 
     const noData = data.length === 0;
 
-
-    console.log(filteredData)
     return (
         <Page title={title}>
             <Container>
@@ -123,28 +123,30 @@ export default function Properties() {
                             padding: 2.5
                         }}>
                             <Stack direction={'row'} alignItems={'stretch'} gap={1}>
-                            <FormControl sx={{minWidth: 80}}>
-                                <InputLabel id="sort-property">Order by</InputLabel>
-                                <Select
-                                    labelId="sort-property"
-                                    value={orderBy}
-                                    label="Order by"
-                                    onChange={handleOrderByChange}
+                                <FormControl sx={{minWidth: 80}}>
+                                    <InputLabel id="sort-property">Order by</InputLabel>
+                                    <Select
+                                        labelId="sort-property"
+                                        value={orderBy}
+                                        label="Order by"
+                                        onChange={handleOrderByChange}
+                                    >
+                                        {properties.map((p) =>
+                                            <MenuItem key={p.id} value={p.id}>{p.label}</MenuItem>
+                                        )}
+                                    </Select>
+                                </FormControl>
+                                <ToggleButtonGroup
+                                    color="primary"
+                                    value={order}
+                                    exclusive
+                                    onChange={handleOrderChange}
                                 >
-                                    {properties.map((p) =>
-                                        <MenuItem key={p.id} value={p.id}>{p.label}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                            <ToggleButtonGroup
-                                color="primary"
-                                value={order}
-                                exclusive
-                                onChange={handleOrderChange}
-                            >
-                                <ToggleButton value="desc"><Iconify sx={{height: 14 , width: 'auto'}} icon="cil:sort-ascending"/></ToggleButton>
-                                <ToggleButton value="asc"><Iconify sx={{height: 14, width: 'auto'}} icon="cil:sort-descending"/></ToggleButton>
-                            </ToggleButtonGroup>
+                                    <ToggleButton value="desc"><Iconify sx={{height: 14, width: 'auto'}}
+                                                                        icon="cil:sort-ascending"/></ToggleButton>
+                                    <ToggleButton value="asc"><Iconify sx={{height: 14, width: 'auto'}}
+                                                                       icon="cil:sort-descending"/></ToggleButton>
+                                </ToggleButtonGroup>
                             </Stack>
                         </Card>
                     </Stack>
