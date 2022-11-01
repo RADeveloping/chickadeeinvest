@@ -76,11 +76,6 @@ export class LoginMenu extends Component {
         icon: getIcon('ant-design:eye-outlined')
       },
       {
-        title: 'tickets',
-        path: '/dashboard/tickets',
-        icon: getIcon('ant-design:folder-open-outlined')
-      },
-      {
         title: 'properties',
         path: '/dashboard/properties',
         icon: getIcon('bxs:building-house')

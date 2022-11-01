@@ -13,7 +13,6 @@ import {
   LogoutActions
 } from './components/api-authorization/ApiAuthorizationConstants';
 import { Logout } from './components/api-authorization/Logout';
-import Tickets from "./pages/Tickets";
 import LandingPage from "./pages/LandingPage";
 import Overview from "./pages/Overview";
 import TicketDetail from "./pages/TicketDetail";
@@ -31,11 +30,6 @@ const DashboardRoutes = [
         path: 'tickets/:id',
         requireAuth: true,
         element: <TicketDetail />
-    },
-    {
-        path: 'tickets',
-        requireAuth: true,
-        element: <Tickets />
     },
     {
         path: 'overview',

@@ -67,7 +67,7 @@ export default function Properties() {
     };
 
     const handleOrderChange = (event, newOrder) => {
-        setOrder(newOrder);
+        if (newOrder) setOrder(newOrder);
     };
 
     const filteredData = applySortFilter(data, getComparator(order, orderBy), filterQuery, filterQueryProperty);
