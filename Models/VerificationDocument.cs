@@ -3,8 +3,7 @@ namespace chickadee.Models {
     using System.ComponentModel.DataAnnotations.Schema;
     using Enums;
     using Microsoft.AspNetCore.Mvc;
-
-    [Bind()]
+    
     public class VerificationDocument {
         [Key]
         public int VerificationDocumentId { get; set; }
