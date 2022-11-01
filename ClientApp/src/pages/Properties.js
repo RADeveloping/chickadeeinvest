@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     Card,
     CardContent,
@@ -183,6 +184,14 @@ export default function Properties() {
                         )}
                     </Grid>
                 </Grow>
+                {!loadingData && filteredData.length === 0 &&
+                    <Box sx={{
+                        height: '40vh',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'text.disabled'
+                    }}>{`No ${title}`}</Box>}
             </Container>
         </Page>
     )
