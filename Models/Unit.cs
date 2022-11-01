@@ -24,7 +24,7 @@ namespace chickadee.Models
         public Property Property { get; set; }
         
         
-        public int PropertyManagerId { get; set; }
+        public int? PropertyManagerId { get; set; }
         [ForeignKey("PropertyManagerId")]
         public PropertyManager? PropertyManager { get; set; }
         

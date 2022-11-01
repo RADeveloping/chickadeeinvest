@@ -26,6 +26,5 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<Unit>? Units { get; set; }
     public DbSet<Ticket>? Tickets { get; set; }
     
-    public DbSet<Document>? Document { get; set; }
 
 }

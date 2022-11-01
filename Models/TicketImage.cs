@@ -20,7 +20,7 @@ namespace chickadee.Models {
         [ForeignKey("UserId")]
         public Tenant Tenant { get; set; } 
                 
-        public ICollection<Ticket> ImageTicket { get; set; } // Many to Many Relationship between ticket and ticket image
+        // public ICollection<Ticket> Tickets { get; set; }
 
     }
 }

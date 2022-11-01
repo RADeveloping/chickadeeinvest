@@ -1,37 +1,36 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace chickadee.Models;
+namespace chickadee.Models {
 
-using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
 
-public class ApplicationUser : IdentityUser
-{
-    [Required]
-    [PersonalData]
-    [DataType(DataType.Text)]
-    [Display(Name = "First Name")]
-    public string FirstName { get; set; }
-    
-    [Required]
-    [PersonalData]
-    [DataType(DataType.Text)]
-    [Display(Name = "Last Name")]
-    public string LastName { get; set; }
-    public int UsernameChangeLimit { get; set; } = 10;
-    
-    [DataType(DataType.DateTime)]
-    [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
-    [Display(Name = "Date Of Birth")]
-    public DateTime DateOfBirth { get; set; } 
-    
-    [PersonalData]
-    [Display(Name = "Profile Picture")]
-    public byte[]? ProfilePicture { get; set; }
-    
-    public bool IsIdVerified { get; set; } = false;
-    
-    public List<Message>? Messages { get; set; }
-    public List<Ticket>? Tickets { get; set; }
+    public class ApplicationUser : IdentityUser {
+        
+        
+        [Required]
+        [PersonalData]
+        [DataType(DataType.Text)]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+        
+        [Required]
+        [PersonalData]
+        [DataType(DataType.Text)]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+        public int UsernameChangeLimit { get; set; } = 10;
 
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [Display(Name = "Date Of Birth")]
+        public DateTime DateOfBirth { get; set; }
+
+        [PersonalData]
+        [Display(Name = "Profile Picture")]
+        public byte[]? ProfilePicture { get; set; }
+        
+        public List<Message>? Messages { get; set; }
+        public List<Ticket>? Tickets { get; set; }
+
+    }
 }

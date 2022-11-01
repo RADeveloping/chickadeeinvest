@@ -27,7 +27,7 @@ namespace chickadee.Models
        
        [Display(Name = "Estimated Completion Date")] 
        [DataType(DataType.DateTime)]
-       public DateTime EstimatedDate { get; set; }
+       public DateTime? EstimatedDate { get; set; }
  
        [Display(Name = "Status")] 
        public TicketStatus Status { get; set; }
@@ -38,25 +38,23 @@ namespace chickadee.Models
        
        [Display(Name = "Closed Date")] 
        [DataType(DataType.DateTime)]
-       public DateTime ClosedDate { get; set; }
+       public DateTime? ClosedDate { get; set; }
 
        
        public int UnitId { get; set; }
        [ForeignKey("UnitId")]
        public Unit Unit { get; set; }
        
-       public String OwnerId { get; set; } // OWNER OF TICKET. Anyone can create ticket but only owner can edit it.
        [ForeignKey("UserId")]
-       public ApplicationUser Owner { get; set; }
+       public String UserId { get; set; } // OWNER OF TICKET. Anyone can create ticket
+        public ApplicationUser User { get; set; }
        
-       
-       public String ClosedById { get; set; }
-       [ForeignKey("UserId")]
-       public ApplicationUser? User { get; set; }
+        //
+        // public String ClosedById { get; set; }
+        // [ForeignKey("ClosedById")]
+        // public ApplicationUser? ClosedByUser { get; set; }
        
        public List<Message>? Messages { get; set; }
-       public ICollection<TicketImage>? TicketImages { get; set; } // Many to Many Relationship between ticket and ticket image
-       
-       
+       public ICollection<TicketImage>? Images { get; set; } // Many to Many Relationship between ticket and ticket image
     }
 }
