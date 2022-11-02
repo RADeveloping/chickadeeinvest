@@ -6,7 +6,7 @@ namespace chickadee.Models {
     
     public class VerificationDocument {
         [Key]
-        public int VerificationDocumentId { get; set; }
+        public String VerificationDocumentId { get; set; }
         
         [Required]
         public byte[] data { get; set; }
@@ -18,6 +18,6 @@ namespace chickadee.Models {
         
         [ForeignKey("UserId")]
         public Tenant Tenant { get; set; }
-        public int TenantId { get; set; }
+        public String TenantId { get; set; }
     }
 }

@@ -3,9 +3,9 @@ namespace chickadee.Models {
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class Message {
-        
+
         [Key]
-        public int MessageId { get; set; }
+        public String MessageId { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [Display(Name = "Message")]
@@ -16,7 +16,7 @@ namespace chickadee.Models {
         [Display(Name = "Sender")]
         public String SenderId { get; set; }
         [ForeignKey("UserId")]
-        public ApplicationUser Sender { get; set; } 
+        public ApplicationUser Sender { get; set; }
         
         [Required]
         [Display(Name = "Created Date")]
@@ -25,8 +25,7 @@ namespace chickadee.Models {
 
         public int TicketId { get; set; }
         [ForeignKey("TicketId")]
-        public Ticket Ticket { get; set; } 
+        public Ticket Ticket { get; set; }
 
-                
     }
 }

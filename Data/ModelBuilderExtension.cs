@@ -9,6 +9,7 @@ using Models;
 public static class ModelBuilderExtensions {
     public static void Seed(this ModelBuilder builder)
     {
+
         var password = "ytyv)9kSBXmg";
         var passwordHasher = new PasswordHasher<ApplicationUser>();
 
@@ -36,7 +37,10 @@ public static class ModelBuilderExtensions {
         List<ApplicationUser> AdminSuperAdminuserList = new List<ApplicationUser>();
         List<Tenant> TenantsList = new List<Tenant>();
         List<PropertyManager> PropertyManagerList = new List<PropertyManager>();
-
+        var propertiesList = SeedProperties();
+        builder.Entity<Property>().HasData(propertiesList);
+        
+        var unitsList = SeedUnits(propertiesList);
 
         // Seed Users
         var superAdminUser = new ApplicationUser()
@@ -76,6 +80,7 @@ public static class ModelBuilderExtensions {
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-3).AddDays(-12),
+
         };
         propertyManagerTwo.NormalizedUserName = propertyManagerTwo.UserName.ToUpper();
         propertyManagerTwo.NormalizedEmail = propertyManagerTwo.Email.ToUpper();
@@ -90,7 +95,8 @@ public static class ModelBuilderExtensions {
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10), 
-            UnitId = 1
+            UnitId = unitsList[0].UnitId,
+
         };
         tenantOne.NormalizedUserName = tenantOne.UserName.ToUpper();
         tenantOne.NormalizedEmail = tenantOne.Email.ToUpper();
@@ -105,7 +111,8 @@ public static class ModelBuilderExtensions {
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
-            UnitId = 2
+            UnitId = unitsList[0].UnitId,
+
         };
         tenantTwo.NormalizedUserName = tenantTwo.UserName.ToUpper();
         tenantTwo.NormalizedEmail = tenantTwo.Email.ToUpper();
@@ -170,31 +177,26 @@ public static class ModelBuilderExtensions {
             RoleId = roles.First(q => q.Name == Enums.Roles.Tenant.ToString()).Id
         });
 
-        List<Tenant> tenants = new List<Tenant>() {
-            tenantOne,
-            tenantTwo
-        };
 
-        List<PropertyManager> propertyManagers = new List<PropertyManager>() {
-            propertyManagerOne,
-            propertyManagerTwo
-        };
+  
+        
+        var ticketsList = SeedTickets(TenantsList, unitsList);
+        builder.Entity<PropertyManager>().HasData(PropertyManagerList);
+        builder.Entity<Unit>().HasData(unitsList);
 
         builder.Entity<IdentityRole>().HasData(roles);
         
         builder.Entity<ApplicationUser>().HasData(AdminSuperAdminuserList);
-        builder.Entity<PropertyManager>().HasData(PropertyManagerList);
         builder.Entity<Tenant>().HasData(TenantsList);
 
         builder.Entity<IdentityUserRole<string>>().HasData(userRoles);
-        builder.Entity<Company>().HasData(SeedCompaniesWithPropertyManagers(propertyManagers));
-        var ticketsList = SeedTickets(tenants);
+        builder.Entity<Company>().HasData(SeedCompaniesWithPropertyManagers(PropertyManagerList));
         builder.Entity<Ticket>().HasData(ticketsList);
             
-        builder.Entity<Message>().HasData(SeedMessages(ticketsList, tenants));
-        builder.Entity<Property>().HasData(SeedProperties());
-        builder.Entity<Unit>().HasData(SeedUnits());
-        builder.Entity<Ticket>().HasData(SeedTickets(tenants));
+      
+        
+        builder.Entity<Message>().HasData(SeedMessages(ticketsList, TenantsList));
+        
 
     }
     
@@ -203,12 +205,11 @@ public static class ModelBuilderExtensions {
     {
         List<Company> companies = new List<Company>() {
             new Company(){
-                CompanyId = 1,
                 Name = "Company One",
                 Address = "123 Main St",
                 Phone = "604-235-7890",
                 Email = "main@companyOne.com",
-                PropertyManagers = propertyManagers
+                // PropertyManagers = propertyManagers
             },
         };
 
@@ -219,11 +220,10 @@ public static class ModelBuilderExtensions {
     {
         List<Message> messages = new List<Message>() {
             new Message(){
-                MessageId = 1,
                 content = "This is a message",
                 SenderId = users[0].Id,
                 CreatedDate = DateTime.Now.AddHours(-23),
-                TicketId = tickets[0].TicketId
+                TicketId = tickets[0].TicketId,
             },
         };
 
@@ -236,17 +236,14 @@ public static class ModelBuilderExtensions {
     {
         var properties = new List<Property>() {
             new Property() {
-                PropertyId = 1,
                 Name = "The Evergreen",
                 Address = "742 Evergreen Terrace",
             },
             new Property() {
-                PropertyId = 2,
                 Name = "Montana Apartments",
                 Address = "123 Sesame Street",
             },
             new Property() {
-                PropertyId = 3,
                 Name = "Arcola",
                 Address = "7488 Hazel Street",
             },
@@ -255,20 +252,18 @@ public static class ModelBuilderExtensions {
         return properties;
     }
     
-    public static List<Unit> SeedUnits()
+    public static List<Unit> SeedUnits(List<Property> properties)
         {
             List<Unit> units = new List<Unit>() {
                 new Unit() {
-                    UnitId = 1,
                     UnitNo = 101,
                     UnitType = UnitType.Studio,
-                    PropertyId = 1,
+                    PropertyId = properties[0].PropertyId
                 },
                 new Unit() {
-                    UnitId = 2,
                     UnitNo = 500,
                     UnitType = UnitType.OneBedroom,
-                    PropertyId = 2
+                    PropertyId = properties[1].PropertyId
                 },
             };
 
@@ -277,7 +272,7 @@ public static class ModelBuilderExtensions {
 
     
 
-        public static List<Ticket> SeedTickets(List<Tenant> tenants)
+        public static List<Ticket> SeedTickets(List<Tenant> tenants, List<Unit> units)
         {
             List<Ticket> tickets = new List<Ticket>() {
                 new Ticket() {
@@ -288,8 +283,8 @@ public static class ModelBuilderExtensions {
                     EstimatedDate = new DateTime(2022, 11, 3),
                     Status = Enums.TicketStatus.Open,
                     Severity = Enums.TicketSeverity.High,
-                    UnitId = 1,
-                    UserId = tenants[0].Id,
+                    UnitId = units[0].UnitId,
+                    CreatedById = tenants[0].Id,
                 },
                 new Ticket() {
                     TicketId = 2,
@@ -299,8 +294,8 @@ public static class ModelBuilderExtensions {
                     Description = "Need repairing the floors from last earthquake",
                     Status = Enums.TicketStatus.Open,
                     Severity = Enums.TicketSeverity.Medium,
-                    UnitId = 1,
-                    UserId = tenants[0].Id
+                    UnitId = units[0].UnitId,
+                    CreatedById = tenants[0].Id
                 },
                 new Ticket() {
                     TicketId = 3,
@@ -310,8 +305,8 @@ public static class ModelBuilderExtensions {
                     Description = "Need to fix the roof that was damaged by the tornado",
                     Status = Enums.TicketStatus.Closed,
                     Severity = Enums.TicketSeverity.High,
-                    UnitId = 2,
-                    UserId = tenants[1].Id
+                    UnitId = units[1].UnitId,
+                    CreatedById = tenants[1].Id
                 },
                 new Ticket() {
                     TicketId = 4,
@@ -321,8 +316,8 @@ public static class ModelBuilderExtensions {
                     Description = "Currently getting by with rat traps",
                     Status = Enums.TicketStatus.Open,
                     Severity = Enums.TicketSeverity.Medium,
-                    UnitId = 2,
-                    UserId = tenants[1].Id
+                    UnitId = units[1].UnitId,
+                    CreatedById = tenants[1].Id
                 },
             };
 

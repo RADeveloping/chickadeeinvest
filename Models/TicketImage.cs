@@ -4,7 +4,7 @@ namespace chickadee.Models {
 
     public class TicketImage {
         [Key]
-        public int TicketImageId { get; set; }
+        public String TicketImageId { get; set; }
         
         [Required]
         public byte[] data { get; set; }
@@ -16,11 +16,10 @@ namespace chickadee.Models {
         [ForeignKey("TicketId")]
         public Ticket Ticket { get; set; }
         
-        public string TenantId { get; set; }
-        [ForeignKey("UserId")]
-        public Tenant Tenant { get; set; } 
-                
-        // public ICollection<Ticket> Tickets { get; set; }
-
+        [Required]
+        public String CreatedById { get; set; } 
+        [ForeignKey("CreatedById")]
+        public ApplicationUser CreatedBy { get; set; }
+        
     }
 }

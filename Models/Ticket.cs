@@ -12,6 +12,7 @@ namespace chickadee.Models
     {
        [Key] 
        public int TicketId { get; set; } 
+
        [Required]
        [Display(Name = "Problem")]
        public string Problem { get; set; }
@@ -41,20 +42,20 @@ namespace chickadee.Models
        public DateTime? ClosedDate { get; set; }
 
        
-       public int UnitId { get; set; }
+       public String UnitId { get; set; }
        [ForeignKey("UnitId")]
        public Unit Unit { get; set; }
        
-       [ForeignKey("UserId")]
-       public String UserId { get; set; } // OWNER OF TICKET. Anyone can create ticket
-        public ApplicationUser User { get; set; }
+       public String CreatedById { get; set; } // OWNER OF TICKET. Anyone can create ticket
+       [ForeignKey("CreatedById")]
+       public ApplicationUser CreatedBy { get; set; }
        
-        //
+        
         // public String ClosedById { get; set; }
         // [ForeignKey("ClosedById")]
-        // public ApplicationUser? ClosedByUser { get; set; }
+        // public virtual ApplicationUser ClosedBy { get; set; }
        
-       public List<Message>? Messages { get; set; }
-       public ICollection<TicketImage>? Images { get; set; } // Many to Many Relationship between ticket and ticket image
+       public List<Message>? Messages { get; set; } = new List<Message>(); 
+       public ICollection<TicketImage>? Images { get; set; } = new List<TicketImage>(); // Many to Many Relationship between ticket and ticket image
     }
 }

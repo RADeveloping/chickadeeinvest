@@ -5,11 +5,11 @@ namespace chickadee.Models {
     public class PropertyManager : ApplicationUser {
         
         [Display(Name = "Company ID")]
-        public int? CompanyId { get; set;}
+        public String? CompanyId { get; set;}
         [ForeignKey("CompanyId")]
-        public Company? Company { get; set; }
-
-        public List<Unit>? Units { get; set; }
+        public Company? Company { get; set; } = null!;
+        
+        public ICollection<Unit>? Units { get; set; } = new List<Unit>();
 
     }
 }

@@ -2,9 +2,9 @@ namespace chickadee.Models {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class UnitNotes {
+    public class UnitNote {
         [Key]
-        public int UnitNotesId { get; set; }
+        public String UnitNoteId { get; set; }
         
         [Required]
         public string Message { get; set; }
@@ -14,6 +14,6 @@ namespace chickadee.Models {
         
         [ForeignKey("UnitId")]
         public Unit Unit { get; set; }
-        public int UnitId { get; set; }
+        public String UnitId { get; set; }
     }
 }

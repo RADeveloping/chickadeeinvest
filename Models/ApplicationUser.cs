@@ -6,7 +6,6 @@ namespace chickadee.Models {
 
     public class ApplicationUser : IdentityUser {
         
-        
         [Required]
         [PersonalData]
         [DataType(DataType.Text)]
@@ -28,9 +27,11 @@ namespace chickadee.Models {
         [PersonalData]
         [Display(Name = "Profile Picture")]
         public byte[]? ProfilePicture { get; set; }
-        
-        public List<Message>? Messages { get; set; }
-        public List<Ticket>? Tickets { get; set; }
 
+        public ICollection<Message>? Messages { get; set; } = new List<Message>();
+        public ICollection<Ticket>? Tickets { get; set; } = new List<Ticket>();
+        public ICollection<TicketImage>? TicketImage { get; set; } = new List<TicketImage>();
+
+        
     }
 }

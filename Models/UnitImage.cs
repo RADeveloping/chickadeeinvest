@@ -4,7 +4,7 @@ namespace chickadee.Models {
 
     public class UnitImage {
         [Key]
-        public int UnitImageId { get; set; }
+        public String UnitImageId { get; set; }
         
         [Required]
         public byte[] data { get; set; }
@@ -12,8 +12,8 @@ namespace chickadee.Models {
         [Required]
         public DateTime UploadDate { get; set; }
         
+        public String UnitId { get; set; }
         [ForeignKey("UnitId")]
         public Unit Unit { get; set; }
-        public int UnitId { get; set; }
     }
 }

@@ -11,29 +11,27 @@ namespace chickadee.Models
 {
     using Enums;
 
-    public class Unit
-    {
+    public class Unit {
         [Key]
-        public int UnitId { get; set; }
+        public String UnitId { get; set; } = Guid.NewGuid().ToString();
         public int UnitNo { get; set; }
         
         public UnitType UnitType { get; set; }
         
-        public int PropertyId { get; set; }
+        public String PropertyId { get; set; }
         [ForeignKey("PropertyId")]
         public Property Property { get; set; }
         
         
-        public int? PropertyManagerId { get; set; }
+        public String? PropertyManagerId { get; set; }
         [ForeignKey("PropertyManagerId")]
         public PropertyManager? PropertyManager { get; set; }
+
+        public ICollection<UnitImage>? Images { get; set; } = new List<UnitImage>();
+        public ICollection<Tenant>? Tenants { get; set; } = new List<Tenant>();
+        public ICollection<Ticket>? Tickets { get; set; } = new List<Ticket>();
+        public ICollection<UnitNote>? Notes { get; set; } = new List<UnitNote>();
         
-        public List<UnitImage>? Images { get; set; }
-        public List<Tenant>? Tenants { get; set; }
-        public List<Ticket>? Tickets { get; set; }
-        public List<UnitNotes>? Notes { get; set; }
-
-
-
+        
     }
 }

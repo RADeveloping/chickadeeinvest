@@ -4,7 +4,8 @@ namespace chickadee.Models {
 
     public class Company {
         [Key]
-        public int CompanyId { get; set; }
+        public String CompanyId { get; set; } = Guid.NewGuid().ToString();
+        
         [Required]
         [Display(Name = "Company Name")] 
         [DataType(DataType.Text)]
@@ -23,9 +24,6 @@ namespace chickadee.Models {
         [Display(Name = "Company Email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-
         
-        public List<PropertyManager>? PropertyManagers { get; set; }
-
     }
 }
