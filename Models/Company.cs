@@ -25,5 +25,8 @@ namespace chickadee.Models {
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         
+        public ICollection<PropertyManager>? PropertyManagers { get; set; } = new List<PropertyManager>(); // Many to Many Relationship between ticket and ticket image
+
+        
     }
 }

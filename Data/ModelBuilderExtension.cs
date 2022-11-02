@@ -32,17 +32,11 @@ public static class ModelBuilderExtensions {
             superAdminRole, propertyManagerRole, adminRole, tenantRole
         };
         
+        builder.Entity<IdentityRole>().HasData(roles);
+
         // -----------------------------------------------------------------------------
 
         List<ApplicationUser> AdminSuperAdminuserList = new List<ApplicationUser>();
-        List<Tenant> TenantsList = new List<Tenant>();
-        List<PropertyManager> PropertyManagerList = new List<PropertyManager>();
-        var propertiesList = SeedProperties();
-        builder.Entity<Property>().HasData(propertiesList);
-        
-        var unitsList = SeedUnits(propertiesList);
-
-        // Seed Users
         var superAdminUser = new ApplicationUser()
         {
             UserName = "superadmin@chickadeeinvest.ca",
@@ -56,7 +50,13 @@ public static class ModelBuilderExtensions {
         superAdminUser.NormalizedUserName = superAdminUser.UserName.ToUpper();
         superAdminUser.NormalizedEmail = superAdminUser.Email.ToUpper();
         superAdminUser.PasswordHash = passwordHasher.HashPassword(superAdminUser, password);
+        AdminSuperAdminuserList.Add(superAdminUser);
+        builder.Entity<ApplicationUser>().HasData(AdminSuperAdminuserList);
 
+        // -----------------------------------------------------------------------------
+
+        List<PropertyManager> PropertyManagerList = new List<PropertyManager>();
+        
         var propertyManagerOne = new PropertyManager()
         {
             UserName = "propertymanager@gmail.com",
@@ -66,6 +66,7 @@ public static class ModelBuilderExtensions {
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
+            
         };
         propertyManagerOne.NormalizedUserName = propertyManagerOne.UserName.ToUpper();
         propertyManagerOne.NormalizedEmail = propertyManagerOne.Email.ToUpper();
@@ -86,6 +87,54 @@ public static class ModelBuilderExtensions {
         propertyManagerTwo.NormalizedEmail = propertyManagerTwo.Email.ToUpper();
         propertyManagerTwo.PasswordHash = passwordHasher.HashPassword(propertyManagerTwo, password);
 
+        PropertyManagerList.Add(propertyManagerOne);
+        PropertyManagerList.Add(propertyManagerTwo);
+        
+        builder.Entity<PropertyManager>().HasData(PropertyManagerList);
+        
+        // -----------------------------------------------------------------------------
+        var properties = new List<Property>() {
+            new Property() {
+                Name = "The Evergreen",
+                Address = "742 Evergreen Terrace",
+            },
+            new Property() {
+                Name = "Montana Apartments",
+                Address = "123 Sesame Street",
+            },
+            new Property() {
+                Name = "Arcola",
+                Address = "7488 Hazel Street",
+            },
+        };
+        
+        builder.Entity<Property>().HasData(properties);
+        
+        // -----------------------------------------------------------------------------
+        
+        List<Unit> units = new List<Unit>() {
+            new Unit() {
+                UnitNo = 101,
+                UnitType = UnitType.Studio,
+                PropertyId = properties[0].PropertyId,
+                // PropertyManagerId = PropertyManagerList[0].Id,
+                // PropertyManager = PropertyManagerList[0]
+            },
+            new Unit() {
+                UnitNo = 500,
+                UnitType = UnitType.OneBedroom,
+                PropertyId = properties[1].PropertyId,
+                // PropertyManagerId = PropertyManagerList[0].Id,
+                // PropertyManager = PropertyManagerList[0]
+            },
+        };
+        
+        builder.Entity<Unit>().HasData(units);
+
+        
+        // -----------------------------------------------------------------------------
+        
+        List<Tenant> TenantsList = new List<Tenant>();
         var tenantOne = new Tenant()
         {
             UserName = "tenant@gmail.com",
@@ -95,7 +144,7 @@ public static class ModelBuilderExtensions {
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10), 
-            UnitId = unitsList[0].UnitId,
+            UnitId = units[0].UnitId,
 
         };
         tenantOne.NormalizedUserName = tenantOne.UserName.ToUpper();
@@ -111,19 +160,18 @@ public static class ModelBuilderExtensions {
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
-            UnitId = unitsList[0].UnitId,
+            UnitId = units[1].UnitId,
+            
 
         };
         tenantTwo.NormalizedUserName = tenantTwo.UserName.ToUpper();
         tenantTwo.NormalizedEmail = tenantTwo.Email.ToUpper();
         tenantTwo.PasswordHash = passwordHasher.HashPassword(tenantTwo, password);
-
-        AdminSuperAdminuserList.Add(superAdminUser);
-        PropertyManagerList.Add(propertyManagerOne);
-        PropertyManagerList.Add(propertyManagerTwo);
         TenantsList.Add(tenantOne);
         TenantsList.Add(tenantTwo);
+        builder.Entity<Tenant>().HasData(TenantsList);
 
+        
         ///----------------------------------------------------
 
         // Seed UserRoles
@@ -177,104 +225,24 @@ public static class ModelBuilderExtensions {
             RoleId = roles.First(q => q.Name == Enums.Roles.Tenant.ToString()).Id
         });
 
-
-  
-        
-        var ticketsList = SeedTickets(TenantsList, unitsList);
-        builder.Entity<PropertyManager>().HasData(PropertyManagerList);
-        builder.Entity<Unit>().HasData(unitsList);
-
-        builder.Entity<IdentityRole>().HasData(roles);
-        
-        builder.Entity<ApplicationUser>().HasData(AdminSuperAdminuserList);
-        builder.Entity<Tenant>().HasData(TenantsList);
-
         builder.Entity<IdentityUserRole<string>>().HasData(userRoles);
-        builder.Entity<Company>().HasData(SeedCompaniesWithPropertyManagers(PropertyManagerList));
-        builder.Entity<Ticket>().HasData(ticketsList);
-            
-      
-        
-        builder.Entity<Message>().HasData(SeedMessages(ticketsList, TenantsList));
-        
 
-    }
-    
-    
-    public static List<Company> SeedCompaniesWithPropertyManagers(List<PropertyManager> propertyManagers)
-    {
+        ///----------------------------------------------------
+        
         List<Company> companies = new List<Company>() {
             new Company(){
                 Name = "Company One",
                 Address = "123 Main St",
                 Phone = "604-235-7890",
                 Email = "main@companyOne.com",
-                // PropertyManagers = propertyManagers
             },
         };
-
-        return companies;
-    }
-    
-    public static List<Message> SeedMessages(List<Ticket> tickets, List<Tenant> users)
-    {
-        List<Message> messages = new List<Message>() {
-            new Message(){
-                content = "This is a message",
-                SenderId = users[0].Id,
-                CreatedDate = DateTime.Now.AddHours(-23),
-                TicketId = tickets[0].TicketId,
-            },
-        };
-
-        return messages;
-    }
-
-
-    
-    public static List<Property> SeedProperties()
-    {
-        var properties = new List<Property>() {
-            new Property() {
-                Name = "The Evergreen",
-                Address = "742 Evergreen Terrace",
-            },
-            new Property() {
-                Name = "Montana Apartments",
-                Address = "123 Sesame Street",
-            },
-            new Property() {
-                Name = "Arcola",
-                Address = "7488 Hazel Street",
-            },
-        };
-
-        return properties;
-    }
-    
-    public static List<Unit> SeedUnits(List<Property> properties)
-        {
-            List<Unit> units = new List<Unit>() {
-                new Unit() {
-                    UnitNo = 101,
-                    UnitType = UnitType.Studio,
-                    PropertyId = properties[0].PropertyId
-                },
-                new Unit() {
-                    UnitNo = 500,
-                    UnitType = UnitType.OneBedroom,
-                    PropertyId = properties[1].PropertyId
-                },
-            };
-
-            return units;
-        }
-
-    
-
-        public static List<Ticket> SeedTickets(List<Tenant> tenants, List<Unit> units)
-        {
-            List<Ticket> tickets = new List<Ticket>() {
+        
+        builder.Entity<Company>().HasData(companies);
+        
+        
+        ///----------------------------------------------------
+        List<Ticket> tickets = new List<Ticket>() {
                 new Ticket() {
                     TicketId = 1,
                     Problem = "Massive Leakage",
@@ -284,7 +252,7 @@ public static class ModelBuilderExtensions {
                     Status = Enums.TicketStatus.Open,
                     Severity = Enums.TicketSeverity.High,
                     UnitId = units[0].UnitId,
-                    CreatedById = tenants[0].Id,
+                    CreatedById = TenantsList[0].Id
                 },
                 new Ticket() {
                     TicketId = 2,
@@ -295,7 +263,7 @@ public static class ModelBuilderExtensions {
                     Status = Enums.TicketStatus.Open,
                     Severity = Enums.TicketSeverity.Medium,
                     UnitId = units[0].UnitId,
-                    CreatedById = tenants[0].Id
+                    CreatedById = TenantsList[0].Id
                 },
                 new Ticket() {
                     TicketId = 3,
@@ -306,7 +274,7 @@ public static class ModelBuilderExtensions {
                     Status = Enums.TicketStatus.Closed,
                     Severity = Enums.TicketSeverity.High,
                     UnitId = units[1].UnitId,
-                    CreatedById = tenants[1].Id
+                    CreatedById = TenantsList[1].Id
                 },
                 new Ticket() {
                     TicketId = 4,
@@ -317,28 +285,39 @@ public static class ModelBuilderExtensions {
                     Status = Enums.TicketStatus.Open,
                     Severity = Enums.TicketSeverity.Medium,
                     UnitId = units[1].UnitId,
-                    CreatedById = tenants[1].Id
+                    CreatedById = TenantsList[1].Id
                 },
-            };
+        };
+        
+        builder.Entity<Ticket>().HasData(tickets);
+        
+        
+        ///----------------------------------------------------
 
-            return tickets;
-        }
         
-        //   public static List<Document> SeedDocuments(List<ApplicationUser> tenants)
-        // {
-        //     List<Document> documents = new List<Document>() {
-        //         new Document() {
-        //             DocumentId = Guid.NewGuid().ToString(),
-        //             IdPhoto = Array.Empty<byte>(),
-        //             LeasePhoto = Array.Empty<byte>(),
-        //             IsIdVerified = false,
-        //             UserId = tenants[0].Id
-        //         },
-        //     };
-        //
-        //     return documents;
-        // }
+        List<Message> messages = new List<Message>() {
+            new Message(){
+                content = "This is a message",
+                SenderId = TenantsList[0].Id,
+                CreatedDate = DateTime.Now.AddHours(-23),
+                TicketId = tickets[0].TicketId,
+            },
+        };
         
-          
+        builder.Entity<Message>().HasData(messages);
+        
+        List<VerificationDocument> verificationDocuments = new List<VerificationDocument>() {
+            new VerificationDocument() {
+                data = Array.Empty<byte>(),
+                DocumentType = Enums.DocumentType.PhotoIdentification,
+                TenantId = TenantsList[0].Id
+            },
+        };
+        
+        builder.Entity<VerificationDocument>().HasData(verificationDocuments);
+
+        
+        ///----------------------------------------------------
+    }
 
 }

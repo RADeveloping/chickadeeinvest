@@ -22,13 +22,13 @@ namespace chickadee.Models
         [ForeignKey("PropertyId")]
         public Property Property { get; set; }
         
-        
         public String? PropertyManagerId { get; set; }
         [ForeignKey("PropertyManagerId")]
         public PropertyManager? PropertyManager { get; set; }
-
-        public ICollection<UnitImage>? Images { get; set; } = new List<UnitImage>();
+        
         public ICollection<Tenant>? Tenants { get; set; } = new List<Tenant>();
+        
+        public ICollection<UnitImage>? Images { get; set; } = new List<UnitImage>();
         public ICollection<Ticket>? Tickets { get; set; } = new List<Ticket>();
         public ICollection<UnitNote>? Notes { get; set; } = new List<UnitNote>();
         

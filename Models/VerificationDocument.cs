@@ -6,7 +6,7 @@ namespace chickadee.Models {
     
     public class VerificationDocument {
         [Key]
-        public String VerificationDocumentId { get; set; }
+        public String VerificationDocumentId { get; set; } = new Guid().ToString();
         
         [Required]
         public byte[] data { get; set; }
