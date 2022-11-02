@@ -37,6 +37,9 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
         {
             relationship.DeleteBehavior = DeleteBehavior.Restrict;
         }
+
+        builder.Entity<ApplicationUser>().Ignore(x => x.PasswordHash);
+
         
         builder.Seed();
 
