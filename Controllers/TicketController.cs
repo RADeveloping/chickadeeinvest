@@ -25,11 +25,37 @@ namespace chickadee.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
         {
-          if (_context.Ticket == null)
-          {
-              return NotFound();
-          }
-            return await _context.Ticket.ToListAsync();
+            var result = _context.Ticket
+                .Select(t=> new
+                {
+                   ticketId = t.TicketId,
+                   problem = t.Problem,
+                   description =  t.Description,
+                   createdOn = t.CreatedOn,
+                   estimatedDate = t.EstimatedDate,
+                   status = t.Status,
+                   severity = t.Severity,
+                   closedDate = t.ClosedDate,
+                   unitId = t.UnitId,
+                   unit = new
+                   {
+                       unitId = t.Unit.UnitId,
+                       unitNo = t.Unit.UnitNo,
+                       unitType = t.Unit.UnitType,
+                       propertyId = t.Unit.PropertyId,
+                       property = t.Unit.Property,
+                       propertyManagerId = t.Unit.PropertyManagerId,
+                       propertyManager = t.Unit.PropertyManager,
+                   },
+                   createdBy = t.CreatedBy,
+                   messages = t.Messages,
+                   images = t.Images,
+                })
+                .ToList();
+
+            return Ok(result);
+
+            
         }
 
         // GET: api/Ticket/5

@@ -55,7 +55,7 @@ namespace chickadee.Models
         // [ForeignKey("ClosedById")]
         // public virtual ApplicationUser ClosedBy { get; set; }
        
-       public List<Message>? Messages { get; set; } = new List<Message>(); 
+       public ICollection<Message>? Messages { get; set; } = new List<Message>(); 
        public ICollection<TicketImage>? Images { get; set; } = new List<TicketImage>(); // Many to Many Relationship between ticket and ticket image
     }
 }

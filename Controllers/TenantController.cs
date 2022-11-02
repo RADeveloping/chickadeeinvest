@@ -10,6 +10,9 @@ using chickadee.Models;
 
 namespace chickadee.Controllers
 {
+    using System.Linq.Expressions;
+    using Microsoft.AspNetCore.Identity;
+
     [Route("api/[controller]")]
     [ApiController]
     public class TenantController : ControllerBase
@@ -21,18 +24,87 @@ namespace chickadee.Controllers
             _context = context;
         }
 
-        // GET: api/Tenant
+        private bool IsSuperAdmin()
+        {
+            return User.IsInRole("Admin");
+        }
+        
+        private bool IsAdmin()
+        {
+            return User.IsInRole("Admin");
+        }
+        
+        private bool IsPropertyManager()
+        {
+            return User.IsInRole("Admin");
+        }
+        
+        private bool IsTenant()
+        {
+            return User.IsInRole("Admin");
+        }
+        
+
+
+        public static Tenant FilterTenants(Tenant tenant)
+        {
+
+            var result = new Tenant()
+            {
+                FirstName = tenant.FirstName,
+                LastName = tenant.LastName,
+                Id = tenant.Id,
+                UserName = tenant.UserName,
+                ProfilePicture = tenant.ProfilePicture,
+                LeaseNumber = tenant.LeaseNumber,
+                Unit = tenant.Unit,
+                Tickets = tenant.Tickets
+            };
+
+            
+            return tenant;
+        }
+        
+        
+        
+        // GET: api/Tenants
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tenant>>> GetTenant()
         {
-          if (_context.Tenant == null)
-          {
-              return NotFound();
-          }
-            return await _context.Tenant.ToListAsync();
+            var result = _context.Tenant
+                .Include(t => t.Tickets)
+                .ThenInclude(ticket => ticket.Messages)
+                .Include(t => t.TicketImage)
+                .Include(ticket => ticket.Unit)
+                .ToList();
+
+            return Ok(result);
+            
+            
+            if (IsSuperAdmin())
+            {
+               
+            }
+            else if (IsAdmin())
+            {
+                return await _context.Tenant.ToListAsync();
+            }
+            else if (IsPropertyManager())
+            {
+                return await _context.Tenant.ToListAsync();
+            }
+            else if (IsTenant())
+            {
+                return await _context.Tenant.ToListAsync();
+            }
+            else
+            {
+                return Unauthorized();
+            }
+            
         }
 
-        // GET: api/Tenant/5
+        // GET: api/Tenants/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Tenant>> GetTenant(string id)
         {
@@ -50,7 +122,7 @@ namespace chickadee.Controllers
             return tenant;
         }
 
-        // PUT: api/Tenant/5
+        // PUT: api/Tenants/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTenant(string id, Tenant tenant)
@@ -81,7 +153,7 @@ namespace chickadee.Controllers
             return NoContent();
         }
 
-        // POST: api/Tenant
+        // POST: api/Tenants
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Tenant>> PostTenant(Tenant tenant)
@@ -110,7 +182,7 @@ namespace chickadee.Controllers
             return CreatedAtAction("GetTenant", new { id = tenant.Id }, tenant);
         }
 
-        // DELETE: api/Tenant/5
+        // DELETE: api/Tenants/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTenant(string id)
         {
