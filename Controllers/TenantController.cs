@@ -13,7 +13,9 @@ namespace chickadee.Controllers
     using System.Linq.Expressions;
     using Microsoft.AspNetCore.Identity;
 
-    [Route("api/properties/{propertyId}/units/{unitId}/tenants")]
+    // [Route("api/properties/{propertyId}/units/{unitId}")]
+    [Route("api/[controller]")]
+
     [ApiController]
     public class TenantController : ControllerBase
     {

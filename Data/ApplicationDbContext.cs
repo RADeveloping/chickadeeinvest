@@ -25,7 +25,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<UnitImage>? UnitImage { get; set; }
     public DbSet<UnitNote>? UnitNote { get; set; }
     public DbSet<Tenant>? Tenant { get; set; }
-    public DbSet<Ticket>? Ticket { get; set; }
+    public DbSet<Ticket>? Tickets { get; set; }
     public DbSet<TicketImage>? TicketImage { get; set; }
 
     public DbSet<VerificationDocument>? VerificationDocuments { get; set; }

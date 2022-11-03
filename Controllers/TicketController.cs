@@ -27,72 +27,75 @@ namespace chickadee.Controllers
 
         // GET: api/Ticket
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket(string propertyId, string unitId)
         {
             
-            var requestingUser = await _userManager.GetUserAsync(User);
-            if (requestingUser == null)
+              var requestingUser = await _userManager.GetUserAsync(User);
+            if (requestingUser == null || _context.Property == null | _context.Unit == null || _context.Tickets == null)
             {
-                return Unauthorized();
+                return NotFound();
             }
+            
             var isSuperAdmin = await _userManager.IsInRoleAsync(requestingUser, "SuperAdmin");
-            
-            var result = _context.Ticket
-                .Select(t=> new
-                {
-                   ticketId = t.TicketId,
-                   problem = t.Problem,
-                   description =  t.Description,
-                   createdOn = t.CreatedOn,
-                   estimatedDate = t.EstimatedDate,
-                   status = t.Status,
-                   severity = t.Severity,
-                   closedDate = t.ClosedDate,
-                   unitId = t.UnitId,
-                   unit = new
-                   {
-                       unitId = t.Unit.UnitId,
-                       unitNo = t.Unit.UnitNo,
-                       unitType = t.Unit.UnitType,
-                       propertyId = t.Unit.PropertyId,
-                       property = t.Unit.Property,
-                       propertyManagerId = t.Unit.PropertyManagerId,
-                       propertyManager = t.Unit.PropertyManager,
-                       tenants = new
-                       {
-                           t.CreatedBy.FirstName,
-                           t.CreatedBy.LastName,
-                           t.CreatedBy.Id,
-                           t.CreatedBy.UserName,
-                           t.CreatedBy.ProfilePicture
-                       },
-                   },
-                   createdBy = new
-                   {
-                       t.CreatedBy.FirstName,
-                       t.CreatedBy.LastName,
-                       t.CreatedBy.Id,
-                       t.CreatedBy.UserName,
-                       t.CreatedBy.ProfilePicture
-                   },
-                   messages = t.Messages,
-                   images = t.Images,
-                })
-                .ToList();
-            
-          var userHasAccess = result.Any(t => t.unit.propertyManagerId == requestingUser.Id || t.unit.tenants.Id == requestingUser.Id || isSuperAdmin);
 
+            var result = _context.Tickets
+                .Include(t => t.Unit)
+                .ThenInclude(u => u.Property)
+                .Where(t => (t.Unit.PropertyId == propertyId) && t.Unit.UnitId == unitId);
+            
+            var userHasAccess = result.Any(t => t.Unit.PropertyManagerId == requestingUser.Id || (t.Unit.Tenants != null && t.Unit.Tenants.Any(x=>x.Id == requestingUser.Id)) || isSuperAdmin);
+
+            var simpleResult =
+                result
+                    .Select(t => new
+                    {
+                        ticketId = t.TicketId,
+                        problem = t.Problem,
+                        description = t.Description,
+                        createdOn = t.CreatedOn,
+                        estimatedDate = t.EstimatedDate,
+                        status = t.Status,
+                        severity = t.Severity,
+                        closedDate = t.ClosedDate,
+                        unitId = t.UnitId,
+                        // unit = new
+                        // {
+                        //     unitId = t.Unit.UnitId,
+                        //     unitNo = t.Unit.UnitNo,
+                        //     unitType = t.Unit.UnitType,
+                        //     propertyId = t.Unit.PropertyId,
+                        //     property = t.Unit.Property,
+                        //     propertyManagerId = t.Unit.PropertyManagerId,
+                        //     propertyManager = t.Unit.PropertyManager,
+                        //     tenants = new
+                        //     {
+                        //         t.CreatedBy.FirstName,
+                        //         t.CreatedBy.LastName,
+                        //         t.CreatedBy.Id,
+                        //         t.CreatedBy.UserName,
+                        //         t.CreatedBy.ProfilePicture
+                        //     },
+                        // },
+                        createdBy = new
+                        {
+                            t.CreatedBy.FirstName,
+                            t.CreatedBy.LastName,
+                            t.CreatedBy.Id,
+                            t.CreatedBy.UserName,
+                            t.CreatedBy.ProfilePicture
+                        },
+                        // messages = t.Messages,
+                        // images = t.Images,
+                    }).ToList();
+            
+            
           if (userHasAccess)
           {
-              return Ok(result);
+              return Ok(simpleResult);
 
           }
-          else
-          {
-              return Forbid();
-          }
-          
-
+        
+          return NotFound();
             
         }
 
@@ -100,11 +103,11 @@ namespace chickadee.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
-          if (_context.Ticket == null)
+          if (_context.Tickets == null)
           {
               return NotFound();
           }
-            var ticket = await _context.Ticket.FindAsync(id);
+            var ticket = await _context.Tickets.FindAsync(id);
 
             if (ticket == null)
             {
@@ -150,11 +153,11 @@ namespace chickadee.Controllers
         [HttpPost]
         public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
         {
-          if (_context.Ticket == null)
+          if (_context.Tickets == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Ticket'  is null.");
           }
-            _context.Ticket.Add(ticket);
+            _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTicket", new { id = ticket.TicketId }, ticket);
@@ -164,17 +167,17 @@ namespace chickadee.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket(int id)
         {
-            if (_context.Ticket == null)
+            if (_context.Tickets == null)
             {
                 return NotFound();
             }
-            var ticket = await _context.Ticket.FindAsync(id);
+            var ticket = await _context.Tickets.FindAsync(id);
             if (ticket == null)
             {
                 return NotFound();
             }
 
-            _context.Ticket.Remove(ticket);
+            _context.Tickets.Remove(ticket);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -182,7 +185,7 @@ namespace chickadee.Controllers
 
         private bool TicketExists(int id)
         {
-            return (_context.Ticket?.Any(e => e.TicketId == id)).GetValueOrDefault();
+            return (_context.Tickets?.Any(e => e.TicketId == id)).GetValueOrDefault();
         }
     }
 }

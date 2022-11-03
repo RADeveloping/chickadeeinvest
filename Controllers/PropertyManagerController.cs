@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
-    [Route("api/properties/{propertyId}/units/{propertyId}")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PropertyManagerController : ControllerBase
     {
