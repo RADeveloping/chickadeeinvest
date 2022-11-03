@@ -13,39 +13,19 @@ namespace chickadee.Controllers
     using System.Linq.Expressions;
     using Microsoft.AspNetCore.Identity;
 
-    [Route("api/[controller]")]
+    [Route("api/properties/{propertyId}/units/{unitId}/tenants")]
     [ApiController]
     public class TenantController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TenantController(ApplicationDbContext context)
+        public TenantController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-        }
-
-        private bool IsSuperAdmin()
-        {
-            return User.IsInRole("Admin");
+            _userManager = userManager;
         }
         
-        private bool IsAdmin()
-        {
-            return User.IsInRole("Admin");
-        }
-        
-        private bool IsPropertyManager()
-        {
-            return User.IsInRole("Admin");
-        }
-        
-        private bool IsTenant()
-        {
-            return User.IsInRole("Admin");
-        }
-        
-
-
         public static Tenant FilterTenants(Tenant tenant)
         {
 
@@ -69,39 +49,33 @@ namespace chickadee.Controllers
         
         // GET: api/Tenants
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tenant>>> GetTenant()
+        public async Task<ActionResult<IEnumerable<Tenant>>> GetTenant(string propertyId, string unitId)
         {
-            var result = _context.Tenant
-                .Include(t => t.Tickets)
-                .ThenInclude(ticket => ticket.Messages)
-                .Include(t => t.TicketImage)
-                .Include(ticket => ticket.Unit)
+            var requestingUser = await _userManager.GetUserAsync(User);
+
+            if (_context.Unit == null || requestingUser == null)
+            {
+                return NotFound();
+            }
+
+            var property = _context.Unit
+                .Include(x => x.Tenants)
+                .Where(p => p.Tenants != null && p.Tenants.Any(u=> 
+                    (u.Id == requestingUser.Id) || 
+                    p.PropertyManagerId == requestingUser.UnitId
+                ))
+                .Where(p=>p.UnitId == unitId && p.PropertyId == propertyId)
+                .ToList();
+          
+            
+            var propertySa = _context.Unit
+                .Include(x => x.Tenants)
+                .Where(p=>p.UnitId == unitId && p.PropertyId == propertyId)
                 .ToList();
 
-            return Ok(result);
-            
-            
-            if (IsSuperAdmin())
-            {
-               
-            }
-            else if (IsAdmin())
-            {
-                return await _context.Tenant.ToListAsync();
-            }
-            else if (IsPropertyManager())
-            {
-                return await _context.Tenant.ToListAsync();
-            }
-            else if (IsTenant())
-            {
-                return await _context.Tenant.ToListAsync();
-            }
-            else
-            {
-                return Unauthorized();
-            }
-            
+
+            return Ok(User.IsInRole("SuperAdmin") ? propertySa : property);
+
         }
 
         // GET: api/Tenants/5

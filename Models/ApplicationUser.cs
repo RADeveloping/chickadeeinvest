@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Models {
 
@@ -29,10 +30,13 @@ namespace chickadee.Models {
         [Display(Name = "Profile Picture")]
         public byte[]? ProfilePicture { get; set; }
         
+        [Display(Name = "Unit ID")]
+        public String? UnitId { get; set;}
+        [ForeignKey("UnitId")]
 
         public ICollection<Message>? Messages { get; set; } = new List<Message>();
         
-        public IList<Ticket>? Tickets { get; set; } = new List<Ticket>();
+        public ICollection<Ticket>? Tickets { get; set; } = new List<Ticket>();
         
         public ICollection<TicketImage>? TicketImage { get; set; } = new List<TicketImage>();
 

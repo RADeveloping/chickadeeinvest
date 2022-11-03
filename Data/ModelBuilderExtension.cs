@@ -53,6 +53,25 @@ public static class ModelBuilderExtensions {
         AdminSuperAdminuserList.Add(superAdminUser);
         builder.Entity<ApplicationUser>().HasData(AdminSuperAdminuserList);
 
+        
+        // -----------------------------------------------------------------------------
+    
+        List<Company> companies = new List<Company>() {
+            new Company(){
+                Name = "Company One",
+                Address = "123 Main St",
+                Phone = "604-235-7890",
+                Email = "main@companyOne.com",
+            },
+            new Company(){
+                Name = "Company Two",
+                Address = "Wall street",
+                Phone = "778-334-4594",
+                Email = "main@companyTwo.com",
+            },
+        };
+        
+        builder.Entity<Company>().HasData(companies);
         // -----------------------------------------------------------------------------
 
         List<PropertyManager> PropertyManagerList = new List<PropertyManager>();
@@ -66,6 +85,7 @@ public static class ModelBuilderExtensions {
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
+            CompanyId = companies[0].CompanyId
             
         };
         propertyManagerOne.NormalizedUserName = propertyManagerOne.UserName.ToUpper();
@@ -81,7 +101,7 @@ public static class ModelBuilderExtensions {
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-3).AddDays(-12),
-
+            CompanyId = companies[1].CompanyId
         };
         propertyManagerTwo.NormalizedUserName = propertyManagerTwo.UserName.ToUpper();
         propertyManagerTwo.NormalizedEmail = propertyManagerTwo.Email.ToUpper();
@@ -95,15 +115,15 @@ public static class ModelBuilderExtensions {
         // -----------------------------------------------------------------------------
         var properties = new List<Property>() {
             new Property() {
-                Name = "The Evergreen",
+                Name = "The Evergreen Managed By PM 1",
                 Address = "742 Evergreen Terrace",
             },
             new Property() {
-                Name = "Montana Apartments",
+                Name = "Montana Apartments Managed By PM 2",
                 Address = "123 Sesame Street",
             },
             new Property() {
-                Name = "Arcola",
+                Name = "Arcola Managed by PM 2",
                 Address = "7488 Hazel Street",
             },
         };
@@ -117,15 +137,13 @@ public static class ModelBuilderExtensions {
                 UnitNo = 101,
                 UnitType = UnitType.Studio,
                 PropertyId = properties[0].PropertyId,
-                // PropertyManagerId = PropertyManagerList[0].Id,
-                // PropertyManager = PropertyManagerList[0]
+                PropertyManagerId = PropertyManagerList[0].Id,
             },
             new Unit() {
                 UnitNo = 500,
                 UnitType = UnitType.OneBedroom,
                 PropertyId = properties[1].PropertyId,
-                // PropertyManagerId = PropertyManagerList[0].Id,
-                // PropertyManager = PropertyManagerList[0]
+                PropertyManagerId = PropertyManagerList[1].Id,
             },
         };
         
@@ -227,18 +245,6 @@ public static class ModelBuilderExtensions {
 
         builder.Entity<IdentityUserRole<string>>().HasData(userRoles);
 
-        ///----------------------------------------------------
-        
-        List<Company> companies = new List<Company>() {
-            new Company(){
-                Name = "Company One",
-                Address = "123 Main St",
-                Phone = "604-235-7890",
-                Email = "main@companyOne.com",
-            },
-        };
-        
-        builder.Entity<Company>().HasData(companies);
         
         
         ///----------------------------------------------------

@@ -10,21 +10,33 @@ using chickadee.Models;
 
 namespace chickadee.Controllers
 {
+    using Microsoft.AspNetCore.Identity;
+
     [Route("api/[controller]")]
     [ApiController]
     public class TicketController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TicketController(ApplicationDbContext context)
+        public TicketController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Ticket
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
         {
+            
+            var requestingUser = await _userManager.GetUserAsync(User);
+            if (requestingUser == null)
+            {
+                return Unauthorized();
+            }
+            var isSuperAdmin = await _userManager.IsInRoleAsync(requestingUser, "SuperAdmin");
+            
             var result = _context.Ticket
                 .Select(t=> new
                 {
@@ -46,14 +58,40 @@ namespace chickadee.Controllers
                        property = t.Unit.Property,
                        propertyManagerId = t.Unit.PropertyManagerId,
                        propertyManager = t.Unit.PropertyManager,
+                       tenants = new
+                       {
+                           t.CreatedBy.FirstName,
+                           t.CreatedBy.LastName,
+                           t.CreatedBy.Id,
+                           t.CreatedBy.UserName,
+                           t.CreatedBy.ProfilePicture
+                       },
                    },
-                   createdBy = t.CreatedBy,
+                   createdBy = new
+                   {
+                       t.CreatedBy.FirstName,
+                       t.CreatedBy.LastName,
+                       t.CreatedBy.Id,
+                       t.CreatedBy.UserName,
+                       t.CreatedBy.ProfilePicture
+                   },
                    messages = t.Messages,
                    images = t.Images,
                 })
                 .ToList();
+            
+          var userHasAccess = result.Any(t => t.unit.propertyManagerId == requestingUser.Id || t.unit.tenants.Id == requestingUser.Id || isSuperAdmin);
 
-            return Ok(result);
+          if (userHasAccess)
+          {
+              return Ok(result);
+
+          }
+          else
+          {
+              return Forbid();
+          }
+          
 
             
         }

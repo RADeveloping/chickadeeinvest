@@ -7,10 +7,6 @@ namespace chickadee.Models {
         
         [Display(Name = "Lease Number")]
         public string? LeaseNumber { get; set;} // Lease can be A00864777 or 1234567890 therefore string is used.
-        
-        [Display(Name = "Unit ID")]
-        public String? UnitId { get; set;}
-        [ForeignKey("UnitId")]
         public Unit? Unit { get; set; }
         
         public ICollection<VerificationDocument>? VerificationDocuments { get; set; } = new List<VerificationDocument>();

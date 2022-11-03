@@ -12,7 +12,7 @@ namespace chickadee.Models {
         public string Name { get; set; }
 
         [Display(Name = "Company Logo")] 
-        public byte[]? ProfilePicture { get; set; }
+        public byte[]? Logo { get; set; }
         
         [Display(Name = "Company Address")] 
         public string Address { get; set; }
@@ -24,9 +24,5 @@ namespace chickadee.Models {
         [Display(Name = "Company Email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-        
-        public ICollection<PropertyManager>? PropertyManagers { get; set; } = new List<PropertyManager>(); // Many to Many Relationship between ticket and ticket image
-
-        
     }
 }

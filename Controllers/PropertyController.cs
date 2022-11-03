@@ -7,48 +7,105 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/properties")]
     [ApiController]
+    [Authorize]
     public class PropertyController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PropertyController(ApplicationDbContext context)
+        public PropertyController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+        
 
-        // GET: api/Property
+        // GET: api/Properties
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Property>>> GetProperty()
+        public async Task<ActionResult<IEnumerable<Property>>> GetProperties()
         {
-          if (_context.Property == null)
+            var requestingUser = await _userManager.GetUserAsync(User);
+
+          if (_context.Property == null || requestingUser == null)
           {
               return NotFound();
           }
-            return await _context.Property.ToListAsync();
+            
+          var properties = _context.Property
+              .Include(x => x.Units)
+              .Where(p => p.Units != null && p.Units.Any(u=> 
+                  (u.PropertyManagerId == requestingUser.Id) || 
+                  u.UnitId == requestingUser.UnitId
+              ))
+              .Select(x => new
+              {
+                  PropertyId = x.PropertyId,
+                  Name = x.Name,
+                  Address = x.Address,
+              })
+              .ToList();
+          
+          var propertiesSa = _context.Property
+              .Include(x => x.Units)
+              .Select(x => new
+              {
+                  PropertyId = x.PropertyId,
+                  Name = x.Name,
+                  Address = x.Address,
+              })
+              .ToList();
+
+          return Ok(User.IsInRole("SuperAdmin") ? propertiesSa : properties);
         }
 
-        // GET: api/Property/5
+
+        // GET: api/Property/{unit
         [HttpGet("{id}")]
         public async Task<ActionResult<Property>> GetProperty(string id)
         {
-          if (_context.Property == null)
-          {
-              return NotFound();
-          }
-            var @property = await _context.Property.FindAsync(id);
+            var requestingUser = await _userManager.GetUserAsync(User);
 
-            if (@property == null)
+            if (_context.Property == null || requestingUser == null)
             {
                 return NotFound();
             }
 
-            return @property;
+            var property = _context.Property
+                .Include(x => x.Units)
+                .Where(p => p.Units != null && p.Units.Any(u=> 
+                    (u.PropertyManagerId == requestingUser.Id) || 
+                    u.UnitId == requestingUser.UnitId
+                ))
+                .Where(p=>p.PropertyId == id)
+                .Select(x => new
+                {
+                    PropertyId = x.PropertyId,
+                    Name = x.Name,
+                    Address = x.Address,
+                })
+                .ToList();
+          
+            var propertySa = _context.Property
+                .Include(x => x.Units)
+                .Where(p=>p.PropertyId == id)
+                .Select(x => new
+                {
+                    PropertyId = x.PropertyId,
+                    Name = x.Name,
+                    Address = x.Address,
+                })
+                .ToList();
+
+            return Ok(User.IsInRole("SuperAdmin") ? propertySa : property);
         }
+        
 
         // PUT: api/Property/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

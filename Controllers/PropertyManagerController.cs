@@ -7,48 +7,80 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/properties/{propertyId}/units/{propertyId}")]
     [ApiController]
     public class PropertyManagerController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PropertyManagerController(ApplicationDbContext context)
+        public PropertyManagerController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: api/PropertyManager
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PropertyManager>>> GetPropertyManagers()
+        [HttpGet("PropertyManager")]
+        public async Task<ActionResult<IEnumerable<PropertyManager>>> GetPropertyManager(string propertyId, string unitId)
         {
-          if (_context.PropertyManagers == null)
-          {
-              return NotFound();
-          }
-            return await _context.PropertyManagers.ToListAsync();
-        }
+            var requestingUser = await _userManager.GetUserAsync(User);
 
-        // GET: api/PropertyManager/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PropertyManager>> GetPropertyManager(string id)
-        {
-          if (_context.PropertyManagers == null)
-          {
-              return NotFound();
-          }
-            var propertyManager = await _context.PropertyManagers.FindAsync(id);
-
-            if (propertyManager == null)
+            if (_context.Unit == null || requestingUser == null || _context.Property == null || _context.PropertyManagers == null)
             {
                 return NotFound();
             }
 
-            return propertyManager;
+            var propertyManager = _context.PropertyManagers
+                // .Include(p => p.PropertyManager)
+                // .Where(u => u.UnitId == unitId)
+                // .Where(u => u.Property.PropertyId == propertyId)
+                //
+                // .Select(p => new PropertyManager()
+                // {
+                //     
+                //     FirstName = p.PropertyManager.FirstName,
+                //     LastName = tenant.LastName,
+                //     Id = tenant.Id,
+                //     UserName = tenant.UserName,
+                //     ProfilePicture = tenant.ProfilePicture,
+                //     LeaseNumber = tenant.LeaseNumber,
+                //     Unit = tenant.Unit,
+                // })
+                .ToList();
+          
+            
+            var propertySa = _context.Unit
+                .Include(x => x.Tenants)
+                .Where(p=>p.UnitId == unitId && p.PropertyId == propertyId)
+                .ToList();
+
+
+            return Ok(User.IsInRole("SuperAdmin") ? propertySa : propertyManager);
         }
+
+        // // GET: api/PropertyManager/5
+        // [HttpGet("{id}")]
+        // public async Task<ActionResult<PropertyManager>> GetPropertyManager(string id)
+        // {
+        //   if (_context.PropertyManagers == null)
+        //   {
+        //       return NotFound();
+        //   }
+        //     var propertyManager = await _context.PropertyManagers.FindAsync(id);
+        //
+        //     if (propertyManager == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //
+        //     return propertyManager;
+        // }
 
         // PUT: api/PropertyManager/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
