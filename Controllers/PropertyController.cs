@@ -29,119 +29,181 @@ namespace chickadee.Controllers
         
 
         // GET: api/Properties
-        [HttpGet("sort/{sortOrder?}")]
-        public async Task<ActionResult<IEnumerable<Property>>> GetProperties(string? sortOrder)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Property>>> GetProperties(string? sort, string? param)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
 
-          if (_context.Property == null)
-          {
-              return NotFound();
-          }
+            if (_context.Property == null)
+            {
+                return NotFound();
+            }
           
-         
-          var anonymous = _context.Property
-              .Select(x => new
-              {
-                  PropertyId = x.PropertyId,
-                  Name = x.Name,
-                  Address = x.Address,
-              })
-              .ToList();
+            var anonymous = _context.Property
+                .Select(x => new
+                {
+                    PropertyId = x.PropertyId,
+                    Name = x.Name,
+                    Address = x.Address,
+                })
+                .ToList();
 
-
-          if (requestingUser == null || User.IsInRole("Tenant")) return Ok(anonymous);
+            var properties = _context.Property
+                .Include(x => x.Units)
+                .Where(p => p.Units != null && p.Units.Any(u=> 
+                        (u.PropertyManagerId == requestingUser.Id) 
+                    // || u.UnitId == requestingUser.UnitId
+                ))
+                .Select(x => new
+                {
+                    PropertyId = x.PropertyId,
+                    Name = x.Name,
+                    Address = x.Address,
+                    TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
+                    UnitsCount = x.Units == null ? 0 : x.Units.Count,
+                    OutstandingTickets = x.Units == null ? 0 : x.Units.Select(u=>u.Tickets != null && u.Tickets.Any(t=>t.Status == TicketStatus.Open)).Count(),
+                })
+                .ToList();
           
-              
-          var properties = _context.Property
-              .Include(x => x.Units)
-              .Where(p => p.Units != null && p.Units.Any(u=> 
-                  (u.PropertyManagerId == requestingUser.Id) 
-                  // || u.UnitId == requestingUser.UnitId
-              ))
-              .Select(x => new
-              {
-                  PropertyId = x.PropertyId,
-                  Name = x.Name,
-                  Address = x.Address,
-                  TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
-                  UnitsCount = x.Units == null ? 0 : x.Units.Count,
-                  OutstandingTickets = x.Units == null ? 0 : x.Units.Select(u=>u.Tickets != null && u.Tickets.Any(t=>t.Status == TicketStatus.Open)).Count(),
-              })
-              .ToList();
+            var propertiesSa = _context.Property
+                .Include(x => x.Units)
+                .Select(x => new
+                {
+                    PropertyId = x.PropertyId,
+                    Name = x.Name,
+                    Address = x.Address,
+                    TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
+                    UnitsCount = x.Units == null ? 0 : x.Units.Count,
+                    OutstandingTickets = x.Units == null ? 0 : x.Units.Select(u=> u.Tickets.Any(t=>t.Status == TicketStatus.Open)).Count(),
+                })
+                .ToList();
+
+            switch (sort)
+            {
+                case "asc":
+                {
+                    switch (param)
+                    {
+                        case "address":
+                        {
+                            propertiesSa = propertiesSa.OrderBy(s => s.Address).ToList();
+                            properties = properties.OrderBy(s => s.Address).ToList();
+                            anonymous = anonymous.OrderBy(s => s.Address).ToList();
+                            break;
+                        }
+
+                        case "id":
+                        {
+                            propertiesSa = propertiesSa.OrderBy(s => s.PropertyId).ToList();
+                            properties = properties.OrderBy(s => s.PropertyId).ToList();
+                            anonymous = anonymous.OrderBy(s => s.PropertyId).ToList();
+                            break;
+                        }
+
+                        case "open_count":
+                        {
+                            propertiesSa = propertiesSa.OrderBy(s => s.OutstandingTickets).ToList();
+                            properties = properties.OrderBy(s => s.OutstandingTickets).ToList();
+                            break;
+                        }
+
+                        case "unit_count":
+                        {
+                            propertiesSa = propertiesSa.OrderBy(s => s.UnitsCount).ToList();
+                            properties = properties.OrderBy(s => s.UnitsCount).ToList();
+                            break;
+                        }
+
+                        case "tenants_count":
+                        {
+                            propertiesSa = propertiesSa.OrderBy(s => s.TenantsCount).ToList();
+                            properties = properties.OrderBy(s => s.TenantsCount).ToList();
+                            break;
+                        }
+
+                        case "name":
+                        {
+                            propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
+                            properties = properties.OrderBy(s => s.Name).ToList();
+                            anonymous = anonymous.OrderBy(s => s.Name).ToList();
+                            break;
+                        }
+
+                        default:
+                        {
+                            propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
+                            properties = properties.OrderBy(s => s.Name).ToList();
+                            anonymous = anonymous.OrderBy(s => s.Name).ToList();
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case "desc":
+                {
+                    switch (param)
+                    {
+                  
+                        case "address":
+                        {
+                            propertiesSa = propertiesSa.OrderByDescending(s => s.Address).ToList();
+                            properties = properties.OrderByDescending(s => s.Address).ToList();
+                            anonymous = anonymous.OrderByDescending(s => s.Address).ToList();
+                            break;
+                        }
+
+                        case "id":
+                        {
+                            propertiesSa = propertiesSa.OrderByDescending(s => s.PropertyId).ToList();
+                            properties = properties.OrderByDescending(s => s.PropertyId).ToList();
+                            anonymous = anonymous.OrderByDescending(s => s.PropertyId).ToList();
+                            break;
+                        }
+
+                        case "open_count":
+                        {
+                            propertiesSa = propertiesSa.OrderByDescending(s => s.OutstandingTickets).ToList();
+                            properties = properties.OrderByDescending(s => s.OutstandingTickets).ToList();
+                            break;
+                        }
+
+                        case "unit_count":
+                        {
+                            propertiesSa = propertiesSa.OrderByDescending(s => s.UnitsCount).ToList();
+                            properties = properties.OrderByDescending(s => s.UnitsCount).ToList();
+                            break;
+                        }
+
+                        case "tenants_count":
+                        {
+                            propertiesSa = propertiesSa.OrderByDescending(s => s.TenantsCount).ToList();
+                            properties = properties.OrderByDescending(s => s.TenantsCount).ToList();
+                            break;
+                        }
+
+                        case "name":
+                        {
+                            propertiesSa = propertiesSa.OrderByDescending(s => s.Name).ToList();
+                            properties = properties.OrderByDescending(s => s.Name).ToList();
+                            anonymous = anonymous.OrderBy(s => s.Name).ToList();
+                            break;
+                        }
+                        default:
+                        {
+                            propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
+                            properties = properties.OrderBy(s => s.Name).ToList();
+                            anonymous = anonymous.OrderBy(s => s.Name).ToList();
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            if (requestingUser == null || User.IsInRole("Tenant")) return Ok(anonymous);
+
           
-          var propertiesSa = _context.Property
-              .Include(x => x.Units)
-              .Select(x => new
-              {
-                  PropertyId = x.PropertyId,
-                  Name = x.Name,
-                  Address = x.Address,
-                  TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
-                  UnitsCount = x.Units == null ? 0 : x.Units.Count,
-                  OutstandingTickets = x.Units == null ? 0 : x.Units.Select(u=> u.Tickets.Any(t=>t.Status == TicketStatus.Open)).Count(),
-              })
-              .ToList();
-
-          switch (sortOrder)
-          {
-              case "address_asc":
-                  propertiesSa = propertiesSa.OrderBy(s => s.Address).ToList();
-                  properties = properties.OrderBy(s => s.Address).ToList();
-
-                  break;
-              case "address_desc":
-                  propertiesSa = propertiesSa.OrderByDescending(s => s.Address).ToList();
-                  properties = properties.OrderByDescending(s => s.Address).ToList();
-                  break;
-              case "id_asc":
-                  propertiesSa = propertiesSa.OrderBy(s => s.PropertyId).ToList();
-                  properties = properties.OrderBy(s => s.PropertyId).ToList();
-
-                  break;
-              case "id_desc":
-                  propertiesSa = propertiesSa.OrderByDescending(s => s.PropertyId).ToList();
-                  properties = properties.OrderByDescending(s => s.PropertyId).ToList();
-                  break;
-              case "open_count_asc":
-                  propertiesSa = propertiesSa.OrderBy(s => s.OutstandingTickets).ToList();
-                  properties = properties.OrderBy(s => s.OutstandingTickets).ToList();
-                  break;
-              case "open_count_desc":
-                  propertiesSa = propertiesSa.OrderByDescending(s => s.OutstandingTickets).ToList();
-                  properties = properties.OrderByDescending(s => s.OutstandingTickets).ToList();
-                  break;
-              case "unit_count_asc":
-                  propertiesSa = propertiesSa.OrderBy(s => s.UnitsCount).ToList();
-                  properties = properties.OrderBy(s => s.UnitsCount).ToList();
-                  break;
-              case "unit_count_desc":
-                  propertiesSa = propertiesSa.OrderByDescending(s => s.UnitsCount).ToList();
-                  properties = properties.OrderByDescending(s => s.UnitsCount).ToList();
-                  break;
-              case "tenants_count_asc":
-                  propertiesSa = propertiesSa.OrderBy(s => s.TenantsCount).ToList();
-                  properties = properties.OrderBy(s => s.TenantsCount).ToList();
-                  break;
-              case "tenants_count_desc":
-                  propertiesSa = propertiesSa.OrderByDescending(s => s.TenantsCount).ToList();
-                  properties = properties.OrderByDescending(s => s.TenantsCount).ToList();
-                  break;
-              case "property_manager_name_asc":
-                  propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
-                  properties = properties.OrderBy(s => s.Name).ToList();
-                  break;
-              case "property_manager_name_desc":
-                  propertiesSa = propertiesSa.OrderByDescending(s => s.Name).ToList();
-                  properties = properties.OrderByDescending(s => s.Name).ToList();
-                  break;
-              default:
-                  propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
-                  properties = properties.OrderBy(s => s.Name).ToList();
-                  break;
-          }
-
-          return Ok(User.IsInRole("SuperAdmin") ? propertiesSa : properties);
+            return Ok(User.IsInRole("SuperAdmin") ? propertiesSa : properties);
         }
 
 
@@ -222,10 +284,10 @@ namespace chickadee.Controllers
         [HttpPost]
         public async Task<ActionResult<Property>> PostProperty(Property @property)
         {
-          if (_context.Property == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Property'  is null.");
-          }
+            if (_context.Property == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Property'  is null.");
+            }
             _context.Property.Add(@property);
             try
             {
