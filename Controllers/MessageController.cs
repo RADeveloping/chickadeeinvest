@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chickadee.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class MessageController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

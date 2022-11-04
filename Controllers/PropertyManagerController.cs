@@ -26,8 +26,8 @@ namespace chickadee.Controllers
         }
 
         // GET: api/PropertyManager
-        [HttpGet("PropertyManager")]
-        public async Task<ActionResult<IEnumerable<PropertyManager>>> GetPropertyManager(string propertyId, string unitId)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PropertyManager>>> GetPropertyManagers()
         {
             var requestingUser = await _userManager.GetUserAsync(User);
 
@@ -36,51 +36,52 @@ namespace chickadee.Controllers
                 return NotFound();
             }
 
-            var propertyManager = _context.PropertyManagers
-                // .Include(p => p.PropertyManager)
-                // .Where(u => u.UnitId == unitId)
-                // .Where(u => u.Property.PropertyId == propertyId)
-                //
-                // .Select(p => new PropertyManager()
-                // {
-                //     
-                //     FirstName = p.PropertyManager.FirstName,
-                //     LastName = tenant.LastName,
-                //     Id = tenant.Id,
-                //     UserName = tenant.UserName,
-                //     ProfilePicture = tenant.ProfilePicture,
-                //     LeaseNumber = tenant.LeaseNumber,
-                //     Unit = tenant.Unit,
-                // })
-                .ToList();
-          
-            
-            var propertySa = _context.Unit
-                .Include(x => x.Tenants)
-                .Where(p=>p.UnitId == unitId && p.PropertyId == propertyId)
+            var property = _context.PropertyManagers
+                .Select(p => new
+                {
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Id = p.Id,
+                    Email = p.Email,
+                    ProfilePicture = p.ProfilePicture,
+                    Company = p.Company
+                })
                 .ToList();
 
-
-            return Ok(User.IsInRole("SuperAdmin") ? propertySa : propertyManager);
+            return Ok(property);
         }
 
-        // // GET: api/PropertyManager/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<PropertyManager>> GetPropertyManager(string id)
-        // {
-        //   if (_context.PropertyManagers == null)
-        //   {
-        //       return NotFound();
-        //   }
-        //     var propertyManager = await _context.PropertyManagers.FindAsync(id);
-        //
-        //     if (propertyManager == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return propertyManager;
-        // }
+        // GET: api/PropertyManager/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PropertyManager>> GetPropertyManager(string id)
+        {
+            
+            var requestingUser = await _userManager.GetUserAsync(User);
+
+            if (_context.Unit == null || requestingUser == null || _context.Property == null || _context.PropertyManagers == null)
+            {
+                return NotFound();
+            }
+
+            var propertyManager = _context.PropertyManagers
+                .Where(p => p.Id == id)
+                .Select(p => new
+                {
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Id = p.Id,
+                    Email = p.Email,
+                    ProfilePicture = p.ProfilePicture,
+                    Company = p.Company
+                }).FirstOrDefault();
+
+            if (propertyManager == null)
+            {
+                return NotFound();
+            }
+        
+            return Ok(propertyManager);
+        }
 
         // PUT: api/PropertyManager/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

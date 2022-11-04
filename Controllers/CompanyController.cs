@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chickadee.Controllers
 {
