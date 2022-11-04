@@ -157,10 +157,15 @@ namespace chickadee.Controllers
             {
                 if (requestingUser == null || User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin"))
                     return Ok(anonymous.Where(s =>
-                        s.Address.ToLower().Contains(query.ToLower()) || s.Name.ToLower().Contains(query.ToLower())));
+                        s.Address.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
+                        s.Name.Contains(query, StringComparison.InvariantCultureIgnoreCase)));
                 return Ok(User.IsInRole("SuperAdmin")
-                    ? propertiesSa.Where(s => s.Address.ToLower().Contains(query.ToLower()) || s.Name.ToLower().Contains(query.ToLower()))
-                    : properties.Where(s => s.Address.ToLower().Contains(query.ToLower()) || s.Name.ToLower().Contains(query.ToLower())));
+                    ? propertiesSa.Where(s => 
+                        s.Address.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
+                        s.Name.Contains(query, StringComparison.InvariantCultureIgnoreCase))
+                    : properties.Where(s => 
+                        s.Address.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
+                        s.Name.Contains(query, StringComparison.InvariantCultureIgnoreCase)));
             }
 
             if (requestingUser == null || User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin"))
