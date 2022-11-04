@@ -10,7 +10,8 @@ using chickadee.Models;
 
 namespace chickadee.Controllers
 {
-    using Microsoft.AspNetCore.Identity;
+  using Microsoft.AspNetCore.Authorization;
+  using Microsoft.AspNetCore.Identity;
 
     [ApiController]
     public class TicketController : ControllerBase
@@ -234,20 +235,25 @@ namespace chickadee.Controllers
         //     return NoContent();
         // }
         //
-        // // POST: api/Ticket
-        // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        // [HttpPost]
-        // public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
-        // {
-        //   if (_context.Tickets == null)
-        //   {
-        //       return Problem("Entity set 'ApplicationDbContext.Ticket'  is null.");
-        //   }
-        //     _context.Tickets.Add(ticket);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetTicket", new { id = ticket.TicketId }, ticket);
-        // }
+        // POST: api/Ticket
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        [Route("api/tickets")]
+        [AllowAnonymous]
+        // [Authorize(Roles = "Tenant")]
+        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        {
+          if (_context.Tickets == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Ticket'  is null.");
+          }
+            ticket.CreatedBy = _userManager.FindByIdAsync(ticket.CreatedById).Result;
+            ticket.Unit = _context.Unit.Find(ticket.UnitId);
+            _context.Tickets.Add(ticket);
+            await _context.SaveChangesAsync();
+        
+            return CreatedAtAction("GetTicket", new { id = ticket.TicketId }, ticket);
+        }
         //
         // // DELETE: api/Ticket/5
         // [HttpDelete("{id}")]

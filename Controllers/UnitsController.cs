@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chickadee.Controllers
 {
@@ -134,15 +135,23 @@ namespace chickadee.Controllers
             return NoContent();
         }
 
-        // POST: api/Unit
+        // POST: api/properties/{propertyId}/units
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostUnit(Unit unit)
+        [AllowAnonymous]
+        public async Task<ActionResult<Unit>> PostUnit(string? propertyId, Unit unit)
         {
           if (_context.Unit == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Unit'  is null.");
           }
+          if (_context.Property == null)
+          {
+             return Problem("Entity set 'ApplicationDbContext.Property'  is null.");
+          }
+          var property = await _context.Property.FindAsync(propertyId);
+          unit.Property = property!;
+          unit.PropertyManager = _userManager.FindByIdAsync(unit.PropertyManagerId).Result;
             _context.Unit.Add(unit);
             try
             {
