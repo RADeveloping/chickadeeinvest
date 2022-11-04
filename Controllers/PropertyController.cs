@@ -26,11 +26,11 @@ namespace chickadee.Controllers
             _context = context;
             _userManager = userManager;
         }
-        
+
 
         // GET: api/Properties
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Property>>> GetProperties(string? sort, string? param)
+        public async Task<ActionResult<IEnumerable<Property>>> GetProperties(string? sort, string? param, string? query)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
 
@@ -38,7 +38,7 @@ namespace chickadee.Controllers
             {
                 return NotFound();
             }
-          
+
             var anonymous = _context.Property
                 .Select(x => new
                 {
@@ -50,8 +50,8 @@ namespace chickadee.Controllers
 
             var properties = _context.Property
                 .Include(x => x.Units)
-                .Where(p => p.Units != null && p.Units.Any(u=> 
-                        (u.PropertyManagerId == requestingUser.Id) 
+                .Where(p => p.Units != null && p.Units.Any(u =>
+                        (u.PropertyManagerId == requestingUser.Id)
                     // || u.UnitId == requestingUser.UnitId
                 ))
                 .Select(x => new
@@ -61,10 +61,13 @@ namespace chickadee.Controllers
                     Address = x.Address,
                     TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
                     UnitsCount = x.Units == null ? 0 : x.Units.Count,
-                    OutstandingTickets = x.Units == null ? 0 : x.Units.Select(u=>u.Tickets != null && u.Tickets.Any(t=>t.Status == TicketStatus.Open)).Count(),
+                    OutstandingTickets = x.Units == null
+                        ? 0
+                        : x.Units.Select(u => u.Tickets != null && u.Tickets.Any(t => t.Status == TicketStatus.Open))
+                            .Count(),
                 })
                 .ToList();
-          
+
             var propertiesSa = _context.Property
                 .Include(x => x.Units)
                 .Select(x => new
@@ -74,11 +77,13 @@ namespace chickadee.Controllers
                     Address = x.Address,
                     TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
                     UnitsCount = x.Units == null ? 0 : x.Units.Count,
-                    OutstandingTickets = x.Units == null ? 0 : x.Units.Select(u=> u.Tickets.Any(t=>t.Status == TicketStatus.Open)).Count(),
+                    OutstandingTickets = x.Units == null
+                        ? 0
+                        : x.Units.Select(u => u.Tickets.Any(t => t.Status == TicketStatus.Open)).Count(),
                 })
                 .ToList();
 
-            
+
             switch (sort)
             {
                 case "asc" when param == "address":
@@ -147,10 +152,20 @@ namespace chickadee.Controllers
                     break;
             }
 
-            
-            if (requestingUser == null || User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin")) return Ok(anonymous);
+            if (query != null)
+            {
+                if (requestingUser == null || User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin"))
+                    return Ok(anonymous.Where(s =>
+                        s.Address.ToLower().Contains(query.ToLower()) || s.Name.ToLower().Contains(query.ToLower())));
+                return Ok(User.IsInRole("SuperAdmin")
+                    ? propertiesSa.Where(s => s.Address.ToLower().Contains(query.ToLower()) || s.Name.ToLower().Contains(query.ToLower()))
+                    : properties.Where(s => s.Address.ToLower().Contains(query.ToLower()) || s.Name.ToLower().Contains(query.ToLower())));
+            }
 
-          
+            if (requestingUser == null || User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin"))
+                return Ok(anonymous);
+
+
             return Ok(User.IsInRole("SuperAdmin") ? propertiesSa : properties);
         }
 
@@ -168,11 +183,11 @@ namespace chickadee.Controllers
 
             var property = _context.Property
                 .Include(x => x.Units)
-                .Where(p => p.Units != null && p.Units.Any(u=> 
-                    (u.PropertyManagerId == requestingUser.Id) || 
+                .Where(p => p.Units != null && p.Units.Any(u =>
+                    (u.PropertyManagerId == requestingUser.Id) ||
                     u.UnitId == requestingUser.UnitId
                 ))
-                .Where(p=>p.PropertyId == id)
+                .Where(p => p.PropertyId == id)
                 .Select(x => new
                 {
                     PropertyId = x.PropertyId,
@@ -180,10 +195,10 @@ namespace chickadee.Controllers
                     Address = x.Address,
                 })
                 .ToList();
-          
+
             var propertySa = _context.Property
                 .Include(x => x.Units)
-                .Where(p=>p.PropertyId == id)
+                .Where(p => p.PropertyId == id)
                 .Select(x => new
                 {
                     PropertyId = x.PropertyId,
@@ -194,7 +209,7 @@ namespace chickadee.Controllers
 
             return Ok(User.IsInRole("SuperAdmin") ? propertySa : property);
         }
-        
+
 
         // PUT: api/Property/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -236,6 +251,7 @@ namespace chickadee.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Property'  is null.");
             }
+
             _context.Property.Add(@property);
             try
             {
@@ -264,6 +280,7 @@ namespace chickadee.Controllers
             {
                 return NotFound();
             }
+
             var @property = await _context.Property.FindAsync(id);
             if (@property == null)
             {
