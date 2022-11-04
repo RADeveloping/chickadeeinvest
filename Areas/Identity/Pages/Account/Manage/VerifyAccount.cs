@@ -38,7 +38,7 @@
 //         ///     directly from your code. This API may change or be removed in future releases.
 //         /// </summary>
 //         [BindProperty]
-//         public InputModel Input { get; set; }
+//         public VerificationDocument Input { get; set; }
 //
 //         [TempData]
 //         public string StatusMessage { get; set; }
@@ -48,53 +48,29 @@
 //         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
 //         ///     directly from your code. This API may change or be removed in future releases.
 //         /// </summary>
-//         public class InputModel
-//         {
-//             [Key]
-//             [Display(Name = "Photo ID")]
-//             public byte[] IdPhoto { get; set; }
-//
-//             [Display(Name = "Lease Agreement")]
-//             public byte[] LeasePhoto { get; set; }
-//             
-//             public bool IsIdVerified { get; set; }
-//
-//         }
+//      
 //
 //         private async Task LoadAsync(ApplicationUser user)
 //         {
 //             
-//             var idPhoto = Array.Empty<byte>();
-//             var leasePhoto = Array.Empty<byte>();
 //             
-//             if (_context.Document == null)
+//             if (_context.VerificationDocuments == null || user == null)
 //             {
 //                 Console.WriteLine("No Table Name Documents");
 //                 return;
 //             }
 //
-//             var document = await _context.Document.FirstOrDefaultAsync(m => m.UserId == user.Id);
+//             var document = await _context.VerificationDocuments.FirstOrDefaultAsync(m => m.TenantId == user.Id);
 //             
-//             if(document == null)
-//             {
-//             var res =await _context.Document.AddAsync(new Document()
-//             {
-//             DocumentId = Guid.NewGuid().ToString(),
-//             IdPhoto = idPhoto,
-//             LeasePhoto = leasePhoto,
-//             IsIdVerified = false,
-//             UserId = user.Id
-//             });
-//             await _context.SaveChangesAsync();
-//             }
+//             if (document == null) return;
 //             
-//             var documentResult = await _context.Document.FirstOrDefaultAsync(m => m.UserId == user.Id);
-//
-//             Input = new InputModel
+//             Input = new VerificationDocument()
 //             {
-//                 IdPhoto = documentResult?.IdPhoto,
-//                 LeasePhoto = documentResult?.LeasePhoto,
-//                 IsIdVerified = documentResult.IsIdVerified
+//                 VerificationDocumentId = document.VerificationDocumentId,
+//                 data = document.data,
+//                 DocumentType = document.DocumentType,
+//                 ResponseMessage = document.ResponseMessage,
+//                 TenantId = document.TenantId
 //             };
 //         }
 //
@@ -112,21 +88,18 @@
 //
 //         public async Task<IActionResult> OnPostAsync()
 //         {
-//             
-//             var user = await _userManager.GetUserAsync(User);
-//             var document = await _context.Document.FirstOrDefaultAsync(d => d.UserId == user.Id);
 //
-//             if (document.IsIdVerified)
+//             var user = await _userManager.GetUserAsync(User) as Tenant;
+//             if (user == null || _context.VerificationDocuments == null) return NotFound();
+//             
+//             var document = await _context.VerificationDocuments.FirstOrDefaultAsync(d => d.TenantId == user.Id);
+//
+//             if (user.IsIdVerified)
 //             {
 //                 StatusMessage = "Your account is already verified.";
 //                 return RedirectToPage();
 //             }
-//
-//             if (user == null)
-//             {
-//                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-//             }
-//
+//             
 //             if (!ModelState.IsValid)
 //             {
 //                 await LoadAsync(user);
