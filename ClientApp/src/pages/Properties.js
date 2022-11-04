@@ -17,7 +17,7 @@ import PageLoading from "../components/PageLoading";
 import * as React from "react";
 import Page from "../components/Page";
 import {applySortFilter, getComparator, ListToolbar} from "../sections/@dashboard/list";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import useFetch from "../components/FetchData";
 import useResponsive from "../hooks/useResponsive";
 import {getUnitBox} from "../utils/filters";
@@ -26,37 +26,22 @@ import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
 
 const properties = [
     {id: 'address', label: 'Address'},
-    {id: 'propertyId', label: 'Property Id'},
-    {id: 'openTicketCount', label: 'Open Ticket Count'},
-    {id: 'unitCount', label: 'Unit Count'},
-    {id: 'propertyManagerName', label: 'Property Manager Name'},
+    {id: 'open_count', label: 'Open Ticket Count'},
+    {id: 'unit_count', label: 'Unit Count'},
+    {id: 'tenant_count', label: 'Tenant Count'},
+    {id: 'name', label: 'Property Manager Name'},
 ];
 
 export default function Properties() {
-    const filterData = (data) => {
-        data.forEach((d) => {
-            let openTicketCount = 0;
-            d.units.forEach((unit) => {
-                if (unit.tickets) {
-                    for (let i = 0; i < unit.tickets.length; i++) {
-                        if (unit.tickets[i].status === 0) {
-                            openTicketCount++
-                        }
-                    }
-                }
-            })
-            d.openTicketCount = openTicketCount
-            d.unitCount = d.units.length
-            d.propertyManagerName = `${d.propertyManager.firstName} ${d.propertyManager.lastName}`
-        })
-        return data;
-    }
+
+    const uri = '/api/Properties'
     const navigate = useNavigate();
     const title = "Properties"
     const dataName = 'Property';
     const [filterQueryProperty, setFilterQueryProperty] = useState('address')
-    const [orderBy, setOrderBy] = useState('openTicketCount');
-    const [data, errorData, loadingData] = useFetch('/api/Properties', filterData);
+    const [orderBy, setOrderBy] = useState('open_count');
+    const [urlSearchParams, setUrlSearchParams] = useState(new URLSearchParams())
+    const [data, errorData, loadingData] = useFetch(uri + '?' + urlSearchParams.toString());
     const [order, setOrder] = useState('desc');
     const [filterQuery, setFilterQuery] = useState('');
 
@@ -72,11 +57,14 @@ export default function Properties() {
         if (newOrder) setOrder(newOrder);
     };
 
-    const filteredData = applySortFilter(data, getComparator(order, orderBy), filterQuery, filterQueryProperty);
-    const isDesktop = useResponsive('up', 'sm');
-    const isDataNotFound = filteredData.length === 0 && data.length > 0;
+    useEffect(() => {
+        setUrlSearchParams(new URLSearchParams({
+            sort: order,
+            param: orderBy,
+        }))
+    }, [order, orderBy])
 
-    const noData = data.length === 0;
+    const isDesktop = useResponsive('up', 'md');
 
     return (
         <Page title={title}>
@@ -152,48 +140,36 @@ export default function Properties() {
                     </Stack>
                 </Grow>
                 <br/>
-                <Grow in={!loadingData && filteredData.length > 0}>
-                    <Grid container spacing={1}>
-                        {filteredData.map((data) => {
-                                const {address, propertyId, openTicketCount, unitCount, propertyManagerName} = data
+                <Grow in={!loadingData && data.length > 0}>
+                    <Grid container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
+                        {data.map((data) => {
+                                const {address, propertyId, outstandingTickets, unitsCount, name, tenantsCount} = data
                                 return (<Grow in={true}>
-                                    <Grid xs={6} sm={6} md={6} l={4} xl={4} item>
-                                        <Card sx={{height: 200}}>
-                                            <CardContent>
-                                                <Stack direction={'column'} justifyContent={'center'}>
-                                                    <Typography variant={'h4'}>
-                                                        {address}
-                                                    </Typography>
-                                                    <Stack direction={'row'} alignItems={'center'} gap={1}>
+                                    <Grid xs={12} sm={12} md={6} l={4} xl={4} item>
+                                        <Card sx={{height: 150}}>
+                                            <CardContent sx={{height: '100%'}}>
+                                                <Stack direction={'column'} justifyContent={'space-between'} alignItems={'flex-start'} sx={{height: '100%'}}>
+                                                    <Stack direction={'column'} width={'100%'}>
+                                                        <Typography variant={'h4'} noWrap>
+                                                            {name}
+                                                        </Typography>
+                                                        <Typography variant={'h6'} color="text.secondary">
+                                                            {address}
+                                                        </Typography>
+                                                    </Stack>
+                                                    <Stack direction={'row'} alignItems={'center'} justifyContent={'left'}
+                                                           gap={1}>
                                                         <Label>
-                                                            {unitCount} unit{unitCount !== 1 && 's'}
+                                                            {unitsCount} unit{unitsCount !== 1 && 's'}
                                                         </Label>
                                                         <Label color={'info'}>
-                                                            {openTicketCount} open ticket{openTicketCount !== 1 && 's'}
+                                                            {outstandingTickets} open
+                                                            ticket{outstandingTickets !== 1 && 's'}
+                                                        </Label>
+                                                        <Label color={'success'}>
+                                                            {tenantsCount} tenant{tenantsCount !== 1 && 's'}
                                                         </Label>
                                                     </Stack>
-                                                    <br/>
-                                                    <Grid container spacing={4} alignItems={'center'}
-                                                          justifyContent={'space-between'}>
-                                                        <Grid item>
-                                                            <Typography sx={{fontSize: 14}} color="text.secondary"
-                                                                        gutterBottom>
-                                                                Property Manager
-                                                            </Typography>
-                                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                                {propertyManagerName}
-                                                            </Typography>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Typography sx={{fontSize: 14}} color="text.secondary"
-                                                                        gutterBottom>
-                                                                Id
-                                                            </Typography>
-                                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                                {propertyId}
-                                                            </Typography>
-                                                        </Grid>
-                                                    </Grid>
                                                 </Stack>
                                             </CardContent>
                                         </Card>
@@ -203,7 +179,7 @@ export default function Properties() {
                         )}
                     </Grid>
                 </Grow>
-                {!loadingData && filteredData.length === 0 &&
+                {!loadingData && data.length === 0 &&
                     <Box sx={{
                         height: '40vh',
                         display: 'flex',

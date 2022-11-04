@@ -147,7 +147,8 @@ namespace chickadee.Controllers
                     break;
             }
 
-            if (requestingUser == null || User.IsInRole("Tenant")) return Ok(anonymous);
+            
+            if (requestingUser == null || User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin")) return Ok(anonymous);
 
           
             return Ok(User.IsInRole("SuperAdmin") ? propertiesSa : properties);
