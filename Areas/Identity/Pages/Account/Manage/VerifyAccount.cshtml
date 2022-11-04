@@ -9,7 +9,7 @@
 @* @{ *@
 @*     ViewData["Title"] = "Verify Account"; *@
 @*     ViewData["ActivePage"] = ManageNavPages.VerifyAccount; *@
-@*     *@
+@* *@
 @* } *@
 @* *@
 @* <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"> *@
@@ -28,7 +28,7 @@
 @* *@
 @*  @{ *@
 @*                    Document? document = null; *@
-@*               *@
+@* *@
 @*                    try *@
 @*                    { *@
 @*                        document = await DbContext.Document!.FirstOrDefaultAsync(m => m.UserId == UserManager.GetUserAsync(User).Result.Id); *@
@@ -37,7 +37,7 @@
 @*                    { *@
 @*                        Console.WriteLine("NO DOCUMENT FOUND"); *@
 @*                    } *@
-@*               *@
+@* *@
 @*                    if (document.IdPhoto.Length < 10|| document.LeasePhoto.Length < 10) *@
 @*                    { *@
 @*                        <div class="alert alert-danger d-flex align-items-center" role="alert"> *@
@@ -75,7 +75,7 @@
 @*     <div class="row justify-content-md-around"> *@
 @*         <div class="col-lg-6"> *@
 @*             <h3 class="subheadingFont">Photo ID</h3> *@
-@*              *@
+@* *@
 @*             @if(!Model.Input.IsIdVerified){ *@
 @*                 <p>Please upload a copy of your legal ID to verification</p> *@
 @*                 <input type="file" name="IdPhoto" *@
@@ -96,8 +96,8 @@
 @*     { *@
 @*         <img id="IdPhoto" class="img-fluid my-3 dropzone d-none" width="300" height="300" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.IdPhoto))" alt="Id Photo"> *@
 @*     } *@
-@*      *@
-@*              *@
+@* *@
+@* *@
 @*         </div> *@
 @*         <div class="col-lg-6"> *@
 @*             <h3 class="subheadingFont">Lease Agreement</h3> *@
@@ -111,10 +111,10 @@
 @*                                    id="input.leasePhoto" *@
 @*                                    placeholder="Upload Lease Agreement" *@
 @*                                    onchange="document.getElementById('leasePhoto').src = window.URL.createObjectURL(this.files[0]); document.getElementById('leasePhoto').classList.remove('d-none')"/> *@
-@*     *@
+@* *@
 @*                         } *@
-@*                          *@
-@*                             *@
+@* *@
+@* *@
 @*             @if (@Convert.ToBase64String(Model.Input.LeasePhoto).Length > 10) *@
 @*             { *@
 @*         <img id="leasePhoto" class="img-fluid my-3 dropzone d-block-inline" width="300" height="300" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.LeasePhoto))" alt="Lease Photo"> *@

@@ -161,8 +161,6 @@ namespace chickadee.Controllers
                     unitType = t.Unit.UnitType,
                     propertyId = t.Unit.PropertyId,
                     property = t.Unit.Property,
-                    ticketCount = t.Unit.Tickets == null ? 0 : t.Unit.Tickets.Count,
-                    openTicketsCount = t.Unit.Tickets == null ? 0 : t.Unit.Tickets.Count(ticket => ticket.Status == TicketStatus.Open),
                     propertyManagerId = t.Unit.PropertyManagerId,
                     propertyManager =  t.Unit.PropertyManager == null ? null : new
                     {
@@ -196,46 +194,7 @@ namespace chickadee.Controllers
                 // images = t.Images,
             }).ToList();
 
-            
-            switch (sortOrder)
-            {
-                case "address_asc":
-                    allTickets = allTickets.OrderBy(s => s.unit.property.Address).ToList();
-                    break;
-                case "address_desc":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Address).ToList();
-                    break;
-                case "id_asc":
-                    allTickets = allTickets.OrderBy(s => s.ticketId).ToList();
-                    tickets = tickets.OrderBy(s => s.ticketId).ToList();
-                    break;
-                case "id_desc":
-                    allTickets = allTickets.OrderByDescending(s => s.ticketId).ToList();
-                    tickets = tickets.OrderByDescending(s => s.ticketId).ToList();
-                    break;
-                case "open_count_asc":
-                    allTickets = allTickets.OrderBy(s => s.unit.openTicketsCount).ToList();
-                    break;
-                case "open_count_desc":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.openTicketsCount).ToList();
-                    break;
-                case "unit_count_asc":
-                    allTickets = allTickets.OrderBy(s => s.unit.ticketCount).ToList();
-                    break;
-                case "unit_count_desc":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.ticketCount).ToList();
-                    break;
-                case "property_manager_name_asc":
-                    allTickets = allTickets.OrderBy(s => s.unit.property.Name).ToList();
-                    break;
-                case "property_manager_name_desc":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Name).ToList();
-                    break;
-                default:
-                    allTickets = allTickets.OrderByDescending(s => s.createdOn).ToList();
-                    break;
-            }
-
+           
             
             return isSuperAdmin ? Ok(allTickets) : Ok(tickets);
         }
