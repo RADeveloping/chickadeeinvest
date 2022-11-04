@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
+using chickadee.Enums;
 using chickadee.Models;
 
 namespace chickadee.Controllers
@@ -104,8 +105,8 @@ namespace chickadee.Controllers
         // GET: api/Ticket/5
         
         [HttpGet]
-        [Route("api/tickets")]
-        public async Task<ActionResult> GetTickets()
+        [Route("api/tickets/{sortOrder?}")]
+        public async Task<ActionResult> GetTickets(string? sortOrder)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
             if (requestingUser == null || _context.Property == null | _context.Unit == null || _context.Tickets == null)
@@ -139,7 +140,7 @@ namespace chickadee.Controllers
                         PhoneNumber = t.CreatedBy.PhoneNumber,
                         ProfilePicture = t.CreatedBy.ProfilePicture
                     }
-                });
+                }).ToList();
                 
             var allTickets = _context.Tickets
                 .Select(t => new
@@ -160,8 +161,10 @@ namespace chickadee.Controllers
                     unitType = t.Unit.UnitType,
                     propertyId = t.Unit.PropertyId,
                     property = t.Unit.Property,
+                    ticketCount = t.Unit.Tickets == null ? 0 : t.Unit.Tickets.Count,
+                    openTicketsCount = t.Unit.Tickets == null ? 0 : t.Unit.Tickets.Count(ticket => ticket.Status == TicketStatus.Open),
                     propertyManagerId = t.Unit.PropertyManagerId,
-                    propertyManager =  t.Unit.PropertyManagerId == null ? null : new
+                    propertyManager =  t.Unit.PropertyManager == null ? null : new
                     {
                         t.Unit.PropertyManager.FirstName,
                         t.Unit.PropertyManager.LastName,
@@ -193,12 +196,48 @@ namespace chickadee.Controllers
                 // images = t.Images,
             }).ToList();
 
-            if (isSuperAdmin)
-            {
-                return Ok(allTickets);
-            }
             
-            return Ok(tickets);
+            switch (sortOrder)
+            {
+                case "address_asc":
+                    allTickets = allTickets.OrderBy(s => s.unit.property.Address).ToList();
+                    break;
+                case "address_desc":
+                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Address).ToList();
+                    break;
+                case "id_asc":
+                    allTickets = allTickets.OrderBy(s => s.ticketId).ToList();
+                    tickets = tickets.OrderBy(s => s.ticketId).ToList();
+                    break;
+                case "id_desc":
+                    allTickets = allTickets.OrderByDescending(s => s.ticketId).ToList();
+                    tickets = tickets.OrderByDescending(s => s.ticketId).ToList();
+                    break;
+                case "open_count_asc":
+                    allTickets = allTickets.OrderBy(s => s.unit.openTicketsCount).ToList();
+                    break;
+                case "open_count_desc":
+                    allTickets = allTickets.OrderByDescending(s => s.unit.openTicketsCount).ToList();
+                    break;
+                case "unit_count_asc":
+                    allTickets = allTickets.OrderBy(s => s.unit.ticketCount).ToList();
+                    break;
+                case "unit_count_desc":
+                    allTickets = allTickets.OrderByDescending(s => s.unit.ticketCount).ToList();
+                    break;
+                case "property_manager_name_asc":
+                    allTickets = allTickets.OrderBy(s => s.unit.property.Name).ToList();
+                    break;
+                case "property_manager_name_desc":
+                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Name).ToList();
+                    break;
+                default:
+                    allTickets = allTickets.OrderByDescending(s => s.createdOn).ToList();
+                    break;
+            }
+
+            
+            return isSuperAdmin ? Ok(allTickets) : Ok(tickets);
         }
         
         
