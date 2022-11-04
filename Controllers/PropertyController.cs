@@ -92,6 +92,12 @@ namespace chickadee.Controllers
               case "unit_count_desc":
                   propertiesSa = propertiesSa.OrderByDescending(s => s.UnitsCount).ToList();
                   break;
+              case "tenants_count_asc":
+                  propertiesSa = propertiesSa.OrderBy(s => s.TenantsCount).ToList();
+                  break;
+              case "tenants_count_desc":
+                  propertiesSa = propertiesSa.OrderByDescending(s => s.TenantsCount).ToList();
+                  break;
               case "property_manager_name_asc":
                   propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
                   break;
