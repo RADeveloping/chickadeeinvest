@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Enums;
 using chickadee.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chickadee.Controllers
 {
@@ -260,24 +262,41 @@ namespace chickadee.Controllers
         //     return NoContent();
         // }
         //
+        
         // POST: api/Ticket
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        [Route("api/tickets")]
+        [HttpPost("/api/tickets")]
         [AllowAnonymous]
-        // [Authorize(Roles = "Tenant")]
         public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
         {
-          if (_context.Tickets == null)
+          if (_context.Tickets == null || _context.Unit == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Ticket'  is null.");
           }
-            ticket.CreatedBy = _userManager.FindByIdAsync(ticket.CreatedById).Result;
-            ticket.Unit = _context.Unit.Find(ticket.UnitId);
+          var requestingUser = await _userManager.GetUserAsync(User);
+
+
+          // if (ticket.CreatedById != requestingUser.Id)
+          // {
+          //     HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+          // }
+          //
+          var unit = await _context.Unit.FindAsync(ticket.UnitId);
+
+          if (unit == null)
+          {
+              // ERROR NO UNIT FOUND 
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+          }
+
+          ticket.Unit = unit;
+          ticket.CreatedBy = requestingUser;
+          
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
-        
-            return CreatedAtAction("GetTicket", new { id = ticket.TicketId }, ticket);
+
+            return Ok(ticket);
         }
         //
         // // DELETE: api/Ticket/5

@@ -39,8 +39,11 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             relationship.DeleteBehavior = DeleteBehavior.Restrict;
         }
         
-        
-        
+        builder.Entity<Ticket>()
+            .Property(r => r.TicketId)
+            .ValueGeneratedOnAdd();
+
+
         builder.Seed();
 
     }
