@@ -193,7 +193,34 @@ namespace chickadee.Controllers
                 // images = t.Images,
             }).ToList();
 
-           
+            
+            switch (sortOrder)
+            {
+                case "address_asc":
+                    allTickets = allTickets.OrderBy(s => s.unit.property.Address).ToList();
+                    break;
+                case "address_desc":
+                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Address).ToList();
+                    break;
+                case "id_asc":
+                    allTickets = allTickets.OrderBy(s => s.ticketId).ToList();
+                    tickets = tickets.OrderBy(s => s.ticketId).ToList();
+                    break;
+                case "id_desc":
+                    allTickets = allTickets.OrderByDescending(s => s.ticketId).ToList();
+                    tickets = tickets.OrderByDescending(s => s.ticketId).ToList();
+                    break;
+                case "property_manager_name_asc":
+                    allTickets = allTickets.OrderBy(s => s.unit.property.Name).ToList();
+                    break;
+                case "property_manager_name_desc":
+                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Name).ToList();
+                    break;
+                default:
+                    allTickets = allTickets.OrderByDescending(s => s.createdOn).ToList();
+                    break;
+            }
+
             
             return isSuperAdmin ? Ok(allTickets) : Ok(tickets);
         }
