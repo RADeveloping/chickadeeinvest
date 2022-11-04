@@ -16,7 +16,7 @@
             @if (ViewData["address"] != null && ViewData["unit"] !=null)
             {
                 <p class="subheadingFont">Property Address: </p>
-                <p>@ViewData["address"]</p>  
+                <p>@ViewData["address"]</p>
                 <p class="subheadingFont">Unit: </p>
                 <p>@ViewData["unit"]</p>
                 <hr/>
@@ -32,12 +32,12 @@
                     {
                         <img id="profilePicture" class="img-fluid img-thumbnail rounded-circle d-none" width="100" height="100" src="~/images/cloud-upload-icon.svg" alt="profile picture">
                     }
-                  
+
                 </div>
-                
+
                 <div class="mb-3 w-50">
                     <p style="text-align: left">Click "Choose File" button to upload a profile picture:</p>
-                   
+
                                    <input type="file"
                                           accept=".png,.jpg,.jpeg,.gif,.tif"
                                           asp-for="Input.ProfilePicture"
@@ -45,8 +45,8 @@
                                           onchange="document.getElementById('profilePicture').src = window.URL.createObjectURL(this.files[0]); document.getElementById('profilePicture').classList.remove('d-none')"/>
                                    <span asp-validation-for="Input.ProfilePicture" class="text-danger"></span>
                 </div>
-                
-               
+
+
             </div>
 
             <div class="form-floating mb-3 w-50">

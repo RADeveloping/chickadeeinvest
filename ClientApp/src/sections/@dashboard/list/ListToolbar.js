@@ -52,13 +52,8 @@ export default function ListToolbar({
                                         filterQuery,
                                         setFilterQuery,
                                         onFilterQuery,
-                                        properties,
-                                        filterQueryProperty,
-                                        setFilterQueryProperty
+                                        properties
                                     }) {
-    const handleChange = (event) => {
-        setFilterQueryProperty(event.target.value);
-    };
 
     const [filterVisible, setFilterVisible] = useState(false);
     return (
@@ -102,24 +97,6 @@ export default function ListToolbar({
                                 </Fade>
                             }
                         />
-                        &nbsp;
-                        {filterVisible && 
-                        <Fade in={filterVisible}>
-                            <FormControl sx={{minWidth: 80}}>
-                                <InputLabel id="query-property">Filter by</InputLabel>
-                                <Select
-                                    labelId="query-property"
-                                    value={filterQueryProperty}
-                                    label="Filter by"
-                                    onChange={handleChange}
-                                >
-                                    {properties.map((p) =>
-                                        <MenuItem key={p.id} value={p.id}>{p.label}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                        </Fade>
-                            }
                     </Box>
                 </>
             )}

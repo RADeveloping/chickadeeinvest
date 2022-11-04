@@ -23,7 +23,8 @@ const context = [
   '/api/Account',
   '/css',
   '/images',
-  '/api'
+  '/api',
+    '/swagger',
 ];
 
 module.exports = function (app) {
