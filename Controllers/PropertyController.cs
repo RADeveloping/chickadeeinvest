@@ -44,22 +44,22 @@ namespace chickadee.Controllers
                   (u.PropertyManagerId == requestingUser.Id) || 
                   u.UnitId == requestingUser.UnitId
               ))
-              // .Select(x => new
-              // {
-              //     PropertyId = x.PropertyId,
-              //     Name = x.Name,
-              //     Address = x.Address,
-              // })
+              .Select(x => new
+              {
+                  PropertyId = x.PropertyId,
+                  Name = x.Name,
+                  Address = x.Address,
+              })
               .ToList();
           
           var propertiesSa = _context.Property
               .Include(x => x.Units)
-              // .Select(x => new
-              // {
-              //     PropertyId = x.PropertyId,
-              //     Name = x.Name,
-              //     Address = x.Address,
-              // })
+              .Select(x => new
+              {
+                  PropertyId = x.PropertyId,
+                  Name = x.Name,
+                  Address = x.Address,
+              })
               .ToList();
 
           return Ok(User.IsInRole("SuperAdmin") ? propertiesSa : properties);
@@ -84,23 +84,23 @@ namespace chickadee.Controllers
                     u.UnitId == requestingUser.UnitId
                 ))
                 .Where(p=>p.PropertyId == id)
-                // .Select(x => new
-                // {
-                //     PropertyId = x.PropertyId,
-                //     Name = x.Name,
-                //     Address = x.Address,
-                // })
+                .Select(x => new
+                {
+                    PropertyId = x.PropertyId,
+                    Name = x.Name,
+                    Address = x.Address,
+                })
                 .ToList();
           
             var propertySa = _context.Property
                 .Include(x => x.Units)
                 .Where(p=>p.PropertyId == id)
-                // .Select(x => new
-                // {
-                //     PropertyId = x.PropertyId,
-                //     Name = x.Name,
-                //     Address = x.Address,
-                // })
+                .Select(x => new
+                {
+                    PropertyId = x.PropertyId,
+                    Name = x.Name,
+                    Address = x.Address,
+                })
                 .ToList();
 
             return Ok(User.IsInRole("SuperAdmin") ? propertySa : property);

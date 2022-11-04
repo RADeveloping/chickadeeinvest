@@ -68,7 +68,7 @@ namespace chickadee.Controllers
                 .Where(p => p.Tenants != null && p.UnitId == unitId && p.PropertyId == propertyId)
                 .Select(p => new
                 {
-                    Tenants = p.Tenants.Select(t => new
+                    Tenants = p.Tenants == null ? null : p.Tenants.Select(t => new
                     {
                         FirstName = t.FirstName,
                         LastName = t.LastName,
@@ -77,7 +77,8 @@ namespace chickadee.Controllers
                         Email = t.Email,
                         PhoneNumber = t.PhoneNumber
                     })
-                }).FirstOrDefault().Tenants;
+                }).FirstOrDefault()
+                ?.Tenants;
             return Ok(User.IsInRole("SuperAdmin") ? propertySa : property);
 
         }

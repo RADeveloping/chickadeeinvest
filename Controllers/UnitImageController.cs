@@ -7,28 +7,40 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/properties/{propertyId}/units/{unitId}/images")]
     [ApiController]
     public class UnitImageController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UnitImageController(ApplicationDbContext context)
+        public UnitImageController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: api/UnitImage
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UnitImage>>> GetUnitImage()
+        public async Task<ActionResult<IEnumerable<UnitImage>>> GetUnitImages(string propertyId, string unitId)
         {
-          if (_context.UnitImage == null)
+            var requestingUser = await _userManager.GetUserAsync(User);
+
+          if (_context.UnitImage == null || _context.Property == null || _context.Unit == null || requestingUser == null)
           {
               return NotFound();
           }
+
+          // var unit = _context.Unit
+          //     .FirstOrDefault(u => ((u.UnitId == requestingUser.UnitId || u.PropertyManagerId == requestingUser.Id) &&
+          //                           u.UnitId == unitId));
+
+          
             return await _context.UnitImage.ToListAsync();
         }
 

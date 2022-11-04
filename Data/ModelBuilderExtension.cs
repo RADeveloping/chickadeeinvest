@@ -134,16 +134,21 @@ public static class ModelBuilderExtensions {
         
         List<Unit> units = new List<Unit>() {
             new Unit() {
-                UnitNo = 101,
+                UnitNo = 100,
                 UnitType = UnitType.Studio,
                 PropertyId = properties[0].PropertyId,
                 PropertyManagerId = PropertyManagerList[0].Id,
             },
             new Unit() {
-                UnitNo = 500,
+                UnitNo = 200,
                 UnitType = UnitType.OneBedroom,
                 PropertyId = properties[1].PropertyId,
                 PropertyManagerId = PropertyManagerList[1].Id,
+            },
+            new Unit() {
+                UnitNo = 300,
+                UnitType = UnitType.OneBedroom,
+                PropertyId = properties[1].PropertyId,
             },
         };
         

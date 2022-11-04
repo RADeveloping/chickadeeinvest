@@ -63,26 +63,8 @@ namespace chickadee.Controllers
             return NotFound();
         }
 
-        // // GET: api/Unit/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<Unit>> GetUnit(string id)
-        // {
-        //     if (_context.Unit == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     var unit = await _context.Unit.FindAsync(id);
-        //
-        //     if (unit == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return unit;
-        // }
-
         
-        // GET: api/Unit/5
+        // GET: api/properties/{propertyId}/units/{unitId
         [HttpGet]
         [Route("{unitId}")]
         public async Task<ActionResult<Unit>> GetUnit(string? unitId, string? propertyId)
@@ -97,23 +79,15 @@ namespace chickadee.Controllers
             var unit = _context.Unit
                 .Where(u => u.UnitId == unitId)
                 .Where(u => u.Property.PropertyId == propertyId)
-                // delete start
-                .Include(u=>u.Tenants)
-                .Include(u=>u.Tickets)
-                .Include(u=>u.Images)
-                .Include(u=>u.Notes)
-                .Include(u=>u.Property)
-
-                // delete end 
-                // .Select(u => new Unit()
-                // {
-                //     UnitId = u.UnitId,
-                //     UnitNo = u.UnitNo,
-                //     UnitType = u.UnitType,
-                //     PropertyId = u.PropertyId,
-                //     PropertyManagerId = u.PropertyManagerId,
-                //
-                // })
+                .Select(u => new Unit()
+                {
+                    UnitId = u.UnitId,
+                    UnitNo = u.UnitNo,
+                    UnitType = u.UnitType,
+                    PropertyId = u.PropertyId,
+                    PropertyManagerId = u.PropertyManagerId,
+                
+                })
                 .FirstOrDefault();
 
             if (unit == null)
