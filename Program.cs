@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
 using Duende.IdentityServer.Extensions;
+using chickadee.Settings;
+using chickadee.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +45,10 @@ builder.Services.AddAuthentication()
 builder.Services.AddCors();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+builder.Services.AddTransient<IMailService, MailService>();
 
 var app = builder.Build();
 
