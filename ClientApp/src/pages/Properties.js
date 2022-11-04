@@ -38,7 +38,6 @@ export default function Properties() {
     const navigate = useNavigate();
     const title = "Properties"
     const dataName = 'Property';
-    const [filterQueryProperty, setFilterQueryProperty] = useState('address')
     const [orderBy, setOrderBy] = useState('open_count');
     const [urlSearchParams, setUrlSearchParams] = useState(new URLSearchParams())
     const [data, errorData, loadingData] = useFetch(uri + '?' + urlSearchParams.toString());
@@ -61,8 +60,9 @@ export default function Properties() {
         setUrlSearchParams(new URLSearchParams({
             sort: order,
             param: orderBy,
+            query: filterQuery
         }))
-    }, [order, orderBy])
+    }, [order, orderBy, filterQuery])
 
     const isDesktop = useResponsive('up', 'md');
 
@@ -97,8 +97,6 @@ export default function Properties() {
                                 filterQuery={filterQuery}
                                 onFilterQuery={handleFilterByQuery}
                                 properties={properties}
-                                filterQueryProperty={filterQueryProperty}
-                                setFilterQueryProperty={setFilterQueryProperty}
                                 setFilterQuery={setFilterQuery}
                             />
 
