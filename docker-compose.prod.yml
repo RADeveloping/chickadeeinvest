@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  chickadee-db:
+    image: mcr.microsoft.com/azure-sql-edge
+
+    volumes:
+      - sqlsystem:/var/opt/mssql/
+      - sqldata:/var/opt/sqlserver/data
+      - sqllog:/var/opt/sqlserver/log
+      - sqlbackup:/var/opt/sqlserver/backup
+
+    ports:
+      - "1433:1433"
+    restart: always
+
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: SqlPassword!
+
+  chickadee:
+    image: chickadeeinvest/chickadee:1667099502
+    depends_on:
+      - chickadee-db
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    environment:
+      - DBHOST=chickadee-db
+      - DBPORT=1433
+      - DBUSER=sa
+      - DBPASSWORD=SqlPassword!
+      - DBNAME=chickadee
+      - ASPNETCORE_ENVIRONMENT=Development
+
+volumes:
+  sqlsystem:
+  sqldata:
+  sqllog:
+  sqlbackup:

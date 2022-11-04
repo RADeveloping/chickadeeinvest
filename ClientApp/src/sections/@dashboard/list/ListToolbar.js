@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 // material
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import {
-  Toolbar,
-  Tooltip,
-  IconButton,
-  Typography,
-  OutlinedInput,
-  InputAdornment,
-  Popover,
-  MenuItem, Select, Box, Fade, InputLabel, FormControl
+    Toolbar,
+    Tooltip,
+    IconButton,
+    Typography,
+    OutlinedInput,
+    InputAdornment,
+    Popover,
+    MenuItem, Select, Box, Fade, InputLabel, FormControl
 } from '@mui/material';
 // component
 import Iconify from '../../../components/Iconify';
@@ -18,108 +18,120 @@ import {useRef, useState} from "react";
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled(Toolbar)(({ theme }) => ({
-  height: 96,
-  display: 'flex',
-  justifyContent: 'space-between',
-  padding: theme.spacing(0, 1, 0, 3),
+const RootStyle = styled(Toolbar)(({theme}) => ({
+    height: 96,
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: theme.spacing(0, 1, 0, 3),
 }));
 
-const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
-  width: 150,
-  transition: theme.transitions.create(['box-shadow', 'width'], {
-    easing: theme.transitions.easing.easeInOut,
-    duration: theme.transitions.duration.shorter,
-  }),
-  '&.Mui-focused': { boxShadow: theme.customShadows.z8 },
-  '&.extend': { width: 280},
-  '& fieldset': {
-    borderWidth: `1px !important`,
-    borderColor: `${theme.palette.grey[500_32]} !important`,
-  },
+const SearchStyle = styled(OutlinedInput)(({theme}) => ({
+    width: 150,
+    transition: theme.transitions.create(['box-shadow', 'width'], {
+        easing: theme.transitions.easing.easeInOut,
+        duration: theme.transitions.duration.shorter,
+    }),
+    '&.Mui-focused': {boxShadow: theme.customShadows.z8},
+    '&.extend': {width: 280},
+    '& fieldset': {
+        borderWidth: `1px !important`,
+        borderColor: `${theme.palette.grey[500_32]} !important`,
+    },
 }));
 
 // ----------------------------------------------------------------------
 
 ListToolbar.propTypes = {
-  numSelected: PropTypes.number,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
+    numSelected: PropTypes.number,
+    filterName: PropTypes.string,
+    onFilterName: PropTypes.func,
 };
 
-export default function ListToolbar({ numSelected, filterQuery, setFilterQuery, onFilterQuery, properties, filterQueryProperty, setFilterQueryProperty }) {
-  const handleChange = (event) => {
-    setFilterQueryProperty(event.target.value);
-  };
-  
-  const [filterVisible, setFilterVisible] = useState(false);
-  return (
-    <RootStyle
-      sx={{
-        ...(numSelected > 0 && {
-          color: 'primary.main',
-          bgcolor: 'primary.lighter',
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography component="div" variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) : (
-          <>
-            <Box>
-        <SearchStyle
-            className={filterVisible ? 'extend' : undefined}
-          value={filterQuery}
-          onChange={onFilterQuery}
-          onFocus={()=>setFilterVisible(true)}
-          placeholder="Search"
-          startAdornment={
-            <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-            </InputAdornment>
-          }
+export default function ListToolbar({
+                                        numSelected,
+                                        filterQuery,
+                                        setFilterQuery,
+                                        onFilterQuery,
+                                        properties,
+                                        filterQueryProperty,
+                                        setFilterQueryProperty
+                                    }) {
+    const handleChange = (event) => {
+        setFilterQueryProperty(event.target.value);
+    };
 
-          endAdornment= {
-            <Fade in={filterVisible}>
-              <IconButton onClick={() => {
-                setFilterQuery('')
-                setFilterVisible(false);
-              }}>
-                <Iconify icon="material-symbols:cancel" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-              </IconButton>
-            </Fade>
-            }
-        />
-              &nbsp;
-              <Fade in={filterVisible}>
-                <FormControl>
-                <InputLabel id="query-property">By</InputLabel>
-            <Select
-                labelId="query-property"
-                value={filterQueryProperty}
-                label="By"
-                onChange={handleChange}
-            >
-              {properties.map((p) => 
-                <MenuItem key={p.id} value={p.id}>{p.label}</MenuItem>
-              )}
-            </Select>
-                </FormControl>
-              </Fade>
-            </Box>
-          </>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Iconify icon="eva:trash-2-fill" />
-          </IconButton>
-        </Tooltip>
-      ) : null}
-    </RootStyle>
-  );
+    const [filterVisible, setFilterVisible] = useState(false);
+    return (
+        <RootStyle
+            sx={{
+                ...(numSelected > 0 && {
+                    color: 'primary.main',
+                    bgcolor: 'primary.lighter',
+                }),
+            }}
+        >
+            {numSelected > 0 ? (
+                <Typography component="div" variant="subtitle1">
+                    {numSelected} selected
+                </Typography>
+            ) : (
+                <>
+                    <Box>
+                        <SearchStyle
+                            className={filterVisible ? 'extend' : undefined}
+                            value={filterQuery}
+                            onChange={onFilterQuery}
+                            onFocus={() => setFilterVisible(true)}
+                            placeholder="Search"
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <Iconify icon="eva:search-fill"
+                                             sx={{color: 'text.disabled', width: 20, height: 20}}/>
+                                </InputAdornment>
+                            }
+
+                            endAdornment={
+                                <Fade in={filterVisible}>
+                                    <IconButton onClick={() => {
+                                        setFilterQuery('')
+                                        setFilterVisible(false);
+                                    }}>
+                                        <Iconify icon="material-symbols:cancel"
+                                                 sx={{color: 'text.disabled', width: 20, height: 20}}/>
+                                    </IconButton>
+                                </Fade>
+                            }
+                        />
+                        &nbsp;
+                        {filterVisible && 
+                        <Fade in={filterVisible}>
+                            <FormControl sx={{minWidth: 80}}>
+                                <InputLabel id="query-property">Filter by</InputLabel>
+                                <Select
+                                    labelId="query-property"
+                                    value={filterQueryProperty}
+                                    label="Filter by"
+                                    onChange={handleChange}
+                                >
+                                    {properties.map((p) =>
+                                        <MenuItem key={p.id} value={p.id}>{p.label}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </Fade>
+                            }
+                    </Box>
+                </>
+            )}
+            {numSelected > 0 ? (
+                <Tooltip title="Delete">
+                    <IconButton>
+                        <Iconify icon="eva:trash-2-fill"/>
+                    </IconButton>
+                </Tooltip>
+            ) : null}
+        </RootStyle>
+    );
 }
 
 
