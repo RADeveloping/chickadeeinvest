@@ -79,126 +79,73 @@ namespace chickadee.Controllers
                 })
                 .ToList();
 
+            
             switch (sort)
             {
+                case "asc" when param == "address":
+                    propertiesSa = propertiesSa.OrderBy(s => s.Address).ToList();
+                    properties = properties.OrderBy(s => s.Address).ToList();
+                    anonymous = anonymous.OrderBy(s => s.Address).ToList();
+                    break;
+                case "asc" when param == "id":
+                    propertiesSa = propertiesSa.OrderBy(s => s.PropertyId).ToList();
+                    properties = properties.OrderBy(s => s.PropertyId).ToList();
+                    anonymous = anonymous.OrderBy(s => s.PropertyId).ToList();
+                    break;
+                case "asc" when param == "open_count":
+                    propertiesSa = propertiesSa.OrderBy(s => s.OutstandingTickets).ToList();
+                    properties = properties.OrderBy(s => s.OutstandingTickets).ToList();
+                    break;
+                case "asc" when param == "unit_count":
+                    propertiesSa = propertiesSa.OrderBy(s => s.UnitsCount).ToList();
+                    properties = properties.OrderBy(s => s.UnitsCount).ToList();
+                    break;
+                case "asc" when param == "tenants_count":
+                    propertiesSa = propertiesSa.OrderBy(s => s.TenantsCount).ToList();
+                    properties = properties.OrderBy(s => s.TenantsCount).ToList();
+                    break;
+                case "asc" when param == "name":
+                    propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
+                    properties = properties.OrderBy(s => s.Name).ToList();
+                    anonymous = anonymous.OrderBy(s => s.Name).ToList();
+                    break;
                 case "asc":
-                {
-                    switch (param)
-                    {
-                        case "address":
-                        {
-                            propertiesSa = propertiesSa.OrderBy(s => s.Address).ToList();
-                            properties = properties.OrderBy(s => s.Address).ToList();
-                            anonymous = anonymous.OrderBy(s => s.Address).ToList();
-                            break;
-                        }
-
-                        case "id":
-                        {
-                            propertiesSa = propertiesSa.OrderBy(s => s.PropertyId).ToList();
-                            properties = properties.OrderBy(s => s.PropertyId).ToList();
-                            anonymous = anonymous.OrderBy(s => s.PropertyId).ToList();
-                            break;
-                        }
-
-                        case "open_count":
-                        {
-                            propertiesSa = propertiesSa.OrderBy(s => s.OutstandingTickets).ToList();
-                            properties = properties.OrderBy(s => s.OutstandingTickets).ToList();
-                            break;
-                        }
-
-                        case "unit_count":
-                        {
-                            propertiesSa = propertiesSa.OrderBy(s => s.UnitsCount).ToList();
-                            properties = properties.OrderBy(s => s.UnitsCount).ToList();
-                            break;
-                        }
-
-                        case "tenants_count":
-                        {
-                            propertiesSa = propertiesSa.OrderBy(s => s.TenantsCount).ToList();
-                            properties = properties.OrderBy(s => s.TenantsCount).ToList();
-                            break;
-                        }
-
-                        case "name":
-                        {
-                            propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
-                            properties = properties.OrderBy(s => s.Name).ToList();
-                            anonymous = anonymous.OrderBy(s => s.Name).ToList();
-                            break;
-                        }
-
-                        default:
-                        {
-                            propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
-                            properties = properties.OrderBy(s => s.Name).ToList();
-                            anonymous = anonymous.OrderBy(s => s.Name).ToList();
-                            break;
-                        }
-                    }
+                    propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
+                    properties = properties.OrderBy(s => s.Name).ToList();
+                    anonymous = anonymous.OrderBy(s => s.Name).ToList();
                     break;
-                }
+                case "desc" when param == "address":
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.Address).ToList();
+                    properties = properties.OrderByDescending(s => s.Address).ToList();
+                    anonymous = anonymous.OrderByDescending(s => s.Address).ToList();
+                    break;
+                case "desc" when param == "id":
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.PropertyId).ToList();
+                    properties = properties.OrderByDescending(s => s.PropertyId).ToList();
+                    anonymous = anonymous.OrderByDescending(s => s.PropertyId).ToList();
+                    break;
+                case "desc" when param == "open_count":
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.OutstandingTickets).ToList();
+                    properties = properties.OrderByDescending(s => s.OutstandingTickets).ToList();
+                    break;
+                case "desc" when param == "unit_count":
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.UnitsCount).ToList();
+                    properties = properties.OrderByDescending(s => s.UnitsCount).ToList();
+                    break;
+                case "desc" when param == "tenants_count":
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.TenantsCount).ToList();
+                    properties = properties.OrderByDescending(s => s.TenantsCount).ToList();
+                    break;
+                case "desc" when param == "name":
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.Name).ToList();
+                    properties = properties.OrderByDescending(s => s.Name).ToList();
+                    anonymous = anonymous.OrderByDescending(s => s.Name).ToList();
+                    break;
                 case "desc":
-                {
-                    switch (param)
-                    {
-                  
-                        case "address":
-                        {
-                            propertiesSa = propertiesSa.OrderByDescending(s => s.Address).ToList();
-                            properties = properties.OrderByDescending(s => s.Address).ToList();
-                            anonymous = anonymous.OrderByDescending(s => s.Address).ToList();
-                            break;
-                        }
-
-                        case "id":
-                        {
-                            propertiesSa = propertiesSa.OrderByDescending(s => s.PropertyId).ToList();
-                            properties = properties.OrderByDescending(s => s.PropertyId).ToList();
-                            anonymous = anonymous.OrderByDescending(s => s.PropertyId).ToList();
-                            break;
-                        }
-
-                        case "open_count":
-                        {
-                            propertiesSa = propertiesSa.OrderByDescending(s => s.OutstandingTickets).ToList();
-                            properties = properties.OrderByDescending(s => s.OutstandingTickets).ToList();
-                            break;
-                        }
-
-                        case "unit_count":
-                        {
-                            propertiesSa = propertiesSa.OrderByDescending(s => s.UnitsCount).ToList();
-                            properties = properties.OrderByDescending(s => s.UnitsCount).ToList();
-                            break;
-                        }
-
-                        case "tenants_count":
-                        {
-                            propertiesSa = propertiesSa.OrderByDescending(s => s.TenantsCount).ToList();
-                            properties = properties.OrderByDescending(s => s.TenantsCount).ToList();
-                            break;
-                        }
-
-                        case "name":
-                        {
-                            propertiesSa = propertiesSa.OrderByDescending(s => s.Name).ToList();
-                            properties = properties.OrderByDescending(s => s.Name).ToList();
-                            anonymous = anonymous.OrderBy(s => s.Name).ToList();
-                            break;
-                        }
-                        default:
-                        {
-                            propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
-                            properties = properties.OrderBy(s => s.Name).ToList();
-                            anonymous = anonymous.OrderBy(s => s.Name).ToList();
-                            break;
-                        }
-                    }
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.Name).ToList();
+                    properties = properties.OrderByDescending(s => s.Name).ToList();
+                    anonymous = anonymous.OrderByDescending(s => s.Name).ToList();
                     break;
-                }
             }
 
             if (requestingUser == null || User.IsInRole("Tenant")) return Ok(anonymous);
