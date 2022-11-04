@@ -11,8 +11,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
-    // [Route("api/properties/{propertyId}/units")]
-    [Route("api/[controller]")]
+    [Route("api/properties/{propertyId}/units")]
     [ApiController]
     
     public class UnitsController : ControllerBase
@@ -26,7 +25,7 @@ namespace chickadee.Controllers
             _userManager = userManager;
         }
 
-        // GET: api/Unit
+        // GET: api/properties/{propertyId}/units
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Unit>>> GetUnits(string propertyId)
         {
@@ -53,7 +52,8 @@ namespace chickadee.Controllers
                   unitType = unit.UnitType,
                   propertyId = unit.PropertyId,
                   propertyManagerId = unit.PropertyManagerId,
-              }).ToList();
+              })
+              .ToList();
               
             if (User.IsInRole("SuperAdmin") || units.Any(p => p.propertyManagerId == requestingUser.Id || p.unitId == requestingUser.UnitId))
             {
@@ -87,7 +87,6 @@ namespace chickadee.Controllers
         [Route("{unitId}")]
         public async Task<ActionResult<Unit>> GetUnit(string? unitId, string? propertyId)
         {
-            Console.WriteLine("GET UNIT");
             var requestingUser = await _userManager.GetUserAsync(User);
 
             if (propertyId == null || unitId == null || _context.Property == null || _context.Unit == null || requestingUser == null)
@@ -98,15 +97,24 @@ namespace chickadee.Controllers
             var unit = _context.Unit
                 .Where(u => u.UnitId == unitId)
                 .Where(u => u.Property.PropertyId == propertyId)
-                .Select(u => new Unit()
-                {
-                    UnitId = u.UnitId,
-                    UnitNo = u.UnitNo,
-                    UnitType = u.UnitType,
-                    PropertyId = u.PropertyId,
-                    PropertyManagerId = u.PropertyManagerId,
+                // delete start
+                .Include(u=>u.Tenants)
+                .Include(u=>u.Tickets)
+                .Include(u=>u.Images)
+                .Include(u=>u.Notes)
+                .Include(u=>u.Property)
 
-                }).FirstOrDefault();
+                // delete end 
+                // .Select(u => new Unit()
+                // {
+                //     UnitId = u.UnitId,
+                //     UnitNo = u.UnitNo,
+                //     UnitType = u.UnitType,
+                //     PropertyId = u.PropertyId,
+                //     PropertyManagerId = u.PropertyManagerId,
+                //
+                // })
+                .FirstOrDefault();
 
             if (unit == null)
             {

@@ -13,8 +13,8 @@ namespace chickadee.Controllers
     using System.Linq.Expressions;
     using Microsoft.AspNetCore.Identity;
 
-    // [Route("api/properties/{propertyId}/units/{unitId}")]
-    [Route("api/[controller]")]
+    [Route("api/properties/{propertyId}/units/{unitId}")]
+    // [Route("api/[controller]")]
 
     [ApiController]
     public class TenantController : ControllerBase
@@ -27,75 +27,119 @@ namespace chickadee.Controllers
             _context = context;
             _userManager = userManager;
         }
-        
-        public static Tenant FilterTenants(Tenant tenant)
-        {
 
-            var result = new Tenant()
-            {
-                FirstName = tenant.FirstName,
-                LastName = tenant.LastName,
-                Id = tenant.Id,
-                UserName = tenant.UserName,
-                ProfilePicture = tenant.ProfilePicture,
-                LeaseNumber = tenant.LeaseNumber,
-                Unit = tenant.Unit,
-                Tickets = tenant.Tickets
-            };
-
-            
-            return tenant;
-        }
         
-        
-        
-        // GET: api/Tenants
+        // GET: api/properties/{propertyId}/units/{unitId}/tenants
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tenant>>> GetTenant(string propertyId, string unitId)
+        [Route("tenants")]
+        public async Task<ActionResult<IEnumerable<Tenant>>> GetTenants(string propertyId, string unitId)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
 
-            if (_context.Unit == null || requestingUser == null)
+            if (_context.Unit == null || requestingUser == null || _context.Tenant == null)
             {
                 return NotFound();
             }
 
             var property = _context.Unit
                 .Include(x => x.Tenants)
-                .Where(p => p.Tenants != null && p.Tenants.Any(u=> 
-                    (u.Id == requestingUser.Id) || 
+                .Where(p => p.Tenants != null && p.Tenants.Any(u =>
+                    (u.Id == requestingUser.Id) ||
                     p.PropertyManagerId == requestingUser.UnitId
                 ))
-                .Where(p=>p.UnitId == unitId && p.PropertyId == propertyId)
-                .ToList();
-          
-            
+                .Where(p => p.UnitId == unitId && p.PropertyId == propertyId)
+                .Select(p => new
+                {
+                    Tenants = p.Tenants.Select(t => new Tenant()
+                    {
+                        FirstName = t.FirstName,
+                        LastName = t.LastName,
+                        ProfilePicture = t.ProfilePicture,
+                        Id = t.Id,
+                        Email = t.Email,
+                        PhoneNumber = t.PhoneNumber
+                    })
+                }).FirstOrDefault();
+
+
+
             var propertySa = _context.Unit
                 .Include(x => x.Tenants)
-                .Where(p=>p.UnitId == unitId && p.PropertyId == propertyId)
-                .ToList();
-
-
+                .Where(p => p.Tenants != null && p.UnitId == unitId && p.PropertyId == propertyId)
+                .Select(p => new
+                {
+                    Tenants = p.Tenants.Select(t => new
+                    {
+                        FirstName = t.FirstName,
+                        LastName = t.LastName,
+                        ProfilePicture = t.ProfilePicture,
+                        Id = t.Id,
+                        Email = t.Email,
+                        PhoneNumber = t.PhoneNumber
+                    })
+                }).FirstOrDefault().Tenants;
             return Ok(User.IsInRole("SuperAdmin") ? propertySa : property);
 
         }
 
-        // GET: api/Tenants/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Tenant>> GetTenant(string id)
+        // GET: api/properties/{propertyId}/units/{unitId}/tenants
+        [HttpGet]
+        [Route("tenants/{tenantId}")]
+        public async Task<ActionResult<Tenant>> GetTenant(string unitId, string tenantId,string propertyId)
         {
-          if (_context.Tenant == null)
-          {
-              return NotFound();
-          }
-            var tenant = await _context.Tenant.FindAsync(id);
+            var requestingUser = await _userManager.GetUserAsync(User);
 
-            if (tenant == null)
+            if (_context.Unit == null || requestingUser == null || _context.Tenant == null)
             {
                 return NotFound();
             }
 
-            return tenant;
+            var property = _context.Unit
+                .Include(x => x.Tenants)
+                .Where(p => p.Tenants != null && p.Tenants.Any(u =>
+                    (u.Id == requestingUser.Id) ||
+                    p.PropertyManagerId == requestingUser.UnitId
+                ))
+                .Where(p => p.UnitId == unitId && p.PropertyId == propertyId)
+                .Where(p => p.Tenants.Any(p => p.Id == tenantId))
+                .Select(p => new
+                {
+                    Tenants = p.Tenants.Select(t => new
+                        {
+                            FirstName = t.FirstName,
+                            LastName = t.LastName,
+                            ProfilePicture = t.ProfilePicture,
+                            Id = t.Id,
+                            Email = t.Email,
+                            PhoneNumber = t.PhoneNumber
+                        })
+                        .FirstOrDefault()
+                })
+                .FirstOrDefault().Tenants;
+
+
+
+            var propertySa = _context.Unit
+                .Include(x => x.Tenants)
+                .Where(p => p.Tenants != null && p.UnitId == unitId && p.PropertyId == propertyId
+                            && p.Tenants.Any(t => t.Id == tenantId))
+                .Select(u => new
+                {
+                    Tenants = u.Tenants.Select(t => new
+                        {
+                            FirstName = t.FirstName,
+                            LastName = t.LastName,
+                            ProfilePicture = t.ProfilePicture,
+                            Id = t.Id,
+                            Email = t.Email,
+                            PhoneNumber = t.PhoneNumber
+                        })
+                        .FirstOrDefault()
+                }).FirstOrDefault().Tenants;
+
+
+
+            return Ok(User.IsInRole("SuperAdmin") ? propertySa : property);
         }
 
         // PUT: api/Tenants/5
