@@ -29,8 +29,8 @@ namespace chickadee.Controllers
         
 
         // GET: api/Properties
-        [HttpGet("sort/{sortOrder?}")]
-        public async Task<ActionResult<IEnumerable<Property>>> GetProperties(string? sortOrder)
+        [HttpGet("{sort?}/{sortOrder?}")]
+        public async Task<ActionResult<IEnumerable<Property>>> GetProperties(string? sort, string? sortOrder)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
 
@@ -50,7 +50,7 @@ namespace chickadee.Controllers
               .ToList();
 
 
-          if (requestingUser == null) return Ok(anonymous);
+          if (requestingUser == null || User.IsInRole("Tenant")) return Ok(anonymous);
           
               
           var properties = _context.Property
