@@ -44,11 +44,11 @@ namespace chickadee.Models
        
        public String UnitId { get; set; }
        [ForeignKey("UnitId")]
-       public Unit Unit { get; set; }
+       public Unit? Unit { get; set; }
        
        public String CreatedById { get; set; } // OWNER OF TICKET. Anyone can create ticket
        [ForeignKey("CreatedById")]
-       public ApplicationUser CreatedBy { get; set; }
+       public ApplicationUser? CreatedBy { get; set; }
        
         
         // public String ClosedById { get; set; }

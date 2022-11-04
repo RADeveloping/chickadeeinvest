@@ -20,11 +20,11 @@ namespace chickadee.Models
         
         public String PropertyId { get; set; }
         [ForeignKey("PropertyId")]
-        public Property Property { get; set; }
+        public Property? Property { get; set; }
         
         public String? PropertyManagerId { get; set; }
         [ForeignKey("PropertyManagerId")]
-        public PropertyManager? PropertyManager { get; set; }
+        public ApplicationUser? PropertyManager { get; set; }
         
         public ICollection<Tenant>? Tenants { get; set; } = new List<Tenant>();
         
