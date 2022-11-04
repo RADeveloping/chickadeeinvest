@@ -17,6 +17,7 @@ import LandingPage from "./pages/LandingPage";
 import Overview from "./pages/Overview";
 import TicketDetail from "./pages/TicketDetail";
 import Properties from "./pages/Properties";
+import TicketSubmission from './pages/TicketSubmission';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,11 @@ const DashboardRoutes = [
         path: 'properties',
         requireAuth: true,
         element: <Properties />
+    },
+    {
+        path: 'tickets/submit',
+        requireAuth: true,
+        element: <TicketSubmission />
     }
 ];
 
