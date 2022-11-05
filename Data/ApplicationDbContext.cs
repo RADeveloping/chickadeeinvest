@@ -43,6 +43,10 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .Property(r => r.TicketId)
             .ValueGeneratedOnAdd();
 
+        builder.Entity<Message>()
+            .Property(s => s.CreatedDate)
+            .HasDefaultValueSql("GETDATE()");
+
 
         builder.Seed();
 
