@@ -287,11 +287,13 @@ namespace chickadee.Controllers
           {
               // ERROR NO UNIT FOUND 
               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Unit not found");
 
           }
           if (ticket.CreatedById != requestingUser.Id)
           {
               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Creator Id does not match current user Id");
           }
           ticket.Unit = unit;
           ticket.CreatedBy = requestingUser;
