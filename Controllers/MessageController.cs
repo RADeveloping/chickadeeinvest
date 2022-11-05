@@ -112,6 +112,31 @@ namespace chickadee.Controllers
           }
 
           var currentTicket = await _context.Tickets.FindAsync(message.TicketId);
+          
+          if (currentTicket == null)
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Ticket not found");
+          }
+          if (requestingUser.Tickets == null)
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Cannot find any tickets from current user");
+          }
+
+          var isTenant = await _userManager.IsInRoleAsync(requestingUser, "Tenant");
+          var isPropertyManager = await _userManager.IsInRoleAsync(requestingUser, "PropertyManager");
+
+          var propertyManagerTickets = _context.Property
+            .SelectMany(p => p.Units)
+            .Where(p => p.PropertyManagerId == requestingUser.Id)
+            .SelectMany(p => p.Tickets);
+
+          if (isTenant && !requestingUser.Tickets.Contains(currentTicket) || isPropertyManager && !propertyManagerTickets.Contains(currentTicket))
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Current user does not have the current ticket");
+          }
 
           message.Sender = requestingUser;
           message.Ticket = currentTicket;
