@@ -30,8 +30,6 @@ namespace chickadee.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Unit>>> GetUnits(string propertyId)
         {
-            Console.WriteLine("GET UNITssss");
-
             var requestingUser = await _userManager.GetUserAsync(User);
             if (_context.Unit == null || requestingUser == null || _context.Property == null)
           {
@@ -138,7 +136,7 @@ namespace chickadee.Controllers
         // POST: api/properties/{propertyId}/units
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<Unit>> PostUnit(string? propertyId, Unit unit)
         {
           if (_context.Unit == null)
