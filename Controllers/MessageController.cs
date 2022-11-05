@@ -108,6 +108,7 @@ namespace chickadee.Controllers
           if (message.SenderId != requestingUser.Id)
           {
               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Message sender Id does not match current user Id");
           }
 
           var currentTicket = await _context.Tickets.FindAsync(message.TicketId);
