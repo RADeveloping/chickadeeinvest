@@ -47,6 +47,17 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .Property(s => s.CreatedDate)
             .HasDefaultValueSql("GETDATE()");
 
+        builder.Entity<TicketImage>()
+            .Property(t => t.UploadDate)
+            .HasDefaultValueSql("GETDATE()");
+        
+        builder.Entity<UnitImage>()
+            .Property(t => t.UploadDate)
+            .HasDefaultValueSql("GETDATE()");
+
+        builder.Entity<UnitNote>()
+            .Property(t => t.UploadDate)
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Seed();
 
