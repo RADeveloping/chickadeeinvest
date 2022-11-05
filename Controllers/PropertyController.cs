@@ -142,7 +142,7 @@ namespace chickadee.Controllers
         // POST: api/Property
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("/api/properties")]
-        [AllowAnonymous]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<Property>> PostProperty(Property @property)
         {
           if (_context.Property == null)
