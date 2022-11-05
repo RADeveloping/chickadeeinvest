@@ -147,9 +147,13 @@ namespace chickadee.Controllers
           {
              return Problem("Entity set 'ApplicationDbContext.Property'  is null.");
           }
+          if (_context.PropertyManagers == null)
+          {
+            return Problem("Entity set 'ApplicationDbContext.PropertyManagers' is null.");
+          }
           var property = await _context.Property.FindAsync(propertyId);
           unit.Property = property!;
-          unit.PropertyManager = _userManager.FindByIdAsync(unit.PropertyManagerId).Result;
+          unit.PropertyManager = _context.PropertyManagers.FindAsync(unit.PropertyManagerId).Result;
             _context.Unit.Add(unit);
             try
             {
