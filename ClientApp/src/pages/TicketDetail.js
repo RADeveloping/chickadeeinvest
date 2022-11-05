@@ -50,7 +50,6 @@ export default function TicketDetail() {
                         variant="contained"
                         to="#"
                         startIcon={<Iconify icon="akar-icons:check" />}
-                        onClick={() => navigate('/dashboard/tickets/submit')}
                     >
                         {`Complete`}
                     </Button>
