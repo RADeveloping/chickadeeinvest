@@ -85,6 +85,7 @@ namespace chickadee.Controllers
         // POST: api/Company
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<Company>> PostCompany(Company company)
         {
           if (_context.Company == null)
