@@ -289,7 +289,10 @@ namespace chickadee.Controllers
               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
           }
-
+          if (ticket.CreatedById != requestingUser.Id)
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+          }
           ticket.Unit = unit;
           ticket.CreatedBy = requestingUser;
           
