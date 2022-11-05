@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chickadee.Controllers
 {
@@ -117,11 +118,22 @@ namespace chickadee.Controllers
         // POST: api/PropertyManager
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<PropertyManager>> PostPropertyManager(PropertyManager propertyManager)
         {
           if (_context.PropertyManagers == null)
           {
               return Problem("Entity set 'ApplicationDbContext.PropertyManagers'  is null.");
+          }
+
+          if (_context.Company == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Companies' is null.");
+          }
+
+          if (propertyManager.CompanyId != null && _context.Company.FindAsync(propertyManager.CompanyId) != null)
+          {
+              propertyManager.Company = _context.Company.FindAsync(propertyManager.CompanyId).Result;
           }
             _context.PropertyManagers.Add(propertyManager);
             try
