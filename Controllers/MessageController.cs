@@ -103,6 +103,11 @@ namespace chickadee.Controllers
               return Problem("Entity set 'ApplicationDbContext.Users'  is null.");
           }
 
+          if (_context.Property == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Property'  is null.");
+          }
+
           var requestingUser = await _userManager.GetUserAsync(User);
 
           if (message.SenderId != requestingUser.Id)
@@ -127,10 +132,11 @@ namespace chickadee.Controllers
           var isTenant = await _userManager.IsInRoleAsync(requestingUser, "Tenant");
           var isPropertyManager = await _userManager.IsInRoleAsync(requestingUser, "PropertyManager");
 
-          var propertyManagerTickets = _context.Property
+          var propertyManagerTickets = await _context.Property
             .SelectMany(p => p.Units)
             .Where(p => p.PropertyManagerId == requestingUser.Id)
-            .SelectMany(p => p.Tickets);
+            .SelectMany(p => p.Tickets)
+            .ToListAsync();
 
           if (isTenant && !requestingUser.Tickets.Contains(currentTicket) || isPropertyManager && !propertyManagerTickets.Contains(currentTicket))
           {
