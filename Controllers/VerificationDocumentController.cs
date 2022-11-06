@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using System.Net;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chickadee.Controllers
 {
@@ -15,10 +18,12 @@ namespace chickadee.Controllers
     public class VerificationDocumentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public VerificationDocumentController(ApplicationDbContext context)
+        public VerificationDocumentController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/VerificationDocument
@@ -84,12 +89,38 @@ namespace chickadee.Controllers
         // POST: api/VerificationDocument
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Tenant")]
         public async Task<ActionResult<VerificationDocument>> PostVerificationDocument(VerificationDocument verificationDocument)
         {
           if (_context.VerificationDocuments == null)
           {
               return Problem("Entity set 'ApplicationDbContext.VerificationDocuments'  is null.");
           }
+
+          if (_context.Tenant == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Tenant'  is null.");
+          }
+
+          var requestingUser = await _userManager.GetUserAsync(User);
+          var tenant = await _context.Tenant.FindAsync(verificationDocument.TenantId);
+
+          if (tenant == null)
+          {
+               // If tenant does not exist, they cannot 
+               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+               return BadRequest("Tenant not found");
+          }
+
+          if (verificationDocument.TenantId != requestingUser.Id)
+          {
+               // If tenant does not exist, they cannot 
+               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+               return BadRequest("Your Id does not match Tenant Id");
+          }
+
+          verificationDocument.Tenant = tenant;
+
             _context.VerificationDocuments.Add(verificationDocument);
             try
             {
