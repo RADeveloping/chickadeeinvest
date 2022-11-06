@@ -11,7 +11,8 @@ using chickadee.Models;
 namespace chickadee.Controllers
 {
     using System.Linq.Expressions;
-    using Microsoft.AspNetCore.Identity;
+  using Microsoft.AspNetCore.Authorization;
+  using Microsoft.AspNetCore.Identity;
 
     [Route("api/properties/{propertyId}/units/{unitId}")]
     // [Route("api/[controller]")]
@@ -177,6 +178,7 @@ namespace chickadee.Controllers
         // POST: api/Tenants
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "PropertyManager")]
         public async Task<ActionResult<Tenant>> PostTenant(Tenant tenant)
         {
           if (_context.Tenant == null)
