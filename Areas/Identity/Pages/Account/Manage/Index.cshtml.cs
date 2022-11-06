@@ -96,7 +96,7 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
             try
            {
                // fetch data from route
-               var list = await _context.Units
+               var list = await _context.Unit
                    .Include(t => t.Tenants)
                    .Where(unit => unit.Tenants.Contains(user))
                    .Include(j => j.Property)

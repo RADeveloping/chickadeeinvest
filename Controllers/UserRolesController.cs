@@ -46,7 +46,7 @@ namespace chickadee.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {userId} cannot be found";
-                return View("NotFound");
+                return NotFound();
             }
             ViewBag.UserName = user.UserName;
             var model = new List<ManageUserRolesViewModel>();

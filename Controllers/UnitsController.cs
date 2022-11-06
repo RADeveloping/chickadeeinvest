@@ -11,8 +11,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/properties/{propertyId}/units")]
     [ApiController]
+    
     public class UnitsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -24,107 +25,88 @@ namespace chickadee.Controllers
             _userManager = userManager;
         }
 
-        // GET: api/Units
+        // GET: api/properties/{propertyId}/units
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Unit>>> GetUnits()
+        public async Task<ActionResult<IEnumerable<Unit>>> GetUnits(string propertyId)
         {
-          if (_context.Units == null)
+            Console.WriteLine("GET UNITssss");
+
+            var requestingUser = await _userManager.GetUserAsync(User);
+            if (_context.Unit == null || requestingUser == null || _context.Property == null)
           {
               return NotFound();
           }
+          
+            var property = await _context.Property.FindAsync(propertyId);
+            if (property == null)
+            {
+                return NotFound();
+            }
 
-          var user = _userManager.GetUserAsync(User).Result;
-
-          var isTenant = await _userManager.IsInRoleAsync(user, "Tenant");
-
-          var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-
-          var isPropertyManager = await _userManager.IsInRoleAsync(user, "PropertyManager");
-
-          var isSuperAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-
-          if ((isTenant || isAdmin) && !isSuperAdmin)
-          {
-            return NoContent();
-          }
-
-          if (isPropertyManager && _context.Properties != null && !isSuperAdmin)
-          {
-            var unitList = new List<Unit>();
-            var specificProperties = await _context.Properties
-              .Include(m => m.PropertyManager)
-              .Where(p => p.PropertyManager == user)
-              .Include(u => u.Units).ThenInclude(t => t.Tickets)
-              .ToListAsync();
-            specificProperties.ForEach((property) => {
-              property.Units.ForEach((unit) => {
-                unitList.Add(unit);
-              });
-            });
-            return unitList;
-          }
-            // Ideally for super admins to get ALL units
-            return await _context.Units
-              .Include(t => t.Tenants)
-              .Include(i => i.Tickets)
-              .Include(j => j.Property)
-              .ToListAsync();
+            var units = _context.Unit
+              .Where(u=> u.PropertyId == propertyId)
+              .Select(unit => new
+              {
+                  unitId = unit.UnitId,
+                  unitNo = unit.UnitNo,
+                  unitType = unit.UnitType,
+                  propertyId = unit.PropertyId,
+                  propertyManagerId = unit.PropertyManagerId,
+              })
+              .ToList();
+              
+            if (User.IsInRole("SuperAdmin") || units.Any(p => p.propertyManagerId == requestingUser.Id || p.unitId == requestingUser.UnitId))
+            {
+                return Ok(units);
+            }
+            
+            return NotFound();
         }
 
-         // GET: api/Units/current
+        
+        // GET: api/properties/{propertyId}/units/{unitId
         [HttpGet]
-        [Route("current")]
-        public async Task<ActionResult> GetSpecificUnitForUser()
+        [Route("{unitId}")]
+        public async Task<ActionResult<Unit>> GetUnit(string? unitId, string? propertyId)
         {
-          if (_context.Units == null)
-          {
-              return NotFound();
-          }
-            var user = _userManager.GetUserAsync(User).Result;
+            var requestingUser = await _userManager.GetUserAsync(User);
 
+            if (propertyId == null || unitId == null || _context.Property == null || _context.Unit == null || requestingUser == null)
+            {
+                return NotFound();
+            }
 
-            return Ok(_context.Units
-                .Include(t => t.Tenants)
-                .Where(unit => unit.Tenants.Contains(user))
-                .Select(p => new
+            var unit = _context.Unit
+                .Where(u => u.UnitId == unitId)
+                .Where(u => u.Property.PropertyId == propertyId)
+                .Select(u => new Unit()
                 {
-                    unitId = p.UnitId,
-                    unitNo = p.UnitNo,
-                    tenants = p.Tenants
-                        .Select(t => new
-                        {
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            Id = user.Id,
-                            Email = user.Email,
-                        }),
-                    Tickets = p.Tickets,
-                    Property = p.Property
-                }));
-        }
-
-        // GET: api/Units/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Unit>> GetUnit(int id)
-        {
-          if (_context.Units == null)
-          {
-              return NotFound();
-          }
-            var unit = await _context.Units.FindAsync(id);
+                    UnitId = u.UnitId,
+                    UnitNo = u.UnitNo,
+                    UnitType = u.UnitType,
+                    PropertyId = u.PropertyId,
+                    PropertyManagerId = u.PropertyManagerId,
+                
+                })
+                .FirstOrDefault();
 
             if (unit == null)
             {
                 return NotFound();
             }
-
-            return unit;
+            
+            if (User.IsInRole("SuperAdmin") || unit.PropertyManagerId == requestingUser.Id || unit.UnitId == requestingUser.UnitId)
+            {
+                return Ok(unit);
+            }
+            
+            return Ok(unit);
         }
 
-        // PUT: api/Units/5
+        // PUT: api/Unit/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUnit(int id, Unit unit)
+        public async Task<IActionResult> PutUnit(string id, Unit unit)
         {
             if (id != unit.UnitId)
             {
@@ -152,44 +134,58 @@ namespace chickadee.Controllers
             return NoContent();
         }
 
-        // POST: api/Units
+        // POST: api/Unit
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Unit>> PostUnit(Unit unit)
         {
-          if (_context.Units == null)
+          if (_context.Unit == null)
           {
-              return Problem("Entity set 'ApplicationDbContext.Units'  is null.");
+              return Problem("Entity set 'ApplicationDbContext.Unit'  is null.");
           }
-            _context.Units.Add(unit);
-            await _context.SaveChangesAsync();
+            _context.Unit.Add(unit);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (UnitExists(unit.UnitId))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return CreatedAtAction("GetUnit", new { id = unit.UnitId }, unit);
         }
 
-        // DELETE: api/Units/5
+        // DELETE: api/Unit/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUnit(int id)
+        public async Task<IActionResult> DeleteUnit(string id)
         {
-            if (_context.Units == null)
+            if (_context.Unit == null)
             {
                 return NotFound();
             }
-            var unit = await _context.Units.FindAsync(id);
+            var unit = await _context.Unit.FindAsync(id);
             if (unit == null)
             {
                 return NotFound();
             }
 
-            _context.Units.Remove(unit);
+            _context.Unit.Remove(unit);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool UnitExists(int id)
+        private bool UnitExists(string id)
         {
-            return (_context.Units?.Any(e => e.UnitId == id)).GetValueOrDefault();
+            return (_context.Unit?.Any(e => e.UnitId == id)).GetValueOrDefault();
         }
     }
 }
