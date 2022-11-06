@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace chickadee.Controllers
 {
@@ -96,12 +98,38 @@ namespace chickadee.Controllers
         // POST: api/UnitImage
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "PropertyManager")]
         public async Task<ActionResult<UnitImage>> PostUnitImage(UnitImage unitImage)
         {
           if (_context.UnitImage == null)
           {
               return Problem("Entity set 'ApplicationDbContext.UnitImage'  is null.");
           }
+
+          if (_context.Unit == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Unit'  is null.");
+          }
+          var unit = await _context.Unit.FindAsync(unitImage.UnitId);
+
+          if (unit == null)
+          {
+               // Only the PMs who have the unit can upload the image for that unit
+               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+               return BadRequest("Unit with that Id not found");
+          }
+
+          var requestingUser = await _userManager.GetUserAsync(User);
+
+          if (unit.PropertyManagerId != requestingUser.Id)
+          {
+               // PM id of the specific unit does not match current PM id
+               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+               return BadRequest("Property Manager Id from Unit does not match current user Id");
+          }
+
+          unitImage.Unit = unit;
+
             _context.UnitImage.Add(unitImage);
             try
             {
