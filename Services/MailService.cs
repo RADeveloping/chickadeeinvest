@@ -3,12 +3,13 @@ using chickadee.Models;
 using chickadee.Settings;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace chickadee.Services
 {
-    public class MailService : IMailService
+    public class MailService : IMailService, IEmailSender
     {
         private readonly MailSettings _mailSettings;
         public MailService(IOptions<MailSettings> mailSettings)
@@ -46,6 +47,17 @@ namespace chickadee.Services
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
+        }
+
+        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            return SendEmailAsync(new MailRequest
+            {
+                ToEmail = email,
+                Subject = subject,
+                Body = htmlMessage,
+                Attachments = new List<IFormFile>()
+            });
         }
 
         public async Task SendWelcomeEmailAsync(WelcomeRequest request)
