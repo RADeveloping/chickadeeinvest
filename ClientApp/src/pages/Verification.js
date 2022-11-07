@@ -12,8 +12,7 @@ import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import {Box, Button, Container, Paper, Typography} from "@mui/material";
 import {AccountCircle, Copyright, Home, Verified} from "@mui/icons-material";
-import Overview from "./Overview";
-import SelectPropertyOverview from "./SelectPropertyOverview";
+import SelectPropertyOverview from "../components/SelectPropertyOverview";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
