@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Net;
 
 namespace chickadee.Controllers
 {
@@ -18,10 +20,12 @@ namespace chickadee.Controllers
     public class MessageController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MessageController(ApplicationDbContext context)
+        public MessageController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Message
@@ -93,6 +97,56 @@ namespace chickadee.Controllers
           {
               return Problem("Entity set 'ApplicationDbContext.Messages'  is null.");
           }
+
+          if (_context.Tickets == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Users'  is null.");
+          }
+
+          if (_context.Property == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Property'  is null.");
+          }
+
+          var requestingUser = await _userManager.GetUserAsync(User);
+
+          if (message.SenderId != requestingUser.Id)
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Message sender Id does not match current user Id");
+          }
+
+          var currentTicket = await _context.Tickets.FindAsync(message.TicketId);
+          
+          if (currentTicket == null)
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Ticket not found");
+          }
+          if (requestingUser.Tickets == null)
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Cannot find any tickets from current user");
+          }
+
+          var isTenant = await _userManager.IsInRoleAsync(requestingUser, "Tenant");
+          var isPropertyManager = await _userManager.IsInRoleAsync(requestingUser, "PropertyManager");
+
+          var propertyManagerTickets = await _context.Property
+            .SelectMany(p => p.Units)
+            .Where(p => p.PropertyManagerId == requestingUser.Id)
+            .SelectMany(p => p.Tickets)
+            .ToListAsync();
+
+          if (isTenant && !requestingUser.Tickets.Contains(currentTicket) || isPropertyManager && !propertyManagerTickets.Contains(currentTicket))
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Current user does not have the current ticket");
+          }
+
+          message.Sender = requestingUser;
+          message.Ticket = currentTicket;
+
             _context.Messages.Add(message);
             try
             {
@@ -110,7 +164,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetMessage", new { id = message.MessageId }, message);
+            return Ok(message);
         }
 
         // DELETE: api/Message/5

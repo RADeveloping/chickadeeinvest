@@ -42,7 +42,26 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
         builder.Entity<Ticket>()
             .Property(r => r.TicketId)
             .ValueGeneratedOnAdd();
+        
+        builder.Entity<Ticket>()
+            .Property(s => s.CreatedOn)
+            .HasDefaultValueSql("GETDATE()");
 
+        builder.Entity<Message>()
+            .Property(s => s.CreatedDate)
+            .HasDefaultValueSql("GETDATE()");
+
+        builder.Entity<TicketImage>()
+            .Property(t => t.UploadDate)
+            .HasDefaultValueSql("GETDATE()");
+        
+        builder.Entity<UnitImage>()
+            .Property(t => t.UploadDate)
+            .HasDefaultValueSql("GETDATE()");
+
+        builder.Entity<UnitNote>()
+            .Property(t => t.UploadDate)
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Seed();
 

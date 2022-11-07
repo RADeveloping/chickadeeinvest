@@ -10,6 +10,7 @@ using chickadee.Enums;
 using chickadee.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Net;
 
 namespace chickadee.Controllers
 {
@@ -249,7 +250,8 @@ namespace chickadee.Controllers
 
         // POST: api/Property
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("/api/properties")]
+        [Authorize(Roles = "PropertyManager")]
         public async Task<ActionResult<Property>> PostProperty(Property @property)
         {
             if (_context.Property == null)
@@ -274,7 +276,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetProperty", new { id = @property.PropertyId }, @property);
+            return Ok(@property);
         }
 
         // DELETE: api/Property/5

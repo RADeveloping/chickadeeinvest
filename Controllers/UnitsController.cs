@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace chickadee.Controllers
 {
@@ -29,8 +31,6 @@ namespace chickadee.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Unit>>> GetUnits(string propertyId)
         {
-            Console.WriteLine("GET UNITssss");
-
             var requestingUser = await _userManager.GetUserAsync(User);
             if (_context.Unit == null || requestingUser == null || _context.Property == null)
           {
@@ -134,15 +134,43 @@ namespace chickadee.Controllers
             return NoContent();
         }
 
-        // POST: api/Unit
+        // POST: api/properties/{propertyId}/units
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostUnit(Unit unit)
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<ActionResult<Unit>> PostUnit(string? propertyId, Unit unit)
         {
           if (_context.Unit == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Unit'  is null.");
           }
+          if (_context.Property == null)
+          {
+             return Problem("Entity set 'ApplicationDbContext.Property'  is null.");
+          }
+          if (_context.PropertyManagers == null)
+          {
+            return Problem("Entity set 'ApplicationDbContext.PropertyManagers' is null.");
+          }
+          var property = await _context.Property.FindAsync(propertyId);
+          
+          var propertyManager = await _context.PropertyManagers.FindAsync(unit.PropertyManagerId);
+
+          if (property == null)
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Property does not exist");
+          }
+
+          if (propertyManager == null)
+          {
+            unit.PropertyManagerId = null;
+          }
+
+          unit.Property = property;
+
+          unit.PropertyManager = propertyManager != null ? propertyManager : null;
+
             _context.Unit.Add(unit);
             try
             {
@@ -160,7 +188,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUnit", new { id = unit.UnitId }, unit);
+            return Ok(unit);
         }
 
         // DELETE: api/Unit/5

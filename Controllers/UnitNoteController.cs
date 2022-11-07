@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Net;
+using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
@@ -15,10 +18,12 @@ namespace chickadee.Controllers
     public class UnitNoteController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UnitNoteController(ApplicationDbContext context)
+        public UnitNoteController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/UnitNote
@@ -84,12 +89,37 @@ namespace chickadee.Controllers
         // POST: api/UnitNote
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "PropertyManager")]
         public async Task<ActionResult<UnitNote>> PostUnitNote(UnitNote unitNote)
         {
           if (_context.UnitNote == null)
           {
               return Problem("Entity set 'ApplicationDbContext.UnitNote'  is null.");
           }
+          if (_context.Unit == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Unit'  is null.");
+          }
+          var unit = await _context.Unit.FindAsync(unitNote.UnitId);
+
+          if (unit == null)
+          {
+               // Only the PMs who have the unit can upload the image for that unit
+               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+               return BadRequest("Unit with that Id not found");
+          }
+
+          var requestingUser = await _userManager.GetUserAsync(User);
+
+          if (unit.PropertyManagerId != requestingUser.Id)
+          {
+               // PM id of the specific unit does not match current PM id
+               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+               return BadRequest("Property Manager Id from Unit does not match current user Id");
+          }
+
+          unitNote.Unit = unit;
+          
             _context.UnitNote.Add(unitNote);
             try
             {
@@ -107,7 +137,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUnitNote", new { id = unitNote.UnitNoteId }, unitNote);
+            return Ok(unitNote);
         }
 
         // DELETE: api/UnitNote/5

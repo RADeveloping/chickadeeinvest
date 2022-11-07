@@ -4,22 +4,24 @@ namespace chickadee.Models {
 
     public class TicketImage {
         [Key]
-        public String TicketImageId { get; set; }
+        public String TicketImageId { get; set; } = Guid.NewGuid().ToString();
         
         [Required]
         public byte[] data { get; set; }
         
         [Required]
+        [Display(Name = "Upload Date")]
+        [DataType(DataType.DateTime)]
         public DateTime UploadDate { get; set; }
         
         public int TicketId { get; set; }
         [ForeignKey("TicketId")]
-        public Ticket Ticket { get; set; }
+        public Ticket? Ticket { get; set; }
         
         [Required]
         public String CreatedById { get; set; } 
         [ForeignKey("CreatedById")]
-        public ApplicationUser CreatedBy { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
         
     }
 }

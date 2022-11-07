@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chickadee.Controllers
 {
@@ -15,10 +18,12 @@ namespace chickadee.Controllers
     public class TicketImageController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TicketImageController(ApplicationDbContext context)
+        public TicketImageController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/TicketImage
@@ -84,12 +89,37 @@ namespace chickadee.Controllers
         // POST: api/TicketImage
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Tenant")]
         public async Task<ActionResult<TicketImage>> PostTicketImage(TicketImage ticketImage)
         {
           if (_context.TicketImage == null)
           {
               return Problem("Entity set 'ApplicationDbContext.TicketImage'  is null.");
           }
+          if (_context.Tickets == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Tickets' is null.");
+          }
+            var currentTicket = await _context.Tickets.FindAsync(ticketImage.TicketId);
+
+            var requestingUser = await _userManager.GetUserAsync(User);
+
+            if (currentTicket == null)
+            {
+                return NotFound();
+            }
+
+            if (currentTicket.CreatedById != requestingUser.Id)
+            {
+                // Only the user who created the ticket can upload the image
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return BadRequest("Creator Id of the ticket does not match current user Id");
+            }
+
+            ticketImage.Ticket = currentTicket;
+
+            ticketImage.CreatedBy = requestingUser;
+
             _context.TicketImage.Add(ticketImage);
             try
             {
@@ -107,7 +137,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetTicketImage", new { id = ticketImage.TicketImageId }, ticketImage);
+            return Ok(ticketImage);
         }
 
         // DELETE: api/TicketImage/5
