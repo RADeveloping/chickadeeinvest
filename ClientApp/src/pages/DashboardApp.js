@@ -25,6 +25,7 @@ export default function DashboardApp() {
     const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri, filterProperties);
 
     const [account, accountError, accountLoading] = useFetch(accountUri);
+
     const [currentUnit, currentUnitError, currentUnitLoading] = useFetch(currentUnitUri, (d) => {
         d = d[0];
         d.property = d.property.address;

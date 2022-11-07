@@ -10,8 +10,8 @@ const useFetch = (url, filter) => {
             fetch(url)
                 .then((res) => res.json())
                 .then((data) => {
-                    if (!Array.isArray(data)) data = []
-                    if (filter) data = filter(data);
+                    if (!data) data = []
+                    if (Array.isArray(data) && filter) data = filter(data);
                     setData(data);
                     setLoading(false);
                 })
