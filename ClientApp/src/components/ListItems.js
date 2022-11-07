@@ -10,7 +10,7 @@ export default function ListItems({uri, items}) {
     {items && items.length > 0 && items.map((item, index)=>
         <>
             {index !== 0 && <Divider sx={{marginLeft: 3}} key={`${item.id}-dvd1`} />}
-            <ListItemButton key={`${item.id}-btn`} component={Link} to={`/dashboard/${uri}/${item.id}`} alignItems="flex-start"
+            <ListItemButton key={`${item.id}-btn`} component={Link} to={`/dashboard/${uri(item)}`} alignItems="flex-start"
             >
                 <ListItemText sx={{marginLeft:1}} key={`${item.id}-txt`}
                               primary={item.primary}

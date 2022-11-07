@@ -32,7 +32,8 @@ export default function SimpleList({
                                        noRound,
                                        properties,
                                        loading,
-                                       disableSort
+                                       disableSort,
+                                       uri
                                    }) {
     const navigate = useNavigate();
     const borderStyles = isDesktop ? {
@@ -130,7 +131,9 @@ export default function SimpleList({
                         <Divider key={`${item.id}-${title}-dvd1`} component="li"/>
                         <ListItemButton key={`${item.id}-${title}-btn`} onClick={() => {
                             if (selectedId && selectedId === item.id) {
-                                navigate(`/dashboard/${title.toLowerCase()}/${item.id}`);
+                                if (uri) {
+                                    navigate(`/dashboard/${uri(item)}`);
+                                }
                             } else {
                                 setSelectedId(item.id)
                             }

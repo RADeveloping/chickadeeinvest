@@ -6,7 +6,14 @@ import useFetch from '../components/FetchData';
 import {Link} from "react-router-dom";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
-import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
+import {
+    filterProperties,
+    filterTicket,
+    filterUnit,
+    getPropertiesUri,
+    getTicketsUri,
+    getUnitsUri
+} from "../utils/filters";
 import Widget from "../sections/@dashboard/app/Widget";
 import UserWidget from "../sections/@dashboard/app/UserWidget";
 // ----------------------------------------------------------------------
@@ -49,7 +56,7 @@ export default function DashboardApp() {
         },
         {
             item:
-                <Widget title="Open Tickets" uri={'tickets'} total={openTickets.length} items={openTickets}
+                <Widget title="Open Tickets" uri={getTicketsUri} total={openTickets.length} items={openTickets}
                         icon={'ant-design:folder-open-outlined'} loading={ticketsLoading}/>
             ,
             for: [
@@ -59,7 +66,7 @@ export default function DashboardApp() {
         },
         {
             item:
-                <Widget title="Properties" uri={'properties'} total={properties.length} items={properties}
+                <Widget title="Properties" uri={getPropertiesUri} total={properties.length} items={properties}
                         icon={'bxs:building-house'} loading={propertiesLoading}/>,
             for: [
                 "PropertyManager"
@@ -67,7 +74,7 @@ export default function DashboardApp() {
         },
         {
             item:
-                <Widget title="Units" uri={'units'} total={units.length} items={units} icon={'bxs:door-open'}
+                <Widget title="Units" uri={getUnitsUri} total={units.length} items={units} icon={'bxs:door-open'}
                         loading={unitsLoading}/>,
             for: [
                 "PropertyManager"

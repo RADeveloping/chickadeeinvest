@@ -26,13 +26,13 @@ import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from '.
 import useFetch from "../components/FetchData";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
-import {SEVERITY, STATUS} from "../utils/filters";
+import {getTicketsUri, SEVERITY, STATUS} from "../utils/filters";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    {id: 'property', label: 'Property', alignRight: false},
-    {id: 'unit', label: 'Unit', alignRight: false},
+    {id: 'propertyName', label: 'Property', alignRight: false},
+    {id: 'unitNo', label: 'Unit', alignRight: false},
     {id: 'problem', label: 'Problem', alignRight: false},
     {id: 'description', label: 'Description', alignRight: false},
     {id: 'createdOn', label: 'Created', alignRight: false},
@@ -50,8 +50,8 @@ export default function TableOverview() {
     const title = "Tickets"
     const filterData = (data) => {
         data.forEach((d) => {
-            d.property = d.unit.property.address
-            d.unit = d.unit.unitNo
+            d.propertyName = d.unit.property.address
+            d.unitNo = d.unit.unitNo
             d.createdOn = new Date(d.createdOn)
             d.estimatedDate = new Date(d.estimatedDate)
         })
@@ -63,6 +63,7 @@ export default function TableOverview() {
     const [filterQueryProperty, setFilterQueryProperty] = useState('property')
     const [orderBy, setOrderBy] = useState('status');
     const [data, errorData, loadingData] = useFetch('/api/Tickets', filterData);
+    const uri = getTicketsUri;
     // ----------------------------------------------------------------------
 
     const [page, setPage] = useState(0);
@@ -164,8 +165,8 @@ export default function TableOverview() {
                                             severity,
                                             status,
                                             ticketId,
-                                            unit,
-                                            property
+                                            unitNo,
+                                            propertyName
                                         } = row;
                                         const isItemSelected = selected.indexOf(ticketId) !== -1;
 
@@ -178,7 +179,7 @@ export default function TableOverview() {
                                                 selected={isItemSelected}
                                                 aria-checked={isItemSelected}
                                                 onClick={() => {
-                                                    navigate(`/dashboard/${title.toLowerCase()}/${ticketId}`);
+                                                    navigate(`/dashboard/${uri(row)}`);
                                                 }}
                                             >
                                                 <TableCell padding="checkbox">
@@ -187,8 +188,8 @@ export default function TableOverview() {
                                                         onChange={(event) => handleClick(event, ticketId)}
                                                     />
                                                 </TableCell>
-                                                <TableCell align="left">{property}</TableCell>
-                                                <TableCell align="left">{unit}</TableCell>
+                                                <TableCell align="left">{propertyName}</TableCell>
+                                                <TableCell align="left">{unitNo}</TableCell>
                                                 <TableCell align="left">{problem}</TableCell>
                                                 <TableCell align="left">{description}</TableCell>
                                                 <TableCell

@@ -16,13 +16,13 @@ export default function TicketDetail() {
         return data;
     }
     const title = "Ticket"
-    const {id} = useParams();
+    const {pid, uid, id} = useParams();
     const navigate = useNavigate();
     const isDesktop = useResponsive('up', 'lg');
 
-    const [ticket, errorTicket, loadingTicket] = useFetch(`/api/Tickets/${id}`, filterTickets);
-    const [unit, errorUnit, loadingUnit] = useFetch(ticket.unitId ? `/api/Units/${ticket.unitId}` : null);
-    const [property, errorProperty, loadingProperty] = useFetch(unit.propertyId ? `/api/Properties/${unit.propertyId}` : null);
+    const [ticket, errorTicket, loadingTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, filterTickets);
+    const [unit, errorUnit, loadingUnit] = useFetch(ticket.unitId ? `/api/properties/${pid}/units/${uid}` : null);
+    const [property, errorProperty, loadingProperty] = useFetch(unit.propertyId ? `/api/properties/${unit.propertyId}` : null);
 
     const {createdOn, description, estimatedDate, problem, severity, status, tenant} = ticket;
     const {unitNo} = unit;

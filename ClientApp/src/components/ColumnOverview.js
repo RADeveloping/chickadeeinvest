@@ -7,7 +7,14 @@ import SimpleList from "../components/SimpleList";
 import PageLoading from "../components/PageLoading";
 import useResponsive from "../hooks/useResponsive";
 import Label from "../components/Label";
-import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
+import {
+    filterProperties,
+    filterTicket,
+    filterUnit,
+    getPropertiesUri,
+    getTicketsUri,
+    getUnitsUri
+} from "../utils/filters";
 import {useSearchParams} from "react-router-dom";
 
 const propertyProperties = [
@@ -96,18 +103,18 @@ export default function ColumnOverview() {
         <SimpleList leftRound items={properties} title={"Properties"} setSelectedId={setSelectedPropertyId}
                     selectedId={selectedPropertyId}
                     isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
-                    loading={loadingProperties}/>,
+                    loading={loadingProperties} uri={getPropertiesUri}/>,
         <SimpleList noRound skinny items={selectedPropertyId ?
             units : []}
                     title={"Units"} setNestedSelect={setSelectedPropertyId} path={path}
                     setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
                     isDesktop={isDesktop} properties={unitProperties}
-                    loading={loadingUnits}/>,
+                    loading={loadingUnits} uri={getUnitsUri}/>,
         <SimpleList rightRound items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
                     isDesktop={isDesktop} properties={ticketProperties}
-                    loading={loadingTickets}/>
+                    loading={loadingTickets} uri={getTicketsUri}/>
     ]
 
     function getActiveList() {
