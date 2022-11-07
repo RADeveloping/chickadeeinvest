@@ -48,8 +48,7 @@ export default function ColumnOverview() {
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'lg');
-    
-console.log(loadingUnits, units)
+
     useEffect(() => {
         if (!loadingData) {
             let propertyId = searchParams.get('property')
@@ -95,16 +94,19 @@ console.log(loadingUnits, units)
     const viewList = [
         <SimpleList leftRound items={properties} title={"Properties"} setSelectedId={setSelectedPropertyId}
                     selectedId={selectedPropertyId}
-                    isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}/>,
+                    isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
+                    />,
         <SimpleList noRound skinny items={selectedPropertyId ?
-            units.filter((u) => u.fid === selectedPropertyId) : []}
+            units : []}
                     title={"Units"} setNestedSelect={setSelectedPropertyId} path={path}
                     setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
-                    isDesktop={isDesktop} properties={unitProperties}/>,
-        <SimpleList rightRound items={selectedUnitId ? tickets.filter((t) => t.fid === selectedUnitId) : []}
+                    isDesktop={isDesktop} properties={unitProperties}
+                    />,
+        <SimpleList rightRound items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
-                    isDesktop={isDesktop} properties={ticketProperties}/>
+                    isDesktop={isDesktop} properties={ticketProperties}
+                    />
     ]
 
     function getActiveList() {

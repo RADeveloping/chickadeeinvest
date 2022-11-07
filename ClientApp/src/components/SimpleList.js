@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import {
     Box,
     Card,
-    Collapse,
+    Collapse, Fade,
     Grow,
     IconButton,
     ListItemButton,
@@ -88,34 +88,34 @@ export default function SimpleList({
                         </Collapse>
                         <Stack direction={'row'} justifyContent={'space-between'}>
                             {title}
-                           <Grow in={filteredItems.length > 0}>
-                            <div>
-                                <IconButton onClick={handleClickListItem} size={'small'}>
-                                    <Iconify icon={order === 'desc' ? 'cil:sort-descending' : 'cil:sort-ascending'}
-                                             sx={{color: (theme) => theme.palette['primary'].lighter}}/>
-                                </IconButton>
-                            </div>
-                           </Grow>
-                            <Menu
-                                id="lock-menu"
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleClose}
-                                MenuListProps={{
-                                    'aria-labelledby': 'lock-button',
-                                    role: 'listbox',
-                                }}
-                            >
-                                {properties.map((option, index) => (
-                                    <MenuItem
-                                        key={option.id}
-                                        selected={index === selectedIndex}
-                                        onClick={(event) => handleMenuItemClick(event, index)}
-                                    >
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </Menu>
+                            <Grow in={filteredItems.length > 0}>
+                                <div>
+                                    <IconButton onClick={handleClickListItem} size={'small'}>
+                                        <Iconify icon={order === 'desc' ? 'cil:sort-descending' : 'cil:sort-ascending'}
+                                                 sx={{color: (theme) => theme.palette['primary'].lighter}}/>
+                                    </IconButton>
+                                </div>
+                            </Grow>
+                                <Menu
+                                    id="lock-menu"
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleClose}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'lock-button',
+                                        role: 'listbox',
+                                    }}
+                                >
+                                    {properties.map((option, index) => (
+                                        <MenuItem
+                                            key={option.id}
+                                            selected={index === selectedIndex}
+                                            onClick={(event) => handleMenuItemClick(event, index)}
+                                        >
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
                         </Stack>
 
                     </Stack>
