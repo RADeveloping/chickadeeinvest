@@ -147,7 +147,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUnitImage", new { id = unitImage.UnitImageId }, unitImage);
+            return Ok(unitImage);
         }
 
         // DELETE: api/UnitImage/5

@@ -276,7 +276,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetProperty", new { id = @property.PropertyId }, @property);
+            return Ok(@property);
         }
 
         // DELETE: api/Property/5

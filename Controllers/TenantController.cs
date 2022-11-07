@@ -185,6 +185,17 @@ namespace chickadee.Controllers
           {
               return Problem("Entity set 'ApplicationDbContext.Tenant'  is null.");
           }
+
+          if (_context.Unit == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Unit'  is null.");
+          }
+
+          if (tenant.UnitId != null && _context.Unit.FindAsync(tenant.UnitId) != null)
+          {
+              tenant.Unit = _context.Unit.FindAsync(tenant.UnitId).Result;
+          }
+
             _context.Tenant.Add(tenant);
             try
             {
@@ -202,7 +213,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetTenant", new { id = tenant.Id }, tenant);
+            return Ok(tenant);
         }
 
         // DELETE: api/Tenants/5

@@ -137,7 +137,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetTicketImage", new { id = ticketImage.TicketImageId }, ticketImage);
+            return Ok(ticketImage);
         }
 
         // DELETE: api/TicketImage/5

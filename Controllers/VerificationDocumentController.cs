@@ -184,7 +184,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetVerificationDocument", new { id = verificationDocument.VerificationDocumentId }, verificationDocument);
+            return Ok(verificationDocument);
         }
 
         // DELETE: api/VerificationDocument/5

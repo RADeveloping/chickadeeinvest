@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
 using Duende.IdentityServer.Extensions;
+using chickadee.Settings;
+using chickadee.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +48,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+builder.Services.AddTransient<IMailService, MailService>();
+builder.Services.AddTransient<IEmailSender, MailService>();
 
 var app = builder.Build();
 

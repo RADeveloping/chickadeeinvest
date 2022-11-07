@@ -9,6 +9,7 @@ using chickadee.Data;
 using chickadee.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace chickadee.Controllers
 {
@@ -163,8 +164,24 @@ namespace chickadee.Controllers
             return Problem("Entity set 'ApplicationDbContext.PropertyManagers' is null.");
           }
           var property = await _context.Property.FindAsync(propertyId);
-          unit.Property = property!;
-          unit.PropertyManager = _context.PropertyManagers.FindAsync(unit.PropertyManagerId).Result;
+          
+          var propertyManager = await _context.PropertyManagers.FindAsync(unit.PropertyManagerId);
+
+          if (property == null)
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Property does not exist");
+          }
+
+          if (propertyManager == null)
+          {
+            unit.PropertyManagerId = null;
+          }
+
+          unit.Property = property;
+
+          unit.PropertyManager = propertyManager != null ? propertyManager : null;
+
             _context.Unit.Add(unit);
             try
             {
@@ -182,7 +199,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUnit", new { id = unit.UnitId }, unit);
+            return Ok(unit);
         }
 
         // DELETE: api/Unit/5

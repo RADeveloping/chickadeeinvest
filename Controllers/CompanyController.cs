@@ -109,7 +109,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetCompany", new { id = company.CompanyId }, company);
+            return Ok(company);
         }
 
         // DELETE: api/Company/5

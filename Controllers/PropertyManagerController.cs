@@ -131,6 +131,11 @@ namespace chickadee.Controllers
               return Problem("Entity set 'ApplicationDbContext.Companies' is null.");
           }
 
+          if (_context.Unit == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Unit' is null.");
+          }
+
           if (propertyManager.CompanyId != null && _context.Company.FindAsync(propertyManager.CompanyId) != null)
           {
               propertyManager.Company = _context.Company.FindAsync(propertyManager.CompanyId).Result;
@@ -152,7 +157,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetPropertyManager", new { id = propertyManager.Id }, propertyManager);
+            return Ok(propertyManager);
         }
 
         // DELETE: api/PropertyManager/5
