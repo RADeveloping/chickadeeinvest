@@ -213,7 +213,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetTenant", new { id = tenant.Id }, tenant);
+            return Ok(tenant);
         }
 
         // DELETE: api/Tenants/5
