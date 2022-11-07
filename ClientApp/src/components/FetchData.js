@@ -21,6 +21,7 @@ const useFetch = (url, filter) => {
             setLoading(false);
           });
       }
+      setLoading(false);
   }, [url]);
   
   return [data, error, loading];

@@ -55,9 +55,6 @@ export const getUnitBox = (unit) => {
                 <Grid item>
                     <b>{unit.unitNo}</b>
                 </Grid>
-                <Grid item>
-                    <Chip label={unit.tickets.length} />
-                </Grid>
             </Grid>
         </>
     )
@@ -69,9 +66,6 @@ export const getPropertiesBox = (property) => {
             <Grid container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
                     <b>{property.address}</b>
-                </Grid>
-                <Grid item>
-                    <Chip label={property.units.length} />
                 </Grid>
             </Grid>
         </>

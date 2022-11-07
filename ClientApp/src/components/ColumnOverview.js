@@ -33,18 +33,23 @@ const ticketProperties = [
 
 export default function ColumnOverview() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [properties, errorProperties, loadingProperties] = useFetch('/api/Properties', filterProperties);
-    const [units, errorUnits, loadingUnits] = useFetch('/api/Units', filterUnit);
-    const [tickets, errorTickets, loadingTickets] = useFetch('/api/Tickets', filterTicket);
 
     const [selectedPropertyId, setSelectedPropertyId] = useState(null);
     const [selectedUnitId, setSelectedUnitId] = useState(null);
     const [selectedTicketId, setSelectedTicketId] = useState(null);
+
+    const [properties, errorProperties, loadingProperties] = useFetch('/api/properties', filterProperties);
+    const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ? 
+        `/api/properties/${selectedPropertyId}/units` : null, filterUnit);
+    const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ? 
+        `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets` : null, filterTicket);
+
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
 
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'lg');
+    
 
     useEffect(() => {
         if (!loadingData) {
