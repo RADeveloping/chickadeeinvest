@@ -48,6 +48,7 @@ export default function ColumnOverview() {
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'lg');
+    const firstLoadingData = loadingData & firstLoad;
 
     useEffect(() => {
         if (!loadingData) {
@@ -95,18 +96,18 @@ export default function ColumnOverview() {
         <SimpleList leftRound items={properties} title={"Properties"} setSelectedId={setSelectedPropertyId}
                     selectedId={selectedPropertyId}
                     isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
-                    />,
+                    loading={loadingProperties}/>,
         <SimpleList noRound skinny items={selectedPropertyId ?
             units : []}
                     title={"Units"} setNestedSelect={setSelectedPropertyId} path={path}
                     setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
                     isDesktop={isDesktop} properties={unitProperties}
-                    />,
+                    loading={loadingUnits}/>,
         <SimpleList rightRound items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
                     isDesktop={isDesktop} properties={ticketProperties}
-                    />
+                    loading={loadingTickets}/>
     ]
 
     function getActiveList() {
@@ -121,16 +122,16 @@ export default function ColumnOverview() {
 
     return (
         <>
-            <PageLoading loadingData={loadingData}/>
-            {!loadingData && isDesktop &&
-                <Grow in={!loadingData}>
+            <PageLoading loadingData={firstLoadingData}/>
+            {!firstLoadingData && isDesktop &&
+                <Grow in={!firstLoadingData}>
                     <Stack direction="row">
                         {viewList}
                     </Stack>
                 </Grow>
             }
-            {!loadingData && !isDesktop &&
-                <Grow in={!loadingData}>
+            {!firstLoadingData && !isDesktop &&
+                <Grow in={!firstLoadingData}>
                     <Box>
                         {getActiveList()}
                     </Box>
