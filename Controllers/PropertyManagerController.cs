@@ -131,6 +131,15 @@ namespace chickadee.Controllers
               return Problem("Entity set 'ApplicationDbContext.Companies' is null.");
           }
 
+          if (_context.Unit == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Unit' is null.");
+          }
+
+          if (propertyManager.CompanyId != null && _context.Company.FindAsync(propertyManager.CompanyId) != null)
+          {
+              propertyManager.Company = _context.Company.FindAsync(propertyManager.CompanyId).Result;
+          }
             _context.PropertyManagers.Add(propertyManager);
             try
             {
