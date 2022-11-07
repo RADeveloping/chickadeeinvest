@@ -51,7 +51,6 @@
     <None Remove="Views\UserRoles\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ClientApp\src\pages\Verification" />
     <Folder Include="Enums\" />
     <Folder Include="Views\" />
     <Folder Include="Views\RoleManager\" />

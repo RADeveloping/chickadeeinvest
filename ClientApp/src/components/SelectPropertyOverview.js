@@ -23,7 +23,8 @@ const unitProperties = [
 ];
 
 
-export default function SelectPropertyOverview() {
+export default function SelectPropertyOverview(props) {
+    const {nextButtonEnabled,setNextButtonEnabled, setSelectedUnitIdParent} = props
 
     const [selectedPropertyId, setSelectedPropertyId] = useState(null);
     const [selectedUnitId, setSelectedUnitId] = useState(null);
@@ -38,7 +39,7 @@ export default function SelectPropertyOverview() {
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
-    const isDesktop = useResponsive('up', 'lg');
+    const isDesktop = useResponsive('up', 'xl');
     const firstLoadingData = loadingData & firstLoad;
 
 
@@ -48,6 +49,7 @@ export default function SelectPropertyOverview() {
             if (!selectedProperty) return
             if (!firstLoad) {
                 setSelectedUnitId(null)
+                setSelectedUnitIdParent(null)
             } else {
                 setFirstLoad(false)
             }
@@ -61,8 +63,10 @@ export default function SelectPropertyOverview() {
             let selectedUnit = getItem(units, selectedUnitId)
             if (!selectedProperty || !selectedUnit) return
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
+            setNextButtonEnabled(true)
+            setSelectedUnitIdParent(selectedUnit)
+
         }
-        setSelectedTicketId(null);
     }, [selectedUnitId, loadingUnits])
 
     const getItem = (items, id) => {
@@ -87,6 +91,7 @@ export default function SelectPropertyOverview() {
        if (selectedPropertyId) {
             return viewList[1]
         } else {
+           setSelectedUnitIdParent(null)
             return viewList[0]
         }
     }

@@ -13,6 +13,8 @@ import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector
 import {Box, Button, Container, Paper, Typography} from "@mui/material";
 import {AccountCircle, Copyright, Home, Verified} from "@mui/icons-material";
 import SelectPropertyOverview from "../components/SelectPropertyOverview";
+import {useEffect} from "react";
+import UploadDocuments from "./UploadDocuments";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -166,13 +168,14 @@ ColorlibStepIcon.propTypes = {
 
 const steps = ['Register', 'Select Unit', 'Verify Documents'];
 
-function getStepContent(step) {
+function getStepContent(step, nextButtonEnabled, setNextButtonEnabled,selectedUnitIdParent, setSelectedUnitIdParent ) {
     switch (step) {
         case 0:
         case 1:
-            return <SelectPropertyOverview />;
+            return <SelectPropertyOverview nextButtonEnabled={nextButtonEnabled} setNextButtonEnabled={setNextButtonEnabled}
+                                           selectedUnitIdParent={selectedUnitIdParent} setSelectedUnitIdParent={setSelectedUnitIdParent} />;
         case 2:
-            return <SelectPropertyOverview />;
+            return <UploadDocuments />;
         default:
             throw new Error('Unknown step');
     }
@@ -180,6 +183,18 @@ function getStepContent(step) {
 
 export default function Verification() {
     const [activeStep, setActiveStep] = React.useState(1);
+    const [nextButtonEnabled, setNextButtonEnabled] = React.useState(false);
+    const [selectedUnitIdParent, setSelectedUnitIdParent] = React.useState(null);
+    
+    useEffect(() => {
+        if (selectedUnitIdParent == null) {
+            setNextButtonEnabled(false);
+        }else{
+            setNextButtonEnabled(true);
+        }
+        console.log(selectedUnitIdParent)
+
+    }, [selectedUnitIdParent])
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
@@ -193,7 +208,7 @@ export default function Verification() {
 
     
     return (
-        <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+        <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                 <Typography component="h1" variant="h4" align="center">
                     Getting Started
@@ -210,30 +225,29 @@ export default function Verification() {
                 {activeStep === steps.length ? (
                     <React.Fragment>
                         <Typography variant="h5" gutterBottom>
-                            Thank you for your order.
+                            Thank you for submitting your details.
                         </Typography>
                         <Typography variant="subtitle1">
-                            Your order number is #2001539. We have emailed your order
-                            confirmation, and will send you an update when your order has
-                            shipped.
+                            Your account is pending verification. We will email you an update when your account has been verified.
                         </Typography>
                     </React.Fragment>
                 ) : (
                     <React.Fragment>
-                        {getStepContent(activeStep)}
+                        {getStepContent(activeStep, nextButtonEnabled, setNextButtonEnabled, selectedUnitIdParent, setSelectedUnitIdParent)}
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             {activeStep !== 1 && (
                                 <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                                     Back
                                 </Button>
                             )}
-
+                            
                             <Button
                                 variant="contained"
                                 onClick={handleNext}
-                                sx={{ mt: 3, ml: 1 }}
+                                sx={{ mt: 3, ml: 1}}
+                                disabled={!nextButtonEnabled}
                             >
-                                {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                                {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
                             </Button>
                         </Box>
                     </React.Fragment>
