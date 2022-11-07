@@ -36,7 +36,6 @@ namespace chickadee.Controllers
 
             if (_context.VerificationDocuments == null || requestingUser == null)
             {
-
                 return NotFound();
             }
 
@@ -45,15 +44,23 @@ namespace chickadee.Controllers
             // SuperAdmin is both a superadmin and a tenant
             if (User.IsInRole("SuperAdmin") && User.IsInRole("Tenant"))
             {
-            
-                return Ok(documents.ToList());
+                return Ok(new
+                {
+                    leaseDocuments = documents.Where(d => d.DocumentType == DocumentType.LeaseAgreement),
+                    photoIDDocuments = documents.Where(d => d.DocumentType == DocumentType.PhotoIdentification),
+                });
             }
             
             if (User.IsInRole("Tenant"))
             {
                 var documentTenantHasAccessto = documents.Where(doc => doc.TenantId == requestingUser.Id);
 
-                return Ok(documentTenantHasAccessto);
+                return Ok(new
+                {
+                    leaseDocuments = documentTenantHasAccessto.Where(d => d.DocumentType == DocumentType.LeaseAgreement),
+                    photoIDDocuments = documentTenantHasAccessto.Where(d => d.DocumentType == DocumentType.PhotoIdentification),
+                });
+                
             }
 
 
@@ -65,7 +72,12 @@ namespace chickadee.Controllers
                 var documentsPmHasAccessTo = documents
                     .Where(p => tenants.Any(t => t.Id == p.TenantId));
             
-                return Ok(documentsPmHasAccessTo);
+                return Ok(new
+                {
+                    leaseDocuments = documentsPmHasAccessTo.Where(d => d.DocumentType == DocumentType.LeaseAgreement),
+                    photoIDDocuments = documentsPmHasAccessTo.Where(d => d.DocumentType == DocumentType.PhotoIdentification),
+                });
+                
             }
             
             return NotFound();
