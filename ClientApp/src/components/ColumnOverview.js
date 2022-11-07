@@ -1,13 +1,11 @@
 ﻿import * as React from 'react';
 import {useEffect, useState} from 'react';
 import useFetch from "../components/FetchData";
-import {Box, Chip, Container, Grid, Grow, Stack, Typography} from "@mui/material";
-import Page from "../components/Page";
+import {Box, Grow, Stack} from "@mui/material";
 import SimpleList from "../components/SimpleList";
 import PageLoading from "../components/PageLoading";
 import useResponsive from "../hooks/useResponsive";
-import Label from "../components/Label";
-import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
+import {filterProperties, filterUnit} from "../utils/filters";
 import {useSearchParams} from "react-router-dom";
 
 const propertyProperties = [
@@ -22,29 +20,17 @@ const unitProperties = [
     {id: 'tenantCount', label: 'Tenant Count'},
 ];
 
-const ticketProperties = [
-    {id: 'ticketId', label: 'Ticket Id'},
-    {id: 'createdOn', label: 'Created On'},
-    {id: 'estimatedDate', label: 'Estimated Date'},
-    {id: 'problem', label: 'Problem'},
-    {id: 'severity', label: 'Severity'},
-    {id: 'status', label: 'Status'},
-];
-
 export default function ColumnOverview() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [selectedPropertyId, setSelectedPropertyId] = useState(null);
     const [selectedUnitId, setSelectedUnitId] = useState(null);
-    const [selectedTicketId, setSelectedTicketId] = useState(null);
 
     const [properties, errorProperties, loadingProperties] = useFetch('/api/properties', filterProperties);
     const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ? 
         `/api/properties/${selectedPropertyId}/units` : null, filterUnit);
-    const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ? 
-        `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets` : null, filterTicket);
 
-    const loadingData = loadingProperties || loadingUnits || loadingTickets;
+    const loadingData = loadingProperties || loadingUnits;
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'lg');
@@ -85,7 +71,6 @@ export default function ColumnOverview() {
             setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
         }
-        setSelectedTicketId(null);
     }, [selectedUnitId, loadingUnits])
 
     const getItem = (items, id) => {
@@ -103,17 +88,10 @@ export default function ColumnOverview() {
                     setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
                     isDesktop={isDesktop} properties={unitProperties}
                     loading={loadingUnits}/>,
-        <SimpleList rightRound items={selectedUnitId ? tickets : []}
-                    title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
-                    setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
-                    isDesktop={isDesktop} properties={ticketProperties}
-                    loading={loadingTickets}/>
     ]
 
     function getActiveList() {
-        if (selectedPropertyId && selectedUnitId) {
-            return viewList[2]
-        } else if (selectedPropertyId) {
+        if (selectedPropertyId) {
             return viewList[1]
         } else {
             return viewList[0]
