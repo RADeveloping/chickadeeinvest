@@ -55,9 +55,6 @@ export const getUnitBox = (unit) => {
                 <Grid item>
                     <b>{unit.unitNo}</b>
                 </Grid>
-                <Grid item>
-                    <Chip label={unit.tickets.length} />
-                </Grid>
             </Grid>
         </>
     )
@@ -68,10 +65,7 @@ export const getPropertiesBox = (property) => {
         <>
             <Grid container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
-                    <b>{property.address}</b>
-                </Grid>
-                <Grid item>
-                    <Chip label={property.units.length} />
+                    <b>{property.name}</b>
                 </Grid>
             </Grid>
         </>
@@ -84,6 +78,7 @@ export const filterProperties = (data) => {
         simpleData.push({
             id: d.propertyId,
             primary: getPropertiesBox(d),
+            tertiary: d.address,
             dir: d.address,
             unitCount: d.units ? d.units.length : 0,
             ...d});

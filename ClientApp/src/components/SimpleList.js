@@ -12,14 +12,11 @@ import {
     ListItemButton,
     ListSubheader, Menu,
     MenuItem,
-    Slide,
     Stack
 } from "@mui/material";
 import Iconify from "./Iconify";
 import {useNavigate} from "react-router-dom";
-import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
 import {useState} from "react";
-import {applySortFilter, getComparator} from "../sections/@dashboard/list";
 
 export default function SimpleList({
                                        items,
@@ -34,6 +31,7 @@ export default function SimpleList({
                                        rightRound,
                                        noRound,
                                        properties,
+                                       loading
                                    }) {
     const navigate = useNavigate();
     const borderStyles = isDesktop ? {
@@ -44,8 +42,6 @@ export default function SimpleList({
 
     const [orderBy, setOrderBy] = useState(properties[0].id);
     const [order, setOrder] = useState('desc');
-
-    const filteredItems = applySortFilter(items, getComparator(order, orderBy));
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -88,14 +84,14 @@ export default function SimpleList({
                         </Collapse>
                         <Stack direction={'row'} justifyContent={'space-between'}>
                             {title}
-                           <Grow in={filteredItems.length > 0}>
-                            <div>
-                                <IconButton onClick={handleClickListItem} size={'small'}>
-                                    <Iconify icon={order === 'desc' ? 'cil:sort-descending' : 'cil:sort-ascending'}
-                                             sx={{color: (theme) => theme.palette['primary'].lighter}}/>
-                                </IconButton>
-                            </div>
-                           </Grow>
+                            <Grow in={items.length > 0}>
+                                <div>
+                                    <IconButton onClick={handleClickListItem} size={'small'}>
+                                        <Iconify icon={order === 'desc' ? 'cil:sort-descending' : 'cil:sort-ascending'}
+                                                 sx={{color: (theme) => theme.palette['primary'].lighter}}/>
+                                    </IconButton>
+                                </div>
+                            </Grow>
                             <Menu
                                 id="lock-menu"
                                 anchorEl={anchorEl}
@@ -123,7 +119,7 @@ export default function SimpleList({
             }
                   sx={{width: '100%', minWidth: isDesktop && skinny ? 200 : 360, bgcolor: 'background.paper'}}>
 
-                {filteredItems.length > 0 && filteredItems.map((item, index) =>
+                {items.length > 0 && items.map((item, index) =>
                     <>
                         <Divider key={`${item.id}-${title}-dvd1`} component="li"/>
                         <ListItemButton key={`${item.id}-${title}-btn`} onClick={() => {
@@ -152,12 +148,12 @@ export default function SimpleList({
                                           }
                             />
                         </ListItemButton>
-                        {index === filteredItems.length - 1 &&
+                        {index === items.length - 1 &&
                             <Divider key={`${item.id}-${title}-dvd`} component="li"/>}
                     </>)
                 }
             </List>
-            {filteredItems.length === 0 &&
+            {items.length === 0 &&
                 <Box sx={{
                     height: '80%',
                     display: 'flex',

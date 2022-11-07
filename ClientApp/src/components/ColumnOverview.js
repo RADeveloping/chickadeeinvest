@@ -33,32 +33,36 @@ const ticketProperties = [
 
 export default function ColumnOverview() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [properties, errorProperties, loadingProperties] = useFetch('/api/Properties', filterProperties);
-    const [units, errorUnits, loadingUnits] = useFetch('/api/Units', filterUnit);
-    const [tickets, errorTickets, loadingTickets] = useFetch('/api/Tickets', filterTicket);
 
     const [selectedPropertyId, setSelectedPropertyId] = useState(null);
     const [selectedUnitId, setSelectedUnitId] = useState(null);
     const [selectedTicketId, setSelectedTicketId] = useState(null);
-    const loadingData = loadingProperties || loadingUnits || loadingTickets;
 
+    const [properties, errorProperties, loadingProperties] = useFetch('/api/properties', filterProperties);
+    const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ? 
+        `/api/properties/${selectedPropertyId}/units` : null, filterUnit);
+    const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ? 
+        `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets` : null, filterTicket);
+
+    const loadingData = loadingProperties || loadingUnits || loadingTickets;
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'lg');
+    const firstLoadingData = loadingData & firstLoad;
 
     useEffect(() => {
         if (!loadingData) {
-            let propertyId = parseInt(searchParams.get('property'))
-            let unitId = parseInt(searchParams.get('unit'))
-            console.log(unitId)
+            let propertyId = searchParams.get('property')
+            let unitId = searchParams.get('unit')
             if (propertyId) setSelectedPropertyId(propertyId)
             if (unitId) setSelectedUnitId(unitId)
         }
     }, [loadingData])
 
     useEffect(() => {
-        if (selectedPropertyId) {
+        if (selectedPropertyId && !loadingProperties) {
             let selectedProperty = getItem(properties, selectedPropertyId)
+            if (!selectedProperty) return
             searchParams.set('property', selectedPropertyId)
             if (!firstLoad) {
                 setSelectedUnitId(null)
@@ -69,19 +73,20 @@ export default function ColumnOverview() {
             setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}`)
         }
-    }, [selectedPropertyId])
+    }, [selectedPropertyId, loadingProperties])
 
     useEffect(() => {
-        if (selectedUnitId) {
+        if (selectedUnitId && !loadingUnits) {
             let selectedProperty = getItem(properties, selectedPropertyId)
             let selectedUnit = getItem(units, selectedUnitId)
+            if (!selectedProperty || !selectedUnit) return
             searchParams.set('property', selectedPropertyId)
             searchParams.set('unit', selectedUnitId)
             setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
         }
         setSelectedTicketId(null);
-    }, [selectedUnitId])
+    }, [selectedUnitId, loadingUnits])
 
     const getItem = (items, id) => {
         return items.find(item => item.id === id)
@@ -90,16 +95,19 @@ export default function ColumnOverview() {
     const viewList = [
         <SimpleList leftRound items={properties} title={"Properties"} setSelectedId={setSelectedPropertyId}
                     selectedId={selectedPropertyId}
-                    isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}/>,
+                    isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
+                    loading={loadingProperties}/>,
         <SimpleList noRound skinny items={selectedPropertyId ?
-            units.filter((u) => u.fid === selectedPropertyId) : []}
+            units : []}
                     title={"Units"} setNestedSelect={setSelectedPropertyId} path={path}
                     setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
-                    isDesktop={isDesktop} properties={unitProperties}/>,
-        <SimpleList rightRound items={selectedUnitId ? tickets.filter((t) => t.fid === selectedUnitId) : []}
+                    isDesktop={isDesktop} properties={unitProperties}
+                    loading={loadingUnits}/>,
+        <SimpleList rightRound items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
-                    isDesktop={isDesktop} properties={ticketProperties}/>
+                    isDesktop={isDesktop} properties={ticketProperties}
+                    loading={loadingTickets}/>
     ]
 
     function getActiveList() {
@@ -114,16 +122,16 @@ export default function ColumnOverview() {
 
     return (
         <>
-            <PageLoading loadingData={loadingData}/>
-            {!loadingData && isDesktop &&
-                <Grow in={!loadingData}>
+            <PageLoading loadingData={firstLoadingData}/>
+            {!firstLoadingData && isDesktop &&
+                <Grow in={!firstLoadingData}>
                     <Stack direction="row">
                         {viewList}
                     </Stack>
                 </Grow>
             }
-            {!loadingData && !isDesktop &&
-                <Grow in={!loadingData}>
+            {!firstLoadingData && !isDesktop &&
+                <Grow in={!firstLoadingData}>
                     <Box>
                         {getActiveList()}
                     </Box>
