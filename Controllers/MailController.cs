@@ -31,5 +31,18 @@ namespace chickadee.Controllers
             }
 
         }
+        [HttpPost("welcome")]
+        public async Task<IActionResult> SendWelcomeMail([FromForm] WelcomeRequest request)
+        {
+            try
+            {
+                await mailService.SendWelcomeEmailAsync(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
