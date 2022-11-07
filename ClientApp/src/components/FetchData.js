@@ -11,6 +11,7 @@ const useFetch = (url, filter) => {
                 .then((res) => res.json())
                 .then((data) => {
                     if (!data) data = []
+                    if (data.status && data.status === 404) data = []
                     if (Array.isArray(data) && filter) data = filter(data);
                     setData(data);
                     setLoading(false);
