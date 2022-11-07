@@ -27,7 +27,7 @@ const DashboardRoutes = [
         element: <DashboardApp />
     },
     {
-        path: 'tickets/:id',
+        path: 'properties/:pid/units/:uid/tickets/:id',
         requireAuth: true,
         element: <TicketDetail />
     },

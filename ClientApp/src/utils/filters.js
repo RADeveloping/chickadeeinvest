@@ -118,3 +118,18 @@ export const filterTicket = (data) => {
     })
     return simpleData;
 }
+
+export const getTicketsUri = (ticket) => {
+    console.log(ticket)
+    return `properties/${ticket.unit.property.propertyId}/units/${ticket.unit.unitId}/tickets/${ticket.ticketId}`
+}
+
+export const getPropertiesUri = (property) => {
+    console.log(property)
+    return `properties/${property.propertyId}`
+}
+
+export const getUnitsUri = (unit) => {
+    console.log(unit)
+    return `properties/${unit.property.propertyId}/units/${unit.unitId}`
+}
