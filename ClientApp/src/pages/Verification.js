@@ -6,9 +6,13 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Check from '@mui/icons-material/Check';
+import SettingsIcon from '@mui/icons-material/Settings';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import {Box, Button, Container, Paper, Typography} from "@mui/material";
 import {AccountCircle, Copyright, Home, Verified} from "@mui/icons-material";
+import Overview from "./Overview";
 import SelectPropertyOverview from "./SelectPropertyOverview";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
