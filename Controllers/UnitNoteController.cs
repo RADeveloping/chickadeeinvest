@@ -137,7 +137,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUnitNote", new { id = unitNote.UnitNoteId }, unitNote);
+            return Ok(unitNote);
         }
 
         // DELETE: api/UnitNote/5

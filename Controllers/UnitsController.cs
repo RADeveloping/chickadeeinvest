@@ -176,7 +176,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUnit", new { id = unit.UnitId }, unit);
+            return Ok(unit);
         }
 
         // DELETE: api/Unit/5

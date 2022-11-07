@@ -164,7 +164,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetMessage", new { id = message.MessageId }, message);
+            return Ok(message);
         }
 
         // DELETE: api/Message/5

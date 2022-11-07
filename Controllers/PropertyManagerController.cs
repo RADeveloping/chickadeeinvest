@@ -157,7 +157,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetPropertyManager", new { id = propertyManager.Id }, propertyManager);
+            return Ok(propertyManager);
         }
 
         // DELETE: api/PropertyManager/5
