@@ -168,14 +168,18 @@ ColorlibStepIcon.propTypes = {
 
 const steps = ['Register', 'Select Unit', 'Verify Documents'];
 
-function getStepContent(step, nextButtonEnabled, setNextButtonEnabled,selectedUnitIdParent, setSelectedUnitIdParent ) {
+function getStepContent(step, nextButtonEnabled, setNextButtonEnabled,selectedUnitIdParent, setSelectedUnitIdParent,
+                        setPhotoId, setLeaseAgreement) {
     switch (step) {
         case 0:
         case 1:
             return <SelectPropertyOverview nextButtonEnabled={nextButtonEnabled} setNextButtonEnabled={setNextButtonEnabled}
-                                           selectedUnitIdParent={selectedUnitIdParent} setSelectedUnitIdParent={setSelectedUnitIdParent} />;
+                                           selectedUnitIdParent={selectedUnitIdParent} setSelectedUnitIdParent={setSelectedUnitIdParent}
+            />;
         case 2:
-            return <UploadDocuments />;
+            return <UploadDocuments  setPhotoId = {setPhotoId} setLeaseAgreement = {setLeaseAgreement}
+                                     selectedUnitIdParent={selectedUnitIdParent} setSelectedUnitIdParent={setSelectedUnitIdParent}
+            />;
         default:
             throw new Error('Unknown step');
     }
@@ -185,7 +189,9 @@ export default function Verification() {
     const [activeStep, setActiveStep] = React.useState(1);
     const [nextButtonEnabled, setNextButtonEnabled] = React.useState(false);
     const [selectedUnitIdParent, setSelectedUnitIdParent] = React.useState(null);
-    
+    const [photoId, setPhotoId] = React.useState(null);
+    const [leaseAgreement, setLeaseAgreement] = React.useState(null);
+
     useEffect(() => {
         if (selectedUnitIdParent == null) {
             setNextButtonEnabled(false);
@@ -233,7 +239,8 @@ export default function Verification() {
                     </React.Fragment>
                 ) : (
                     <React.Fragment>
-                        {getStepContent(activeStep, nextButtonEnabled, setNextButtonEnabled, selectedUnitIdParent, setSelectedUnitIdParent)}
+                        {getStepContent(activeStep, nextButtonEnabled, setNextButtonEnabled, selectedUnitIdParent, setSelectedUnitIdParent,
+                            photoId, setPhotoId, leaseAgreement, setLeaseAgreement)}
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             {activeStep !== 1 && (
                                 <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
