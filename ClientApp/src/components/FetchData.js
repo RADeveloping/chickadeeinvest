@@ -7,16 +7,11 @@ const useFetch = (url, filter) => {
 
     useEffect(() => {
         if (url) {
-            setLoading(true)
             fetch(url)
                 .then((res) => res.json())
                 .then((data) => {
-                    if (Array.isArray(data) && filter) {
-                        console.log(data)
-                        data = filter(data);
-                    } else {
-                        data = []
-                    }
+                    if (!Array.isArray(data)) data = []
+                    if (filter) data = filter(data);
                     setData(data);
                     setLoading(false);
                 })
