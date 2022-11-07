@@ -22,17 +22,8 @@ const unitProperties = [
     {id: 'tenantCount', label: 'Tenant Count'},
 ];
 
-const ticketProperties = [
-    {id: 'ticketId', label: 'Ticket Id'},
-    {id: 'createdOn', label: 'Created On'},
-    {id: 'estimatedDate', label: 'Estimated Date'},
-    {id: 'problem', label: 'Problem'},
-    {id: 'severity', label: 'Severity'},
-    {id: 'status', label: 'Status'},
-];
 
 export default function SelectPropertyOverview() {
-    const [searchParams, setSearchParams] = useSearchParams();
 
     const [selectedPropertyId, setSelectedPropertyId] = useState(null);
     const [selectedUnitId, setSelectedUnitId] = useState(null);
@@ -50,27 +41,16 @@ export default function SelectPropertyOverview() {
     const isDesktop = useResponsive('up', 'lg');
     const firstLoadingData = loadingData & firstLoad;
 
-    useEffect(() => {
-        if (!loadingData) {
-            let propertyId = searchParams.get('property')
-            let unitId = searchParams.get('unit')
-            if (propertyId) setSelectedPropertyId(propertyId)
-            if (unitId) setSelectedUnitId(unitId)
-        }
-    }, [loadingData])
 
     useEffect(() => {
         if (selectedPropertyId && !loadingProperties) {
             let selectedProperty = getItem(properties, selectedPropertyId)
             if (!selectedProperty) return
-            searchParams.set('property', selectedPropertyId)
             if (!firstLoad) {
                 setSelectedUnitId(null)
-                searchParams.delete('unit')
             } else {
                 setFirstLoad(false)
             }
-            setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}`)
         }
     }, [selectedPropertyId, loadingProperties])
@@ -80,9 +60,6 @@ export default function SelectPropertyOverview() {
             let selectedProperty = getItem(properties, selectedPropertyId)
             let selectedUnit = getItem(units, selectedUnitId)
             if (!selectedProperty || !selectedUnit) return
-            searchParams.set('property', selectedPropertyId)
-            searchParams.set('unit', selectedUnitId)
-            setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
         }
         setSelectedTicketId(null);
@@ -93,27 +70,21 @@ export default function SelectPropertyOverview() {
     }
 
     const viewList = [
-        <SimpleList leftRound items={properties} title={"Properties"} setSelectedId={setSelectedPropertyId}
+        <SimpleList disableSort items={properties} title={"Properties"} setSelectedId={setSelectedPropertyId}
                     selectedId={selectedPropertyId}
                     isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
                     loading={loadingProperties}/>,
-        <SimpleList noRound skinny items={selectedPropertyId ?
+        <SimpleList disableSort noRound skinny items={selectedPropertyId ?
             units : []}
                     title={"Units"} setNestedSelect={setSelectedPropertyId} path={path}
                     setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
                     isDesktop={isDesktop} properties={unitProperties}
                     loading={loadingUnits}/>,
-        <SimpleList rightRound items={selectedUnitId ? tickets : []}
-                    title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
-                    setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
-                    isDesktop={isDesktop} properties={ticketProperties}
-                    loading={loadingTickets}/>
+      
     ]
 
     function getActiveList() {
-        if (selectedPropertyId && selectedUnitId) {
-            return viewList[2]
-        } else if (selectedPropertyId) {
+       if (selectedPropertyId) {
             return viewList[1]
         } else {
             return viewList[0]
@@ -123,14 +94,7 @@ export default function SelectPropertyOverview() {
     return (
         <>
             <PageLoading loadingData={firstLoadingData}/>
-            {!firstLoadingData && isDesktop &&
-                <Grow in={!firstLoadingData}>
-                    <Stack direction="row">
-                        {viewList}
-                    </Stack>
-                </Grow>
-            }
-            {!firstLoadingData && !isDesktop &&
+            {!firstLoadingData &&
                 <Grow in={!firstLoadingData}>
                     <Box>
                         {getActiveList()}
