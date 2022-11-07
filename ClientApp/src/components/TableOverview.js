@@ -60,7 +60,7 @@ export default function TableOverview() {
     const properties = TABLE_HEAD.slice(0, -1);
     const dataName = 'Ticket';
     const dataId = 'ticketId';
-    const [filterQueryProperty, setFilterQueryProperty] = useState('property')
+    const [filterQueryProperty, setFilterQueryProperty] = useState('propertyName')
     const [orderBy, setOrderBy] = useState('status');
     const [data, errorData, loadingData] = useFetch('/api/Tickets', filterData);
     const uri = getTicketsUri;
