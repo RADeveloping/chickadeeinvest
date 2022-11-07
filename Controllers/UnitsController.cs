@@ -9,6 +9,7 @@ using chickadee.Data;
 using chickadee.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace chickadee.Controllers
 {
@@ -155,7 +156,18 @@ namespace chickadee.Controllers
           
           var propertyManager = await _context.PropertyManagers.FindAsync(unit.PropertyManagerId);
 
-          unit.Property = property != null ? property : null;
+          if (property == null)
+          {
+              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+              return BadRequest("Property does not exist");
+          }
+
+          if (propertyManager == null)
+          {
+            unit.PropertyManagerId = null;
+          }
+
+          unit.Property = property;
 
           unit.PropertyManager = propertyManager != null ? propertyManager : null;
 
