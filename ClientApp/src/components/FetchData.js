@@ -20,8 +20,9 @@ const useFetch = (url, filter) => {
             setError(err);
             setLoading(false);
           });
+      } else {
+          setLoading(false);
       }
-      setLoading(false);
   }, [url]);
   
   return [data, error, loading];

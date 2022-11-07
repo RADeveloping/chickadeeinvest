@@ -45,25 +45,24 @@ export default function ColumnOverview() {
         `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets` : null, filterTicket);
 
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
-
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'lg');
     
-
+console.log(loadingUnits, units)
     useEffect(() => {
         if (!loadingData) {
-            let propertyId = parseInt(searchParams.get('property'))
-            let unitId = parseInt(searchParams.get('unit'))
-            console.log(unitId)
+            let propertyId = searchParams.get('property')
+            let unitId = searchParams.get('unit')
             if (propertyId) setSelectedPropertyId(propertyId)
             if (unitId) setSelectedUnitId(unitId)
         }
     }, [loadingData])
 
     useEffect(() => {
-        if (selectedPropertyId) {
+        if (selectedPropertyId && !loadingProperties) {
             let selectedProperty = getItem(properties, selectedPropertyId)
+            if (!selectedProperty) return
             searchParams.set('property', selectedPropertyId)
             if (!firstLoad) {
                 setSelectedUnitId(null)
@@ -74,19 +73,20 @@ export default function ColumnOverview() {
             setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}`)
         }
-    }, [selectedPropertyId])
+    }, [selectedPropertyId, loadingProperties])
 
     useEffect(() => {
-        if (selectedUnitId) {
+        if (selectedUnitId && !loadingUnits) {
             let selectedProperty = getItem(properties, selectedPropertyId)
             let selectedUnit = getItem(units, selectedUnitId)
+            if (!selectedProperty || !selectedUnit) return
             searchParams.set('property', selectedPropertyId)
             searchParams.set('unit', selectedUnitId)
             setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
         }
         setSelectedTicketId(null);
-    }, [selectedUnitId])
+    }, [selectedUnitId, loadingUnits])
 
     const getItem = (items, id) => {
         return items.find(item => item.id === id)
