@@ -8,6 +8,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using chickadee.Enums;
 using chickadee.Models;
+using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -54,7 +55,6 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
      
-
         private async Task LoadAsync(ApplicationUser user)
         {
             
@@ -64,15 +64,19 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
                 return;
             }
 
-            var photoIdDocument = _context.VerificationDocuments
+            var photoIdDocumentList = _context.VerificationDocuments
                 .Where(m => m.TenantId == user.Id)
-                .FirstOrDefault(m => m.DocumentType == DocumentType.PhotoIdentification);
+                .Where(m => m.DocumentType == DocumentType.PhotoIdentification)
+                .ToList();
 
-            var leaseDocument = _context.VerificationDocuments
-                .Where(m => m.TenantId == user.Id).FirstOrDefault(m => m.DocumentType == DocumentType.LeaseAgreement);
+            var leaseDocumentList = _context.VerificationDocuments
+                .Where(m => m.TenantId == user.Id)
+                .Where(m => m.DocumentType == DocumentType.LeaseAgreement)
+                .ToList();
 
-            if (photoIdDocument != null)
+            if (!photoIdDocumentList.IsNullOrEmpty())
             {
+                var photoIdDocument = photoIdDocumentList.First();
                 InputPhotoId = new VerificationDocument()
                 {
                     VerificationDocumentId = photoIdDocument.VerificationDocumentId,
@@ -82,10 +86,16 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
                     TenantId = photoIdDocument.TenantId
                 }; 
             }
-
-
-            if (leaseDocument != null)
+            else
             {
+                InputPhotoId = new VerificationDocument();
+
+            }
+
+
+            if (!leaseDocumentList.IsNullOrEmpty())
+            {
+                var leaseDocument = leaseDocumentList.First();
                 InputLeaseAgreement = new VerificationDocument()
                 {
                     VerificationDocumentId = leaseDocument.VerificationDocumentId,
@@ -95,7 +105,11 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
                     TenantId = leaseDocument.TenantId
                 };
             }
+            else
+            {
+                InputLeaseAgreement = new VerificationDocument();
 
+            }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -107,36 +121,41 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
             }
 
             await LoadAsync(user);
+            
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            Console.WriteLine("ON POST");
 
-            var user = await _userManager.GetUserAsync(User) as Tenant;
+            var user = (Tenant)await _userManager.GetUserAsync(User);
             if (user == null || _context.VerificationDocuments == null) return NotFound();
-            
-            var document = await _context.VerificationDocuments.FirstOrDefaultAsync(d => d.TenantId == user.Id);
 
+            var photoIdDocumentList = _context.VerificationDocuments
+                .Where(m => m.TenantId == user.Id)
+                .Where(m => m.DocumentType == DocumentType.PhotoIdentification)
+                .ToList();
+
+            var leaseDocumentList = _context.VerificationDocuments
+                .Where(m => m.TenantId == user.Id)
+                .Where(m => m.DocumentType == DocumentType.LeaseAgreement)
+                .ToList();
+
+            Console.WriteLine(photoIdDocumentList);
+            Console.WriteLine(leaseDocumentList);
+
+            
             if (user.IsIdVerified)
             {
                 StatusMessage = "Your account is already verified.";
                 return RedirectToPage();
             }
             
-            if (!ModelState.IsValid)
-            {
-                await LoadAsync(user);
-                var message = string.Join(" | ", ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage));
-                Console.WriteLine(message);
-                return Page();
-            }
-
+            
             if (Request.Form.Files.Count > 0)
             {
-             
+                
                 IFormFile idPhoto = Request.Form.Files.GetFile("IdPhoto");
                 IFormFile leasePhoto = Request.Form.Files.GetFile("leasePhoto");
 
@@ -144,24 +163,56 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
                 {
                     Console.WriteLine(file.Name);
                 };
+                
                 using (var idPhotoStream = new MemoryStream())
                 {
-                    if(idPhoto != null){
+                    if(idPhoto != null)
+                    {
                         await idPhoto.CopyToAsync(idPhotoStream);
-                        document!.Data = idPhotoStream.ToArray();
-                        
+                        if (photoIdDocumentList.Count > 0)
+                        {
+                            photoIdDocumentList.First().Data = idPhotoStream.ToArray();
+                            photoIdDocumentList.First().ResponseMessage = null;
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            _context.VerificationDocuments.Add(new VerificationDocument()
+                            {
+                                Data = idPhotoStream.ToArray(),
+                                DocumentType = DocumentType.PhotoIdentification,
+                                TenantId = user.Id
+                            });
+                            await _context.SaveChangesAsync();
+                        }
                     }
                 }
                 
                 using (var leasePhotoStream = new MemoryStream())
                 {
-                    if(leasePhoto != null){
+                    if(leasePhoto != null)
+                    {
                         await leasePhoto.CopyToAsync(leasePhotoStream);
-                        document!.Data = leasePhotoStream.ToArray();
-                    }
+                        if (leaseDocumentList.Count > 0)
+                        {
+                            leaseDocumentList.First().Data = leasePhotoStream.ToArray();
+                            leaseDocumentList.First().ResponseMessage = null;
+                            await _context.SaveChangesAsync();
 
+                        }
+                        else
+                        {
+                            _context.VerificationDocuments.Add(new VerificationDocument()
+                            {
+                                Data = leasePhotoStream.ToArray(),
+                                DocumentType = DocumentType.LeaseAgreement,
+                                TenantId = user.Id
+                            });
+                            await _context.SaveChangesAsync();
+
+                        }
+                    }
                 }
-                await _context.SaveChangesAsync();
                 
             }
 
