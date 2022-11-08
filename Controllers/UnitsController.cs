@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Identity;
 namespace chickadee.Controllers
 {
     [ApiController]
-    
     public class UnitsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -66,6 +65,9 @@ namespace chickadee.Controllers
 
             return Ok(units);
         }
+        
+        
+       
         
         // GET: api/properties/{propertyId}/units
         [HttpGet]
@@ -148,7 +150,8 @@ namespace chickadee.Controllers
 
         // PUT: api/Unit/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("/api/units/{id}")]
         public async Task<IActionResult> PutUnit(string id, Unit unit)
         {
             if (id != unit.UnitId)
@@ -180,6 +183,7 @@ namespace chickadee.Controllers
         // POST: api/Unit
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("api/units")]
         public async Task<ActionResult<Unit>> PostUnit(Unit unit)
         {
           if (_context.Unit == null)
@@ -207,7 +211,9 @@ namespace chickadee.Controllers
         }
 
         // DELETE: api/Unit/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("api/units/{id}")]
+
         public async Task<IActionResult> DeleteUnit(string id)
         {
             if (_context.Unit == null)
