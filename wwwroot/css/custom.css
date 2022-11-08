@@ -2,6 +2,9 @@
     background: #EEEFDF;
 }
 
+.text-green {
+    color: #103A31;
+}
 .green {
     background: #103A31;
 }
@@ -54,6 +57,19 @@
 .p{
     font-family: "chickadeeText", serif;
 }
+
+.btn-green {
+    color: #fff;
+    background-color: #103A31;
+    border-color: #103a31;
+}
+
+.btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active, .open>.dropdown-toggle.btn-green {
+    color: #fff;
+    background-color: rgba(16, 58, 49, 0.95);
+    border-color: #103a31; /*set the color you want here*/
+}
+
 
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\
 for details on configuring this project to bundle and minify static web assets. */

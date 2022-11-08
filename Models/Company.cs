@@ -4,7 +4,7 @@ namespace chickadee.Models {
 
     public class Company {
         [Key]
-        public String CompanyId { get; set; } = Guid.NewGuid().ToString();
+        public string CompanyId { get; set; } = Guid.NewGuid().ToString();
         
         [Required]
         [Display(Name = "Company Name")] 

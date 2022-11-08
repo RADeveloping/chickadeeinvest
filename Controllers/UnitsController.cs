@@ -29,6 +29,7 @@ namespace chickadee.Controllers
 
         // GET: api/properties/{propertyId}/units
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin, Admin, PropertyManager, Tenant")]
         public async Task<ActionResult<IEnumerable<Unit>>> GetUnits(string propertyId)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
@@ -42,25 +43,35 @@ namespace chickadee.Controllers
             {
                 return NotFound();
             }
+            
+            var unitsSimple = _context.Unit
+                .Where(u => u.PropertyId == propertyId)
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                }).ToList();
+
 
             var units = _context.Unit
-              .Where(u=> u.PropertyId == propertyId)
-              .Select(unit => new
-              {
-                  unitId = unit.UnitId,
-                  unitNo = unit.UnitNo,
-                  unitType = unit.UnitType,
-                  propertyId = unit.PropertyId,
-                  propertyManagerId = unit.PropertyManagerId,
-              })
-              .ToList();
-              
+                .Where(u => u.PropertyId == propertyId)
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                    propertyId = unit.PropertyId,
+                    propertyManagerId = unit.PropertyManagerId,
+                }).ToList();
+               
+
             if (User.IsInRole("SuperAdmin") || units.Any(p => p.propertyManagerId == requestingUser.Id || p.unitId == requestingUser.UnitId))
             {
                 return Ok(units);
             }
-            
-            return NotFound();
+
+            return Ok(unitsSimple);
         }
 
         
@@ -103,6 +114,7 @@ namespace chickadee.Controllers
             return Ok(unit);
         }
 
+        
         // PUT: api/Unit/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

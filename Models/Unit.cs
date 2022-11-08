@@ -13,16 +13,16 @@ namespace chickadee.Models
 
     public class Unit {
         [Key]
-        public String UnitId { get; set; } = Guid.NewGuid().ToString();
+        public string UnitId { get; set; } = Guid.NewGuid().ToString();
         public int UnitNo { get; set; }
         
         public UnitType UnitType { get; set; }
         
-        public String PropertyId { get; set; }
+        public string PropertyId { get; set; }
         [ForeignKey("PropertyId")]
         public Property? Property { get; set; }
         
-        public String? PropertyManagerId { get; set; }
+        public string? PropertyManagerId { get; set; }
         [ForeignKey("PropertyManagerId")]
         public PropertyManager? PropertyManager { get; set; }
         
