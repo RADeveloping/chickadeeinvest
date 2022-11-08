@@ -3,6 +3,7 @@ import {useDropzone} from 'react-dropzone';
 import {Container, Stack} from "@mui/material";
 import useFetch from "./FetchData";
 import {filterUnit} from "../utils/filters";
+import authService from "./api-authorization/AuthorizeService";
 
 const thumbsContainer = {
     display: 'flex',
@@ -37,53 +38,48 @@ const img = {
 
 
 export default function UploadDocument(props) {
-    const {documentType, description, inputElementId, imageId, selectedUnitIdParent} = props
+    const {documentType, description, inputElementId, imageId, setPhotoId, setLeaseAgreement} = props
     const [documents, errorDocuments, loadingDocuments] = useFetch(`api/documents/verification`);
+    const [tenantId, setTenantId] = useState(null);
     
     const [photoIDFile, setPhotoIDFile] = useState(null);
-    const [imagePreview, setImagePreview] = useState("")
+    const [imagePreview, setImagePreview] = useState(null)
     const [responseMessage, setResponseMessage] = useState(null)
 
-    const [postDocument, setPostDocument] = useState({
-        myFile: "",
-    });
+    // const [postDocument, setPostDocument] = useState({
+    //     "data": photoIDFile,
+    //     "documentType": documentType === "Photo ID" ? 0 : 1,
+    //     "responseMessage": null,
+    //     "tenantId": {tenantId}
+    // });
 
     
-
-    const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(file);
-            fileReader.onload = () => {
-                resolve(fileReader.result);
-            };
-            fileReader.onerror = (error) => {
-                reject(error);
-            };
-        });
-    };
     
-    const saveFile = (e) => {
-        setPhotoIDFile(e.target.files[0]);
-        setImagePreview(window.URL.createObjectURL(e.target.files[0]));
-        const base64 =  convertToBase64(e.target.files[0]);
-        console.log(base64)
+    const saveFile = async (e) => {
+        if (e.target.files[0]){
+            setPhotoIDFile(e.target.files[0]);
+            setImagePreview(window.URL.createObjectURL(e.target.files[0]));
+        }
     }
-    
     
     useEffect(() => {
        if (documentType === "Photo ID") {
            if(documents && !loadingDocuments && documents.photoIDDocuments[0]){
-               setImagePreview(`data:image/jpeg;base64,${documents.photoIDDocuments[0].data}`)
+               if(documents.photoIDDocuments[0].data){
+                   setImagePreview(`data:image/jpeg;base64,${documents.photoIDDocuments[0].data}`)
+               }
                setResponseMessage(documents.photoIDDocuments[0].responseMessage)
            }
        }else{
            if(documents && !loadingDocuments && documents.leaseDocuments[0]){
-               setImagePreview(`data:image/jpeg;base64,${documents.leaseDocuments[0].data}`)
+               if(documents.photoIDDocuments[0].data){
+                   setImagePreview(`data:image/jpeg;base64,${documents.leaseDocuments[0].data}`)    
+               }
+
                setResponseMessage(documents.photoIDDocuments[0].responseMessage)
            }
        }
-        
+       
        // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
         return () => URL.revokeObjectURL(imagePreview);
     }, [documents]);
@@ -97,10 +93,11 @@ export default function UploadDocument(props) {
                   id={inputElementId}
                   onChange={saveFile}
            />
-           <aside style={thumbsContainer}>
-               {imagePreview ?  <img id={imageId} className="img-fluid my-3 dropzone d-block-inline" width="300" height="300"
-                                     src={imagePreview} alt="Id Photo"/> : <div></div>}
-           </aside>
+           {imagePreview ? <aside style={thumbsContainer}> <img id={imageId} className="img-fluid my-3 dropzone d-block-inline" width="300" height="300"
+                                 src={imagePreview} alt="Id Photo"/>
+           </aside> : <span></span>
+           }
+           
 
            { responseMessage ?
                <p className={'text-danger h6'}>{`Verification Failed: ${responseMessage}`}</p> : <span></span>}

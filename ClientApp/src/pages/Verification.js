@@ -168,7 +168,7 @@ ColorlibStepIcon.propTypes = {
 
 const steps = ['Register', 'Select Unit', 'Verify Documents'];
 
-function getStepContent(step, nextButtonEnabled, setNextButtonEnabled,selectedUnitIdParent, setSelectedUnitIdParent,
+function getStepContent(step, nextButtonEnabled, setNextButtonEnabled,selectedUnitIdParent, setSelectedUnitIdParent, 
                         setPhotoId, setLeaseAgreement) {
     switch (step) {
         case 0:
@@ -179,6 +179,7 @@ function getStepContent(step, nextButtonEnabled, setNextButtonEnabled,selectedUn
         case 2:
             return <UploadDocuments  setPhotoId = {setPhotoId} setLeaseAgreement = {setLeaseAgreement}
                                      selectedUnitIdParent={selectedUnitIdParent} setSelectedUnitIdParent={setSelectedUnitIdParent}
+
             />;
         default:
             throw new Error('Unknown step');
@@ -202,7 +203,18 @@ export default function Verification() {
 
     }, [selectedUnitIdParent])
 
+
+    useEffect(() => {
+   
+        console.log(photoId)
+
+    }, [photoId])
+
+    
     const handleNext = () => {
+        if(activeStep === 2){
+            console.log("SUBMIT")
+        }
         setActiveStep(activeStep + 1);
     };
 
