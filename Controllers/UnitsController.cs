@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers
 {
-    [Route("api/properties/{propertyId}/units")]
     [ApiController]
     
     public class UnitsController : ControllerBase
@@ -25,8 +24,52 @@ namespace chickadee.Controllers
             _userManager = userManager;
         }
 
+        // GET: api/units
+        [HttpGet]
+        [Route("api/units")]
+        public async Task<ActionResult<IEnumerable<Unit>>> GetAllUnits()
+        {
+            var requestingUser = await _userManager.GetUserAsync(User);
+            if (_context.Unit == null || requestingUser == null || _context.Property == null)
+            {
+                return NotFound();
+            }
+
+            var units = _context.Unit
+                .Where(u=>  u.PropertyManager != null && (requestingUser.UnitId == u.UnitId || u.PropertyManager.Id == requestingUser.Id))
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                    propertyId = unit.PropertyId,
+                    propertyManagerId = unit.PropertyManagerId,
+                })
+                .ToList();
+            
+            var unitsSa = _context.Unit
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                    propertyId = unit.PropertyId,
+                    propertyManagerId = unit.PropertyManagerId,
+                })
+                .ToList();
+
+              
+            if (User.IsInRole("SuperAdmin"))
+            {
+                return Ok(unitsSa);
+            }
+
+            return Ok(units);
+        }
+        
         // GET: api/properties/{propertyId}/units
         [HttpGet]
+        [Route("api/properties/{propertyId}/units")]
         public async Task<ActionResult<IEnumerable<Unit>>> GetUnits(string propertyId)
         {
             Console.WriteLine("GET UNITssss");
@@ -66,7 +109,7 @@ namespace chickadee.Controllers
         
         // GET: api/properties/{propertyId}/units/{unitId
         [HttpGet]
-        [Route("{unitId}")]
+        [Route("api/properties/{propertyId}/units/{unitId}")]
         public async Task<ActionResult<Unit>> GetUnit(string? unitId, string? propertyId)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
