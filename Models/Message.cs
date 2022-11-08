@@ -5,7 +5,7 @@ namespace chickadee.Models {
     public class Message {
 
         [Key]
-        public String MessageId { get; set; } = Guid.NewGuid().ToString();
+        public string MessageId { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [Display(Name = "Message")]
@@ -14,7 +14,7 @@ namespace chickadee.Models {
         
         [Required]
         [Display(Name = "Sender")]
-        public String SenderId { get; set; }
+        public string SenderId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser? Sender { get; set; } 
         

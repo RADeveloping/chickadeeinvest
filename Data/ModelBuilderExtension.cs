@@ -319,7 +319,7 @@ public static class ModelBuilderExtensions {
         
         List<VerificationDocument> verificationDocuments = new List<VerificationDocument>() {
             new VerificationDocument() {
-                data = Array.Empty<byte>(),
+                Data = Array.Empty<byte>(),
                 DocumentType = Enums.DocumentType.PhotoIdentification,
                 TenantId = TenantsList[0].Id
             },

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace chickadee.Models
 {
     public class Property {
-        public String PropertyId { get; set; } = Guid.NewGuid().ToString();
+        public string PropertyId { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; }
         public string Address { get; set; }
         

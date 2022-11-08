@@ -5,7 +5,7 @@ namespace chickadee.Models {
     public class PropertyManager : ApplicationUser {
         
         [Display(Name = "Company ID")]
-        public String? CompanyId { get; set;}
+        public string? CompanyId { get; set;}
         [ForeignKey("CompanyId")]
         public Company? Company { get; set; } = null!;
         

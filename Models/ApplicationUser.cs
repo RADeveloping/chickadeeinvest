@@ -31,7 +31,7 @@ namespace chickadee.Models {
         public byte[]? ProfilePicture { get; set; }
         
         [Display(Name = "Unit ID")]
-        public String? UnitId { get; set;}
+        public string? UnitId { get; set;}
         [ForeignKey("UnitId")]
 
         public ICollection<Message>? Messages { get; set; } = new List<Message>();

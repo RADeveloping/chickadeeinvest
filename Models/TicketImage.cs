@@ -4,7 +4,7 @@ namespace chickadee.Models {
 
     public class TicketImage {
         [Key]
-        public String TicketImageId { get; set; } = Guid.NewGuid().ToString();
+        public string TicketImageId { get; set; } = Guid.NewGuid().ToString();
         
         [Required]
         public byte[] data { get; set; }
@@ -19,7 +19,7 @@ namespace chickadee.Models {
         public Ticket? Ticket { get; set; }
         
         [Required]
-        public String CreatedById { get; set; } 
+        public string CreatedById { get; set; } 
         [ForeignKey("CreatedById")]
         public ApplicationUser? CreatedBy { get; set; }
         
