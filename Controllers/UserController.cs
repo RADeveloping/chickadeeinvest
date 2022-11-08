@@ -107,7 +107,7 @@ namespace chickadee.Controllers
                 }
             }
 
-            return CreatedAtAction("GetApplicationUser", new { id = applicationUser.Id }, applicationUser);
+            return Ok("User created");
         }
 
         // DELETE: api/User/5
