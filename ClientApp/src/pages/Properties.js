@@ -29,7 +29,7 @@ const properties = [
     {id: 'open_count', label: 'Open Ticket Count'},
     {id: 'unit_count', label: 'Unit Count'},
     {id: 'tenant_count', label: 'Tenant Count'},
-    {id: 'name', label: 'Property Manager Name'},
+    {id: 'name', label: 'Property Name'},
 ];
 
 export default function Properties() {
@@ -89,7 +89,7 @@ export default function Properties() {
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
                             display: loadingData ? 'none' : undefined,
-                            width: 'fit-content',
+                            width: isDesktop ? 'fit-content' : '100%',
                             backgroundColor: (theme) => theme.palette['background'].default,
                         }}>
 
@@ -98,18 +98,19 @@ export default function Properties() {
                                 onFilterQuery={handleFilterByQuery}
                                 properties={properties}
                                 setFilterQuery={setFilterQuery}
+                                isDesktop={isDesktop}
                             />
 
                         </Card>
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
                             display: loadingData ? 'none' : undefined,
-                            width: 'fit-content',
+                            width: isDesktop ? 'fit-content' : '100%',
                             backgroundColor: (theme) => theme.palette['background'].default,
                             padding: 2.5
                         }}>
                             <Stack direction={'row'} alignItems={'stretch'} gap={1}>
-                                <FormControl sx={{minWidth: 80}}>
+                                <FormControl sx={{width:'100%'}}>
                                     <InputLabel id="sort-property">Order by</InputLabel>
                                     <Select
                                         labelId="sort-property"
