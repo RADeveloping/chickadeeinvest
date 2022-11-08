@@ -350,7 +350,6 @@ namespace chickadee.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Route("api/properties/{propertyId}/units/{unitId}/tickets")]
-        [Authorize(Roles = "Tenant")]
         public async Task<ActionResult<Ticket>> PostTicket(string propertyId, string unitId, Ticket ticket)
         {
           if (_context.Tickets == null || _context.Unit == null)
