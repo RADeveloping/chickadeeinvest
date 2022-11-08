@@ -120,7 +120,7 @@ namespace chickadee.Controllers
             var tickets = _context.Tickets
                 .Include(t => t.Unit)
                 .ThenInclude(u => u.Property)
-                .Where(t => (t.Unit.PropertyManagerId == requestingUser.Id) || t.Unit.UnitId == requestingUser.UnitId)
+                .Where(t => t.Unit != null && ((t.Unit.PropertyManagerId == requestingUser.Id) || t.Unit.UnitId == requestingUser.UnitId))
                 .Select(t => new
                 {
                     ticketId = t.TicketId,
@@ -132,6 +132,7 @@ namespace chickadee.Controllers
                     severity = t.Severity,
                     closedDate = t.ClosedDate,
                     unitId = t.UnitId,
+                    propertyId = t.Unit.PropertyId,
                     createdBy = new
                     {
                         FirstName = t.CreatedBy.FirstName,
