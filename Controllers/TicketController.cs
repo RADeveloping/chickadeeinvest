@@ -61,6 +61,7 @@ namespace chickadee.Controllers
                         severity = t.Severity,
                         closedDate = t.ClosedDate,
                         unitId = t.UnitId,
+                        propertyId = t.Unit.PropertyId,
                         // unit = new
                         // {
                         //     unitId = t.Unit.UnitId,
