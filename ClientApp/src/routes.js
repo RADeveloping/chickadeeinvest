@@ -13,22 +13,34 @@ import {
   LogoutActions
 } from './components/api-authorization/ApiAuthorizationConstants';
 import { Logout } from './components/api-authorization/Logout';
-import Tickets from "./pages/Tickets";
 import LandingPage from "./pages/LandingPage";
+import Overview from "./pages/Overview";
+import TicketDetail from "./pages/TicketDetail";
+import Properties from "./pages/Properties";
 
 // ----------------------------------------------------------------------
 
 const DashboardRoutes = [
-  {
-    path: 'app',
-    requireAuth: true,
-    element: <DashboardApp />
-  },
-  {
-    path: 'tickets',
-    requireAuth: true,
-    element: <Tickets />
-  }
+    {
+        path: 'app',
+        requireAuth: true,
+        element: <DashboardApp />
+    },
+    {
+        path: 'tickets/:id',
+        requireAuth: true,
+        element: <TicketDetail />
+    },
+    {
+        path: 'overview',
+        requireAuth: true,
+        element: <Overview />
+    },
+    {
+        path: 'properties',
+        requireAuth: true,
+        element: <Properties />
+    }
 ];
 
 export default function Router() {

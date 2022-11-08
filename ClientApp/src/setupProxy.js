@@ -23,11 +23,8 @@ const context = [
   '/api/Account',
   '/css',
   '/images',
-  '/api/Ticket',
-  '/api/Unit',
-  '/api/Property',
-  '/api/Unit/current',
-  '/api/Property/current'
+  '/api',
+    '/swagger',
 ];
 
 module.exports = function (app) {
@@ -41,10 +38,11 @@ module.exports = function (app) {
 
   app.use(appProxy);
   app.use(
-    '/api',
-    createProxyMiddleware({
-      target,
-      changeOrigin: true
-    }),
+      '/api',
+      createProxyMiddleware({
+        target,
+        changeOrigin: true
+      }),
   );
+ 
 };

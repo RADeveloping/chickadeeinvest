@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace chickadee.Controllers;
 
-[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -29,7 +31,7 @@ namespace chickadee.Controllers;
             if (user != null)
             {
                 var roles = _userManager.GetRolesAsync(user).Result;
-
+                
                 var simpleUser = new
                 {
                     FirstName = user.FirstName,
@@ -37,7 +39,9 @@ namespace chickadee.Controllers;
                     Id = user.Id,
                     Email = user.Email,
                     Roles = roles,
+                    PhoneNumber = user.PhoneNumber,
                     ProfilePicture = user.ProfilePicture,
+                    
                 };
                 
                 

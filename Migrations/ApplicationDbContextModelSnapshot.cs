@@ -34,6 +34,13 @@ namespace chickadee.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -81,8 +88,8 @@ namespace chickadee.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("UnitId")
-                        .HasColumnType("int");
+                    b.Property<string>("UnitId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -101,16 +108,17 @@ namespace chickadee.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("UnitId");
-
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
 
                     b.HasData(
                         new
                         {
-                            Id = "215f0df8-b94a-49f0-9fae-c22c74614ecb",
+                            Id = "16c1608e-2fab-4129-9b7e-8037356c49c8",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a988c259-4d65-4225-98c8-1e065870f8d2",
+                            ConcurrencyStamp = "9c02e15e-8435-4901-9154-ff78aa919e8d",
+                            DateOfBirth = new DateTime(1992, 5, 27, 0, 0, 0, 0, DateTimeKind.Local),
                             Email = "superadmin@chickadeeinvest.ca",
                             EmailConfirmed = true,
                             FirstName = "Matt",
@@ -118,127 +126,145 @@ namespace chickadee.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERADMIN@CHICKADEEINVEST.CA",
                             NormalizedUserName = "SUPERADMIN@CHICKADEEINVEST.CA",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGl8d2wU+zkwfHAKT3V6Zmi4TUOd8kzkH32Aq+GhGItxmzuAN7mk3jWgno6J9bF+rQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOMI7BJF6TmE+C5wpu+ZZqz9Ldd1NXuPfYZEirBF0/sOEmregwFFbap1WB+tyFJdBw==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "cfed882f-d0ce-436e-95b5-4edebdaa510d",
+                            SecurityStamp = "96d33fff-153d-40a6-aafa-be48b6f3ff48",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@chickadeeinvest.ca",
-                            UsernameChangeLimit = 10
-                        },
-                        new
-                        {
-                            Id = "0cc25564-5133-4769-a2b9-b8bd37996d3d",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "9ab5f754-f3ac-45c6-a724-fb27c919dcdb",
-                            Email = "propertymanager@gmail.com",
-                            EmailConfirmed = true,
-                            FirstName = "Property",
-                            LastName = "Manager",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "PROPERTYMANAGER@GMAIL.COM",
-                            NormalizedUserName = "PROPERTYMANAGER@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJCmrJ3Bdwib2e3xLiiGMQU1kYzBzHg/tC618TPAcMp1/CwsvWDDwbzmL+ntX8Z1qw==",
-                            PhoneNumberConfirmed = true,
-                            SecurityStamp = "79205821-a649-4b33-8b78-820a940e743b",
-                            TwoFactorEnabled = false,
-                            UserName = "propertymanager@gmail.com",
-                            UsernameChangeLimit = 10
-                        },
-                        new
-                        {
-                            Id = "7e972781-25af-46ad-b5d6-051e3e857d3d",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7ad1a89b-7b91-4379-bafa-3f8769ffcffa",
-                            Email = "propertymanager2@gmail.com",
-                            EmailConfirmed = true,
-                            FirstName = "Manager",
-                            LastName = "Property",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "PROPERTYMANAGER2@GMAIL.COM",
-                            NormalizedUserName = "PROPERTYMANAGER2@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEB6UsuyGJ3DCUuQEkKHxVQIQD06j0gjC5t/7D+dkM/fOkYCY744tFCLa08356ju4A==",
-                            PhoneNumberConfirmed = true,
-                            SecurityStamp = "cee92c9d-5c0f-43b7-acca-32e657c1f8e6",
-                            TwoFactorEnabled = false,
-                            UserName = "propertymanager2@gmail.com",
-                            UsernameChangeLimit = 10
-                        },
-                        new
-                        {
-                            Id = "72904ebc-cb0c-4b97-a5e7-98313e9a59f5",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "49298b3b-4342-4894-b4a1-af1e95b7d011",
-                            Email = "tenant@gmail.com",
-                            EmailConfirmed = true,
-                            FirstName = "Tenant",
-                            LastName = "User",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TENANT@GMAIL.COM",
-                            NormalizedUserName = "TENANT@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELfG0j6HhYwxZ/cIqLDZ08PCs11Mw0kWUgoizTxHDgk6093hiT5HqTilExgZ8QVmZQ==",
-                            PhoneNumberConfirmed = true,
-                            SecurityStamp = "e8789163-157f-422f-a3cb-5aa23edd279d",
-                            TwoFactorEnabled = false,
-                            UnitId = 1,
-                            UserName = "tenant@gmail.com",
-                            UsernameChangeLimit = 10
-                        },
-                        new
-                        {
-                            Id = "646750e8-a6f2-4a9c-b75f-53e1686cf5b7",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "284573b3-3c0c-445d-9ed4-ecad8750ae9a",
-                            Email = "tenant2@gmail.com",
-                            EmailConfirmed = true,
-                            FirstName = "User",
-                            LastName = "Tenant",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TENANT2@GMAIL.COM",
-                            NormalizedUserName = "TENANT2@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDMWKqB4we+z7Q/xU+hD2DDfZ5LA9sEg7Soz0vcgn0iA2LeHpLAHUaHzJGN3nl3nZw==",
-                            PhoneNumberConfirmed = true,
-                            SecurityStamp = "8578139b-3dc6-4622-9724-f7846e0fb3a1",
-                            TwoFactorEnabled = false,
-                            UnitId = 2,
-                            UserName = "tenant2@gmail.com",
                             UsernameChangeLimit = 10
                         });
                 });
 
-            modelBuilder.Entity("chickadee.Models.Property", b =>
+            modelBuilder.Entity("chickadee.Models.Company", b =>
                 {
-                    b.Property<int>("PropertyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PropertyId"), 1L, 1);
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PropertyManagerId")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PropertyId");
+                    b.Property<byte[]>("Logo")
+                        .HasColumnType("varbinary(max)");
 
-                    b.HasIndex("PropertyManagerId");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Properties");
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CompanyId");
+
+                    b.ToTable("Company");
 
                     b.HasData(
                         new
                         {
-                            PropertyId = 1,
-                            Address = "742 Evergreen Terrace",
-                            PropertyManagerId = "0cc25564-5133-4769-a2b9-b8bd37996d3d"
+                            CompanyId = "150918d8-559d-4111-8dcc-3af2868a1e63",
+                            Address = "123 Main St",
+                            Email = "main@companyOne.com",
+                            Name = "Company One",
+                            Phone = "604-235-7890"
                         },
                         new
                         {
-                            PropertyId = 2,
-                            Address = "The Montana",
-                            PropertyManagerId = "7e972781-25af-46ad-b5d6-051e3e857d3d"
+                            CompanyId = "00533fc4-66fa-4b38-9961-a7be2fe53370",
+                            Address = "Wall street",
+                            Email = "main@companyTwo.com",
+                            Name = "Company Two",
+                            Phone = "778-334-4594"
+                        });
+                });
+
+            modelBuilder.Entity("chickadee.Models.Message", b =>
+                {
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnitId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("TicketId");
+
+                    b.HasIndex("UnitId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages");
+
+                    b.HasData(
+                        new
+                        {
+                            MessageId = "f119d71c-9c96-455a-91ca-a609f3b2c525",
+                            CreatedDate = new DateTime(2022, 11, 5, 23, 4, 58, 283, DateTimeKind.Local).AddTicks(6240),
+                            SenderId = "a92cdb3c-20d5-49be-a7f7-963ef43757c7",
+                            TicketId = 1,
+                            content = "This is a message"
+                        });
+                });
+
+            modelBuilder.Entity("chickadee.Models.Property", b =>
+                {
+                    b.Property<string>("PropertyId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PropertyId");
+
+                    b.ToTable("Property");
+
+                    b.HasData(
+                        new
+                        {
+                            PropertyId = "162ceb42-16a7-462b-8ebf-0543c4ca7a28",
+                            Address = "742 Evergreen Terrace",
+                            Name = "The Evergreen Managed By PM 1"
+                        },
+                        new
+                        {
+                            PropertyId = "5536f869-5617-4261-b4d6-f62290eb5011",
+                            Address = "123 Sesame Street",
+                            Name = "Montana Apartments Managed By PM 2"
+                        },
+                        new
+                        {
+                            PropertyId = "7f15bf4b-335f-41d8-95f2-7d42323298f4",
+                            Address = "7488 Hazel Street",
+                            Name = "Arcola Managed by PM 2"
                         });
                 });
 
@@ -250,14 +276,23 @@ namespace chickadee.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("ClosedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EstimatedDate")
+                    b.Property<DateTime?>("EstimatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Problem")
@@ -270,10 +305,13 @@ namespace chickadee.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
+                    b.Property<string>("UnitId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("TicketId");
+
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("UnitId");
 
@@ -283,81 +321,220 @@ namespace chickadee.Migrations
                         new
                         {
                             TicketId = 1,
+                            CreatedById = "a92cdb3c-20d5-49be-a7f7-963ef43757c7",
                             CreatedOn = new DateTime(2022, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Massive Leak from the Kitchen pipe",
                             EstimatedDate = new DateTime(2022, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Problem = "Massive Leakage",
                             Severity = 2,
                             Status = 0,
-                            UnitId = 1
+                            UnitId = "03c253b1-54d1-4c25-afe9-63100dce6303"
                         },
                         new
                         {
                             TicketId = 2,
+                            CreatedById = "a92cdb3c-20d5-49be-a7f7-963ef43757c7",
                             CreatedOn = new DateTime(2021, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Need repairing the floors from last earthquake",
                             EstimatedDate = new DateTime(2022, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Problem = "Earthquake repair",
                             Severity = 1,
                             Status = 0,
-                            UnitId = 1
+                            UnitId = "03c253b1-54d1-4c25-afe9-63100dce6303"
                         },
                         new
                         {
                             TicketId = 3,
+                            CreatedById = "7fa3ad5f-ccbd-4ede-a4b9-0d4df6644d65",
                             CreatedOn = new DateTime(1999, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Need to fix the roof that was damaged by the tornado",
                             EstimatedDate = new DateTime(2000, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Problem = "Tornado damage",
                             Severity = 2,
                             Status = 1,
-                            UnitId = 2
+                            UnitId = "a7e6b1fb-6f5d-4d68-83c4-6d578f0105d6"
                         },
                         new
                         {
                             TicketId = 4,
+                            CreatedById = "7fa3ad5f-ccbd-4ede-a4b9-0d4df6644d65",
                             CreatedOn = new DateTime(2019, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Currently getting by with rat traps",
                             EstimatedDate = new DateTime(2022, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Problem = "Rat infestation",
                             Severity = 1,
                             Status = 0,
-                            UnitId = 2
+                            UnitId = "a7e6b1fb-6f5d-4d68-83c4-6d578f0105d6"
                         });
+                });
+
+            modelBuilder.Entity("chickadee.Models.TicketImage", b =>
+                {
+                    b.Property<string>("TicketImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UploadDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<byte[]>("data")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("TicketImageId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("TicketImage");
                 });
 
             modelBuilder.Entity("chickadee.Models.Unit", b =>
                 {
-                    b.Property<int>("UnitId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("UnitId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UnitId"), 1L, 1);
+                    b.Property<string>("PropertyId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
+                    b.Property<string>("PropertyManagerId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("UnitNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitType")
                         .HasColumnType("int");
 
                     b.HasKey("UnitId");
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("Units");
+                    b.HasIndex("PropertyManagerId");
+
+                    b.ToTable("Unit");
 
                     b.HasData(
                         new
                         {
-                            UnitId = 1,
-                            PropertyId = 1,
-                            UnitNo = 101
+                            UnitId = "03c253b1-54d1-4c25-afe9-63100dce6303",
+                            PropertyId = "162ceb42-16a7-462b-8ebf-0543c4ca7a28",
+                            PropertyManagerId = "aa47f635-35bb-49e3-b016-7ae14751b4b1",
+                            UnitNo = 100,
+                            UnitType = 0
                         },
                         new
                         {
-                            UnitId = 2,
-                            PropertyId = 2,
-                            UnitNo = 500
+                            UnitId = "a7e6b1fb-6f5d-4d68-83c4-6d578f0105d6",
+                            PropertyId = "5536f869-5617-4261-b4d6-f62290eb5011",
+                            PropertyManagerId = "fd669981-aa28-4d17-9c19-090e27098f49",
+                            UnitNo = 200,
+                            UnitType = 1
+                        },
+                        new
+                        {
+                            UnitId = "8940ed56-c1b9-4134-92df-4dee60b21e44",
+                            PropertyId = "5536f869-5617-4261-b4d6-f62290eb5011",
+                            UnitNo = 300,
+                            UnitType = 1
+                        });
+                });
+
+            modelBuilder.Entity("chickadee.Models.UnitImage", b =>
+                {
+                    b.Property<string>("UnitImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UnitId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UploadDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<byte[]>("data")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("UnitImageId");
+
+                    b.HasIndex("UnitId");
+
+                    b.ToTable("UnitImage");
+                });
+
+            modelBuilder.Entity("chickadee.Models.UnitNote", b =>
+                {
+                    b.Property<string>("UnitNoteId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UnitId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UploadDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("UnitNoteId");
+
+                    b.HasIndex("UnitId");
+
+                    b.ToTable("UnitNote");
+                });
+
+            modelBuilder.Entity("chickadee.Models.VerificationDocument", b =>
+                {
+                    b.Property<string>("VerificationDocumentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DocumentType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResponseMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte[]>("data")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("VerificationDocumentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("VerificationDocuments");
+
+                    b.HasData(
+                        new
+                        {
+                            VerificationDocumentId = "8977bcc7-1038-4610-8f84-a9e7e05b1a42",
+                            DocumentType = 0,
+                            TenantId = "a92cdb3c-20d5-49be-a7f7-963ef43757c7",
+                            data = new byte[0]
                         });
                 });
 
@@ -531,29 +708,29 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "da1d50ab-8df8-4c21-a2df-eec2647f8100",
-                            ConcurrencyStamp = "84e19c77-8b23-4073-949b-8213a1f62d45",
+                            Id = "f3fa3e2e-a072-44f9-91f2-f8a4756300da",
+                            ConcurrencyStamp = "39bb1f1a-033d-4c94-8303-a727fc06ba82",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "322df380-6af1-4aaa-a1c0-cb5d59195373",
-                            ConcurrencyStamp = "830c44fa-ee44-4dda-8a16-0d618f853fa8",
+                            Id = "460de45a-d9c2-4812-81e3-28ac2d8f6c7b",
+                            ConcurrencyStamp = "aef6631a-4139-4b1d-8912-e650bdfdf5f5",
                             Name = "PropertyManager",
                             NormalizedName = "PROPERTYMANAGER"
                         },
                         new
                         {
-                            Id = "9bcae295-e06e-4137-b302-e9caed02280e",
-                            ConcurrencyStamp = "96f5501d-b49f-42ae-949e-78d7bc1e8c0b",
+                            Id = "917451f2-135c-4f50-8b58-2c3cc7623977",
+                            ConcurrencyStamp = "dbdd9fc4-6c31-4d17-8282-1352fe291aba",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "efc90636-a2dc-478d-9501-f9797dbcbf8a",
-                            ConcurrencyStamp = "1aacc8c1-84b6-4875-bdb3-559ca559c035",
+                            Id = "c7b1daf6-6248-45c4-984c-fa151e7ec5e2",
+                            ConcurrencyStamp = "ad1b1968-7052-494c-90ad-cd2c5fb49b96",
                             Name = "Tenant",
                             NormalizedName = "TENANT"
                         });
@@ -648,43 +825,43 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "215f0df8-b94a-49f0-9fae-c22c74614ecb",
-                            RoleId = "efc90636-a2dc-478d-9501-f9797dbcbf8a"
+                            UserId = "16c1608e-2fab-4129-9b7e-8037356c49c8",
+                            RoleId = "c7b1daf6-6248-45c4-984c-fa151e7ec5e2"
                         },
                         new
                         {
-                            UserId = "215f0df8-b94a-49f0-9fae-c22c74614ecb",
-                            RoleId = "322df380-6af1-4aaa-a1c0-cb5d59195373"
+                            UserId = "16c1608e-2fab-4129-9b7e-8037356c49c8",
+                            RoleId = "460de45a-d9c2-4812-81e3-28ac2d8f6c7b"
                         },
                         new
                         {
-                            UserId = "215f0df8-b94a-49f0-9fae-c22c74614ecb",
-                            RoleId = "9bcae295-e06e-4137-b302-e9caed02280e"
+                            UserId = "16c1608e-2fab-4129-9b7e-8037356c49c8",
+                            RoleId = "917451f2-135c-4f50-8b58-2c3cc7623977"
                         },
                         new
                         {
-                            UserId = "215f0df8-b94a-49f0-9fae-c22c74614ecb",
-                            RoleId = "da1d50ab-8df8-4c21-a2df-eec2647f8100"
+                            UserId = "16c1608e-2fab-4129-9b7e-8037356c49c8",
+                            RoleId = "f3fa3e2e-a072-44f9-91f2-f8a4756300da"
                         },
                         new
                         {
-                            UserId = "0cc25564-5133-4769-a2b9-b8bd37996d3d",
-                            RoleId = "322df380-6af1-4aaa-a1c0-cb5d59195373"
+                            UserId = "aa47f635-35bb-49e3-b016-7ae14751b4b1",
+                            RoleId = "460de45a-d9c2-4812-81e3-28ac2d8f6c7b"
                         },
                         new
                         {
-                            UserId = "7e972781-25af-46ad-b5d6-051e3e857d3d",
-                            RoleId = "322df380-6af1-4aaa-a1c0-cb5d59195373"
+                            UserId = "fd669981-aa28-4d17-9c19-090e27098f49",
+                            RoleId = "460de45a-d9c2-4812-81e3-28ac2d8f6c7b"
                         },
                         new
                         {
-                            UserId = "72904ebc-cb0c-4b97-a5e7-98313e9a59f5",
-                            RoleId = "efc90636-a2dc-478d-9501-f9797dbcbf8a"
+                            UserId = "a92cdb3c-20d5-49be-a7f7-963ef43757c7",
+                            RoleId = "c7b1daf6-6248-45c4-984c-fa151e7ec5e2"
                         },
                         new
                         {
-                            UserId = "646750e8-a6f2-4a9c-b75f-53e1686cf5b7",
-                            RoleId = "efc90636-a2dc-478d-9501-f9797dbcbf8a"
+                            UserId = "7fa3ad5f-ccbd-4ede-a4b9-0d4df6644d65",
+                            RoleId = "c7b1daf6-6248-45c4-984c-fa151e7ec5e2"
                         });
                 });
 
@@ -707,35 +884,182 @@ namespace chickadee.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("chickadee.Models.ApplicationUser", b =>
+            modelBuilder.Entity("chickadee.Models.PropertyManager", b =>
                 {
-                    b.HasOne("chickadee.Models.Unit", "Unit")
-                        .WithMany("Tenants")
-                        .HasForeignKey("UnitId");
+                    b.HasBaseType("chickadee.Models.ApplicationUser");
 
-                    b.Navigation("Unit");
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasDiscriminator().HasValue("PropertyManager");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "aa47f635-35bb-49e3-b016-7ae14751b4b1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0b425ae5-d6ad-442e-9772-b9f64d2f5e09",
+                            DateOfBirth = new DateTime(1992, 5, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            Email = "propertymanager@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Property",
+                            LastName = "Manager",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PROPERTYMANAGER@GMAIL.COM",
+                            NormalizedUserName = "PROPERTYMANAGER@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHgOEChBV+IJ5//A9QAtGJL+Sp+3cuLau8ut9yv4kAN22YBi+0x2GuyHCMU8nu8tUQ==",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "a3677327-f422-42e9-bb6c-b66f8a30e21a",
+                            TwoFactorEnabled = false,
+                            UserName = "propertymanager@gmail.com",
+                            UsernameChangeLimit = 10,
+                            CompanyId = "150918d8-559d-4111-8dcc-3af2868a1e63"
+                        },
+                        new
+                        {
+                            Id = "fd669981-aa28-4d17-9c19-090e27098f49",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "3be67e36-ba91-4354-b41d-df35e77d318d",
+                            DateOfBirth = new DateTime(1992, 7, 25, 0, 0, 0, 0, DateTimeKind.Local),
+                            Email = "propertymanager2@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Manager",
+                            LastName = "Property",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PROPERTYMANAGER2@GMAIL.COM",
+                            NormalizedUserName = "PROPERTYMANAGER2@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMaufQcx6YsuP3kjN04R/icjttYq3NNpy0CkWkj8tZo80rtoJ4Tvrnz+sVZ+QbT7mw==",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "09beb579-b07a-470d-a5c1-021f83313bb3",
+                            TwoFactorEnabled = false,
+                            UserName = "propertymanager2@gmail.com",
+                            UsernameChangeLimit = 10,
+                            CompanyId = "00533fc4-66fa-4b38-9961-a7be2fe53370"
+                        });
                 });
 
-            modelBuilder.Entity("chickadee.Models.Property", b =>
+            modelBuilder.Entity("chickadee.Models.Tenant", b =>
                 {
-                    b.HasOne("chickadee.Models.ApplicationUser", "PropertyManager")
-                        .WithMany()
-                        .HasForeignKey("PropertyManagerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasBaseType("chickadee.Models.ApplicationUser");
+
+                    b.Property<bool>("IsIdVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LeaseNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("UnitId");
+
+                    b.HasDiscriminator().HasValue("Tenant");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a92cdb3c-20d5-49be-a7f7-963ef43757c7",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "72ed4725-d505-4560-8761-cdf726d8b938",
+                            DateOfBirth = new DateTime(2002, 5, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            Email = "tenant@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Tenant",
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "TENANT@GMAIL.COM",
+                            NormalizedUserName = "TENANT@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDSmkBqkScYMdrJfOGoxjVaONvYDzsXBK8UbDI/IxBulL0i3FZkWug5Y5evZdqFe7A==",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "55639f90-5b69-4aad-89c3-dadb44b177b0",
+                            TwoFactorEnabled = false,
+                            UnitId = "03c253b1-54d1-4c25-afe9-63100dce6303",
+                            UserName = "tenant@gmail.com",
+                            UsernameChangeLimit = 10,
+                            IsIdVerified = false
+                        },
+                        new
+                        {
+                            Id = "7fa3ad5f-ccbd-4ede-a4b9-0d4df6644d65",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "53145007-af1c-4159-b2fd-3d8bbc214cf4",
+                            DateOfBirth = new DateTime(2002, 5, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            Email = "tenant2@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "User",
+                            LastName = "Tenant",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "TENANT2@GMAIL.COM",
+                            NormalizedUserName = "TENANT2@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN4hvMKgDokr3A5nLo4nOQk9VQux/cUNE6M7kAwlK7XVIV3Lu1Ft2F3DWGPLak3GWQ==",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "bae647d6-e722-4e43-96e1-88c9ffd4a400",
+                            TwoFactorEnabled = false,
+                            UnitId = "a7e6b1fb-6f5d-4d68-83c4-6d578f0105d6",
+                            UserName = "tenant2@gmail.com",
+                            UsernameChangeLimit = 10,
+                            IsIdVerified = false
+                        });
+                });
+
+            modelBuilder.Entity("chickadee.Models.Message", b =>
+                {
+                    b.HasOne("chickadee.Models.Ticket", "Ticket")
+                        .WithMany("Messages")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("PropertyManager");
+                    b.HasOne("chickadee.Models.ApplicationUser", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("chickadee.Models.ApplicationUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Sender");
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("chickadee.Models.Ticket", b =>
                 {
+                    b.HasOne("chickadee.Models.ApplicationUser", "CreatedBy")
+                        .WithMany("Tickets")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("chickadee.Models.Unit", "Unit")
                         .WithMany("Tickets")
                         .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("CreatedBy");
+
                     b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("chickadee.Models.TicketImage", b =>
+                {
+                    b.HasOne("chickadee.Models.ApplicationUser", "CreatedBy")
+                        .WithMany("TicketImage")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("chickadee.Models.Ticket", "Ticket")
+                        .WithMany("Images")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("chickadee.Models.Unit", b =>
@@ -743,10 +1067,49 @@ namespace chickadee.Migrations
                     b.HasOne("chickadee.Models.Property", "Property")
                         .WithMany("Units")
                         .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("chickadee.Models.PropertyManager", "PropertyManager")
+                        .WithMany("Units")
+                        .HasForeignKey("PropertyManagerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Property");
+
+                    b.Navigation("PropertyManager");
+                });
+
+            modelBuilder.Entity("chickadee.Models.UnitImage", b =>
+                {
+                    b.HasOne("chickadee.Models.Unit", "Unit")
+                        .WithMany("Images")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("chickadee.Models.UnitNote", b =>
+                {
+                    b.HasOne("chickadee.Models.Unit", "Unit")
+                        .WithMany("Notes")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("chickadee.Models.VerificationDocument", b =>
+                {
+                    b.HasOne("chickadee.Models.Tenant", "Tenant")
+                        .WithMany("VerificationDocuments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -754,7 +1117,7 @@ namespace chickadee.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -763,7 +1126,7 @@ namespace chickadee.Migrations
                     b.HasOne("chickadee.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -772,7 +1135,7 @@ namespace chickadee.Migrations
                     b.HasOne("chickadee.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -781,13 +1144,13 @@ namespace chickadee.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("chickadee.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -796,8 +1159,37 @@ namespace chickadee.Migrations
                     b.HasOne("chickadee.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("chickadee.Models.PropertyManager", b =>
+                {
+                    b.HasOne("chickadee.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("chickadee.Models.Tenant", b =>
+                {
+                    b.HasOne("chickadee.Models.Unit", "Unit")
+                        .WithMany("Tenants")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("chickadee.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("TicketImage");
+
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("chickadee.Models.Property", b =>
@@ -805,11 +1197,32 @@ namespace chickadee.Migrations
                     b.Navigation("Units");
                 });
 
+            modelBuilder.Entity("chickadee.Models.Ticket", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("chickadee.Models.Unit", b =>
                 {
+                    b.Navigation("Images");
+
+                    b.Navigation("Notes");
+
                     b.Navigation("Tenants");
 
                     b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("chickadee.Models.PropertyManager", b =>
+                {
+                    b.Navigation("Units");
+                });
+
+            modelBuilder.Entity("chickadee.Models.Tenant", b =>
+                {
+                    b.Navigation("VerificationDocuments");
                 });
 #pragma warning restore 612, 618
         }
