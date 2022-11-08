@@ -43,6 +43,7 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     <None Include="wwwroot\css\custom.css" />
     <None Include="wwwroot\images\logo.svg" />
+    <Content Remove="Pages\Units\Details.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,6 +67,12 @@
     <Folder Include="Services\" />
     <Folder Include="Templates\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Pages\Units\Edit.cshtml.cs" />
+    <Compile Remove="Pages\Units\Details.cshtml.cs" />
+    <Compile Remove="Pages\Units\Delete.cshtml.cs" />
+    <Compile Remove="Pages\Units\Create.cshtml.cs" />
+  </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
@@ -84,7 +91,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)build\**" />
-      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

@@ -6,12 +6,14 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 using chickadee.Enums;
 using chickadee.Models;
 using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace chickadee.Areas.Identity.Pages.Account.Manage
 {
@@ -49,13 +51,16 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string StatusMessage { get; set; }
         
+        [TempData]
+        public string UnitId { get; set; }
+        
         
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
      
-        private async Task LoadAsync(ApplicationUser user)
+        private async Task LoadAsync(Tenant user)
         {
             
             if (_context.VerificationDocuments == null || user == null)
@@ -114,106 +119,152 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            if (_context.Tenant != null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                var user =  _context.Tenant.FirstOrDefault(t => t.Id == User.GetSubjectId());
+                ViewData["tenant"] = user;
+
+                await LoadAsync(user);
             }
 
-            await LoadAsync(user);
+            if (_context.Property == null) return Page();
+            List<SelectListItem> li = new List<SelectListItem> { new() { Text = "", Value = "" } };
+            foreach (var property in _context.Property.Where(p=>p.Units.Any()))
+            {
+                li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
+            }
+            ViewData["properties"] = li;
             
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Console.WriteLine("ON POST");
+            // foreach (var (key, value) in Request.Form)
+            // {
+            //     Console.WriteLine("key = {key}");
+            //     Console.WriteLine("Value = {value}");
+            //
+            // }
 
-            var user = (Tenant)await _userManager.GetUserAsync(User);
-            if (user == null || _context.VerificationDocuments == null) return NotFound();
+            Console.WriteLine(Request.Form["UnitId"] == "");
+            Console.WriteLine(Request.Form["IdPhoto"] == "");
+            Console.WriteLine(Request.Form["leasePhoto"] == "");
 
-            var photoIdDocumentList = _context.VerificationDocuments
-                .Where(m => m.TenantId == user.Id)
-                .Where(m => m.DocumentType == DocumentType.PhotoIdentification)
-                .ToList();
 
-            var leaseDocumentList = _context.VerificationDocuments
-                .Where(m => m.TenantId == user.Id)
-                .Where(m => m.DocumentType == DocumentType.LeaseAgreement)
-                .ToList();
-
-            Console.WriteLine(photoIdDocumentList);
-            Console.WriteLine(leaseDocumentList);
-
-            
-            if (user.IsIdVerified)
+            if (Request.Form["UnitId"] == "")
             {
-                StatusMessage = "Your account is already verified.";
-                return RedirectToPage();
+                ModelState.AddModelError(string.Empty, "Unit selection is missing.");
+            };
+            
+            if (Request.Form["IdPhoto"] == "")
+            {
+                ModelState.AddModelError(string.Empty, "ID photo is required and needs to be uploaded.");
             }
             
-            
-            if (Request.Form.Files.Count > 0)
+            if (Request.Form["leasePhoto"] == "")
             {
-                
-                IFormFile idPhoto = Request.Form.Files.GetFile("IdPhoto");
-                IFormFile leasePhoto = Request.Form.Files.GetFile("leasePhoto");
+                ModelState.AddModelError(string.Empty, "Lease agreement photo is required and needs to be uploaded.");
+            }
 
-                foreach (var file in Request.Form.Files)
+            if (Request.Form["UnitId"] == "" || Request.Form["IdPhoto"] == "" || Request.Form["leasePhoto"] == "")
+            {
+                return await OnGetAsync();
+            }
+
+            if (_context.Tenant != null)
+            {
+                var user = _context.Tenant.FirstOrDefault(u=>u.Id == User.GetSubjectId());
+                if (user == null || _context.VerificationDocuments == null) return NotFound();
+
+                var photoIdDocumentList = _context.VerificationDocuments
+                    .Where(m => m.TenantId == user.Id)
+                    .Where(m => m.DocumentType == DocumentType.PhotoIdentification)
+                    .ToList();
+
+                var leaseDocumentList = _context.VerificationDocuments
+                    .Where(m => m.TenantId == user.Id)
+                    .Where(m => m.DocumentType == DocumentType.LeaseAgreement)
+                    .ToList();
+            
+
+                if (user.IsIdVerified)
                 {
-                    Console.WriteLine(file.Name);
-                };
+                    StatusMessage = "Your account is already verified.";
+                    return RedirectToPage();
+                }
+            
+            
+                if (Request.Form.Files.Count == 2)
+                {
                 
-                using (var idPhotoStream = new MemoryStream())
-                {
-                    if(idPhoto != null)
+                    IFormFile idPhoto = Request.Form.Files.GetFile("IdPhoto");
+                    IFormFile leasePhoto = Request.Form.Files.GetFile("leasePhoto");
+                    ;
+                
+                    using (var idPhotoStream = new MemoryStream())
                     {
-                        await idPhoto.CopyToAsync(idPhotoStream);
-                        if (photoIdDocumentList.Count > 0)
+                        if(idPhoto != null)
                         {
-                            photoIdDocumentList.First().Data = idPhotoStream.ToArray();
-                            photoIdDocumentList.First().ResponseMessage = null;
-                            await _context.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            _context.VerificationDocuments.Add(new VerificationDocument()
+                            await idPhoto.CopyToAsync(idPhotoStream);
+                            if (photoIdDocumentList.Count > 0)
                             {
-                                Data = idPhotoStream.ToArray(),
-                                DocumentType = DocumentType.PhotoIdentification,
-                                TenantId = user.Id
-                            });
-                            await _context.SaveChangesAsync();
+                                photoIdDocumentList.First().Data = idPhotoStream.ToArray();
+                                photoIdDocumentList.First().ResponseMessage = null;
+                                await _context.SaveChangesAsync();
+                            }
+                            else
+                            {
+                                _context.VerificationDocuments.Add(new VerificationDocument()
+                                {
+                                    Data = idPhotoStream.ToArray(),
+                                    DocumentType = DocumentType.PhotoIdentification,
+                                    TenantId = user.Id
+                                });
+                                await _context.SaveChangesAsync();
+                            }
                         }
                     }
-                }
                 
-                using (var leasePhotoStream = new MemoryStream())
-                {
-                    if(leasePhoto != null)
+                    using (var leasePhotoStream = new MemoryStream())
                     {
-                        await leasePhoto.CopyToAsync(leasePhotoStream);
-                        if (leaseDocumentList.Count > 0)
+                        if(leasePhoto != null)
                         {
-                            leaseDocumentList.First().Data = leasePhotoStream.ToArray();
-                            leaseDocumentList.First().ResponseMessage = null;
-                            await _context.SaveChangesAsync();
-
-                        }
-                        else
-                        {
-                            _context.VerificationDocuments.Add(new VerificationDocument()
+                            await leasePhoto.CopyToAsync(leasePhotoStream);
+                            if (leaseDocumentList.Count > 0)
                             {
-                                Data = leasePhotoStream.ToArray(),
-                                DocumentType = DocumentType.LeaseAgreement,
-                                TenantId = user.Id
-                            });
-                            await _context.SaveChangesAsync();
+                                leaseDocumentList.First().Data = leasePhotoStream.ToArray();
+                                leaseDocumentList.First().ResponseMessage = null;
+                                await _context.SaveChangesAsync();
 
+                            }
+                            else
+                            {
+                                _context.VerificationDocuments.Add(new VerificationDocument()
+                                {
+                                    Data = leasePhotoStream.ToArray(),
+                                    DocumentType = DocumentType.LeaseAgreement,
+                                    TenantId = user.Id
+                                });
+                                await _context.SaveChangesAsync();
+
+                            }
                         }
                     }
-                }
+
+
+                    try
+                    {
+                        user.UnitId = Request.Form["UnitId"];
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        Console.WriteLine("DB ERROR");
+                    }
                 
+                
+                }
             }
 
             StatusMessage = "Your profile has been updated";
