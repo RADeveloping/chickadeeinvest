@@ -307,6 +307,16 @@ namespace chickadee.Controllers
         
             patchDocument.ApplyTo(ticketFromDb, ModelState);
 
+            if (ticketFromDb.Status == TicketStatus.Closed)
+            {
+                ticketFromDb.ClosedDate = DateTime.Now;
+            }
+
+            if (ticketFromDb.Status == TicketStatus.Open)
+            {
+                ticketFromDb.ClosedDate = null;
+            }
+
             var isValid = TryValidateModel(ticketFromDb);
 
             if (!isValid)
