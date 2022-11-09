@@ -126,10 +126,10 @@ export const getTicketsUri = (ticket) => {
 
 export const getPropertiesUri = (property) => {
     console.log(property)
-    return `properties/${property.propertyId}`
+    return `overview?property=${property.propertyId}`
 }
 
 export const getUnitsUri = (unit) => {
     console.log(unit)
-    return `properties/${unit.propertyId}/units/${unit.unitId}`
+    return `overview?property=${unit.propertyId}&unit=${unit.unitId}`
 }
