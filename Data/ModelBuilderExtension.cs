@@ -308,7 +308,7 @@ public static class ModelBuilderExtensions {
         
         List<Message> messages = new List<Message>() {
             new Message(){
-                content = "This is a message",
+                Content = "This is a message",
                 SenderId = TenantsList[0].Id,
                 CreatedDate = DateTime.Now.AddHours(-23),
                 TicketId = tickets[0].TicketId,
@@ -319,7 +319,7 @@ public static class ModelBuilderExtensions {
         
         List<VerificationDocument> verificationDocuments = new List<VerificationDocument>() {
             new VerificationDocument() {
-                data = Array.Empty<byte>(),
+                Data = Array.Empty<byte>(),
                 DocumentType = Enums.DocumentType.PhotoIdentification,
                 TenantId = TenantsList[0].Id
             },
