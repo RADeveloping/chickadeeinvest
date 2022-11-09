@@ -103,21 +103,24 @@ namespace chickadee.Controllers
                 case "asc" when param == "id":
                     units = units.OrderBy(s => s.unitId);
                     break;
-                case "desc" when param == "number":
+                case "desc" when param == "id":
                     units = units.OrderByDescending(s => s.unitId);
                     break;
+                
                 case "asc" when param == "number":
                     units = units.OrderBy(s => s.unitNo);
                     break;
-                case "desc" when param == "id":
+                case "desc" when param == "number":
                     units = units.OrderByDescending(s => s.unitNo);
                     break;
-                case "asc" when param == "property_manager_name":
+               
+                case "asc" when param == "type":
                     units = units.OrderBy(s => s.unitType);
                     break;
-                case "desc" when param == "property_manager_name":
-                    units = units.OrderBy(s => s.unitType);
+                case "desc" when param == "type":
+                    units = units.OrderByDescending(s => s.unitType);
                     break;
+                
                 default:
                     units = units.OrderBy(s => s.unitNo);
                     break;
