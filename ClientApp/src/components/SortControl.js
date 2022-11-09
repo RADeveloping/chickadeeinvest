@@ -5,7 +5,6 @@ import Iconify from "./Iconify";
 import * as React from "react";
 
 export default function SortControl({   title,
-                                        loadingSearch,
                                         orderBy,
                                         handleOrderByChange,
                                         properties,
@@ -15,7 +14,6 @@ export default function SortControl({   title,
     return (
         <Card sx={{
             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-            display: loadingSearch ? 'none' : undefined,
             width: '100%',
             backgroundColor: (theme) => theme.palette['background'].default,
             padding: 2.5

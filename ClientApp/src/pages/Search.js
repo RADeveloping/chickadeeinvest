@@ -68,12 +68,8 @@ export default function Search() {
     )
 
     debouncedFilterQueries(mainFilterQuery);
-
-    const loadingSearch = loadingProperties || loadingUnits || loadingTickets;
+    
     const isEmptySearch = properties.length === 0 && units.length === 0 && tickets.length === 0;
-
-    const showResults = !loadingSearch && !isEmptySearch;
-    const showNullResults = !loadingSearch && isEmptySearch;
 
     const isDesktop = useResponsive('up', 'md');
 
@@ -85,13 +81,11 @@ export default function Search() {
                         {title}
                     </Typography>
                 </Stack>
-                <PageLoading loadingData={loadingSearch}/>
-                <Grow in={!loadingSearch}>
+                <Grow in={true}>
                     <Stack direction={isDesktop ? 'row' : 'column'} gap={1} alignItems={'center'}
                            justifyContent={'space-between'}>
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                            display: loadingSearch ? 'none' : undefined,
                             width: isDesktop ? 'fit-content' : '100%',
                             backgroundColor: (theme) => theme.palette['background'].default,
                         }}>
@@ -106,44 +100,41 @@ export default function Search() {
                     </Stack>
                 </Grow>
                 <br/>
-                <Grow in={showResults}>
+                <Grow in={!isEmptySearch}>
                     <Grid container spacing={2}>
-                            <SearchRowResult viewComponent={(data) => <Property data={data}/>}
-                                             title={"Properties"}
-                                             loadingSearch={loadingSearch}
-                                             orderBy={propertyOrderBy}
-                                             handleOrderByChange={propertyHandleOrderByChange}
-                                             properties={propertyProperties}
-                                             order={propertyOrder}
-                                             handleOrderChange={propertyHandleOrderChange}
-                                             isDesktop={isDesktop}
-                                             data={properties}
-                            />
-                        
-                            <SearchRowResult viewComponent={(data) => <Unit data={data}/>}
-                                             title={"Units"} loadingSearch={loadingSearch}
-                                             orderBy={unitOrderBy}
-                                             handleOrderByChange={unitHandleOrderByChange}
-                                             properties={unitProperties}
-                                             order={unitOrder}
-                                             handleOrderChange={unitHandleOrderChange}
-                                             isDesktop={isDesktop}
-                                             data={units}
-                            />
-                            <SearchRowResult viewComponent={(data) => <Ticket data={data}/>}
-                                             title={"Tickets"} loadingSearch={loadingSearch}
-                                             orderBy={ticketOrderBy}
-                                             handleOrderByChange={ticketHandleOrderByChange}
-                                             properties={ticketProperties}
-                                             order={ticketOrder}
-                                             handleOrderChange={ticketHandleOrderChange}
-                                             isDesktop={isDesktop}
-                                             data={tickets}
-                            />
-                   
+                        <SearchRowResult viewComponent={(data) => <Property data={data}/>}
+                                         title={"Properties"}
+                                         orderBy={propertyOrderBy}
+                                         handleOrderByChange={propertyHandleOrderByChange}
+                                         properties={propertyProperties}
+                                         order={propertyOrder}
+                                         handleOrderChange={propertyHandleOrderChange}
+                                         isDesktop={isDesktop}
+                                         data={properties}
+                        />
+                        <SearchRowResult viewComponent={(data) => <Unit data={data}/>}
+                                         title={"Units"}
+                                         orderBy={unitOrderBy}
+                                         handleOrderByChange={unitHandleOrderByChange}
+                                         properties={unitProperties}
+                                         order={unitOrder}
+                                         handleOrderChange={unitHandleOrderChange}
+                                         isDesktop={isDesktop}
+                                         data={units}
+                        />
+                        <SearchRowResult viewComponent={(data) => <Ticket data={data}/>}
+                                         title={"Tickets"}
+                                         orderBy={ticketOrderBy}
+                                         handleOrderByChange={ticketHandleOrderByChange}
+                                         properties={ticketProperties}
+                                         order={ticketOrder}
+                                         handleOrderChange={ticketHandleOrderChange}
+                                         isDesktop={isDesktop}
+                                         data={tickets}
+                        />
                     </Grid>
                 </Grow>
-                {showNullResults &&
+                {isEmptySearch &&
                     <Box sx={{
                         height: '40vh',
                         display: 'flex',
