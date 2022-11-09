@@ -4,7 +4,7 @@ namespace chickadee.Models {
 
     public class UnitNote {
         [Key]
-        public String UnitNoteId { get; set; } = Guid.NewGuid().ToString();
+        public string UnitNoteId { get; set; } = Guid.NewGuid().ToString();
         
         [Required]
         public string Message { get; set; }
@@ -16,6 +16,6 @@ namespace chickadee.Models {
         
         [ForeignKey("UnitId")]
         public Unit? Unit { get; set; }
-        public String UnitId { get; set; }
+        public string UnitId { get; set; }
     }
 }
