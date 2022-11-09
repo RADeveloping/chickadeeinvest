@@ -79,14 +79,6 @@ export default function Search() {
                     <Typography variant="h4" gutterBottom>
                         {title}
                     </Typography>
-                    <Button
-                        variant="contained"
-                        component={RouterLink}
-                        to="#"
-                        startIcon={<Iconify icon="eva:plus-fill"/>}
-                    >
-                        {`New ${dataName}`}
-                    </Button>
                 </Stack>
                 <PageLoading loadingData={loadingSearch}/>
                 <Grow in={!loadingSearch}>
