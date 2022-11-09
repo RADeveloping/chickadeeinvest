@@ -10,11 +10,6 @@ import Label from "../components/Label";
 import useResponsive from "../hooks/useResponsive";
 
 export default function TicketDetail() {
-    const filterTickets = (data) => {
-        data.createdOn = new Date(data.createdOn)
-        data.estimatedDate = new Date(data.estimatedDate)
-        return data;
-    }
     const title = "Ticket"
     const {id} = useParams();
     const [searchParams] = useSearchParams();
@@ -23,7 +18,7 @@ export default function TicketDetail() {
     const navigate = useNavigate();
     const isDesktop = useResponsive('up', 'lg');
 
-    const [ticket, errorTicket, loadingTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, filterTickets);
+    const [ticket, errorTicket, loadingTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`);
     const [unit, errorUnit, loadingUnit] = useFetch(uid ? `/api/properties/${pid}/units/${uid}` : null);
     const [property, errorProperty, loadingProperty] = useFetch(pid ? `/api/properties/${pid}` : null);
 
@@ -85,11 +80,11 @@ export default function TicketDetail() {
                                             </Stack>
                                             <Stack direction={'row'} alignItems={'center'} gap={1}>
                                                 <Label>
-                                                    {createdOn.toLocaleDateString('en-CA', {dateStyle: 'medium'})}
+                                                    {new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
                                                 </Label>
                                                 <Label sx={{fontWeight: 'normal'}}>
                                                     <div>
-                                                        Estimated: <b>{estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                        Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
                                                     </div>
                                                 </Label>
                                             </Stack>
@@ -124,7 +119,7 @@ export default function TicketDetail() {
                                                 Property Manager
                                             </Typography>
                                             <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                {property.propertyManager.firstName} {property.propertyManager.lastName}
+                                                {property.propertyManager && property.propertyManager.firstName} {property.propertyManager && property.propertyManager.lastName}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
@@ -132,7 +127,7 @@ export default function TicketDetail() {
                                                 Tenant
                                             </Typography>
                                             <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                {tenant.firstName} {tenant.lastName}
+                                                {tenant && tenant.firstName} {tenant && tenant.lastName}
                                             </Typography>
                                         </Grid>
                                     </Grid>

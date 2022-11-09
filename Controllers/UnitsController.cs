@@ -44,7 +44,7 @@ namespace chickadee.Controllers
                     unitNo = unit.UnitNo,
                     unitType = unit.UnitType,
                     propertyId = unit.PropertyId,
-                    proertyName = unit.Property.Name,
+                    propertyName = unit.Property.Name,
                     propertyManagerId = unit.PropertyManagerId,
                 })
                 .ToList();
@@ -56,7 +56,7 @@ namespace chickadee.Controllers
                     unitNo = unit.UnitNo,
                     unitType = unit.UnitType,
                     propertyId = unit.PropertyId,
-                    proertyName = unit.Property.Name,
+                    propertyName = unit.Property.Name,
                     propertyManagerId = unit.PropertyManagerId,
                 })
                 .ToList();
