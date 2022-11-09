@@ -108,21 +108,23 @@ export default function Search() {
                 <br/>
                 <Grow in={!loadingSearch && (properties.length !== 0 || units.length !== 0 || tickets.length !== 0)}>
                     <Grid container spacing={2}>
-                        <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
-                            <Grid width={'100%'} item>
-                                <SortControl title={"Properties"} loadingSearch={loadingSearch}
-                                             orderBy={propertyOrderBy}
-                                             handleOrderByChange={propertyHandleOrderByChange}
-                                             properties={propertyProperties}
-                                             order={propertyOrder}
-                                             handleOrderChange={propertyHandleOrderChange}/>
+                        {properties.length !== 0 &&
+                            <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
+                                <Grid width={'100%'} item>
+                                    <SortControl title={"Properties"} loadingSearch={loadingSearch}
+                                                 orderBy={propertyOrderBy}
+                                                 handleOrderByChange={propertyHandleOrderByChange}
+                                                 properties={propertyProperties}
+                                                 order={propertyOrder}
+                                                 handleOrderChange={propertyHandleOrderChange}/>
+                                </Grid>
+                                {properties.map((data) =>
+                                        // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
+                                        <Property data={data}/>
+                                    // </Link>
+                                )}
                             </Grid>
-                            {properties.map((data) =>
-                                    // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
-                                    <Property data={data}/>
-                                // </Link>
-                            )}
-                        </Grid>
+                        }
                         <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
                             <Grid width={'100%'}  item>
                                 <SortControl title={"Units"}  loadingSearch={loadingSearch}
