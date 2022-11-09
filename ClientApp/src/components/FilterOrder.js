@@ -27,8 +27,8 @@ const useFilter = (properties) => {
     }, [order, orderBy, filterQuery])
 
     return [urlSearchParams,
-        orderBy, handleOrderByChange,
-        order, handleOrderChange,
+        orderBy, setOrderBy, handleOrderByChange,
+        order, setOrder, handleOrderChange,
         filterQuery, handleFilterByQuery, setFilterQuery
     ];
 };

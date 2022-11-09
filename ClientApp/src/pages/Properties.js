@@ -20,30 +20,20 @@ import {applySortFilter, getComparator, ListToolbar} from "../sections/@dashboar
 import {useEffect, useState} from "react";
 import useFetch from "../components/FetchData";
 import useResponsive from "../hooks/useResponsive";
-import {getPropertiesUri, getUnitBox} from "../utils/filters";
+import {getPropertiesUri, getUnitBox, propertyProperties} from "../utils/filters";
 import Label from "../components/Label";
 import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
 import Property from "../components/Property";
 import useFilter from "../components/FilterOrder";
 
-const properties = [
-    {id: 'address', label: 'Address'},
-    {id: 'open_count', label: 'Open Ticket Count'},
-    {id: 'unit_count', label: 'Unit Count'},
-    {id: 'tenant_count', label: 'Tenant Count'},
-    {id: 'name', label: 'Property Name'},
-];
-
 export default function Properties() {
-
     const uri = '/api/Properties'
-    const navigate = useNavigate();
     const title = "Properties"
     const dataName = 'Property';
     const [urlSearchParams,
-        orderBy, handleOrderByChange,
-        order, handleOrderChange,
-        filterQuery, handleFilterByQuery, setFilterQuery] = useFilter(properties);
+        orderBy, setOrderBy, handleOrderByChange,
+        order, setOrder, handleOrderChange,
+        filterQuery, handleFilterByQuery, setFilterQuery] = useFilter(propertyProperties);
     const [data, errorData, loadingData] = useFetch(uri + '?' + urlSearchParams.toString());
 
     const isDesktop = useResponsive('up', 'md');
@@ -71,28 +61,27 @@ export default function Properties() {
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
                             display: loadingData ? 'none' : undefined,
-                            width: isDesktop ? 'fit-content' : '100%',
+                            width: 'fit-content',
                             backgroundColor: (theme) => theme.palette['background'].default,
                         }}>
 
                             <ListToolbar
                                 filterQuery={filterQuery}
                                 onFilterQuery={handleFilterByQuery}
-                                properties={properties}
+                                properties={propertyProperties}
                                 setFilterQuery={setFilterQuery}
-                                isDesktop={isDesktop}
                             />
 
                         </Card>
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
                             display: loadingData ? 'none' : undefined,
-                            width: isDesktop ? 'fit-content' : '100%',
+                            width: 'fit-content',
                             backgroundColor: (theme) => theme.palette['background'].default,
                             padding: 2.5
                         }}>
                             <Stack direction={'row'} alignItems={'stretch'} gap={1}>
-                                <FormControl sx={{width:'100%'}}>
+                                <FormControl sx={{minWidth: 80}}>
                                     <InputLabel id="sort-property">Order by</InputLabel>
                                     <Select
                                         labelId="sort-property"
@@ -100,7 +89,7 @@ export default function Properties() {
                                         label="Order by"
                                         onChange={handleOrderByChange}
                                     >
-                                        {properties.map((p) =>
+                                        {propertyProperties.map((p) =>
                                             <MenuItem key={p.id} value={p.id}>{p.label}</MenuItem>
                                         )}
                                     </Select>

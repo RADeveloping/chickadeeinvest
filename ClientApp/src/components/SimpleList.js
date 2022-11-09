@@ -33,7 +33,8 @@ export default function SimpleList({
                                        properties,
                                        loading,
                                        disableSort,
-                                       uri
+                                       uri,
+                                       setOrderBy, order, setOrder
                                    }) {
     const navigate = useNavigate();
     const borderStyles = isDesktop ? {
@@ -41,9 +42,6 @@ export default function SimpleList({
         borderTopLeftRadius: rightRound ? 0 : undefined, borderBottomLeftRadius: rightRound ? 0 : undefined,
         borderRadius: noRound ? 0 : undefined
     } : null
-
-    const [orderBy, setOrderBy] = useState(properties[0].id);
-    const [order, setOrder] = useState('desc');
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
