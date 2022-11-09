@@ -34,6 +34,8 @@ import Property from "../components/Property";
 import useFilter from "../components/FilterOrder";
 import SortControl from "../components/SortControl";
 import SearchRowResult from "../components/SearchRowResult";
+import Unit from "../components/Unit";
+import Ticket from "../components/Ticket";
 
 export default function Search() {
     const title = "Search"
@@ -122,40 +124,30 @@ export default function Search() {
                                              data={properties}
                             />
                         }
-                        <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
-                            <Grid width={'100%'} item>
-                                <SortControl title={"Units"} loadingSearch={loadingSearch}
+                        {units.length !== 0 &&
+                            <SearchRowResult viewComponent={(data) => <Unit data={data}/>}
+                                             title={"Units"} loadingSearch={loadingSearch}
                                              orderBy={unitOrderBy}
                                              handleOrderByChange={unitHandleOrderByChange}
                                              properties={unitProperties}
                                              order={unitOrder}
-                                             handleOrderChange={unitHandleOrderChange}/>
-                            </Grid>
-                            {units.map((data) =>
-                                    // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
-                                    <Card>
-                                        {getUnitBox(data)}
-                                    </Card>
-                                // </Link>
-                            )}
-                        </Grid>
-                        <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
-                            <Grid width={'100%'} item>
-                                <SortControl title={"Tickets"} loadingSearch={loadingSearch}
+                                             handleOrderChange={unitHandleOrderChange}
+                                             isDesktop={isDesktop}
+                                             data={units}
+                            />
+                        }
+                        {tickets.length !== 0 &&
+                            <SearchRowResult viewComponent={(data) => <Ticket data={data}/>}
+                                             title={"Tickets"} loadingSearch={loadingSearch}
                                              orderBy={ticketOrderBy}
                                              handleOrderByChange={ticketHandleOrderByChange}
                                              properties={ticketProperties}
                                              order={ticketOrder}
-                                             handleOrderChange={ticketHandleOrderChange}/>
-                            </Grid>
-                            {tickets.map((data) =>
-                                    // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
-                                    <Card>
-                                        {getTicketBox(data)}
-                                    </Card>
-                                // </Link>
-                            )}
-                        </Grid>
+                                             handleOrderChange={ticketHandleOrderChange}
+                                             isDesktop={isDesktop}
+                                             data={tickets}
+                            />
+                        }
                     </Grid>
                 </Grow>
                 {!loadingSearch && (properties.length === 0 && units.length === 0 && tickets.length === 0) &&
