@@ -10,11 +10,11 @@ using chickadee.Models;
 
 namespace chickadee.Controllers
 {
-    public class SAUnitManagerController : Controller
+    public class SAUnitController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SAUnitManagerController(ApplicationDbContext context)
+        public SAUnitController(ApplicationDbContext context)
         {
             _context = context;
         }
