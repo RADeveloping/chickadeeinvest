@@ -24,6 +24,7 @@ import {getPropertiesUri, getUnitBox} from "../utils/filters";
 import Label from "../components/Label";
 import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
 import Property from "../components/Property";
+import useFilter from "../components/FilterOrder";
 
 const properties = [
     {id: 'address', label: 'Address'},
@@ -39,31 +40,11 @@ export default function Properties() {
     const navigate = useNavigate();
     const title = "Properties"
     const dataName = 'Property';
-    const [orderBy, setOrderBy] = useState('open_count');
-    const [urlSearchParams, setUrlSearchParams] = useState(new URLSearchParams())
+    const [urlSearchParams,
+        orderBy, handleOrderByChange,
+        order, handleOrderChange,
+        filterQuery, handleFilterByQuery, setFilterQuery] = useFilter(properties);
     const [data, errorData, loadingData] = useFetch(uri + '?' + urlSearchParams.toString());
-    const [order, setOrder] = useState('desc');
-    const [filterQuery, setFilterQuery] = useState('');
-
-    const handleFilterByQuery = (event) => {
-        setFilterQuery(event.target.value);
-    };
-
-    const handleOrderByChange = (event) => {
-        setOrderBy(event.target.value);
-    };
-
-    const handleOrderChange = (event, newOrder) => {
-        if (newOrder) setOrder(newOrder);
-    };
-
-    useEffect(() => {
-        setUrlSearchParams(new URLSearchParams({
-            sort: order,
-            param: orderBy,
-            query: filterQuery
-        }))
-    }, [order, orderBy, filterQuery])
 
     const isDesktop = useResponsive('up', 'md');
 
@@ -143,7 +124,7 @@ export default function Properties() {
                 <Grow in={!loadingData && data.length > 0}>
                     <Grid container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
                         {data.map((data) =>
-                            // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
+                                // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
                                 <Property data={data}/>
                             // </Link>
                         )}
