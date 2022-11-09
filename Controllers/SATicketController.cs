@@ -13,11 +13,11 @@ namespace chickadee.Controllers
 {
     [Authorize(Roles = "SuperAdmin")]
 
-    public class SATicketManagerController : Controller
+    public class SATicketController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SATicketManagerController(ApplicationDbContext context)
+        public SATicketController(ApplicationDbContext context)
         {
             _context = context;
         }
