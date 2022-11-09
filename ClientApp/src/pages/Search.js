@@ -95,11 +95,12 @@ export default function Search() {
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
                             display: loadingSearch ? 'none' : undefined,
-                            width: 'fit-content',
+                            width: isDesktop ? 'fit-content' : '100%',
                             backgroundColor: (theme) => theme.palette['background'].default,
                         }}>
 
                             <ListToolbar
+                                isDesktop={isDesktop}
                                 filterQuery={propertyFilterQuery}
                                 onFilterQuery={handlePropertyFilterByQuery}
                                 setFilterQuery={setPropertyFilterQuery}

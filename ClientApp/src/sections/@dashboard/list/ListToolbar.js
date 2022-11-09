@@ -32,7 +32,7 @@ const SearchStyle = styled(OutlinedInput)(({theme}) => ({
         duration: theme.transitions.duration.shorter,
     }),
     '&.Mui-focused': {boxShadow: theme.customShadows.z8},
-    '&.extend': {width: 280},
+    '&.extend': {width: 300},
     '& fieldset': {
         borderWidth: `1px !important`,
         borderColor: `${theme.palette.grey[500_32]} !important`,
@@ -52,13 +52,15 @@ export default function ListToolbar({
                                         filterQuery,
                                         setFilterQuery,
                                         onFilterQuery,
-                                        properties
+                                        properties,
+                                        isDesktop
                                     }) {
 
     const [filterVisible, setFilterVisible] = useState(false);
     return (
         <RootStyle
             sx={{
+                padding: 2.5,
                 ...(numSelected > 0 && {
                     color: 'primary.main',
                     bgcolor: 'primary.lighter',
@@ -71,9 +73,10 @@ export default function ListToolbar({
                 </Typography>
             ) : (
                 <>
-                    <Box>
+                    <Box width={'100%'}>
                         <SearchStyle
-                            className={filterVisible ? 'extend' : undefined}
+                            sx={{width: !isDesktop ? '100%' : undefined}}
+                            className={filterVisible && isDesktop ? 'extend' : undefined}
                             value={filterQuery}
                             onChange={onFilterQuery}
                             onFocus={() => setFilterVisible(true)}
