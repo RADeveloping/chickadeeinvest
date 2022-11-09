@@ -7,7 +7,6 @@ import * as React from "react";
 export default function SearchRowResult({
                                             isDesktop,
                                             title,
-                                            loadingSearch,
                                             orderBy,
                                             handleOrderByChange,
                                             properties,
@@ -19,9 +18,9 @@ export default function SearchRowResult({
     return (
         <Grow in={data.length > 0}>
             <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}
-            sx={{display: data.length === 0 ? 'none' : undefined}}>
+                  sx={{display: data.length === 0 ? 'none' : undefined}}>
                 <Grid width={'100%'} item>
-                    <SortControl title={title} loadingSearch={loadingSearch}
+                    <SortControl title={title}
                                  orderBy={orderBy}
                                  handleOrderByChange={handleOrderByChange}
                                  properties={properties}
