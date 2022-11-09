@@ -9,9 +9,9 @@ import {useSearchParams} from "react-router-dom";
 import ColumnOverview from "../components/ColumnOverview";
 import TableOverview from "../components/TableOverview";
 
-export default function Overview() {
+export default function Tickets() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const title = "Overview"
+    const title = "Tickets"
     const [viewMode, setViewMode] = useState('column');
 
     const handleViewModeChange = (event, newViewMode) => {

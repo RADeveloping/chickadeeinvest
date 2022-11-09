@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {Button, Card, Container, Grid, Grow, Stack, Typography} from "@mui/material";
 import * as React from "react";
 import Page from "../components/Page";
@@ -16,13 +16,16 @@ export default function TicketDetail() {
         return data;
     }
     const title = "Ticket"
-    const {pid, uid, id} = useParams();
+    const {id} = useParams();
+    const [searchParams] = useSearchParams();
+    const uid = searchParams.get('uid')
+    const pid = searchParams.get('pid')
     const navigate = useNavigate();
     const isDesktop = useResponsive('up', 'lg');
 
     const [ticket, errorTicket, loadingTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, filterTickets);
-    const [unit, errorUnit, loadingUnit] = useFetch(ticket.unitId ? `/api/properties/${pid}/units/${uid}` : null);
-    const [property, errorProperty, loadingProperty] = useFetch(unit.propertyId ? `/api/properties/${unit.propertyId}` : null);
+    const [unit, errorUnit, loadingUnit] = useFetch(uid ? `/api/properties/${pid}/units/${uid}` : null);
+    const [property, errorProperty, loadingProperty] = useFetch(pid ? `/api/properties/${pid}` : null);
 
     const {createdOn, description, estimatedDate, problem, severity, status, tenant} = ticket;
     const {unitNo} = unit;
@@ -49,49 +52,50 @@ export default function TicketDetail() {
                     <Button
                         variant="contained"
                         to="#"
-                        startIcon={<Iconify icon="akar-icons:check" />}
+                        startIcon={<Iconify icon="akar-icons:check"/>}
                     >
                         {`Complete`}
                     </Button>
                 </Stack>
                 <PageLoading loadingData={loadingData}/>
                 <Grow in={!loadingData}>
-                    <Card sx={{display: loadingData ? 'none' : undefined}}>
-                        {!loadingData &&
+                    <Card>
+                        {ticket.length !== 0 &&
                             <Grid container padding={3} spacing={3} direction={'column'}>
                                 <Grid item>
                                     <Stack direction={'column'} gap={1}>
-                                    <Typography variant={'h4'}>
-                                        {problem}
-                                    </Typography>
-                                    <Stack direction={isDesktop ? 'row' : 'column'} justifyContent={'space-between'} gap={1}>
-                                        <Stack direction={'row'} alignItems={'center'} gap={1}>
-                                            <Label
-                                                variant="ghost"
-                                                color={STATUS[status].color}
-                                            >
-                                                {STATUS[status].text}
-                                            </Label>
-                                            <Label
-                                                variant="ghost"
-                                                color={SEVERITY[severity].color}
-                                            >
-                                                {SEVERITY[severity].text}
-                                            </Label>
-                                        </Stack>
-                                        <Stack direction={'row'} alignItems={'center'} gap={1}>
-                                            <Label>
-                                                {createdOn.toLocaleDateString('en-CA', {dateStyle: 'medium'})}
-                                            </Label>
-                                            <Label sx={{fontWeight: 'normal'}}>
-                                                <div>
-                                                    Estimated: <b>{estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
-                                                </div>
-                                            </Label>
+                                        <Typography variant={'h4'}>
+                                            {problem}
+                                        </Typography>
+                                        <Stack direction={isDesktop ? 'row' : 'column'} justifyContent={'space-between'}
+                                               gap={1}>
+                                            <Stack direction={'row'} alignItems={'center'} gap={1}>
+                                                <Label
+                                                    variant="ghost"
+                                                    color={STATUS[status].color}
+                                                >
+                                                    {STATUS[status].text}
+                                                </Label>
+                                                <Label
+                                                    variant="ghost"
+                                                    color={SEVERITY[severity].color}
+                                                >
+                                                    {SEVERITY[severity].text}
+                                                </Label>
+                                            </Stack>
+                                            <Stack direction={'row'} alignItems={'center'} gap={1}>
+                                                <Label>
+                                                    {createdOn.toLocaleDateString('en-CA', {dateStyle: 'medium'})}
+                                                </Label>
+                                                <Label sx={{fontWeight: 'normal'}}>
+                                                    <div>
+                                                        Estimated: <b>{estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                    </div>
+                                                </Label>
+                                            </Stack>
                                         </Stack>
                                     </Stack>
-                                    </Stack>
-                               
+
                                 </Grid>
 
                                 <Grid item>
