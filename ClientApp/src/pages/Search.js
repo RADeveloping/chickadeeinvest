@@ -25,6 +25,7 @@ import useFilter from "../components/FilterOrder";
 import SearchRowResult from "../components/SearchRowResult";
 import Unit from "../components/Unit";
 import Ticket from "../components/Ticket";
+import {debounce} from "lodash";
 
 export default function Search() {
     const title = "Search"
@@ -61,23 +62,18 @@ export default function Search() {
         setUnitFilterQuery(query);
         setTicketUnitQuery(query);
     };
-    
-    useEffect(()=> {
-        setFilterQueries(mainFilterQuery);
-    }, [mainFilterQuery])
+
+    const debouncedFilterQueries = useCallback(debounce(query =>
+        setFilterQueries(query), 500), []
+    )
+
+    debouncedFilterQueries(mainFilterQuery);
 
     const loadingSearch = loadingProperties || loadingUnits || loadingTickets;
     const isEmptySearch = properties.length === 0 && units.length === 0 && tickets.length === 0;
 
     const showResults = !loadingSearch && !isEmptySearch;
     const showNullResults = !loadingSearch && isEmptySearch;
-
-    useEffect(() => {
-        setPropertyFilterQuery(mainFilterQuery);
-        setUnitFilterQuery(mainFilterQuery);
-        setTicketUnitQuery(mainFilterQuery);
-    }, [mainFilterQuery])
-
 
     const isDesktop = useResponsive('up', 'md');
 
@@ -112,7 +108,6 @@ export default function Search() {
                 <br/>
                 <Grow in={showResults}>
                     <Grid container spacing={2}>
-                        {properties.length !== 0 &&
                             <SearchRowResult viewComponent={(data) => <Property data={data}/>}
                                              title={"Properties"}
                                              loadingSearch={loadingSearch}
@@ -124,8 +119,7 @@ export default function Search() {
                                              isDesktop={isDesktop}
                                              data={properties}
                             />
-                        }
-                        {units.length !== 0 &&
+                        
                             <SearchRowResult viewComponent={(data) => <Unit data={data}/>}
                                              title={"Units"} loadingSearch={loadingSearch}
                                              orderBy={unitOrderBy}
@@ -136,8 +130,6 @@ export default function Search() {
                                              isDesktop={isDesktop}
                                              data={units}
                             />
-                        }
-                        {tickets.length !== 0 &&
                             <SearchRowResult viewComponent={(data) => <Ticket data={data}/>}
                                              title={"Tickets"} loadingSearch={loadingSearch}
                                              orderBy={ticketOrderBy}
@@ -148,7 +140,7 @@ export default function Search() {
                                              isDesktop={isDesktop}
                                              data={tickets}
                             />
-                        }
+                   
                     </Grid>
                 </Grow>
                 {showNullResults &&
@@ -158,7 +150,7 @@ export default function Search() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         color: 'text.disabled'
-                    }}>{`No ${propertyFilterQuery ? 'Results' : 'Search'}`}</Box>}
+                    }}>{`No Results`}</Box>}
             </Container>
         </Page>
     )
