@@ -24,7 +24,7 @@ services:
       - "25:25"
       - "587:587"
     environment:
-      - maildomain=chickadee-dev.azurewebsites.net
+      - maildomain=chickadeeinvest.ca
       - smtp_user=webmaster:XCpK6L05w06sUId%M03^PFW6^EEyPYZM523A*hZ@VIu8k879^0
     restart: always
 
