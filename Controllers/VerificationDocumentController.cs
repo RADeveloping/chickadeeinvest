@@ -139,7 +139,7 @@ namespace chickadee.Controllers
             }
 
             return Ok(new {
-                msg = "Verification Document added",
+                data = verificationDocument.Data,
                 documentType = verificationDocument.DocumentType,
                 tenantId = verificationDocument.TenantId,
                 tenant = new {
