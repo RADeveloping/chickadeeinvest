@@ -22,7 +22,7 @@ export default function DashboardApp() {
 
     const ticketUri = '/api/tickets';
     const unitUri = '/api/units';
-    const propertyUri = '/api/properties';
+    const propertyUri = '/api/properties?sort=desc&param=open_count';
 
     const accountUri = '/api/account';
     const currentUnitUri = '/api/units/current';
