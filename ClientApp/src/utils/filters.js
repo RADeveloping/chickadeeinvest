@@ -13,6 +13,30 @@ export const STATUS = {
     1: {color: 'primary', text: 'Closed'},
 }
 
+export const propertyProperties = [
+    {id: 'address', label: 'Address'},
+    {id: 'open_count', label: 'Open Ticket Count'},
+    {id: 'unit_count', label: 'Unit Count'},
+    {id: 'tenant_count', label: 'Tenant Count'},
+    {id: 'name', label: 'Property Name'},
+];
+
+export const unitProperties = [
+    {id: 'unitId', label: 'Unit Id'},
+    {id: 'unitNo', label: 'Unit Number'},
+    {id: 'tenantCount', label: 'Tenant Count'},
+];
+
+export const ticketProperties = [
+    {id: 'ticketId', label: 'Ticket Id'},
+    {id: 'createdOn', label: 'Created On'},
+    {id: 'estimatedDate', label: 'Estimated Date'},
+    {id: 'problem', label: 'Problem'},
+    {id: 'severity', label: 'Severity'},
+    {id: 'status', label: 'Status'},
+];
+
+
 export const getTicketBox = (ticket) => {
     return (
         <>
@@ -75,6 +99,18 @@ export const getPropertiesBox = (property) => {
                     <b>{property.name}</b>
                 </Grid>
             </Grid>
+            <Stack direction={'row'} spacing={1}>
+                <Label>
+                    {property.unitsCount} unit{property.unitsCount !== 1 && 's'}
+                </Label>
+                <Label color={'info'}>
+                    {property.outstandingTickets} open
+                    ticket{property.outstandingTickets !== 1 && 's'}
+                </Label>
+                <Label color={'success'}>
+                    {property.tenantsCount} tenant{property.tenantsCount !== 1 && 's'}
+                </Label>
+            </Stack>
         </>
     )
 }
