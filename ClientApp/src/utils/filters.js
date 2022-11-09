@@ -1,6 +1,7 @@
 ﻿import {Chip, Grid, Stack, Typography} from "@mui/material";
 import Label from "../components/Label";
 import * as React from "react";
+
 export const SEVERITY = {
     0: {color: 'success', text: 'Low'},
     1: {color: 'warning', text: 'Medium'},
@@ -21,7 +22,7 @@ export const getTicketBox = (ticket) => {
                 </Grid>
                 <Grid item>
                     <Typography
-                        sx={{ display: 'inline' }}
+                        sx={{display: 'inline'}}
                         component="span"
                         variant="body2"
                         color="text.secondary">
@@ -55,6 +56,12 @@ export const getUnitBox = (unit) => {
                 <Grid item>
                     <b>{unit.unitNo}</b>
                 </Grid>
+                <Grid item>
+                    <Typography variant="body2"
+                                color="text.secondary">
+                        {unit.propertyName}
+                    </Typography>
+                </Grid>
             </Grid>
         </>
     )
@@ -74,35 +81,37 @@ export const getPropertiesBox = (property) => {
 
 export const filterProperties = (data) => {
     let simpleData = []
-    data.forEach((d)=> {
+    data.forEach((d) => {
         simpleData.push({
             id: d.propertyId,
             primary: getPropertiesBox(d),
             tertiary: d.address,
             dir: d.address,
             unitCount: d.units ? d.units.length : 0,
-            ...d});
+            ...d
+        });
     })
     return simpleData;
 }
 
 export const filterUnit = (data) => {
     let simpleData = []
-    data.forEach((d)=> {
+    data.forEach((d) => {
         simpleData.push({
             id: d.unitId,
             fid: d.propertyId,
             primary: getUnitBox(d),
             dir: d.unitNo,
             tenantCount: d.tenants ? d.tenants.length : 0,
-            ...d});
+            ...d
+        });
     })
     return simpleData;
 }
 
 export const filterTicket = (data) => {
     let simpleData = []
-    data.forEach((d)=> {
+    data.forEach((d) => {
         simpleData.push({
                 id: d.ticketId,
                 fid: d.unitId,
@@ -110,9 +119,9 @@ export const filterTicket = (data) => {
                 tertiary: d.description,
                 status: d.status,
                 dir: `#${d.ticketId}`,
-            ...d,
-            createdOn: new Date(d.createdOn),
-            estimatedDate: new Date(d.estimatedDate),
+                ...d,
+                createdOn: new Date(d.createdOn),
+                estimatedDate: new Date(d.estimatedDate),
             }
         );
     })
