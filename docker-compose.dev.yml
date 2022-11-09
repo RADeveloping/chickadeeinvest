@@ -29,7 +29,7 @@ services:
     restart: always
 
   chickadee:
-    image: chickadeeinvest/chickadee:1668030573
+    image: chickadeeinvest/chickadee:1668034573
     depends_on:
       - chickadee-db
       - chickadee-smtp
