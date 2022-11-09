@@ -20,21 +20,57 @@ import {applySortFilter, getComparator, ListToolbar} from "../sections/@dashboar
 import {useEffect, useState} from "react";
 import useFetch from "../components/FetchData";
 import useResponsive from "../hooks/useResponsive";
-import {getPropertiesUri, getUnitBox, propertyProperties} from "../utils/filters";
+import {
+    filterProperties, filterTicket, filterUnit,
+    getPropertiesUri,
+    getUnitBox,
+    propertyProperties,
+    ticketProperties,
+    unitProperties
+} from "../utils/filters";
 import Label from "../components/Label";
 import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
 import Property from "../components/Property";
 import useFilter from "../components/FilterOrder";
 
-export default function Properties() {
+export default function Search() {
     const uri = '/api/Properties'
-    const title = "Properties"
+    const title = "Search"
     const dataName = 'Property';
     const [urlSearchParams,
         orderBy, setOrderBy, handleOrderByChange,
         order, setOrder, handleOrderChange,
         filterQuery, handleFilterByQuery, setFilterQuery] = useFilter(propertyProperties);
     const [data, errorData, loadingData] = useFetch(uri + '?' + urlSearchParams.toString());
+
+    const [propertySearchParams,
+        propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
+        propertyOrder, propertySetOrder, propertyHandleOrderChange, 
+        propertyFilterQuery, handlePropertyFilterByQuery, setPropertyFilterQuery] = useFilter(propertyProperties);
+
+    const [unitSearchParams,
+        unitOrderBy, unitSetOrderBy, unitHandleOrderByChange,
+        unitOrder, unitSetOrder, unitHandleOrderChange,
+        unitFilterQuery, handleUnitFilterByQuery, setUnitFilterQuery] = useFilter(unitProperties);
+
+    const [ticketSearchParams,
+        ticketOrderBy, ticketSetOrderBy, ticketHandleOrderByChange,
+        ticketOrder, ticketSetOrder, ticketHandleOrderChange,
+        ticketFilterQuery, handleTicketFilterByQuery, setTicketUnitQuery] = useFilter(ticketProperties);
+
+    const [properties, errorProperties, loadingProperties] = useFetch(
+        '/api/properties?' + propertySearchParams.toString(), filterProperties);
+    const [units, errorUnits, loadingUnits] = useFetch(
+        `/api/units?` + unitSearchParams.toString(), filterUnit);
+    const [tickets, errorTickets, loadingTickets] = useFetch(
+        `/api/tickets?` + ticketSearchParams.toString(), filterTicket);
+
+    const loadingSearch = loadingProperties || loadingUnits || loadingTickets;
+    
+    useEffect(()=> {
+        setUnitFilterQuery(propertyFilterQuery);
+        setTicketUnitQuery(propertyFilterQuery);
+    },[propertyFilterQuery])
 
     const isDesktop = useResponsive('up', 'md');
 
@@ -66,10 +102,10 @@ export default function Properties() {
                         }}>
 
                             <ListToolbar
-                                filterQuery={filterQuery}
-                                onFilterQuery={handleFilterByQuery}
+                                filterQuery={propertyFilterQuery}
+                                onFilterQuery={handlePropertyFilterByQuery}
                                 properties={propertyProperties}
-                                setFilterQuery={setFilterQuery}
+                                setFilterQuery={setPropertyFilterQuery}
                             />
 
                         </Card>
@@ -85,9 +121,9 @@ export default function Properties() {
                                     <InputLabel id="sort-property">Order by</InputLabel>
                                     <Select
                                         labelId="sort-property"
-                                        value={orderBy}
+                                        value={propertyOrderBy}
                                         label="Order by"
-                                        onChange={handleOrderByChange}
+                                        onChange={propertyHandleOrderByChange}
                                     >
                                         {propertyProperties.map((p) =>
                                             <MenuItem key={p.id} value={p.id}>{p.label}</MenuItem>
@@ -96,9 +132,9 @@ export default function Properties() {
                                 </FormControl>
                                 <ToggleButtonGroup
                                     color="primary"
-                                    value={order}
+                                    value={propertyOrder}
                                     exclusive
-                                    onChange={handleOrderChange}
+                                    onChange={propertyHandleOrderChange}
                                 >
                                     <ToggleButton value="desc"><Iconify sx={{height: 14, width: 'auto'}}
                                                                         icon="cil:sort-ascending"/></ToggleButton>
@@ -110,16 +146,16 @@ export default function Properties() {
                     </Stack>
                 </Grow>
                 <br/>
-                <Grow in={!loadingData && data.length > 0}>
+                <Grow in={!loadingData && properties.length > 0}>
                     <Grid container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
-                        {data.map((data) =>
+                        {properties.map((data) =>
                                 // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
                                 <Property data={data}/>
                             // </Link>
                         )}
                     </Grid>
                 </Grow>
-                {!loadingData && data.length === 0 &&
+                {!loadingData && properties.length === 0 &&
                     <Box sx={{
                         height: '40vh',
                         display: 'flex',
