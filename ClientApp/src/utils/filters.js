@@ -17,7 +17,7 @@ export const propertyProperties = [
     {id: 'address', label: 'Address'},
     {id: 'open_count', label: 'Open Ticket Count'},
     {id: 'unit_count', label: 'Unit Count'},
-    {id: 'tenant_count', label: 'Tenant Count'},
+    {id: 'tenants_count', label: 'Tenant Count'},
     {id: 'name', label: 'Property Name'},
 ];
 
