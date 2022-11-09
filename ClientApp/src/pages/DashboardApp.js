@@ -20,12 +20,12 @@ import UserWidget from "../sections/@dashboard/app/UserWidget";
 
 export default function DashboardApp() {
 
-    const ticketUri = '/api/Tickets';
-    const unitUri = '/api/Units';
-    const propertyUri = '/api/Properties';
+    const ticketUri = '/api/tickets';
+    const unitUri = '/api/units';
+    const propertyUri = '/api/properties';
 
-    const accountUri = '/api/Account';
-    const currentUnitUri = '/api/Units/current';
+    const accountUri = '/api/account';
+    const currentUnitUri = '/api/units/current';
 
     const [tickets, ticketsError, ticketsLoading] = useFetch(ticketUri, filterTicket);
     const [units, unitsError, unitsLoading] = useFetch(unitUri, filterUnit);
