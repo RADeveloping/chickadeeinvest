@@ -11,7 +11,7 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import {Link as RouterLink, useNavigate} from "react-router-dom";
+import {Link, Link as RouterLink, useNavigate} from "react-router-dom";
 import Iconify from "../components/Iconify";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
@@ -20,9 +20,10 @@ import {applySortFilter, getComparator, ListToolbar} from "../sections/@dashboar
 import {useEffect, useState} from "react";
 import useFetch from "../components/FetchData";
 import useResponsive from "../hooks/useResponsive";
-import {getUnitBox} from "../utils/filters";
+import {getPropertiesUri, getUnitBox} from "../utils/filters";
 import Label from "../components/Label";
 import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
+import Property from "../components/Property";
 
 const properties = [
     {id: 'address', label: 'Address'},
@@ -141,40 +142,10 @@ export default function Properties() {
                 <br/>
                 <Grow in={!loadingData && data.length > 0}>
                     <Grid container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
-                        {data.map((data) => {
-                                const {address, propertyId, outstandingTickets, unitsCount, name, tenantsCount} = data
-                                return (<Grow in={true}>
-                                    <Grid xs={12} sm={12} md={6} l={4} xl={4} item>
-                                        <Card sx={{height: 150}}>
-                                            <CardContent sx={{height: '100%'}}>
-                                                <Stack direction={'column'} justifyContent={'space-between'} alignItems={'flex-start'} sx={{height: '100%'}}>
-                                                    <Stack direction={'column'} width={'100%'}>
-                                                        <Typography variant={'h4'} noWrap>
-                                                            {name}
-                                                        </Typography>
-                                                        <Typography variant={'h6'} color="text.secondary">
-                                                            {address}
-                                                        </Typography>
-                                                    </Stack>
-                                                    <Stack direction={'row'} alignItems={'center'} justifyContent={'left'}
-                                                           gap={1}>
-                                                        <Label>
-                                                            {unitsCount} unit{unitsCount !== 1 && 's'}
-                                                        </Label>
-                                                        <Label color={'info'}>
-                                                            {outstandingTickets} open
-                                                            ticket{outstandingTickets !== 1 && 's'}
-                                                        </Label>
-                                                        <Label color={'success'}>
-                                                            {tenantsCount} tenant{tenantsCount !== 1 && 's'}
-                                                        </Label>
-                                                    </Stack>
-                                                </Stack>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>
-                                </Grow>)
-                            }
+                        {data.map((data) =>
+                            // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
+                                <Property data={data}/>
+                            // </Link>
                         )}
                     </Grid>
                 </Grow>
