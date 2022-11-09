@@ -312,8 +312,6 @@ namespace chickadee.Controllers
 
                     }
                 }
-                
-        
             }
 
             
@@ -542,7 +540,7 @@ namespace chickadee.Controllers
                     },
                     // messages = t.Messages,
                     // images = t.Images,
-                });
+                }).AsEnumerable();
 
             var allTickets = _context.Tickets
                 .Select(t => new
@@ -600,7 +598,7 @@ namespace chickadee.Controllers
                     },
                     // messages = t.Messages,
                     // images = t.Images,
-                });
+                }).AsEnumerable();
 
             
             switch (sortOrder)
@@ -661,20 +659,7 @@ namespace chickadee.Controllers
                     break;
             }
 
-            
-            if (query != null)
-            {
-                return isSuperAdmin
-                    ? Ok(allTickets.Where(s =>
-                        s.problem.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
-                        s.ticketId.ToString().Contains(query, StringComparison.InvariantCultureIgnoreCase)).ToList())
-                    : Ok(tickets.Where(s =>
-                        s.problem.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
-                        s.ticketId.ToString().Contains(query, StringComparison.InvariantCultureIgnoreCase)).ToList());
-            
-            }
-
-            if (query != null)
+             if (query != null)
             {
                 try
                 {
@@ -718,7 +703,7 @@ namespace chickadee.Controllers
                              (s.unit.tenants != null && s.unit.tenants.Any(t =>
                                   t.LastName.Contains(query, StringComparison.InvariantCultureIgnoreCase)) ||
                               s.ticketId == parsedInt ||
-                              s.unit.unitNo == parsedInt))).ToList());
+                              s.unit.unitNo == parsedInt))).AsEnumerable());
                     }
                 }catch
                 {
@@ -738,7 +723,7 @@ namespace chickadee.Controllers
                             (s.unit.tenants != null && s.unit.tenants.Any(t =>
                                  t.FirstName.Contains(query, StringComparison.InvariantCultureIgnoreCase)) ||
                              (s.unit.tenants != null && s.unit.tenants.Any(t =>
-                                 t.LastName.Contains(query, StringComparison.InvariantCultureIgnoreCase))))).ToList());
+                                 t.LastName.Contains(query, StringComparison.InvariantCultureIgnoreCase))))).AsEnumerable());
                     }
                     else
                     {
@@ -760,12 +745,11 @@ namespace chickadee.Controllers
 
                     }
                 }
-                
-        
             }
-
+            
             
             return isSuperAdmin ? Ok(allTickets.ToList()) : Ok(tickets.ToList());
+
         }
         
         
