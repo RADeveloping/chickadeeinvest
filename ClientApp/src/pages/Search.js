@@ -57,13 +57,17 @@ export default function Search() {
         ticketFilterQuery, handleTicketFilterByQuery, setTicketUnitQuery] = useFilter(ticketProperties);
 
     const [properties, errorProperties, loadingProperties] = useFetch(
-        '/api/properties?' + propertySearchParams.toString(), filterProperties);
+        propertyFilterQuery ? 
+        '/api/properties?' + propertySearchParams.toString() : null, filterProperties);
     const [units, errorUnits, loadingUnits] = useFetch(
-        `/api/units?` + unitSearchParams.toString(), filterUnit);
+        propertyFilterQuery ?
+        `/api/units?` + unitSearchParams.toString() : null, filterUnit);
     const [tickets, errorTickets, loadingTickets] = useFetch(
-        `/api/tickets?` + ticketSearchParams.toString(), filterTicket);
+        propertyFilterQuery ?
+        `/api/tickets?` + ticketSearchParams.toString() : null, filterTicket);
 
     const loadingSearch = loadingProperties || loadingUnits || loadingTickets;
+    const isEmptySearch = properties.length === 0 && units.length === 0 && tickets.length === 0;
 
     useEffect(() => {
         setUnitFilterQuery(propertyFilterQuery);
@@ -143,14 +147,14 @@ export default function Search() {
                         }
                     </Grid>
                 </Grow>
-                {!loadingSearch && (properties.length === 0 && units.length === 0 && tickets.length === 0) &&
+                {!loadingSearch && isEmptySearch &&
                     <Box sx={{
                         height: '40vh',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         color: 'text.disabled'
-                    }}>{`No ${title}`}</Box>}
+                    }}>{`No ${propertyFilterQuery ? 'Results' : 'Search'}`}</Box>}
             </Container>
         </Page>
     )

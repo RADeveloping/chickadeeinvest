@@ -47,7 +47,7 @@ namespace chickadee.Controllers
                     propertyId = unit.PropertyId,
                     propertyName = unit.Property.Name,
                     propertyManagerId = unit.PropertyManagerId,
-                });
+                }).AsEnumerable();
 
             var unitsSa = _context.Unit
                 .Select(unit => new
@@ -58,7 +58,7 @@ namespace chickadee.Controllers
                     propertyId = unit.PropertyId,
                     propertyName = unit.Property.Name,
                     propertyManagerId = unit.PropertyManagerId,
-                });
+                }).AsEnumerable();
 
             switch (sort)
             {
@@ -105,6 +105,7 @@ namespace chickadee.Controllers
             {
                 try
                 {
+
                     var parsedInt = int.Parse(query);
                     if (User.IsInRole("SuperAdmin"))
                     {
@@ -116,17 +117,22 @@ namespace chickadee.Controllers
                         return Ok(units.Where(s =>
                             s.unitNo == parsedInt).ToList());
                     }
+                    
+
                 }catch
                 {
                     if (User.IsInRole("SuperAdmin"))
                     {
+                        
+                        Console.WriteLine(query);
+
                         return Ok(unitsSa.Where(s =>
-                            s.propertyName.Contains(query, StringComparison.InvariantCultureIgnoreCase)).AsEnumerable());
+                            s.propertyName.Contains(query, StringComparison.InvariantCultureIgnoreCase)).ToList());
                     }
                     else
                     {
                         return Ok(units.Where(s =>
-                            s.propertyName.Contains(query, StringComparison.InvariantCultureIgnoreCase)).AsEnumerable());
+                            s.propertyName.Contains(query, StringComparison.InvariantCultureIgnoreCase)).ToList());
 
                     }
                 }
