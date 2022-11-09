@@ -23,9 +23,6 @@ services:
     ports:
       - "25:25"
       - "587:587"
-    volumes:
-      - /srv/postfix/conf:/etc/postfix
-      - /srv/postfix/domainkeys:/etc/opendkim/domainkeys
     environment:
       - maildomain=chickadeeinvest.ca
       - smtp_user=webmaster:XCpK6L05w06sUId%M03^PFW6^EEyPYZM523A*hZ@VIu8k879^0
