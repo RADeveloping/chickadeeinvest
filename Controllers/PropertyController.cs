@@ -80,7 +80,7 @@ namespace chickadee.Controllers
                     UnitsCount = x.Units == null ? 0 : x.Units.Count,
                     OutstandingTickets = x.Units == null
                         ? 0
-                        : x.Units.Select(u => u.Tickets.Any(t => t.Status == TicketStatus.Open)).Count(),
+                        : x.Units.Select(u => u.Tickets != null && u.Tickets.Any(t => t.Status == TicketStatus.Open)).Count(),
                 })
                 .ToList();
 
