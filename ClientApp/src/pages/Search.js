@@ -34,15 +34,9 @@ import Property from "../components/Property";
 import useFilter from "../components/FilterOrder";
 
 export default function Search() {
-    const uri = '/api/Properties'
     const title = "Search"
-    const dataName = 'Property';
-    const [urlSearchParams,
-        orderBy, setOrderBy, handleOrderByChange,
-        order, setOrder, handleOrderChange,
-        filterQuery, handleFilterByQuery, setFilterQuery] = useFilter(propertyProperties);
-    const [data, errorData, loadingData] = useFetch(uri + '?' + urlSearchParams.toString());
-
+    const dataName = 'wtf';
+    
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
         propertyOrder, propertySetOrder, propertyHandleOrderChange, 
@@ -90,13 +84,13 @@ export default function Search() {
                         {`New ${dataName}`}
                     </Button>
                 </Stack>
-                <PageLoading loadingData={loadingData}/>
-                <Grow in={!loadingData}>
+                <PageLoading loadingData={loadingSearch}/>
+                <Grow in={!loadingSearch}>
                     <Stack direction={isDesktop ? 'row' : 'column'} gap={1} alignItems={'center'}
                            justifyContent={'space-between'}>
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                            display: loadingData ? 'none' : undefined,
+                            display: loadingSearch ? 'none' : undefined,
                             width: 'fit-content',
                             backgroundColor: (theme) => theme.palette['background'].default,
                         }}>
@@ -111,7 +105,7 @@ export default function Search() {
                         </Card>
                         <Card sx={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                            display: loadingData ? 'none' : undefined,
+                            display: loadingSearch ? 'none' : undefined,
                             width: 'fit-content',
                             backgroundColor: (theme) => theme.palette['background'].default,
                             padding: 2.5
@@ -146,7 +140,7 @@ export default function Search() {
                     </Stack>
                 </Grow>
                 <br/>
-                <Grow in={!loadingData && properties.length > 0}>
+                <Grow in={!loadingSearch && properties.length > 0}>
                     <Grid container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
                         {properties.map((data) =>
                                 // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
@@ -155,7 +149,7 @@ export default function Search() {
                         )}
                     </Grid>
                 </Grow>
-                {!loadingData && properties.length === 0 &&
+                {!loadingSearch && properties.length === 0 &&
                     <Box sx={{
                         height: '40vh',
                         display: 'flex',
