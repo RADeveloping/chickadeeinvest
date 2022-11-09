@@ -74,6 +74,10 @@
     <Compile Remove="Pages\Units\Delete.cshtml.cs" />
     <Compile Remove="Pages\Units\Create.cshtml.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="Areas\Identity\Pages\Account\Manage\_Layout.cshtml" />
+    <AdditionalFiles Include="Areas\Identity\Pages\_ManageNav.cshtml" />
+  </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
