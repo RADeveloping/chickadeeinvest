@@ -28,7 +28,7 @@ namespace chickadee.Controllers
         // GET: api/units
         [HttpGet]
         [Route("api/units")]
-        public async Task<ActionResult<IEnumerable<Unit>>> GetAllUnits()
+        public async Task<ActionResult<IEnumerable<Unit>>> GetAllUnits(string? sort, string? param, string? query)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
             if (_context.Unit == null || requestingUser == null || _context.Property == null)
@@ -37,7 +37,8 @@ namespace chickadee.Controllers
             }
 
             var units = _context.Unit
-                .Where(u=>  u.PropertyManager != null && (requestingUser.UnitId == u.UnitId || u.PropertyManager.Id == requestingUser.Id))
+                .Where(u => u.PropertyManager != null &&
+                            (requestingUser.UnitId == u.UnitId || u.PropertyManager.Id == requestingUser.Id))
                 .Select(unit => new
                 {
                     unitId = unit.UnitId,
@@ -46,9 +47,8 @@ namespace chickadee.Controllers
                     propertyId = unit.PropertyId,
                     propertyName = unit.Property.Name,
                     propertyManagerId = unit.PropertyManagerId,
-                })
-                .ToList();
-            
+                });
+
             var unitsSa = _context.Unit
                 .Select(unit => new
                 {
@@ -58,9 +58,50 @@ namespace chickadee.Controllers
                     propertyId = unit.PropertyId,
                     propertyName = unit.Property.Name,
                     propertyManagerId = unit.PropertyManagerId,
-                })
-                .ToList();
+                });
 
+            switch (sort)
+            {
+                case "asc" when param == "id":
+                    units = units.OrderBy(s => s.unitId);
+                    unitsSa = unitsSa.OrderBy(s => s.unitId);
+
+                    break;
+                case "desc" when param == "id":
+                    units = units.OrderByDescending(s => s.unitId);
+                    unitsSa = unitsSa.OrderByDescending(s => s.unitId);
+
+                    break;
+                
+                case "asc" when param == "number":
+                    units = units.OrderBy(s => s.unitNo);
+                    unitsSa = unitsSa.OrderBy(s => s.unitNo);
+
+                    break;
+                case "desc" when param == "number":
+                    units = units.OrderByDescending(s => s.unitNo);
+                    unitsSa = unitsSa.OrderByDescending(s => s.unitNo);
+
+                    break;
+               
+                case "asc" when param == "type":
+                    units = units.OrderBy(s => s.unitType);
+                    unitsSa = unitsSa.OrderBy(s => s.unitType);
+
+                    break;
+                case "desc" when param == "type":
+                    units = units.OrderByDescending(s => s.unitType);
+                    unitsSa = unitsSa.OrderByDescending(s => s.unitType);
+
+                    break;
+                
+                default:
+                    units = units.OrderBy(s => s.unitNo);
+                    unitsSa = unitsSa.OrderBy(s => s.unitNo);
+                    break;
+            }
+
+            
 
             return Ok(User.IsInRole("SuperAdmin") ? unitsSa : units);
         }
