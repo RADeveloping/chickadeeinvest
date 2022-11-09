@@ -121,15 +121,15 @@ export const filterTicket = (data) => {
 
 export const getTicketsUri = (ticket) => {
     console.log(ticket)
-    return `properties/${ticket.propertyId}/units/${ticket.unitId}/tickets/${ticket.ticketId}`
+    return `tickets/${ticket.ticketId}?pid=${ticket.propertyId}&uid=${ticket.unitId}`
 }
 
 export const getPropertiesUri = (property) => {
     console.log(property)
-    return `overview?property=${property.propertyId}`
+    return `tickets?property=${property.propertyId}`
 }
 
 export const getUnitsUri = (unit) => {
     console.log(unit)
-    return `overview?property=${unit.propertyId}&unit=${unit.unitId}`
+    return `tickets?property=${unit.propertyId}&unit=${unit.unitId}`
 }

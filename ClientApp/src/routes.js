@@ -14,7 +14,7 @@ import {
 } from './components/api-authorization/ApiAuthorizationConstants';
 import { Logout } from './components/api-authorization/Logout';
 import LandingPage from "./pages/LandingPage";
-import Overview from "./pages/Overview";
+import Tickets from "./pages/Tickets";
 import TicketDetail from "./pages/TicketDetail";
 import Properties from "./pages/Properties";
 import Verification from "./pages/Verification";
@@ -28,14 +28,14 @@ const DashboardRoutes = [
         element: <DashboardApp />
     },
     {
-        path: 'properties/:pid/units/:uid/tickets/:id',
+        path: 'tickets/:id',
         requireAuth: true,
         element: <TicketDetail />
     },
     {
-        path: 'overview',
+        path: 'tickets',
         requireAuth: true,
-        element: <Overview />
+        element: <Tickets />
     },
     {
         path: 'properties',
