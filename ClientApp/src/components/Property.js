@@ -15,7 +15,7 @@ export default function Property({ data }) {
                                 <Typography variant={'h4'} noWrap>
                                     {name}
                                 </Typography>
-                                <Typography variant={'h6'} color="text.secondary">
+                                <Typography variant={'h6'} color="text.secondary" noWrap>
                                     {address}
                                 </Typography>
                             </Stack>

@@ -15,7 +15,7 @@ export default function Unit({ data }) {
                                 <Typography variant={'h4'} noWrap>
                                     {unitNo}
                                 </Typography>
-                                <Typography variant={'h6'} color="text.secondary">
+                                <Typography variant={'h6'} color="text.secondary" noWrap>
                                     {propertyName}
                                 </Typography>
                             </Stack>
