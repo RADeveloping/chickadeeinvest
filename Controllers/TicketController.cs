@@ -163,19 +163,8 @@ namespace chickadee.Controllers
                     });
 
 
-
             switch (sortOrder)
             {
-                case "asc" when param == "address":
-                    allTickets = allTickets.OrderBy(s => s.unit.property.Address);
-                    tickets = tickets.OrderBy(s => s.unit.property.Address);
-
-                    break;
-                case "desc" when param == "address":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Address);
-                    tickets = tickets.OrderByDescending(s => s.unit.property.Address);
-
-                    break;
                 case "asc" when param == "id":
                     allTickets = allTickets.OrderBy(s => s.ticketId);
                     tickets = tickets.OrderBy(s => s.ticketId);
@@ -184,15 +173,47 @@ namespace chickadee.Controllers
                     allTickets = allTickets.OrderByDescending(s => s.ticketId);
                     tickets = tickets.OrderByDescending(s => s.ticketId);
                     break;
-                case "asc" when param == "property_manager_name":
-                    allTickets = allTickets.OrderBy(s => s.unit.property.Name);
-                    tickets = tickets.OrderBy(s => s.unit.property.Name);
-
+                case "asc" when param == "createOn":
+                    allTickets = allTickets.OrderBy(s => s.createdOn);
+                    tickets = tickets.OrderBy(s => s.createdOn);
                     break;
-                case "desc" when param == "property_manager_name":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Name);
-                    tickets = tickets.OrderByDescending(s => s.unit.property.Name);
+                case "desc" when param == "createOn":
+                    allTickets = allTickets.OrderByDescending(s => s.createdOn);
+                    tickets = tickets.OrderByDescending(s => s.createdOn);
                     break;
+                case "asc" when param == "estimatedDate":
+                    allTickets = allTickets.OrderBy(s => s.estimatedDate);
+                    tickets = tickets.OrderBy(s => s.estimatedDate);
+                    break;
+                case "desc" when param == "estimatedDate":
+                    allTickets = allTickets.OrderByDescending(s => s.estimatedDate);
+                    tickets = tickets.OrderByDescending(s => s.estimatedDate);
+                    break;
+                case "asc" when param == "problem":
+                    allTickets = allTickets.OrderBy(s => s.problem);
+                    tickets = tickets.OrderBy(s => s.problem);
+                    break;
+                case "desc" when param == "problem":
+                    allTickets = allTickets.OrderByDescending(s => s.problem);
+                    tickets = tickets.OrderByDescending(s => s.problem);
+                    break;
+                case "asc" when param == "severity":
+                    allTickets = allTickets.OrderBy(s => s.severity);
+                    tickets = tickets.OrderBy(s => s.severity);
+                    break;
+                case "desc" when param == "severity":
+                    allTickets = allTickets.OrderByDescending(s => s.severity);
+                    tickets = tickets.OrderByDescending(s => s.severity);
+                    break;
+                case "asc" when param == "status":
+                    allTickets = allTickets.OrderBy(s => s.status);
+                    tickets = tickets.OrderBy(s => s.status);
+                    break;
+                case "desc" when param == "status":
+                    allTickets = allTickets.OrderByDescending(s => s.status);
+                    tickets = tickets.OrderByDescending(s => s.status);
+                    break;
+            
                 default:
                     allTickets = allTickets.OrderByDescending(s => s.createdOn);
                     tickets = tickets.OrderByDescending(s => s.createdOn);
@@ -489,16 +510,6 @@ namespace chickadee.Controllers
             
             switch (sortOrder)
             {
-                case "asc" when param == "address":
-                    allTickets = allTickets.OrderBy(s => s.unit.property.Address);
-                    tickets = tickets.OrderBy(s => s.unit.property.Address);
-
-                    break;
-                case "desc" when param == "address":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Address);
-                    tickets = tickets.OrderByDescending(s => s.unit.property.Address);
-
-                    break;
                 case "asc" when param == "id":
                     allTickets = allTickets.OrderBy(s => s.ticketId);
                     tickets = tickets.OrderBy(s => s.ticketId);
@@ -507,15 +518,47 @@ namespace chickadee.Controllers
                     allTickets = allTickets.OrderByDescending(s => s.ticketId);
                     tickets = tickets.OrderByDescending(s => s.ticketId);
                     break;
-                case "asc" when param == "property_manager_name":
-                    allTickets = allTickets.OrderBy(s => s.unit.property.Name);
-                    tickets = tickets.OrderBy(s => s.unit.property.Name);
-
+                case "asc" when param == "createOn":
+                    allTickets = allTickets.OrderBy(s => s.createdOn);
+                    tickets = tickets.OrderBy(s => s.createdOn);
                     break;
-                case "desc" when param == "property_manager_name":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Name);
-                    tickets = tickets.OrderByDescending(s => s.unit.property.Name);
+                case "desc" when param == "createOn":
+                    allTickets = allTickets.OrderByDescending(s => s.createdOn);
+                    tickets = tickets.OrderByDescending(s => s.createdOn);
                     break;
+                case "asc" when param == "estimatedDate":
+                    allTickets = allTickets.OrderBy(s => s.estimatedDate);
+                    tickets = tickets.OrderBy(s => s.estimatedDate);
+                    break;
+                case "desc" when param == "estimatedDate":
+                    allTickets = allTickets.OrderByDescending(s => s.estimatedDate);
+                    tickets = tickets.OrderByDescending(s => s.estimatedDate);
+                    break;
+                case "asc" when param == "problem":
+                    allTickets = allTickets.OrderBy(s => s.problem);
+                    tickets = tickets.OrderBy(s => s.problem);
+                    break;
+                case "desc" when param == "problem":
+                    allTickets = allTickets.OrderByDescending(s => s.problem);
+                    tickets = tickets.OrderByDescending(s => s.problem);
+                    break;
+                case "asc" when param == "severity":
+                    allTickets = allTickets.OrderBy(s => s.severity);
+                    tickets = tickets.OrderBy(s => s.severity);
+                    break;
+                case "desc" when param == "severity":
+                    allTickets = allTickets.OrderByDescending(s => s.severity);
+                    tickets = tickets.OrderByDescending(s => s.severity);
+                    break;
+                case "asc" when param == "status":
+                    allTickets = allTickets.OrderBy(s => s.status);
+                    tickets = tickets.OrderBy(s => s.status);
+                    break;
+                case "desc" when param == "status":
+                    allTickets = allTickets.OrderByDescending(s => s.status);
+                    tickets = tickets.OrderByDescending(s => s.status);
+                    break;
+            
                 default:
                     allTickets = allTickets.OrderByDescending(s => s.createdOn);
                     tickets = tickets.OrderByDescending(s => s.createdOn);
