@@ -170,9 +170,13 @@ namespace chickadee.Controllers
             {
                 case "asc" when param == "address":
                     allTickets = allTickets.OrderBy(s => s.unit.property.Address);
+                    tickets = tickets.OrderBy(s => s.unit.property.Address);
+
                     break;
                 case "desc" when param == "address":
                     allTickets = allTickets.OrderByDescending(s => s.unit.property.Address);
+                    tickets = tickets.OrderByDescending(s => s.unit.property.Address);
+
                     break;
                 case "asc" when param == "id":
                     allTickets = allTickets.OrderBy(s => s.ticketId);
@@ -184,12 +188,17 @@ namespace chickadee.Controllers
                     break;
                 case "asc" when param == "property_manager_name":
                     allTickets = allTickets.OrderBy(s => s.unit.property.Name);
+                    tickets = tickets.OrderBy(s => s.unit.property.Name);
+
                     break;
                 case "desc" when param == "property_manager_name":
                     allTickets = allTickets.OrderByDescending(s => s.unit.property.Name);
+                    tickets = tickets.OrderByDescending(s => s.unit.property.Name);
                     break;
                 default:
                     allTickets = allTickets.OrderByDescending(s => s.createdOn);
+                    tickets = tickets.OrderByDescending(s => s.createdOn);
+
                     break;
             }
 
@@ -357,28 +366,31 @@ namespace chickadee.Controllers
             var isSuperAdmin = await _userManager.IsInRoleAsync(requestingUser, "SuperAdmin");
 
             var tickets = _context.Tickets
-                .Where(t => t.Unit != null && ((t.Unit.PropertyManagerId == requestingUser.Id) || t.Unit.UnitId == requestingUser.UnitId))
+                .Where(t => t.Unit != null && ((t.Unit.PropertyManagerId == requestingUser.Id) ||
+                                               t.Unit.UnitId == requestingUser.UnitId))
                 .Select(t => new
                 {
                     ticketId = t.TicketId,
-                        problem = t.Problem,
-                        description = t.Description,
-                        createdOn = t.CreatedOn,
-                        estimatedDate = t.EstimatedDate,
-                        status = t.Status,
-                        severity = t.Severity,
-                        closedDate = t.ClosedDate,
-                        unitId = t.UnitId,
-                        propertyId = t.Unit != null ? t.Unit.PropertyId : null,
-                        propertyName= t.Unit != null ? t.Unit.Property.Name : null,
-                        unit = new
-                        {
-                            unitId = t.Unit.UnitId,
-                            unitNo = t.Unit.UnitNo,
-                            unitType = t.Unit.UnitType,
-                            propertyId = t.Unit.PropertyId,
-                            propertyManagerId = t.Unit.PropertyManagerId,
-                            propertyManager =  t.Unit.PropertyManager == null ? null : new
+                    problem = t.Problem,
+                    description = t.Description,
+                    createdOn = t.CreatedOn,
+                    estimatedDate = t.EstimatedDate,
+                    status = t.Status,
+                    severity = t.Severity,
+                    closedDate = t.ClosedDate,
+                    unitId = t.UnitId,
+                    propertyId = t.Unit != null ? t.Unit.PropertyId : null,
+                    propertyName = t.Unit != null ? t.Unit.Property.Name : null,
+                    unit = new
+                    {
+                        unitId = t.Unit.UnitId,
+                        unitNo = t.Unit.UnitNo,
+                        unitType = t.Unit.UnitType,
+                        propertyId = t.Unit.PropertyId,
+                        propertyManagerId = t.Unit.PropertyManagerId,
+                        propertyManager = t.Unit.PropertyManager == null
+                            ? null
+                            : new
                             {
                                 t.Unit.PropertyManager.FirstName,
                                 t.Unit.PropertyManager.LastName,
@@ -386,14 +398,16 @@ namespace chickadee.Controllers
                                 t.Unit.PropertyManager.UserName,
                                 t.Unit.PropertyManager.Email,
                                 t.Unit.PropertyManager.ProfilePicture
-                            } ,
-                            property = new
-                            {
-                                t.Unit.Property.Address,
-                                t.Unit.Property.Name,
-                                t.Unit.Property.PropertyId,
                             },
-                            tenants = t.Unit.Tenants == null ? null : t.Unit.Tenants.Select(tenant => new
+                        property = new
+                        {
+                            t.Unit.Property.Address,
+                            t.Unit.Property.Name,
+                            t.Unit.Property.PropertyId,
+                        },
+                        tenants = t.Unit.Tenants == null
+                            ? null
+                            : t.Unit.Tenants.Select(tenant => new
                             {
                                 FirstName = tenant.FirstName,
                                 LastName = tenant.LastName,
@@ -402,20 +416,20 @@ namespace chickadee.Controllers
                                 PhoneNumber = tenant.PhoneNumber,
                                 ProfilePicture = tenant.ProfilePicture
                             })
-                        },
-                        createdBy = new
-                        {
-                            FirstName = t.CreatedBy.FirstName,
-                            LastName = t.CreatedBy.LastName,
-                            Id = t.CreatedBy.Id,
-                            Email = t.CreatedBy.UserName,
-                            PhoneNumber = t.CreatedBy.PhoneNumber,
-                            ProfilePicture = t.CreatedBy.ProfilePicture
-                        },
-                        // messages = t.Messages,
-                        // images = t.Images,
-                }).ToList();
-                
+                    },
+                    createdBy = new
+                    {
+                        FirstName = t.CreatedBy.FirstName,
+                        LastName = t.CreatedBy.LastName,
+                        Id = t.CreatedBy.Id,
+                        Email = t.CreatedBy.UserName,
+                        PhoneNumber = t.CreatedBy.PhoneNumber,
+                        ProfilePicture = t.CreatedBy.ProfilePicture
+                    },
+                    // messages = t.Messages,
+                    // images = t.Images,
+                });
+
             var allTickets = _context.Tickets
                 .Select(t => new
                 {
@@ -429,7 +443,7 @@ namespace chickadee.Controllers
                     closedDate = t.ClosedDate,
                     unitId = t.UnitId,
                     propertyId = t.Unit != null ? t.Unit.PropertyId : null,
-                    propertyName= t.Unit != null ? t.Unit.Property.Name : null,
+                    propertyName = t.Unit != null ? t.Unit.Property.Name : null,
                     unit = new
                     {
                         unitId = t.Unit.UnitId,
@@ -438,68 +452,81 @@ namespace chickadee.Controllers
                         propertyId = t.Unit.PropertyId,
                         property = t.Unit.Property,
                         propertyManagerId = t.Unit.PropertyManagerId,
-                        propertyManager =  t.Unit.PropertyManager == null ? null : new
-                        {
-                            t.Unit.PropertyManager.FirstName,
-                            t.Unit.PropertyManager.LastName,
-                            t.Unit.PropertyManager.Id,
-                            t.Unit.PropertyManager.UserName,
-                            t.Unit.PropertyManager.Email,
-                            t.Unit.PropertyManager.ProfilePicture
-                        } ,
-                        tenants = t.Unit.Tenants == null ? null : t.Unit.Tenants.Select(tenant => new
-                        {
-                            FirstName = tenant.FirstName,
-                            LastName = tenant.LastName,
-                            Id = tenant.Id,
-                            Email = tenant.UserName,
-                            PhoneNumber = tenant.PhoneNumber,
-                            ProfilePicture = tenant.ProfilePicture
-                        })
+                        propertyManager = t.Unit.PropertyManager == null
+                            ? null
+                            : new
+                            {
+                                t.Unit.PropertyManager.FirstName,
+                                t.Unit.PropertyManager.LastName,
+                                t.Unit.PropertyManager.Id,
+                                t.Unit.PropertyManager.UserName,
+                                t.Unit.PropertyManager.Email,
+                                t.Unit.PropertyManager.ProfilePicture
+                            },
+                        tenants = t.Unit.Tenants == null
+                            ? null
+                            : t.Unit.Tenants.Select(tenant => new
+                            {
+                                FirstName = tenant.FirstName,
+                                LastName = tenant.LastName,
+                                Id = tenant.Id,
+                                Email = tenant.UserName,
+                                PhoneNumber = tenant.PhoneNumber,
+                                ProfilePicture = tenant.ProfilePicture
+                            })
                     },
                     createdBy = new
                     {
-                    FirstName = t.CreatedBy.FirstName,
-                    LastName = t.CreatedBy.LastName,
-                    Id = t.CreatedBy.Id,
-                    Email = t.CreatedBy.UserName,
-                    PhoneNumber = t.CreatedBy.PhoneNumber,
-                    ProfilePicture = t.CreatedBy.ProfilePicture
+                        FirstName = t.CreatedBy.FirstName,
+                        LastName = t.CreatedBy.LastName,
+                        Id = t.CreatedBy.Id,
+                        Email = t.CreatedBy.UserName,
+                        PhoneNumber = t.CreatedBy.PhoneNumber,
+                        ProfilePicture = t.CreatedBy.ProfilePicture
                     },
-                // messages = t.Messages,
-                // images = t.Images,
-            }).ToList();
+                    // messages = t.Messages,
+                    // images = t.Images,
+                });
 
             
             switch (sortOrder)
             {
                 case "asc" when param == "address":
-                    allTickets = allTickets.OrderBy(s => s.unit.property.Address).ToList();
+                    allTickets = allTickets.OrderBy(s => s.unit.property.Address);
+                    tickets = tickets.OrderBy(s => s.unit.property.Address);
+
                     break;
                 case "desc" when param == "address":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Address).ToList();
+                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Address);
+                    tickets = tickets.OrderByDescending(s => s.unit.property.Address);
+
                     break;
                 case "asc" when param == "id":
-                    allTickets = allTickets.OrderBy(s => s.ticketId).ToList();
-                    tickets = tickets.OrderBy(s => s.ticketId).ToList();
+                    allTickets = allTickets.OrderBy(s => s.ticketId);
+                    tickets = tickets.OrderBy(s => s.ticketId);
                     break;
                 case "desc" when param == "id":
-                    allTickets = allTickets.OrderByDescending(s => s.ticketId).ToList();
-                    tickets = tickets.OrderByDescending(s => s.ticketId).ToList();
+                    allTickets = allTickets.OrderByDescending(s => s.ticketId);
+                    tickets = tickets.OrderByDescending(s => s.ticketId);
                     break;
                 case "asc" when param == "property_manager_name":
-                    allTickets = allTickets.OrderBy(s => s.unit.property.Name).ToList();
+                    allTickets = allTickets.OrderBy(s => s.unit.property.Name);
+                    tickets = tickets.OrderBy(s => s.unit.property.Name);
+
                     break;
                 case "desc" when param == "property_manager_name":
-                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Name).ToList();
+                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Name);
+                    tickets = tickets.OrderByDescending(s => s.unit.property.Name);
                     break;
                 default:
-                    allTickets = allTickets.OrderByDescending(s => s.createdOn).ToList();
+                    allTickets = allTickets.OrderByDescending(s => s.createdOn);
+                    tickets = tickets.OrderByDescending(s => s.createdOn);
+
                     break;
             }
 
             
-            return isSuperAdmin ? Ok(allTickets) : Ok(tickets);
+            return isSuperAdmin ? Ok(allTickets.ToList()) : Ok(tickets.ToList());
         }
         
         // GET:   api/properties/{propertyId}/units/{unitId}/tickets
