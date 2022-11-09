@@ -23,7 +23,7 @@ export const propertyProperties = [
 
 export const unitProperties = [
     {id: 'number', label: 'Unit Number'},
-    {id: 'property_manager_name', label: 'Property Manager Name'},
+    {id: 'type', label: 'Unit Type'},
 ];
 
 export const ticketProperties = [

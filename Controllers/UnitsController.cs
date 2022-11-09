@@ -69,7 +69,7 @@ namespace chickadee.Controllers
         // GET: api/properties/{propertyId}/units
         [HttpGet]
         [Route("api/properties/{propertyId}/units")]
-        public async Task<ActionResult> GetUnits(string propertyId, string? sortOrder, string? param)
+        public async Task<ActionResult> GetUnits(string propertyId, string? sort, string? param)
         {
 
             var requestingUser = await _userManager.GetUserAsync(User);
@@ -96,7 +96,7 @@ namespace chickadee.Controllers
                 });
               
             
-            switch (sortOrder)
+            switch (sort)
             {
                 case "asc" when param == "id":
                     units = units.OrderBy(s => s.unitId);
