@@ -32,7 +32,7 @@ namespace chickadee.Controllers
         // GET:   api/properties/{propertyId}/units/{unitId}/tickets
         [HttpGet]
         [Route("api/properties/{propertyId}/units/{unitId}/tickets")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets(string propertyId, string unitId)
+        public async Task<ActionResult> GetTickets(string propertyId, string unitId, string? sortOrder, string? param)
         {
             
               var requestingUser = await _userManager.GetUserAsync(User);
@@ -43,16 +43,9 @@ namespace chickadee.Controllers
             
             var isSuperAdmin = await _userManager.IsInRoleAsync(requestingUser, "SuperAdmin");
 
-            var result = _context.Tickets
-                .Include(t => t.Unit)
-                .ThenInclude(u => u.Property)
-                .Where(t => (t.Unit.PropertyId == propertyId) && t.Unit.UnitId == unitId);
-            
-            var userHasAccess = result.Any(t => t.Unit.PropertyManagerId == requestingUser.Id || (t.Unit.Tenants != null && t.Unit.Tenants.Any(x=>x.Id == requestingUser.Id)) || isSuperAdmin);
-
-            var simpleResult =
-                result
-                    .Select(t => new
+            var allTickets = _context.Tickets
+                .Where(t => t.Unit != null && (t.Unit.PropertyId == propertyId) && t.Unit.UnitId == unitId)
+                .Select(t => new
                     {
                         ticketId = t.TicketId,
                         problem = t.Problem,
@@ -63,54 +56,297 @@ namespace chickadee.Controllers
                         severity = t.Severity,
                         closedDate = t.ClosedDate,
                         unitId = t.UnitId,
-                        propertyId = t.Unit.PropertyId,
-                        // unit = new
-                        // {
-                        //     unitId = t.Unit.UnitId,
-                        //     unitNo = t.Unit.UnitNo,
-                        //     unitType = t.Unit.UnitType,
-                        //     propertyId = t.Unit.PropertyId,
-                        //     property = t.Unit.Property,
-                        //     propertyManagerId = t.Unit.PropertyManagerId,
-                        //     propertyManager = t.Unit.PropertyManager,
-                        //     tenants = new
-                        //     {
-                        //         t.CreatedBy.FirstName,
-                        //         t.CreatedBy.LastName,
-                        //         t.CreatedBy.Id,
-                        //         t.CreatedBy.UserName,
-                        //         t.CreatedBy.ProfilePicture
-                        //     },
-                        // },
+                        propertyId = t.Unit != null ? t.Unit.PropertyId : null,
+                        propertyName= t.Unit != null ? t.Unit.Property.Name : null,
+                        unit = new
+                        {
+                            unitId = t.Unit.UnitId,
+                            unitNo = t.Unit.UnitNo,
+                            unitType = t.Unit.UnitType,
+                            propertyId = t.Unit.PropertyId,
+                            propertyManagerId = t.Unit.PropertyManagerId,
+                            propertyManager =  t.Unit.PropertyManager == null ? null : new
+                            {
+                                t.Unit.PropertyManager.FirstName,
+                                t.Unit.PropertyManager.LastName,
+                                t.Unit.PropertyManager.Id,
+                                t.Unit.PropertyManager.UserName,
+                                t.Unit.PropertyManager.Email,
+                                t.Unit.PropertyManager.ProfilePicture
+                            } ,
+                            property = new
+                            {
+                                t.Unit.Property.Address,
+                                t.Unit.Property.Name,
+                                t.Unit.Property.PropertyId,
+                            },
+                            tenants = t.Unit.Tenants == null ? null : t.Unit.Tenants.Select(tenant => new
+                            {
+                                FirstName = tenant.FirstName,
+                                LastName = tenant.LastName,
+                                Id = tenant.Id,
+                                Email = tenant.UserName,
+                                PhoneNumber = tenant.PhoneNumber,
+                                ProfilePicture = tenant.ProfilePicture
+                            })
+                        },
                         createdBy = new
                         {
-                           FirstName = t.CreatedBy.FirstName,
-                           LastName = t.CreatedBy.LastName,
-                           Id = t.CreatedBy.Id,
-                           Email = t.CreatedBy.UserName,
-                           PhoneNumber = t.CreatedBy.PhoneNumber,
-                           ProfilePicture = t.CreatedBy.ProfilePicture
+                            FirstName = t.CreatedBy.FirstName,
+                            LastName = t.CreatedBy.LastName,
+                            Id = t.CreatedBy.Id,
+                            Email = t.CreatedBy.UserName,
+                            PhoneNumber = t.CreatedBy.PhoneNumber,
+                            ProfilePicture = t.CreatedBy.ProfilePicture
                         },
                         // messages = t.Messages,
                         // images = t.Images,
-                    }).ToList();
+                    });
             
-            
-          if (userHasAccess)
-          {
-              return Ok(simpleResult);
+            var tickets = _context.Tickets
+                .Where(t => t.Unit != null && (t.Unit.PropertyId == propertyId) && t.Unit.UnitId == unitId)
+                .Where(t => t.Unit != null && (t.UnitId == requestingUser.UnitId || t.Unit.PropertyManagerId == requestingUser.Id))
+                .Select(t => new
+                    {
+                        ticketId = t.TicketId,
+                        problem = t.Problem,
+                        description = t.Description,
+                        createdOn = t.CreatedOn,
+                        estimatedDate = t.EstimatedDate,
+                        status = t.Status,
+                        severity = t.Severity,
+                        closedDate = t.ClosedDate,
+                        unitId = t.UnitId,
+                        propertyId = t.Unit != null ? t.Unit.PropertyId : null,
+                        propertyName= t.Unit != null ? t.Unit.Property.Name : null,
+                        unit = new
+                        {
+                            unitId = t.Unit.UnitId,
+                            unitNo = t.Unit.UnitNo,
+                            unitType = t.Unit.UnitType,
+                            propertyId = t.Unit.PropertyId,
+                            propertyManagerId = t.Unit.PropertyManagerId,
+                            propertyManager =  t.Unit.PropertyManager == null ? null : new
+                            {
+                                t.Unit.PropertyManager.FirstName,
+                                t.Unit.PropertyManager.LastName,
+                                t.Unit.PropertyManager.Id,
+                                t.Unit.PropertyManager.UserName,
+                                t.Unit.PropertyManager.Email,
+                                t.Unit.PropertyManager.ProfilePicture
+                            } ,
+                            property = new
+                            {
+                                t.Unit.Property.Address,
+                                t.Unit.Property.Name,
+                                t.Unit.Property.PropertyId,
+                            },
+                            tenants = t.Unit.Tenants == null ? null : t.Unit.Tenants.Select(tenant => new 
+                            {
+                                FirstName = tenant.FirstName,
+                                LastName = tenant.LastName,
+                                Id = tenant.Id,
+                                Email = tenant.UserName,
+                                PhoneNumber = tenant.PhoneNumber,
+                                ProfilePicture = tenant.ProfilePicture
+                            })
+                        },
+                        createdBy = new
+                        {
+                            FirstName = t.CreatedBy.FirstName,
+                            LastName = t.CreatedBy.LastName,
+                            Id = t.CreatedBy.Id,
+                            Email = t.CreatedBy.UserName,
+                            PhoneNumber = t.CreatedBy.PhoneNumber,
+                            ProfilePicture = t.CreatedBy.ProfilePicture
+                        },
+                        // messages = t.Messages,
+                        // images = t.Images,
+                    });
 
-          }
-        
-          return NotFound();
+
+
+            switch (sortOrder)
+            {
+                case "asc" when param == "address":
+                    allTickets = allTickets.OrderBy(s => s.unit.property.Address);
+                    break;
+                case "desc" when param == "address":
+                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Address);
+                    break;
+                case "asc" when param == "id":
+                    allTickets = allTickets.OrderBy(s => s.ticketId);
+                    tickets = tickets.OrderBy(s => s.ticketId);
+                    break;
+                case "desc" when param == "id":
+                    allTickets = allTickets.OrderByDescending(s => s.ticketId);
+                    tickets = tickets.OrderByDescending(s => s.ticketId);
+                    break;
+                case "asc" when param == "property_manager_name":
+                    allTickets = allTickets.OrderBy(s => s.unit.property.Name);
+                    break;
+                case "desc" when param == "property_manager_name":
+                    allTickets = allTickets.OrderByDescending(s => s.unit.property.Name);
+                    break;
+                default:
+                    allTickets = allTickets.OrderByDescending(s => s.createdOn);
+                    break;
+            }
+
+            
+            
+            return isSuperAdmin ? Ok(allTickets.ToList()) : Ok(tickets.ToList());
+            
             
         }
 
+        // GET:   api/properties/{propertyId}/units/{unitId}/tickets/{ticketId}
+        [HttpGet]
+        [Route("api/properties/{propertyId}/units/{unitId}/tickets/{ticketId:int}")]
+        public async Task<ActionResult> GetTicket(string propertyId, string unitId, int ticketId)
+        {
+            
+            var requestingUser = await _userManager.GetUserAsync(User);
+            if (requestingUser == null || _context.Property == null | _context.Unit == null || _context.Tickets == null)
+            {
+                return NotFound();
+            }
+            
+            var isSuperAdmin = await _userManager.IsInRoleAsync(requestingUser, "SuperAdmin");
+
+            var ticketSA = _context.Tickets
+                .Where(t => t.Unit != null && (t.Unit.PropertyId == propertyId) && t.Unit.UnitId == unitId)
+                .Where(t=>t.TicketId == ticketId)
+                .Select(t => new
+                    {
+                        ticketId = t.TicketId,
+                        problem = t.Problem,
+                        description = t.Description,
+                        createdOn = t.CreatedOn,
+                        estimatedDate = t.EstimatedDate,
+                        status = t.Status,
+                        severity = t.Severity,
+                        closedDate = t.ClosedDate,
+                        unitId = t.UnitId,
+                        propertyId = t.Unit != null ? t.Unit.PropertyId : null,
+                        propertyName= t.Unit != null ? t.Unit.Property.Name : null,
+                        unit = new
+                        {
+                            unitId = t.Unit.UnitId,
+                            unitNo = t.Unit.UnitNo,
+                            unitType = t.Unit.UnitType,
+                            propertyId = t.Unit.PropertyId,
+                            propertyManagerId = t.Unit.PropertyManagerId,
+                            propertyManager =  t.Unit.PropertyManager == null ? null : new
+                            {
+                                t.Unit.PropertyManager.FirstName,
+                                t.Unit.PropertyManager.LastName,
+                                t.Unit.PropertyManager.Id,
+                                t.Unit.PropertyManager.UserName,
+                                t.Unit.PropertyManager.Email,
+                                t.Unit.PropertyManager.ProfilePicture
+                            } ,
+                            property = new
+                            {
+                                t.Unit.Property.Address,
+                                t.Unit.Property.Name,
+                                t.Unit.Property.PropertyId,
+                            },
+                            tenants = t.Unit.Tenants == null ? null : t.Unit.Tenants.Select(tenant => new
+                            {
+                                FirstName = tenant.FirstName,
+                                LastName = tenant.LastName,
+                                Id = tenant.Id,
+                                Email = tenant.UserName,
+                                PhoneNumber = tenant.PhoneNumber,
+                                ProfilePicture = tenant.ProfilePicture
+                            })
+                        },
+                        createdBy = new
+                        {
+                            FirstName = t.CreatedBy.FirstName,
+                            LastName = t.CreatedBy.LastName,
+                            Id = t.CreatedBy.Id,
+                            Email = t.CreatedBy.UserName,
+                            PhoneNumber = t.CreatedBy.PhoneNumber,
+                            ProfilePicture = t.CreatedBy.ProfilePicture
+                        },
+                        // messages = t.Messages,
+                        // images = t.Images,
+                    });
+            
+            var ticket = _context.Tickets
+                .Where(t => t.Unit != null && (t.Unit.PropertyId == propertyId) && t.Unit.UnitId == unitId)
+                .Where(t => t.Unit != null && (t.UnitId == requestingUser.UnitId || t.Unit.PropertyManagerId == requestingUser.Id))
+                .Where(t=>t.TicketId == ticketId)
+                .Select(t => new
+                    {
+                        ticketId = t.TicketId,
+                        problem = t.Problem,
+                        description = t.Description,
+                        createdOn = t.CreatedOn,
+                        estimatedDate = t.EstimatedDate,
+                        status = t.Status,
+                        severity = t.Severity,
+                        closedDate = t.ClosedDate,
+                        unitId = t.UnitId,
+                        propertyId = t.Unit != null ? t.Unit.PropertyId : null,
+                        propertyName= t.Unit != null ? t.Unit.Property.Name : null,
+                        unit = new
+                        {
+                            unitId = t.Unit.UnitId,
+                            unitNo = t.Unit.UnitNo,
+                            unitType = t.Unit.UnitType,
+                            propertyId = t.Unit.PropertyId,
+                            propertyManagerId = t.Unit.PropertyManagerId,
+                            propertyManager =  t.Unit.PropertyManager == null ? null : new
+                            {
+                                t.Unit.PropertyManager.FirstName,
+                                t.Unit.PropertyManager.LastName,
+                                t.Unit.PropertyManager.Id,
+                                t.Unit.PropertyManager.UserName,
+                                t.Unit.PropertyManager.Email,
+                                t.Unit.PropertyManager.ProfilePicture
+                            } ,
+                            property = new
+                            {
+                                t.Unit.Property.Address,
+                                t.Unit.Property.Name,
+                                t.Unit.Property.PropertyId,
+                            },
+                            tenants = t.Unit.Tenants == null ? null : t.Unit.Tenants.Select(tenant => new 
+                            {
+                                FirstName = tenant.FirstName,
+                                LastName = tenant.LastName,
+                                Id = tenant.Id,
+                                Email = tenant.UserName,
+                                PhoneNumber = tenant.PhoneNumber,
+                                ProfilePicture = tenant.ProfilePicture
+                            })
+                        },
+                        createdBy = new
+                        {
+                            FirstName = t.CreatedBy.FirstName,
+                            LastName = t.CreatedBy.LastName,
+                            Id = t.CreatedBy.Id,
+                            Email = t.CreatedBy.UserName,
+                            PhoneNumber = t.CreatedBy.PhoneNumber,
+                            ProfilePicture = t.CreatedBy.ProfilePicture
+                        },
+                        // messages = t.Messages,
+                        // images = t.Images,
+                    });
+                    
+            return isSuperAdmin ? Ok(ticketSA.FirstOrDefault()) : Ok(ticket.FirstOrDefault());
+            
+            
+        }
+        
         // GET: api/Ticket/5
         
         [HttpGet]
-        [Route("api/tickets/{sortOrder?}")]
-        public async Task<ActionResult> GetTickets(string? sortOrder)
+        [Route("api/tickets")]
+        public async Task<ActionResult> GetTickets(string? sortOrder, string? query, string? param)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
             if (requestingUser == null || _context.Property == null | _context.Unit == null || _context.Tickets == null)
@@ -121,9 +357,66 @@ namespace chickadee.Controllers
             var isSuperAdmin = await _userManager.IsInRoleAsync(requestingUser, "SuperAdmin");
 
             var tickets = _context.Tickets
-                .Include(t => t.Unit)
-                .ThenInclude(u => u.Property)
                 .Where(t => t.Unit != null && ((t.Unit.PropertyManagerId == requestingUser.Id) || t.Unit.UnitId == requestingUser.UnitId))
+                .Select(t => new
+                {
+                    ticketId = t.TicketId,
+                        problem = t.Problem,
+                        description = t.Description,
+                        createdOn = t.CreatedOn,
+                        estimatedDate = t.EstimatedDate,
+                        status = t.Status,
+                        severity = t.Severity,
+                        closedDate = t.ClosedDate,
+                        unitId = t.UnitId,
+                        propertyId = t.Unit != null ? t.Unit.PropertyId : null,
+                        propertyName= t.Unit != null ? t.Unit.Property.Name : null,
+                        unit = new
+                        {
+                            unitId = t.Unit.UnitId,
+                            unitNo = t.Unit.UnitNo,
+                            unitType = t.Unit.UnitType,
+                            propertyId = t.Unit.PropertyId,
+                            propertyManagerId = t.Unit.PropertyManagerId,
+                            propertyManager =  t.Unit.PropertyManager == null ? null : new
+                            {
+                                t.Unit.PropertyManager.FirstName,
+                                t.Unit.PropertyManager.LastName,
+                                t.Unit.PropertyManager.Id,
+                                t.Unit.PropertyManager.UserName,
+                                t.Unit.PropertyManager.Email,
+                                t.Unit.PropertyManager.ProfilePicture
+                            } ,
+                            property = new
+                            {
+                                t.Unit.Property.Address,
+                                t.Unit.Property.Name,
+                                t.Unit.Property.PropertyId,
+                            },
+                            tenants = t.Unit.Tenants == null ? null : t.Unit.Tenants.Select(tenant => new
+                            {
+                                FirstName = tenant.FirstName,
+                                LastName = tenant.LastName,
+                                Id = tenant.Id,
+                                Email = tenant.UserName,
+                                PhoneNumber = tenant.PhoneNumber,
+                                ProfilePicture = tenant.ProfilePicture
+                            })
+                        },
+                        createdBy = new
+                        {
+                            FirstName = t.CreatedBy.FirstName,
+                            LastName = t.CreatedBy.LastName,
+                            Id = t.CreatedBy.Id,
+                            Email = t.CreatedBy.UserName,
+                            PhoneNumber = t.CreatedBy.PhoneNumber,
+                            ProfilePicture = t.CreatedBy.ProfilePicture
+                        },
+                        // messages = t.Messages,
+                        // images = t.Images,
+                }).ToList();
+                
+            var allTickets = _context.Tickets
                 .Select(t => new
                 {
                     ticketId = t.TicketId,
@@ -135,66 +428,44 @@ namespace chickadee.Controllers
                     severity = t.Severity,
                     closedDate = t.ClosedDate,
                     unitId = t.UnitId,
-                    propertyId = t.Unit.PropertyId,
+                    propertyId = t.Unit != null ? t.Unit.PropertyId : null,
+                    propertyName= t.Unit != null ? t.Unit.Property.Name : null,
+                    unit = new
+                    {
+                        unitId = t.Unit.UnitId,
+                        unitNo = t.Unit.UnitNo,
+                        unitType = t.Unit.UnitType,
+                        propertyId = t.Unit.PropertyId,
+                        property = t.Unit.Property,
+                        propertyManagerId = t.Unit.PropertyManagerId,
+                        propertyManager =  t.Unit.PropertyManager == null ? null : new
+                        {
+                            t.Unit.PropertyManager.FirstName,
+                            t.Unit.PropertyManager.LastName,
+                            t.Unit.PropertyManager.Id,
+                            t.Unit.PropertyManager.UserName,
+                            t.Unit.PropertyManager.Email,
+                            t.Unit.PropertyManager.ProfilePicture
+                        } ,
+                        tenants = t.Unit.Tenants == null ? null : t.Unit.Tenants.Select(tenant => new
+                        {
+                            FirstName = tenant.FirstName,
+                            LastName = tenant.LastName,
+                            Id = tenant.Id,
+                            Email = tenant.UserName,
+                            PhoneNumber = tenant.PhoneNumber,
+                            ProfilePicture = tenant.ProfilePicture
+                        })
+                    },
                     createdBy = new
                     {
-                        FirstName = t.CreatedBy.FirstName,
-                        LastName = t.CreatedBy.LastName,
-                        Id = t.CreatedBy.Id,
-                        Email = t.CreatedBy.UserName,
-                        PhoneNumber = t.CreatedBy.PhoneNumber,
-                        ProfilePicture = t.CreatedBy.ProfilePicture
-                    }
-                }).ToList();
-                
-            var allTickets = _context.Tickets
-                .Select(t => new
-                {
-                ticketId = t.TicketId,
-                problem = t.Problem,
-                description = t.Description,
-                createdOn = t.CreatedOn,
-                estimatedDate = t.EstimatedDate,
-                status = t.Status,
-                severity = t.Severity,
-                closedDate = t.ClosedDate,
-                unitId = t.UnitId,
-                unit = new
-                {
-                    unitId = t.Unit.UnitId,
-                    unitNo = t.Unit.UnitNo,
-                    unitType = t.Unit.UnitType,
-                    propertyId = t.Unit.PropertyId,
-                    property = t.Unit.Property,
-                    propertyManagerId = t.Unit.PropertyManagerId,
-                    propertyManager =  t.Unit.PropertyManager == null ? null : new
-                    {
-                        t.Unit.PropertyManager.FirstName,
-                        t.Unit.PropertyManager.LastName,
-                        t.Unit.PropertyManager.Id,
-                        t.Unit.PropertyManager.UserName,
-                        t.Unit.PropertyManager.Email,
-                        t.Unit.PropertyManager.ProfilePicture
-                    } ,
-                    tenants = new
-                    {
-                        FirstName = t.CreatedBy.FirstName,
-                        LastName = t.CreatedBy.LastName,
-                        Id = t.CreatedBy.Id,
-                        Email = t.CreatedBy.UserName,
-                        PhoneNumber = t.CreatedBy.PhoneNumber,
-                        ProfilePicture = t.CreatedBy.ProfilePicture
-                    },
-                },
-                createdBy = new
-                {
                     FirstName = t.CreatedBy.FirstName,
                     LastName = t.CreatedBy.LastName,
                     Id = t.CreatedBy.Id,
                     Email = t.CreatedBy.UserName,
                     PhoneNumber = t.CreatedBy.PhoneNumber,
                     ProfilePicture = t.CreatedBy.ProfilePicture
-                },
+                    },
                 // messages = t.Messages,
                 // images = t.Images,
             }).ToList();
@@ -202,24 +473,24 @@ namespace chickadee.Controllers
             
             switch (sortOrder)
             {
-                case "address_asc":
+                case "asc" when param == "address":
                     allTickets = allTickets.OrderBy(s => s.unit.property.Address).ToList();
                     break;
-                case "address_desc":
+                case "desc" when param == "address":
                     allTickets = allTickets.OrderByDescending(s => s.unit.property.Address).ToList();
                     break;
-                case "id_asc":
+                case "asc" when param == "id":
                     allTickets = allTickets.OrderBy(s => s.ticketId).ToList();
                     tickets = tickets.OrderBy(s => s.ticketId).ToList();
                     break;
-                case "id_desc":
+                case "desc" when param == "id":
                     allTickets = allTickets.OrderByDescending(s => s.ticketId).ToList();
                     tickets = tickets.OrderByDescending(s => s.ticketId).ToList();
                     break;
-                case "property_manager_name_asc":
+                case "asc" when param == "property_manager_name":
                     allTickets = allTickets.OrderBy(s => s.unit.property.Name).ToList();
                     break;
-                case "property_manager_name_desc":
+                case "desc" when param == "property_manager_name":
                     allTickets = allTickets.OrderByDescending(s => s.unit.property.Name).ToList();
                     break;
                 default:

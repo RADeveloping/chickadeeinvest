@@ -44,6 +44,7 @@ namespace chickadee.Controllers
                     unitNo = unit.UnitNo,
                     unitType = unit.UnitType,
                     propertyId = unit.PropertyId,
+                    proertyName = unit.Property.Name,
                     propertyManagerId = unit.PropertyManagerId,
                 })
                 .ToList();
@@ -55,17 +56,13 @@ namespace chickadee.Controllers
                     unitNo = unit.UnitNo,
                     unitType = unit.UnitType,
                     propertyId = unit.PropertyId,
+                    proertyName = unit.Property.Name,
                     propertyManagerId = unit.PropertyManagerId,
                 })
                 .ToList();
 
-              
-            if (User.IsInRole("SuperAdmin"))
-            {
-                return Ok(unitsSa);
-            }
 
-            return Ok(units);
+            return Ok(User.IsInRole("SuperAdmin") ? unitsSa : units);
         }
         
         
@@ -74,9 +71,8 @@ namespace chickadee.Controllers
         // GET: api/properties/{propertyId}/units
         [HttpGet]
         [Route("api/properties/{propertyId}/units")]
-        public async Task<ActionResult<IEnumerable<Unit>>> GetUnits(string propertyId)
+        public async Task<ActionResult> GetUnits(string propertyId, string? sortOrder, string? param)
         {
-            Console.WriteLine("GET UNITssss");
 
             var requestingUser = await _userManager.GetUserAsync(User);
             if (_context.Unit == null || requestingUser == null || _context.Property == null)
@@ -91,20 +87,46 @@ namespace chickadee.Controllers
             }
 
             var units = _context.Unit
-              .Where(u=> u.PropertyId == propertyId)
-              .Select(unit => new
-              {
-                  unitId = unit.UnitId,
-                  unitNo = unit.UnitNo,
-                  unitType = unit.UnitType,
-                  propertyId = unit.PropertyId,
-                  propertyManagerId = unit.PropertyManagerId,
-              })
-              .ToList();
+                .Where(u => u.PropertyId == propertyId)
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                    propertyId = unit.PropertyId,
+                    propertyManagerId = unit.PropertyManagerId,
+                });
               
+            
+            switch (sortOrder)
+            {
+                case "asc" when param == "id":
+                    units = units.OrderBy(s => s.unitId);
+                    break;
+                case "desc" when param == "number":
+                    units = units.OrderByDescending(s => s.unitId);
+                    break;
+                case "asc" when param == "number":
+                    units = units.OrderBy(s => s.unitNo);
+                    break;
+                case "desc" when param == "id":
+                    units = units.OrderByDescending(s => s.unitNo);
+                    break;
+                case "asc" when param == "property_manager_name":
+                    units = units.OrderBy(s => s.unitType);
+                    break;
+                case "desc" when param == "property_manager_name":
+                    units = units.OrderBy(s => s.unitType);
+                    break;
+                default:
+                    units = units.OrderBy(s => s.unitNo);
+                    break;
+            }
+            
+            
             if (User.IsInRole("SuperAdmin") || units.Any(p => p.propertyManagerId == requestingUser.Id || p.unitId == requestingUser.UnitId))
             {
-                return Ok(units);
+                return Ok(units.ToList());
             }
             
             return NotFound();
