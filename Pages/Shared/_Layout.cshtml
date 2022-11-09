@@ -3,11 +3,12 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Mvc.ViewEngines
 @using chickadee.Models
+@using chickadee.Data
+@using Microsoft.EntityFrameworkCore
 @inject IWebHostEnvironment Environment
 @inject ICompositeViewEngine Engine
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-@using Areas.Identity.Pages.Account.Manage;
 
 
 <!DOCTYPE html>
@@ -51,7 +52,7 @@
          </a>
         
               <ul class="nav nav-pills flex-column w-100">
-                              <partial name="/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml"/>
+                              <partial name="_ManageNav"/>
                               <partial name="_LoginPartial"/>
               </ul>
         </div>
