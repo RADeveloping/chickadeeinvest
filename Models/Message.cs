@@ -10,7 +10,7 @@ namespace chickadee.Models {
         [Required]
         [Display(Name = "Message")]
         [DataType(DataType.MultilineText)]
-        public string content { get; set; }
+        public string Content { get; set; }
         
         [Required]
         [Display(Name = "Sender")]
