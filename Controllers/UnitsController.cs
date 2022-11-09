@@ -99,6 +99,36 @@ namespace chickadee.Controllers
                     break;
             }
 
+             if (query != null)
+            {
+                try
+                {
+                    var parsedInt = int.Parse(query);
+                    if (User.IsInRole("SuperAdmin"))
+                    {
+                        return Ok(unitsSa.Where(s =>
+                            s.unitNo == parsedInt).ToList());
+                    }
+                    else
+                    {
+                        return Ok(units.Where(s =>
+                            s.unitNo == parsedInt).ToList());
+                    }
+                }catch
+                {
+                    if (User.IsInRole("SuperAdmin"))
+                    {
+                        return Ok(unitsSa.Where(s =>
+                            s.propertyName.Contains(query, StringComparison.InvariantCultureIgnoreCase)).AsEnumerable());
+                    }
+                    else
+                    {
+                        return Ok(units.Where(s =>
+                            s.propertyName.Contains(query, StringComparison.InvariantCultureIgnoreCase)).AsEnumerable());
+
+                    }
+                }
+            }
             
 
             return Ok(User.IsInRole("SuperAdmin") ? unitsSa : units);
