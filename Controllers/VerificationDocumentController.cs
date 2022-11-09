@@ -184,7 +184,16 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(verificationDocument);
+            return Ok(new {
+                data = verificationDocument.Data,
+                documentType = verificationDocument.DocumentType,
+                tenantId = verificationDocument.TenantId,
+                tenant = new {
+                    firstName = verificationDocument.Tenant.FirstName,
+                    lastName = verificationDocument.Tenant.LastName,
+                    email = verificationDocument.Tenant.Email
+                }
+            });
         }
 
         // DELETE: api/VerificationDocument/5

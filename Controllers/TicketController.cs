@@ -15,8 +15,9 @@ namespace chickadee.Controllers
 {
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Identity;
+  using Microsoft.AspNetCore.JsonPatch;
 
-    [ApiController]
+  [ApiController]
     public class TicketController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -287,43 +288,69 @@ namespace chickadee.Controllers
         }
         
 
-        // // PUT: api/Ticket/5
-        // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutTicket(int id, Ticket ticket)
-        // {
-        //     if (id != ticket.TicketId)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     _context.Entry(ticket).State = EntityState.Modified;
-        //
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!TicketExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
+        // PATCH: api/properties/{propertyId}/units/{unitId}/tickets/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPatch]
+        [Route("api/properties/{propertyId}/units/{unitId}/tickets/{ticketId}")]
+        [Authorize(Roles = "PropertyManager")]
+        public async Task<IActionResult> PatchTicket(int ticketId, [FromBody] JsonPatchDocument<Ticket> patchDocument)
+        {
+            if (_context.Tickets == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Ticket'  is null."); 
+            }
+            var ticketFromDb = _context.Tickets.FirstOrDefault(ticket => ticket.TicketId == ticketId);
+            if (ticketFromDb == null)
+            {
+                return BadRequest();
+            }
+        
+            patchDocument.ApplyTo(ticketFromDb, ModelState);
+
+            if (ticketFromDb.Status == TicketStatus.Closed)
+            {
+                ticketFromDb.ClosedDate = DateTime.Now;
+            }
+
+            if (ticketFromDb.Status == TicketStatus.Open)
+            {
+                ticketFromDb.ClosedDate = null;
+            }
+
+            var isValid = TryValidateModel(ticketFromDb);
+
+            if (!isValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _context.Update(ticketFromDb);
+        
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TicketExists(ticketId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        
+            return Ok(ticketFromDb);
+        }
+        
         
         // POST: api/Ticket
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("/api/tickets")]
-        [AllowAnonymous]
-        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        [HttpPost]
+        [Route("api/properties/{propertyId}/units/{unitId}/tickets")]
+        public async Task<ActionResult<Ticket>> PostTicket(string propertyId, string unitId, Ticket ticket)
         {
           if (_context.Tickets == null || _context.Unit == null)
           {
@@ -337,7 +364,7 @@ namespace chickadee.Controllers
           //     HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
           // }
           //
-          var unit = await _context.Unit.FindAsync(ticket.UnitId);
+          var unit = await _context.Unit.FindAsync(unitId);
 
           if (unit == null)
           {
