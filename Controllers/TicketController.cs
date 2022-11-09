@@ -32,7 +32,7 @@ namespace chickadee.Controllers
         // GET:   api/properties/{propertyId}/units/{unitId}/tickets
         [HttpGet]
         [Route("api/properties/{propertyId}/units/{unitId}/tickets")]
-        public async Task<ActionResult> GetTickets(string propertyId, string unitId, string? sortOrder, string? param, string? query)
+        public async Task<ActionResult> GetTickets(string propertyId, string unitId, string? sort, string? param, string? query)
         {
             
             var requestingUser = await _userManager.GetUserAsync(User);
@@ -170,7 +170,7 @@ namespace chickadee.Controllers
                 }).AsEnumerable();
 
 
-            switch (sortOrder)
+            switch (sort)
             {
                 case "asc" when param == "id":
                     allTickets = allTickets.OrderBy(s => s.ticketId);
@@ -180,11 +180,11 @@ namespace chickadee.Controllers
                     allTickets = allTickets.OrderByDescending(s => s.ticketId);
                     tickets = tickets.OrderByDescending(s => s.ticketId);
                     break;
-                case "asc" when param == "createOn":
+                case "asc" when param == "createdOn":
                     allTickets = allTickets.OrderBy(s => s.createdOn);
                     tickets = tickets.OrderBy(s => s.createdOn);
                     break;
-                case "desc" when param == "createOn":
+                case "desc" when param == "createdOn":
                     allTickets = allTickets.OrderByDescending(s => s.createdOn);
                     tickets = tickets.OrderByDescending(s => s.createdOn);
                     break;
@@ -469,7 +469,7 @@ namespace chickadee.Controllers
         
         [HttpGet]
         [Route("api/tickets")]
-        public async Task<ActionResult> GetTickets(string? sortOrder, string? query, string? param)
+        public async Task<ActionResult> GetTickets(string? sort, string? query, string? param)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
             if (requestingUser == null || _context.Property == null | _context.Unit == null || _context.Tickets == null)
@@ -603,7 +603,7 @@ namespace chickadee.Controllers
                 }).AsEnumerable();
 
             
-            switch (sortOrder)
+            switch (sort)
             {
                 case "asc" when param == "id":
                     allTickets = allTickets.OrderBy(s => s.ticketId);
@@ -613,11 +613,11 @@ namespace chickadee.Controllers
                     allTickets = allTickets.OrderByDescending(s => s.ticketId);
                     tickets = tickets.OrderByDescending(s => s.ticketId);
                     break;
-                case "asc" when param == "createOn":
+                case "asc" when param == "createdOn":
                     allTickets = allTickets.OrderBy(s => s.createdOn);
                     tickets = tickets.OrderBy(s => s.createdOn);
                     break;
-                case "desc" when param == "createOn":
+                case "desc" when param == "createdOn":
                     allTickets = allTickets.OrderByDescending(s => s.createdOn);
                     tickets = tickets.OrderByDescending(s => s.createdOn);
                     break;
