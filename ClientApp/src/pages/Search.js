@@ -1,45 +1,33 @@
 import {
     Box,
-    Button,
     Card,
-    CardContent,
     Container,
-    FormControl,
     Grid,
-    Grow, InputLabel,
-    ListItemButton, MenuItem, Select,
+    Grow,
     Stack,
     Typography
 } from "@mui/material";
-import {Link, Link as RouterLink, useNavigate} from "react-router-dom";
-import Iconify from "../components/Iconify";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
 import Page from "../components/Page";
-import {applySortFilter, getComparator, ListToolbar} from "../sections/@dashboard/list";
-import {useEffect, useState} from "react";
+import {ListToolbar} from "../sections/@dashboard/list";
+import {useCallback, useEffect, useState} from "react";
 import useFetch from "../components/FetchData";
 import useResponsive from "../hooks/useResponsive";
 import {
     filterProperties, filterTicket, filterUnit,
-    getPropertiesUri, getTicketBox,
-    getUnitBox,
     propertyProperties,
     ticketProperties,
     unitProperties
 } from "../utils/filters";
-import Label from "../components/Label";
-import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
 import Property from "../components/Property";
 import useFilter from "../components/FilterOrder";
-import SortControl from "../components/SortControl";
 import SearchRowResult from "../components/SearchRowResult";
 import Unit from "../components/Unit";
 import Ticket from "../components/Ticket";
 
 export default function Search() {
     const title = "Search"
-    const dataName = 'wtf';
 
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
@@ -57,22 +45,39 @@ export default function Search() {
         ticketFilterQuery, handleTicketFilterByQuery, setTicketUnitQuery] = useFilter(ticketProperties);
 
     const [properties, errorProperties, loadingProperties] = useFetch(
-        propertyFilterQuery ? 
-        '/api/properties?' + propertySearchParams.toString() : null, filterProperties);
+        propertyFilterQuery ?
+            '/api/properties?' + propertySearchParams.toString() : null, filterProperties);
     const [units, errorUnits, loadingUnits] = useFetch(
         propertyFilterQuery ?
-        `/api/units?` + unitSearchParams.toString() : null, filterUnit);
+            `/api/units?` + unitSearchParams.toString() : null, filterUnit);
     const [tickets, errorTickets, loadingTickets] = useFetch(
         propertyFilterQuery ?
-        `/api/tickets?` + ticketSearchParams.toString() : null, filterTicket);
+            `/api/tickets?` + ticketSearchParams.toString() : null, filterTicket);
+
+    const [mainFilterQuery, setMainFilterQuery] = useState('');
+
+    const setFilterQueries = (query) => {
+        setPropertyFilterQuery(query);
+        setUnitFilterQuery(query);
+        setTicketUnitQuery(query);
+    };
+    
+    useEffect(()=> {
+        setFilterQueries(mainFilterQuery);
+    }, [mainFilterQuery])
 
     const loadingSearch = loadingProperties || loadingUnits || loadingTickets;
     const isEmptySearch = properties.length === 0 && units.length === 0 && tickets.length === 0;
 
+    const showResults = !loadingSearch && !isEmptySearch;
+    const showNullResults = !loadingSearch && isEmptySearch;
+
     useEffect(() => {
-        setUnitFilterQuery(propertyFilterQuery);
-        setTicketUnitQuery(propertyFilterQuery);
-    }, [propertyFilterQuery])
+        setPropertyFilterQuery(mainFilterQuery);
+        setUnitFilterQuery(mainFilterQuery);
+        setTicketUnitQuery(mainFilterQuery);
+    }, [mainFilterQuery])
+
 
     const isDesktop = useResponsive('up', 'md');
 
@@ -97,16 +102,15 @@ export default function Search() {
 
                             <ListToolbar
                                 isDesktop={isDesktop}
-                                filterQuery={propertyFilterQuery}
-                                onFilterQuery={handlePropertyFilterByQuery}
-                                setFilterQuery={setPropertyFilterQuery}
+                                filterQuery={mainFilterQuery}
+                                setFilterQuery={setMainFilterQuery}
                             />
 
                         </Card>
                     </Stack>
                 </Grow>
                 <br/>
-                <Grow in={!loadingSearch && (properties.length !== 0 || units.length !== 0 || tickets.length !== 0)}>
+                <Grow in={showResults}>
                     <Grid container spacing={2}>
                         {properties.length !== 0 &&
                             <SearchRowResult viewComponent={(data) => <Property data={data}/>}
@@ -147,7 +151,7 @@ export default function Search() {
                         }
                     </Grid>
                 </Grow>
-                {!loadingSearch && isEmptySearch &&
+                {showNullResults &&
                     <Box sx={{
                         height: '40vh',
                         display: 'flex',

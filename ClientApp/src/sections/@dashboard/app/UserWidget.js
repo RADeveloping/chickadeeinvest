@@ -3,8 +3,7 @@ import {Avatar, Card, Grow, Typography} from '@mui/material';
 import Loading from "../../../components/Loading";
 
 export default function UserWidget({ account, unit, loading}) {
-    const {profilePicture, firstName} = account;
-    const {unitNo, property} = unit;
+    const {profilePicture, firstName, unitNo, propertyName} = account;
   return (
       <Grow in={!loading}>
     <Card
@@ -31,7 +30,7 @@ export default function UserWidget({ account, unit, loading}) {
             {firstName}
         </Typography>
         <Typography variant="h5" sx={{color:(theme) => theme.palette['primary'].lighter, fontWeight:'normal', lineHeight: 1.25}}>
-            {property}
+            {propertyName}
         </Typography>
             <br/>
         <Typography variant="h5" sx={{lineHeight: 1.25}}>

@@ -51,11 +51,12 @@ export default function ListToolbar({
                                         numSelected,
                                         filterQuery,
                                         setFilterQuery,
-                                        onFilterQuery,
                                         properties,
                                         isDesktop
                                     }) {
-
+    const onFilterQuery = (event) => {
+        setFilterQuery(event.target.value);
+    };
     const [filterVisible, setFilterVisible] = useState(false);
     return (
         <RootStyle
