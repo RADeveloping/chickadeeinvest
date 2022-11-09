@@ -76,9 +76,9 @@ export class LoginMenu extends Component {
         icon: getIcon('ant-design:folder-open-outlined')
       },
       {
-        title: 'properties',
-        path: '/dashboard/properties',
-        icon: getIcon('bxs:building-house')
+        title: 'search',
+        path: '/dashboard/search',
+        icon: getIcon('eva:search-fill')
       },
       {
         title: 'profile',

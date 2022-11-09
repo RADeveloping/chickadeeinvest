@@ -16,7 +16,7 @@ import { Logout } from './components/api-authorization/Logout';
 import LandingPage from "./pages/LandingPage";
 import Tickets from "./pages/Tickets";
 import TicketDetail from "./pages/TicketDetail";
-import Properties from "./pages/Properties";
+import Search from "./pages/Search";
 import Verification from "./pages/Verification";
 
 // ----------------------------------------------------------------------
@@ -38,9 +38,9 @@ const DashboardRoutes = [
         element: <Tickets />
     },
     {
-        path: 'properties',
+        path: 'search',
         requireAuth: true,
-        element: <Properties />
+        element: <Search />
     }
 ];
 
