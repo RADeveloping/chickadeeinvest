@@ -7,6 +7,7 @@ const useFetch = (url, filter) => {
 
     useEffect(() => {
         if (url) {
+            console.log(url)
             fetch(url)
                 .then((res) => res.json())
                 .then((data) => {

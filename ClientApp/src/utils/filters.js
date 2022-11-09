@@ -22,13 +22,12 @@ export const propertyProperties = [
 ];
 
 export const unitProperties = [
-    {id: 'unitId', label: 'Unit Id'},
-    {id: 'unitNo', label: 'Unit Number'},
-    {id: 'tenantCount', label: 'Tenant Count'},
+    {id: 'number', label: 'Unit Number'},
+    {id: 'property_manager_name', label: 'Property Manager Name'},
 ];
 
 export const ticketProperties = [
-    {id: 'ticketId', label: 'Ticket Id'},
+    {id: 'id', label: 'Ticket Id'},
     {id: 'createdOn', label: 'Created On'},
     {id: 'estimatedDate', label: 'Estimated Date'},
     {id: 'problem', label: 'Problem'},
