@@ -22,7 +22,7 @@ import useFetch from "../components/FetchData";
 import useResponsive from "../hooks/useResponsive";
 import {
     filterProperties, filterTicket, filterUnit,
-    getPropertiesUri,
+    getPropertiesUri, getTicketBox,
     getUnitBox,
     propertyProperties,
     ticketProperties,
@@ -32,14 +32,15 @@ import Label from "../components/Label";
 import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
 import Property from "../components/Property";
 import useFilter from "../components/FilterOrder";
+import SortControl from "../components/SortControl";
 
 export default function Search() {
     const title = "Search"
     const dataName = 'wtf';
-    
+
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
-        propertyOrder, propertySetOrder, propertyHandleOrderChange, 
+        propertyOrder, propertySetOrder, propertyHandleOrderChange,
         propertyFilterQuery, handlePropertyFilterByQuery, setPropertyFilterQuery] = useFilter(propertyProperties);
 
     const [unitSearchParams,
@@ -60,11 +61,11 @@ export default function Search() {
         `/api/tickets?` + ticketSearchParams.toString(), filterTicket);
 
     const loadingSearch = loadingProperties || loadingUnits || loadingTickets;
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         setUnitFilterQuery(propertyFilterQuery);
         setTicketUnitQuery(propertyFilterQuery);
-    },[propertyFilterQuery])
+    }, [propertyFilterQuery])
 
     const isDesktop = useResponsive('up', 'md');
 
@@ -98,58 +99,67 @@ export default function Search() {
                             <ListToolbar
                                 filterQuery={propertyFilterQuery}
                                 onFilterQuery={handlePropertyFilterByQuery}
-                                properties={propertyProperties}
                                 setFilterQuery={setPropertyFilterQuery}
                             />
 
                         </Card>
-                        <Card sx={{
-                            boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                            display: loadingSearch ? 'none' : undefined,
-                            width: 'fit-content',
-                            backgroundColor: (theme) => theme.palette['background'].default,
-                            padding: 2.5
-                        }}>
-                            <Stack direction={'row'} alignItems={'stretch'} gap={1}>
-                                <FormControl sx={{minWidth: 80}}>
-                                    <InputLabel id="sort-property">Order by</InputLabel>
-                                    <Select
-                                        labelId="sort-property"
-                                        value={propertyOrderBy}
-                                        label="Order by"
-                                        onChange={propertyHandleOrderByChange}
-                                    >
-                                        {propertyProperties.map((p) =>
-                                            <MenuItem key={p.id} value={p.id}>{p.label}</MenuItem>
-                                        )}
-                                    </Select>
-                                </FormControl>
-                                <ToggleButtonGroup
-                                    color="primary"
-                                    value={propertyOrder}
-                                    exclusive
-                                    onChange={propertyHandleOrderChange}
-                                >
-                                    <ToggleButton value="desc"><Iconify sx={{height: 14, width: 'auto'}}
-                                                                        icon="cil:sort-ascending"/></ToggleButton>
-                                    <ToggleButton value="asc"><Iconify sx={{height: 14, width: 'auto'}}
-                                                                       icon="cil:sort-descending"/></ToggleButton>
-                                </ToggleButtonGroup>
-                            </Stack>
-                        </Card>
                     </Stack>
                 </Grow>
                 <br/>
-                <Grow in={!loadingSearch && properties.length > 0}>
-                    <Grid container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
-                        {properties.map((data) =>
-                                // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
-                                <Property data={data}/>
-                            // </Link>
-                        )}
+                <Grow in={!loadingSearch && (properties.length !== 0 || units.length !== 0 || tickets.length !== 0)}>
+                    <Grid container spacing={2}>
+                        <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
+                            <Grid width={'100%'} item>
+                                <SortControl title={"Properties"} loadingSearch={loadingSearch}
+                                             orderBy={propertyOrderBy}
+                                             handleOrderByChange={propertyHandleOrderByChange}
+                                             properties={propertyProperties}
+                                             order={propertyOrder}
+                                             handleOrderChange={propertyHandleOrderChange}/>
+                            </Grid>
+                            {properties.map((data) =>
+                                    // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
+                                    <Property data={data}/>
+                                // </Link>
+                            )}
+                        </Grid>
+                        <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
+                            <Grid width={'100%'}  item>
+                                <SortControl title={"Units"}  loadingSearch={loadingSearch}
+                                             orderBy={unitOrderBy}
+                                             handleOrderByChange={unitHandleOrderByChange}
+                                             properties={unitProperties}
+                                             order={unitOrder}
+                                             handleOrderChange={unitHandleOrderChange}/>
+                            </Grid>
+                            {units.map((data) =>
+                                    // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
+                            <Card>
+                                {getUnitBox(data)}
+                                </Card>
+                                // </Link>
+                            )}
+                        </Grid>
+                        <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}>
+                            <Grid width={'100%'} item>
+                                <SortControl title={"Tickets"} loadingSearch={loadingSearch}
+                                             orderBy={ticketOrderBy}
+                                             handleOrderByChange={ticketHandleOrderByChange}
+                                             properties={ticketProperties}
+                                             order={ticketOrder}
+                                             handleOrderChange={ticketHandleOrderChange}/>
+                            </Grid>
+                            {tickets.map((data) =>
+                                    // <Link to={'/dashboard/' + getPropertiesUri(data)} style={{textDecoration: 'none'}}>
+                                    <Card>
+                                        {getTicketBox(data)}
+                                    </Card>
+                                // </Link>
+                            )}
+                        </Grid>
                     </Grid>
                 </Grow>
-                {!loadingSearch && properties.length === 0 &&
+                {!loadingSearch && (properties.length === 0 && units.length === 0 && tickets.length === 0) &&
                     <Box sx={{
                         height: '40vh',
                         display: 'flex',
