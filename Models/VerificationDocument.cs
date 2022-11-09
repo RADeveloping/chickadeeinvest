@@ -8,8 +8,7 @@ namespace chickadee.Models {
         [Key]
         public String VerificationDocumentId { get; set; } = Guid.NewGuid().ToString();
         
-        [Required]
-        public byte[] Data { get; set; }
+        public byte[]? Data { get; set; }
         
         [Required]
         public DocumentType DocumentType { get; set; }
