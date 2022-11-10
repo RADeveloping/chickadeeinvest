@@ -757,7 +757,7 @@ namespace chickadee.Controllers
         // GET:   api/properties/{propertyId}/units/{unitId}/tickets
         [HttpGet]
         [Route("api/properties/{propertyId}/units/{unitId}/tickets/{ticketId}")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket(string propertyId, string unitId, int ticketId)
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket(string propertyId, int ticketId, string unitId)
         {
             
               var requestingUser = await _userManager.GetUserAsync(User);
