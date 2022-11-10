@@ -85,7 +85,9 @@ namespace chickadee.Controllers
             {
                 return NotFound();
             }
-            ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "CompanyId", propertyManager.CompanyId);
+            
+            ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Name", propertyManager.CompanyId);
+            
             return View(propertyManager);
         }
 
@@ -105,6 +107,10 @@ namespace chickadee.Controllers
             {
                 try
                 {
+                    propertyManager.UserName = propertyManager.Email;
+                    propertyManager.NormalizedUserName = propertyManager.Email.ToUpper();
+                    propertyManager.NormalizedEmail = propertyManager.Email.ToUpper();
+                    
                     _context.Update(propertyManager);
                     await _context.SaveChangesAsync();
                 }
