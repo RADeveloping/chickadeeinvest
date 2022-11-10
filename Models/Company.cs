@@ -7,21 +7,21 @@ namespace chickadee.Models {
         public string CompanyId { get; set; } = Guid.NewGuid().ToString();
         
         [Required]
-        [Display(Name = "Company Name")] 
+        [Display(Name = "Name")] 
         [DataType(DataType.Text)]
         public string Name { get; set; }
 
-        [Display(Name = "Company Logo")] 
+        [Display(Name = "Logo")] 
         public byte[]? Logo { get; set; }
         
-        [Display(Name = "Company Address")] 
+        [Display(Name = "Address")] 
         public string Address { get; set; }
         
-        [Display(Name = "Company Phone")]
+        [Display(Name = "Phone")]
         [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
         
-        [Display(Name = "Company Email")]
+        [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
     }

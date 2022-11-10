@@ -24,11 +24,9 @@
         <link rel="stylesheet" href="~/Identity/lib/bootstrap/dist/css/bootstrap.css" />
         @* <link rel="stylesheet" href="~/Identity/css/site.css" /> *@
         <link rel="stylesheet" href="~/css/custom.css" />
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-            <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
-            <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
-
-
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.1/dist/bootstrap-table.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
@@ -39,66 +37,71 @@
 </head>
 <body class="cream">
 
- @if (SignInManager.IsSignedIn(User))
- {
-
-     <div class="row cream min-vw-100">
-       <nav class="navbar navbar-expand-md green col-md-5" id="navbar">
-        <div class="sidebar w-100">
-         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-           <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse flex-column p-3" id="navbarNav">
-         <a href="/" class="navbar-brand collapse navbar-collapse">
-           <img src="~/images/logoWhite.svg" class="logo mb-5" width="115" height="65">
-         </a>
-        
-              <ul class="nav nav-pills flex-column w-100">
-                              <partial name="/Areas/Identity/Pages/_ManageNav.cshtml"/>
-                              <partial name="_LoginPartial"/>
-              </ul>
+@if (SignInManager.IsSignedIn(User))
+{
+    <header class="navbar navbar-dark sticky-top green flex-sm-nowrap d-md-none p-0">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 green" href="/">Chickadee</a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </header>
+    <div class="container-fluid cream">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block green sidebar collapse" id="navbarNav">
+                <div class="text-center">
+                    <a href="/">
+                        <img src="~/images/logoWhite.svg" class="img-fluid" width="115" height="65">
+                    </a>
+                </div>
+                <div class="position-sticky pt-3 sidebar-sticky">
+                    <ul class="nav nav-pills flex-column">
+                        <partial name="/Areas/Identity/Pages/_ManageNav.cshtml"/>
+                        <partial name="_LoginPartial"/>
+                    </ul>
+                </div>
+            </nav>
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <partial name="_CookieConsentPartial" optional/>
+                <main role="main" class="p-5">
+                    @RenderBody()
+                </main>
+            </div>
         </div>
-        </div> 
-        </nav>
-         <div class="col-sm-12 col-md-7 col-lg-8">
-             <partial name="_CookieConsentPartial" optional/>
-             <main role="main" class="p-5">
-                 @RenderBody()
-             </main>
-         </div>
-     </div>
- }
- else
- {
-     <div class="container">
-         <main role="main">
-             @RenderBody()
-         </main>
-     </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
        
- }
+}
 
 <environment include="Development">
-        <script src="~/Identity/lib/jquery/dist/jquery.js"></script>
-        <script src="~/Identity/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script src="~/Identity/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-                asp-fallback-src="~/Identity/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2">
+    <script src="~/Identity/lib/jquery/dist/jquery.js"></script>
+    <script src="~/Identity/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/Identity/js/site.js" asp-append-version="true"></script>
+</environment>
+<environment exclude="Development">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            asp-fallback-src="~/Identity/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2">
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-                asp-fallback-src="~/Identity/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+            asp-fallback-src="~/Identity/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+            crossorigin="anonymous"
+            integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj">
         </script>
-        <script src="~/Identity/js/site.js" asp-append-version="true"></script>
-    </environment>
+    <script src="~/Identity/js/site.js" asp-append-version="true"></script>
+</environment>
+<script src="https://unpkg.com/bootstrap-table@1.21.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.0/dist/extensions/mobile/bootstrap-table-mobile.min.js"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,88 @@
+@model IEnumerable<chickadee.Models.Property>
+
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h3 class="lead">Properties</h3>
+<hr/>
+<table
+    data-toggle="table"
+    data-show-columns="true"
+    data-pagination="true"
+    data-search="true"
+    data-search-align="left"
+    data-show-search-button="true"
+    data-mobile-responsive="true"
+    data-check-on-init="true"
+    data-header-style="headerStyle"
+    data-buttons="buttons"
+    data-icons-prefix="fa"
+    data-buttons-class="green">
+
+    <thead>
+    <tr>
+        <th data-sortable="true" data-field="name">
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th data-sortable="true" data-field="Address">
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th data-field="Actions">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td class="hstack gap-3 justify-content-center">
+                <a asp-action="Edit" asp-route-id="@item.PropertyId">
+                    <i class="bi bi-pencil-fill fa-table"></i>
+                </a>
+                <a asp-action="Details" asp-route-id="@item.PropertyId">
+                    <i class="bi bi-info-circle-fill fa-table"></i>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.PropertyId">
+                    <i class="bi bi-trash-fill fa-table"></i>
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@{
+    <script>
+    
+  function headerStyle() {
+    return {
+    css: {
+        background: '#103A31',
+        color: '#EEEFDF'
+    }
+    }
+  }
+  
+ function buttons () {
+    return {
+      btnAdd: {
+        text: 'Add new row',
+        icon: 'fa-plus',
+        event: function () {
+           window.location.assign("SAProperty/Create/");
+        },
+        attributes: {
+          title: 'Add a new row to the table'
+        }
+      }
+    }
+  }
+    
+</script>
+}

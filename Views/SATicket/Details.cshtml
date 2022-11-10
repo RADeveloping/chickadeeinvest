@@ -1,0 +1,75 @@
+@model chickadee.Models.Ticket
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h3 class="lead">Ticket Details</h3>
+<hr/>
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Problem)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Problem)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+          <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </dt>
+            <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.CreatedBy.FirstName)
+                    @Html.DisplayFor(model => model.CreatedBy.LastName)
+                </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.CreatedOn)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.EstimatedDate)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.EstimatedDate)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Severity)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Severity)
+        </dd>
+  
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Unit)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Unit.UnitNo)
+        </dd>
+      
+              <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.ClosedDate)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.ClosedDate)
+                </dd>
+    
+    </dl>
+</div>
+<div>
+    <a class="w-100 btn btn-lg btn-green my-2" asp-action="Edit" asp-route-id="@Model?.TicketId">Edit</a>
+    <a asp-action="Index" class="w-100 btn btn-lg btn-secondary my-2">Back to List</a>
+</div>
