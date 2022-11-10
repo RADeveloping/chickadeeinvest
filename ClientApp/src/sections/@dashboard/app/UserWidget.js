@@ -2,7 +2,7 @@
 import {Avatar, Card, Grow, Typography} from '@mui/material';
 import Loading from "../../../components/Loading";
 
-export default function UserWidget({ account, unit, loading}) {
+export default function UserWidget({ account, loading}) {
     const {profilePicture, firstName, unitNo, propertyName} = account;
   return (
       <Grow in={!loading}>
