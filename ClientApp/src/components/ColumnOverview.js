@@ -103,7 +103,7 @@ export default function ColumnOverview() {
                     isDesktop={isDesktop} properties={unitProperties}
                     loading={loadingUnits} uri={getUnitsUri}
                     setOrderBy={unitSetOrderBy} order={unitOrder} setOrder={unitSetOrder}/>,
-        <SimpleList rightRound items={selectedUnitId ? tickets : []}
+        <SimpleList rightRound immediateClick items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
                     isDesktop={isDesktop} properties={ticketProperties}

@@ -1,6 +1,6 @@
 import {
     Box, Button,
-    Card,
+    Card, CircularProgress,
     Container,
     Grid,
     Grow,
@@ -50,39 +50,42 @@ export default function Search() {
 
     const [properties, errorProperties, loadingProperties] = useFetch(
         propertySearchParams.get('query') ?
-            '/api/properties?' + propertySearchParams.toString() : null, filterProperties);
+            '/api/properties?' + propertySearchParams.toString() : null, filterProperties, true);
     const [units, errorUnits, loadingUnits] = useFetch(
         unitSearchParams.get('query') ?
-            `/api/units?` + unitSearchParams.toString() : null, filterUnit);
+            `/api/units?` + unitSearchParams.toString() : null, filterUnit, true);
     const [tickets, errorTickets, loadingTickets] = useFetch(
         ticketSearchParams.get('query') ?
-            `/api/tickets?` + ticketSearchParams.toString() : null, filterTicket);
+            `/api/tickets?` + ticketSearchParams.toString() : null, filterTicket, true);
 
     const setFilterQueries = (query) => {
         setPropertyFilterQuery(query);
         setUnitFilterQuery(query);
         setTicketFilterQuery(query);
     };
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         let query = searchParams.get('query');
         setFilterQueries(query);
-    },[searchParams])
-    
+    }, [searchParams])
+
     const loadingSearch = loadingUnits || loadingProperties || loadingTickets;
     const isEmptySearch = properties.length === 0 && units.length === 0 && tickets.length === 0;
-    
-    const showResults = !loadingSearch && !isEmptySearch;
-    const showNullResults = !loadingSearch && isEmptySearch;
+
+    const showResults = !isEmptySearch;
+    const showNullResults = isEmptySearch;
     const isDesktop = useResponsive('up', 'md');
 
     return (
         <Page title={title}>
             <Container>
                 <Stack direction="column" alignItems="flex-start" justifyContent="space-between" mb={5}>
-                    <Typography variant="h4" gutterBottom>
-                        {title} results for "{searchParams.get('query')}"
-                    </Typography>
+                    <Stack direction="row" alignItems={'center'} justifyContent="space-between" width={'100%'}>
+                        <Typography variant="h4" gutterBottom>
+                            {title} results for "{searchParams.get('query')}"
+                        </Typography>
+                        <Grow timeout={3000} in={loadingSearch}><CircularProgress size={30}/></Grow>
+                    </Stack>
                     <Button
                         variant="contained"
                         startIcon={<Iconify icon="eva:arrow-back-outline"/>}
@@ -91,10 +94,8 @@ export default function Search() {
                         Back
                     </Button>
                 </Stack>
-           
-                <PageLoading loadingData={loadingSearch} />
                 <Grow in={showResults}>
-                    <Grid sx={{display: loadingSearch ? 'none' : undefined}} container spacing={2}>
+                    <Grid container spacing={2}>
                         <SearchRowResult viewComponent={(data) => <Property navigate={navigate} data={data}/>}
                                          title={"Properties"}
                                          orderBy={propertyOrderBy}
@@ -129,13 +130,13 @@ export default function Search() {
                 </Grow>
                 {showNullResults &&
                     <Grow in={showNullResults}>
-                    <Box sx={{
-                        height: '40vh',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'text.disabled'
-                    }}>{`No Results`}</Box>
+                        <Box sx={{
+                            height: '40vh',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'text.disabled'
+                        }}>{`No Results`}</Box>
                     </Grow>}
             </Container>
         </Page>

@@ -34,7 +34,8 @@ export default function SimpleList({
                                        loading,
                                        disableSort,
                                        uri,
-                                       setOrderBy, order, setOrder
+                                       setOrderBy, order, setOrder,
+                                       immediateClick
                                    }) {
     const navigate = useNavigate();
     const borderStyles = isDesktop ? {
@@ -128,7 +129,7 @@ export default function SimpleList({
                     <>
                         <Divider key={`${item.id}-${title}-dvd1`} component="li"/>
                         <ListItemButton key={`${item.id}-${title}-btn`} onClick={() => {
-                            if (selectedId && selectedId === item.id) {
+                            if (immediateClick || (selectedId && selectedId === item.id)) {
                                 if (uri) {
                                     navigate(`/dashboard/${uri(item)}`);
                                 }

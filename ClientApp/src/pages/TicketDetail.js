@@ -26,8 +26,7 @@ export default function TicketDetail() {
     const {unitNo} = unit;
     const {address} = property;
     const loadingData = loadingTicket || loadingUnit || loadingProperty;
-
-    console.log(ticket, unit, property)
+    
     return (
         <Page title={`${title} #${id}`}>
             <Container>

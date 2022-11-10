@@ -164,16 +164,13 @@ export const filterTicket = (data) => {
 }
 
 export const getTicketsUri = (ticket) => {
-    console.log(ticket)
     return `tickets/${ticket.ticketId}?pid=${ticket.propertyId}&uid=${ticket.unitId}`
 }
 
 export const getPropertiesUri = (property) => {
-    console.log(property)
     return `tickets?property=${property.propertyId}`
 }
 
 export const getUnitsUri = (unit) => {
-    console.log(unit)
     return `tickets?property=${unit.propertyId}&unit=${unit.unitId}`
 }
