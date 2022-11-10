@@ -7,145 +7,82 @@
 
 <h3 class="lead">Tenants</h3>
 <hr/>
-<table class="table">
+<table
+    data-toggle="table"
+    data-show-columns="true"
+    data-pagination="true"
+    data-search="true"
+    data-search-align="left"
+    data-show-search-button="true"
+    data-mobile-responsive="true"
+    data-check-on-init="true"
+    data-header-style="headerStyle"
+    data-buttons="buttons"
+    data-icons-prefix="fa"
+    data-buttons-class="green">
+
     <thead>
     <tr>
-        <th>
+           
+        <th data-sortable="true" data-field="FirstName">
             @Html.DisplayNameFor(model => model.FirstName)
         </th>
-        <th>
+        <th data-sortable="true" data-field="LastName">
             @Html.DisplayNameFor(model => model.LastName)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UsernameChangeLimit)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProfilePicture)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NormalizedUserName)
-        </th>
-        <th>
+        <th data-sortable="true" data-field="DateOfBirth">
+        @Html.DisplayNameFor(model => model.DateOfBirth)
+        <th data-sortable="true" data-field="Email">
             @Html.DisplayNameFor(model => model.Email)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NormalizedEmail)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmailConfirmed)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PasswordHash)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SecurityStamp)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ConcurrencyStamp)
-        </th>
-        <th>
+        <th data-sortable="true" data-field="PhoneNumber">
             @Html.DisplayNameFor(model => model.PhoneNumber)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TwoFactorEnabled)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LockoutEnd)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LockoutEnabled)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AccessFailedCount)
-        </th>
+         <th data-sortable="true" data-field="Unit">
+                            @Html.DisplayNameFor(model => model.Unit)
+                        </th>
         <th data-field="Actions" data-align="center">Actions</th>
     </tr>
     </thead>
     <tbody>
     @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsernameChangeLimit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfilePicture)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NormalizedUserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NormalizedEmail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailConfirmed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswordHash)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SecurityStamp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumberConfirmed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TwoFactorEnabled)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LockoutEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LockoutEnabled)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccessFailedCount)
-            </td>
-            <td class="hstack gap-3 justify-content-center">
-                <a asp-action="Edit" asp-route-id="@item.Id">
-                    <i class="bi bi-pencil-fill fa-table"></i>
-                </a>
-                <a asp-action="Details" asp-route-id="@item.Id">
-                    <i class="bi bi-info-circle-fill fa-table"></i>
-                </a>
-                <a asp-action="Delete" asp-route-id="@item.Id">
-                    <i class="bi bi-trash-fill fa-table"></i>
-                </a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+       {
+           <tr>
+            
+               <td>
+                   @Html.DisplayFor(modelItem => item.FirstName)
+               </td>
+               <td>
+                   @Html.DisplayFor(modelItem => item.LastName)
+               </td>
+               <td>
+                   @Html.DisplayFor(modelItem => item.DateOfBirth)
+               </td>
+               <td>
+                   @Html.DisplayFor(modelItem => item.Email)
+               </td>
+               <td>
+                   Phone Number
+               </td>
+                  <td>
+                                  @Html.DisplayFor(modelItem => item.Unit.UnitNo)
+                              </td>
+               <td class="hstack gap-3 justify-content-center">
+                   <a asp-action="Edit" asp-route-id="@item.Id">
+                       <i class="bi bi-pencil-fill fa-table"></i>
+                   </a>
+                   <a asp-action="Details" asp-route-id="@item.Id">
+                       <i class="bi bi-info-circle-fill fa-table"></i>
+                   </a>
+                   <a asp-action="Delete" asp-route-id="@item.Id">
+                       <i class="bi bi-trash-fill fa-table"></i>
+                   </a>
+               </td>
+           </tr>
+       }
+       </tbody>
+   </table>
+
 
 
 @{
@@ -159,21 +96,6 @@
     }
     }
   }
-  
- function buttons () {
-    return {
-      btnAdd: {
-        text: 'Add new row',
-        icon: 'fa-plus',
-        event: function () {
-           window.location.assign("SACompany/Create/");
-        },
-        attributes: {
-          title: 'Add a new row to the table'
-        }
-      }
-    }
-  }
-    
+   
 </script>
 }
