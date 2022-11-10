@@ -5,51 +5,49 @@
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h3 class="lead">Edit Company</h3>
 
-<h4>Company</h4>
-<hr />
+<hr/>
 <div class="row">
-    <div class="col">
+    <div class="col-md-9">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CompanyId"  />
+            <input type="hidden" asp-for="CompanyId"/>
             <div class="form-group mb-2">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group mb-2" hidden>
                 <label asp-for="Logo" class="control-label mb-1"></label>
-                <input type="hidden" asp-for="Logo" class="form-control" />
+                <input type="hidden" asp-for="Logo" class="form-control"/>
                 <span asp-validation-for="Logo" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
                 <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
+                <input asp-for="Address" class="form-control"/>
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
                 <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
+                <input asp-for="Phone" class="form-control"/>
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control"/>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
-                <input type="submit" value="Save" class="w-100 btn btn-lg btn-green my-3" />
+                <input type="submit" value="Save" class="w-100 btn btn-lg btn-green my-3"/>
             </div>
         </form>
+        <div>
+            <a asp-action="Index" class="w-100 btn btn-lg btn-secondary">Back to List</a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" class="w-100 btn btn-lg btn-secondary">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
