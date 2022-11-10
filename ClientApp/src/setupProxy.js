@@ -24,7 +24,14 @@ const context = [
   '/css',
   '/images',
   '/api',
-    '/swagger',
+  '/swagger',
+  '/SACompany',
+  '/SAProperty',
+  '/SAProperty',
+  '/SATenant',
+  '/SATicket',
+  '/SAUnit',
+
 ];
 
 module.exports = function (app) {
