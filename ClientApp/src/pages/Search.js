@@ -1,5 +1,5 @@
 import {
-    Box,
+    Box, Button,
     Card,
     Container,
     Grid,
@@ -25,10 +25,13 @@ import useFilter from "../components/FilterOrder";
 import SearchRowResult from "../components/SearchRowResult";
 import Unit from "../components/Unit";
 import Ticket from "../components/Ticket";
-import {debounce} from "lodash";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import Iconify from "../components/Iconify";
 
 export default function Search() {
     const title = "Search"
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
@@ -43,65 +46,55 @@ export default function Search() {
     const [ticketSearchParams,
         ticketOrderBy, ticketSetOrderBy, ticketHandleOrderByChange,
         ticketOrder, ticketSetOrder, ticketHandleOrderChange,
-        ticketFilterQuery, handleTicketFilterByQuery, setTicketUnitQuery] = useFilter(ticketProperties);
+        ticketFilterQuery, handleTicketFilterByQuery, setTicketFilterQuery] = useFilter(ticketProperties);
 
     const [properties, errorProperties, loadingProperties] = useFetch(
-        propertyFilterQuery ?
-            '/api/properties?' + propertySearchParams.toString() : null, filterProperties);
+        propertySearchParams.get('query') ?
+            '/api/properties?' + propertySearchParams.toString() : null, filterProperties, true);
     const [units, errorUnits, loadingUnits] = useFetch(
-        propertyFilterQuery ?
-            `/api/units?` + unitSearchParams.toString() : null, filterUnit);
+        unitSearchParams.get('query') ?
+            `/api/units?` + unitSearchParams.toString() : null, filterUnit, true);
     const [tickets, errorTickets, loadingTickets] = useFetch(
-        propertyFilterQuery ?
-            `/api/tickets?` + ticketSearchParams.toString() : null, filterTicket);
-
-    const [mainFilterQuery, setMainFilterQuery] = useState('');
+        ticketSearchParams.get('query') ?
+            `/api/tickets?` + ticketSearchParams.toString() : null, filterTicket, true);
 
     const setFilterQueries = (query) => {
         setPropertyFilterQuery(query);
         setUnitFilterQuery(query);
-        setTicketUnitQuery(query);
+        setTicketFilterQuery(query);
     };
-
-    const debouncedFilterQueries = useCallback(debounce(query =>
-        setFilterQueries(query), 500), []
-    )
-
-    debouncedFilterQueries(mainFilterQuery);
     
+    useEffect(()=> {
+        let query = searchParams.get('query');
+        setFilterQueries(query);
+    },[searchParams])
+    
+    const loadingSearch = loadingUnits || loadingProperties || loadingUnits;
     const isEmptySearch = properties.length === 0 && units.length === 0 && tickets.length === 0;
-
+    
+    const showResults = !loadingSearch && !isEmptySearch;
+    const showNullResults = !loadingSearch && isEmptySearch;
     const isDesktop = useResponsive('up', 'md');
 
     return (
         <Page title={title}>
             <Container>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+                <Stack direction="column" alignItems="flex-start" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        {title}
+                        {title} results for "{searchParams.get('query')}"
                     </Typography>
+                    <Button
+                        variant="contained"
+                        startIcon={<Iconify icon="eva:arrow-back-outline"/>}
+                        onClick={() => navigate(-1)}
+                    >
+                        Back
+                    </Button>
                 </Stack>
-                <Grow in={true}>
-                    <Stack direction={isDesktop ? 'row' : 'column'} gap={1} alignItems={'center'}
-                           justifyContent={'space-between'}>
-                        <Card sx={{
-                            boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                            width: isDesktop ? 'fit-content' : '100%',
-                            backgroundColor: (theme) => theme.palette['background'].default,
-                        }}>
-
-                            <ListToolbar
-                                isDesktop={isDesktop}
-                                filterQuery={mainFilterQuery}
-                                setFilterQuery={setMainFilterQuery}
-                            />
-
-                        </Card>
-                    </Stack>
-                </Grow>
-                <br/>
-                <Grow in={!isEmptySearch}>
-                    <Grid container spacing={2}>
+           
+                <PageLoading loadingData={loadingSearch} />
+                <Grow in={showResults}>
+                    <Grid sx={{display: loadingSearch ? 'none' : undefined}} container spacing={2}>
                         <SearchRowResult viewComponent={(data) => <Property data={data}/>}
                                          title={"Properties"}
                                          orderBy={propertyOrderBy}
@@ -134,14 +127,16 @@ export default function Search() {
                         />
                     </Grid>
                 </Grow>
-                {isEmptySearch &&
+                {showNullResults &&
+                    <Grow in={showNullResults}>
                     <Box sx={{
                         height: '40vh',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         color: 'text.disabled'
-                    }}>{`No Results`}</Box>}
+                    }}>{`No Results`}</Box>
+                    </Grow>}
             </Container>
         </Page>
     )
