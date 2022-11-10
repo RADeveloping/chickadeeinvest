@@ -1,13 +1,14 @@
 ﻿import {Card, CardContent, Grid, Grow, Stack, Typography} from "@mui/material";
 import Label from "./Label";
 import * as React from "react";
+import {getPropertiesUri} from "../utils/filters";
 
-export default function Property({ data }) {
+export default function Property({ data, navigate }) {
     const {address, propertyId, outstandingTickets, unitsCount, name, tenantsCount} = data;
     return (
         <Grow in={true}>
             <Grid xs={12} sm={12} md={6} l={4} xl={4} item>
-                <Card sx={{height: 150}}>
+                <Card sx={{height: 150}} onClick={()=>navigate('/dashboard/' + getPropertiesUri(data))}>
                     <CardContent sx={{height: '100%'}}>
                         <Stack direction={'column'} justifyContent={'space-between'} alignItems={'flex-start'}
                                sx={{height: '100%'}}>

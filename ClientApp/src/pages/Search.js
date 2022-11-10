@@ -95,7 +95,7 @@ export default function Search() {
                 <PageLoading loadingData={loadingSearch} />
                 <Grow in={showResults}>
                     <Grid sx={{display: loadingSearch ? 'none' : undefined}} container spacing={2}>
-                        <SearchRowResult viewComponent={(data) => <Property data={data}/>}
+                        <SearchRowResult viewComponent={(data) => <Property navigate={navigate} data={data}/>}
                                          title={"Properties"}
                                          orderBy={propertyOrderBy}
                                          handleOrderByChange={propertyHandleOrderByChange}
@@ -105,7 +105,7 @@ export default function Search() {
                                          isDesktop={isDesktop}
                                          data={properties}
                         />
-                        <SearchRowResult viewComponent={(data) => <Unit data={data}/>}
+                        <SearchRowResult viewComponent={(data) => <Unit navigate={navigate} data={data}/>}
                                          title={"Units"}
                                          orderBy={unitOrderBy}
                                          handleOrderByChange={unitHandleOrderByChange}
@@ -115,7 +115,7 @@ export default function Search() {
                                          isDesktop={isDesktop}
                                          data={units}
                         />
-                        <SearchRowResult viewComponent={(data) => <Ticket data={data}/>}
+                        <SearchRowResult viewComponent={(data) => <Ticket navigate={navigate} data={data}/>}
                                          title={"Tickets"}
                                          orderBy={ticketOrderBy}
                                          handleOrderByChange={ticketHandleOrderByChange}
