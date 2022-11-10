@@ -8,7 +8,6 @@ const useFetch = (url, filter, reset) => {
     useEffect(() => {
         if (url) {
             console.log(url)
-            if (reset) setLoading(true);
             fetch(url)
                 .then((res) => res.json())
                 .then((data) => {
@@ -26,7 +25,7 @@ const useFetch = (url, filter, reset) => {
                 });
         } else {
             setData([])
-            if (!reset) setLoading(false);
+            setLoading(false);
         }
     }, [url]);
 

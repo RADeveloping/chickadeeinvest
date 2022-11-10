@@ -50,13 +50,13 @@ export default function Search() {
 
     const [properties, errorProperties, loadingProperties] = useFetch(
         propertySearchParams.get('query') ?
-            '/api/properties?' + propertySearchParams.toString() : null, filterProperties, true);
+            '/api/properties?' + propertySearchParams.toString() : null, filterProperties);
     const [units, errorUnits, loadingUnits] = useFetch(
         unitSearchParams.get('query') ?
-            `/api/units?` + unitSearchParams.toString() : null, filterUnit, true);
+            `/api/units?` + unitSearchParams.toString() : null, filterUnit);
     const [tickets, errorTickets, loadingTickets] = useFetch(
         ticketSearchParams.get('query') ?
-            `/api/tickets?` + ticketSearchParams.toString() : null, filterTicket, true);
+            `/api/tickets?` + ticketSearchParams.toString() : null, filterTicket);
 
     const setFilterQueries = (query) => {
         setPropertyFilterQuery(query);
@@ -69,7 +69,7 @@ export default function Search() {
         setFilterQueries(query);
     },[searchParams])
     
-    const loadingSearch = loadingUnits || loadingProperties || loadingUnits;
+    const loadingSearch = loadingUnits || loadingProperties || loadingTickets;
     const isEmptySearch = properties.length === 0 && units.length === 0 && tickets.length === 0;
     
     const showResults = !loadingSearch && !isEmptySearch;
