@@ -1,7 +1,7 @@
 @model IEnumerable<chickadee.Models.Property>
 
 @{
-    ViewData["Title"] = "Companies";
+    
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
@@ -70,7 +70,7 @@
         text: 'Add new row',
         icon: 'fa-plus',
         event: function () {
-           window.location.assign("SACompany/Create/");
+           window.location.assign("SAProperty/Create/");
         },
         attributes: {
           title: 'Add a new row to the table'

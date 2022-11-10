@@ -13,60 +13,60 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="CompanyId" class="control-label"></label>
                 <select asp-for="CompanyId" class ="form-control" asp-items="ViewBag.CompanyId"></select>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="UsernameChangeLimit" class="control-label"></label>
                 <input asp-for="UsernameChangeLimit" class="form-control" />
                 <span asp-validation-for="UsernameChangeLimit" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="DateOfBirth" class="control-label"></label>
                 <input asp-for="DateOfBirth" class="form-control" />
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="ProfilePicture" class="control-label"></label>
                 <input asp-for="ProfilePicture" class="form-control" />
                 <span asp-validation-for="ProfilePicture" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="UnitId" class="control-label"></label>
                 <select asp-for="UnitId" class ="form-control" asp-items="ViewBag.UnitId"></select>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="Id" class="control-label"></label>
                 <input asp-for="Id" class="form-control" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="UserName" class="control-label"></label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="NormalizedUserName" class="control-label"></label>
                 <input asp-for="NormalizedUserName" class="form-control" />
                 <span asp-validation-for="NormalizedUserName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="NormalizedEmail" class="control-label"></label>
                 <input asp-for="NormalizedEmail" class="form-control" />
                 <span asp-validation-for="NormalizedEmail" class="text-danger"></span>
@@ -76,22 +76,22 @@
                     <input class="form-check-input" asp-for="EmailConfirmed" /> @Html.DisplayNameFor(model => model.EmailConfirmed)
                 </label>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="PasswordHash" class="control-label"></label>
                 <input asp-for="PasswordHash" class="form-control" />
                 <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="SecurityStamp" class="control-label"></label>
                 <input asp-for="SecurityStamp" class="form-control" />
                 <span asp-validation-for="SecurityStamp" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="ConcurrencyStamp" class="control-label"></label>
                 <input asp-for="ConcurrencyStamp" class="form-control" />
                 <span asp-validation-for="ConcurrencyStamp" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="PhoneNumber" class="control-label"></label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
@@ -106,7 +106,7 @@
                     <input class="form-check-input" asp-for="TwoFactorEnabled" /> @Html.DisplayNameFor(model => model.TwoFactorEnabled)
                 </label>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="LockoutEnd" class="control-label"></label>
                 <input asp-for="LockoutEnd" class="form-control" />
                 <span asp-validation-for="LockoutEnd" class="text-danger"></span>
@@ -116,12 +116,12 @@
                     <input class="form-check-input" asp-for="LockoutEnabled" /> @Html.DisplayNameFor(model => model.LockoutEnabled)
                 </label>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="AccessFailedCount" class="control-label"></label>
                 <input asp-for="AccessFailedCount" class="form-control" />
                 <span asp-validation-for="AccessFailedCount" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -129,7 +129,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="w-100 btn btn-lg btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {

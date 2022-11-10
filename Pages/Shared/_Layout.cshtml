@@ -41,24 +41,24 @@
  {
 
      <div class="row cream min-vw-100">
-       <nav class="navbar navbar-expand-md green col-md-5" id="navbar">
-        <div class="sidebar w-100">
-         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-           <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse flex-column p-3" id="navbarNav">
-         <a href="/" class="navbar-brand collapse navbar-collapse">
-           <img src="~/images/logoWhite.svg" class="logo mb-5" width="115" height="65">
-         </a>
+         <nav class="navbar navbar-expand-md green col-md-5" id="navbar">
+             <div class="sidebar w-100">
+                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                     <span class="navbar-toggler-icon"></span>
+                 </button>
+                 <div class="collapse navbar-collapse flex-column p-3" id="navbarNav">
+                     <a href="/" class="navbar-brand collapse navbar-collapse">
+                         <img src="~/images/logoWhite.svg" class="logo mb-5" width="115" height="65">
+                     </a>
         
-              <ul class="nav nav-pills flex-column w-100">
-                              <partial name="/Areas/Identity/Pages/_ManageNav.cshtml"/>
-                              <partial name="_LoginPartial"/>
-              </ul>
-        </div>
-        </div> 
-        </nav>
-         <div class="col-sm-12 col-md-7 col-lg-8">
+                     <ul class="nav nav-pills flex-column w-100">
+                         <partial name="/Areas/Identity/Pages/_ManageNav.cshtml"/>
+                         <partial name="_LoginPartial"/>
+                     </ul>
+                 </div>
+             </div> 
+         </nav>
+         <div class="col">
              <partial name="_CookieConsentPartial" optional/>
              <main role="main" class="p-5">
                  @RenderBody()
