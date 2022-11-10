@@ -22,7 +22,7 @@ namespace chickadee.Models {
         public int UsernameChangeLimit { get; set; } = 10;
 
         [DataType(DataType.DateTime)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
 
