@@ -754,64 +754,6 @@ namespace chickadee.Controllers
 
         }
         
-        // GET:   api/properties/{propertyId}/units/{unitId}/tickets
-        [HttpGet]
-        [Route("api/properties/{propertyId}/units/{unitId}/tickets/{ticketId}")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket(string propertyId, int ticketId, string unitId)
-        {
-            
-              var requestingUser = await _userManager.GetUserAsync(User);
-            if (requestingUser == null || _context.Property == null | _context.Unit == null || _context.Tickets == null)
-            {
-                return NotFound();
-            }
-            
-            var isSuperAdmin = await _userManager.IsInRoleAsync(requestingUser, "SuperAdmin");
-
-            var result = _context.Tickets
-                .Include(t => t.Unit)
-                .ThenInclude(u => u.Property)
-                .Where(t => (t.Unit.PropertyId == propertyId) && t.Unit.UnitId == unitId && t.TicketId == ticketId);
-            
-            var userHasAccess = result.Any(t => t.Unit.PropertyManagerId == requestingUser.Id || (t.Unit.Tenants != null && t.Unit.Tenants.Any(x=>x.Id == requestingUser.Id)) || isSuperAdmin);
-
-            var simpleResult =
-                result
-                    .Select(t => new
-                    {
-                        ticketId = t.TicketId,
-                        problem = t.Problem,
-                        description = t.Description,
-                        createdOn = t.CreatedOn,
-                        estimatedDate = t.EstimatedDate,
-                        status = t.Status,
-                        severity = t.Severity,
-                        closedDate = t.ClosedDate,
-                        unitId = t.UnitId,
-                        createdBy = new
-                        {
-                           FirstName = t.CreatedBy.FirstName,
-                           LastName = t.CreatedBy.LastName,
-                           Id = t.CreatedBy.Id,
-                           Email = t.CreatedBy.UserName,
-                           PhoneNumber = t.CreatedBy.PhoneNumber,
-                           ProfilePicture = t.CreatedBy.ProfilePicture
-                        },
-                        // messages = t.Messages,
-                        // images = t.Images,
-                    });
-            
-            
-          if (userHasAccess)
-          {
-              return Ok(simpleResult);
-
-          }
-        
-          return NotFound();
-            
-        }
-        
 
         // PATCH: api/properties/{propertyId}/units/{unitId}/tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
