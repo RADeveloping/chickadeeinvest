@@ -39,7 +39,7 @@
         <th data-sortable="true" data-field="Email">
             @Html.DisplayNameFor(model => model.Email)
         </th>
-        <th data-field="Actions">Actions</th>
+        <th data-field="Actions" data-align="center">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -60,7 +60,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
-            <td>
+            <td class="hstack gap-3 justify-content-center">
                 <a asp-action="Edit" asp-route-id="@item.CompanyId"><i class="bi bi-pencil-fill fa-table"></i></a>
                 <a asp-action="Details" asp-route-id="@item.CompanyId"><i class="bi bi-info-circle-fill fa-table"></i></a>
                 <a asp-action="Delete" asp-route-id="@item.CompanyId"><i class="bi bi-trash-fill fa-table"></i></a>

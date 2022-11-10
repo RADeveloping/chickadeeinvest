@@ -42,7 +42,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
-            <td>
+            <td class="hstack gap-3 justify-content-center">
                 <a asp-action="Edit" asp-route-id="@item.PropertyId"><i class="bi bi-pencil-fill fa-table"></i></a>
                 <a asp-action="Details" asp-route-id="@item.PropertyId"><i class="bi bi-info-circle-fill fa-table"></i></a>
                 <a asp-action="Delete" asp-route-id="@item.PropertyId"><i class="bi bi-trash-fill fa-table"></i></a>
