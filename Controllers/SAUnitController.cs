@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chickadee.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class SAUnitController : Controller
     {
         private readonly ApplicationDbContext _context;
