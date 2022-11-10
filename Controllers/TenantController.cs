@@ -191,9 +191,9 @@ namespace chickadee.Controllers
               return Problem("Entity set 'ApplicationDbContext.Unit'  is null.");
           }
 
-          if (tenant.UnitId != null && _context.Unit.FindAsync(tenant.UnitId) != null)
+          if (tenant.UnitId != null && await _context.Unit.FindAsync(tenant.UnitId) != null)
           {
-              tenant.Unit = _context.Unit.FindAsync(tenant.UnitId).Result;
+              tenant.Unit = await _context.Unit.FindAsync(tenant.UnitId);
           }
 
             _context.Tenant.Add(tenant);
@@ -213,7 +213,13 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(tenant);
+            return Ok(new {
+                Id = tenant.Id,
+                Email = tenant.Email,
+                FirstName = tenant.FirstName,
+                LastName = tenant.LastName,
+                UnitId = tenant.UnitId
+            });
         }
 
         // DELETE: api/Tenants/5

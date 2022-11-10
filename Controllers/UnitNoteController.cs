@@ -137,7 +137,12 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(unitNote);
+            return Ok(new {
+                UnitNoteId = unitNote.UnitNoteId,
+                Message = unitNote.Message,
+                UploadDate = unitNote.UploadDate,
+                UnitId = unitNote.UnitId
+            });
         }
 
         // DELETE: api/UnitNote/5

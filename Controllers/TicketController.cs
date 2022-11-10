@@ -851,7 +851,18 @@ namespace chickadee.Controllers
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
 
-            return Ok(ticket);
+            return Ok(new {
+                TicketId = ticket.TicketId,
+                Problem = ticket.Problem,
+                Description = ticket.Description,
+                CreatedOn = ticket.CreatedOn,
+                EstimatedDate = ticket.EstimatedDate,
+                Status = ticket.Status,
+                Severity = ticket.Severity,
+                ClosedDate = ticket.ClosedDate,
+                UnitId = ticket.UnitId,
+                CreatedById = ticket.CreatedById
+            });
         }
         //
         // // DELETE: api/Ticket/5
