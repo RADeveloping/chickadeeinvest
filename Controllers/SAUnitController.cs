@@ -49,8 +49,8 @@ namespace chickadee.Controllers
         // GET: SAUnitManager/Create
         public IActionResult Create()
         {
-            ViewData["PropertyId"] = new SelectList(_context.Property, "PropertyId", "PropertyId");
-            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "Id");
+            ViewData["PropertyId"] = new SelectList(_context.Property, "PropertyId", "Name");
+            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "FirstName");
             return View();
         }
 
@@ -67,8 +67,9 @@ namespace chickadee.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PropertyId"] = new SelectList(_context.Property, "PropertyId", "PropertyId", unit.PropertyId);
-            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "Id", unit.PropertyManagerId);
+            ViewData["PropertyId"] = new SelectList(_context.Property, "PropertyId", "Name", unit.PropertyId);
+            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "FirstName", unit.PropertyManagerId);
+
             return View(unit);
         }
 
@@ -85,8 +86,9 @@ namespace chickadee.Controllers
             {
                 return NotFound();
             }
-            ViewData["PropertyId"] = new SelectList(_context.Property, "PropertyId", "PropertyId", unit.PropertyId);
-            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "Id", unit.PropertyManagerId);
+            
+            ViewData["PropertyId"] = new SelectList(_context.Property, "PropertyId", "Name", unit.PropertyId);
+            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "FirstName", unit.PropertyManagerId);
             return View(unit);
         }
 

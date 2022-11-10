@@ -7,20 +7,33 @@
 
 <h3 class="lead">Units</h3>
 <hr/>
-<table class="table">
+<table
+    data-toggle="table"
+    data-show-columns="true"
+    data-pagination="true"
+    data-search="true"
+    data-search-align="left"
+    data-show-search-button="true"
+    data-mobile-responsive="true"
+    data-check-on-init="true"
+    data-header-style="headerStyle"
+    data-buttons="buttons"
+    data-icons-prefix="fa"
+    data-buttons-class="green">
+
     <thead>
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.UnitNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UnitType)
-        </th>
-        <th>
+        <th data-sortable="true" data-field="Property">
             @Html.DisplayNameFor(model => model.Property)
         </th>
-        <th>
+        <th data-sortable="true" data-field="PropertyManager">
             @Html.DisplayNameFor(model => model.PropertyManager)
+        </th>
+        <th data-sortable="true" data-field="UnitNo">
+            @Html.DisplayNameFor(model => model.UnitNo)
+        </th>
+        <th data-sortable="true" data-field="UnitType">
+            @Html.DisplayNameFor(model => model.UnitType)
         </th>
         <th data-field="Actions" data-align="center">Actions</th>
     </tr>
@@ -30,17 +43,20 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Property.Name)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.PropertyManager.FirstName)
+                @Html.DisplayFor(modelItem => item.PropertyManager.LastName)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.UnitNo)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UnitType)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Property.PropertyId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PropertyManager.Id)
-            </td>
+
             <td class="hstack gap-3 justify-content-center">
                 <a asp-action="Edit" asp-route-id="@item.UnitId">
                     <i class="bi bi-pencil-fill fa-table"></i>
@@ -76,7 +92,7 @@
         text: 'Add new row',
         icon: 'fa-plus',
         event: function () {
-           window.location.assign("SACompany/Create/");
+           window.location.assign("SAUnit/Create/");
         },
         attributes: {
           title: 'Add a new row to the table'

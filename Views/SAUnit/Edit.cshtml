@@ -1,5 +1,5 @@
+@using chickadee.Enums
 @model chickadee.Models.Unit
-
 @{
     ViewData["Title"] = "Edit";
     Layout = "/Pages/Shared/_Layout.cshtml";
@@ -13,22 +13,22 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UnitId"/>
             <div class="form-group mb-2">
-                <label asp-for="UnitNo" class="control-label"></label>
+                <label asp-for="UnitNo" class="control-label">Unit Number</label>
                 <input asp-for="UnitNo" class="form-control"/>
                 <span asp-validation-for="UnitNo" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
-                <label asp-for="UnitType" class="control-label"></label>
-                <select asp-for="UnitType" class="form-control"></select>
+                <label asp-for="UnitType" class="control-label">Unit Type</label>
+                <select asp-for="@Model.UnitType" class="form-control" asp-items="Html.GetEnumSelectList<UnitType>()">Unit Type</select>
                 <span asp-validation-for="UnitType" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
-                <label asp-for="PropertyId" class="control-label"></label>
+                <label asp-for="PropertyId" class="control-label">Property Name</label>
                 <select asp-for="PropertyId" class="form-control" asp-items="ViewBag.PropertyId"></select>
                 <span asp-validation-for="PropertyId" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
-                <label asp-for="PropertyManagerId" class="control-label"></label>
+                <label asp-for="PropertyManagerId" class="control-label">Property Manager</label>
                 <select asp-for="PropertyManagerId" class="form-control" asp-items="ViewBag.PropertyManagerId"></select>
                 <span asp-validation-for="PropertyManagerId" class="text-danger"></span>
             </div>
