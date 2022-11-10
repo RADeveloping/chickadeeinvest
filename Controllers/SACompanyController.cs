@@ -59,7 +59,7 @@ namespace chickadee.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CompanyId,Name,Logo,Address,Phone,Email")] Company company)
+        public async Task<IActionResult> Create([Bind("Name,Logo,Address,Phone,Email")] Company company)
         {
             if (ModelState.IsValid)
             {
