@@ -1,42 +1,57 @@
 @model IEnumerable<chickadee.Models.Ticket>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tickets";
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
 <h3 class="lead">Tickets</h3>
 <hr/>
-<table class="table">
+<table
+    data-toggle="table"
+    data-show-columns="true"
+    data-pagination="true"
+    data-search="true"
+    data-search-align="left"
+    data-show-search-button="true"
+    data-mobile-responsive="true"
+    data-check-on-init="true"
+    data-header-style="headerStyle"
+    data-buttons="buttons"
+    data-icons-prefix="fa"
+    data-buttons-class="green">
+
     <thead>
     <tr>
-        <th>
+        <th data-sortable="true" data-field="Problem">
             @Html.DisplayNameFor(model => model.Problem)
         </th>
-        <th>
+        <th data-sortable="true" data-field="Description">
             @Html.DisplayNameFor(model => model.Description)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EstimatedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Severity)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ClosedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Unit)
-        </th>
-        <th>
+        <th data-sortable="true" data-field="CreatedBy">
             @Html.DisplayNameFor(model => model.CreatedBy)
         </th>
+        <th data-sortable="true"  data-field="CreatedOn">
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </th>
+        <th data-sortable="true" data-field="EstimatedDate">
+            @Html.DisplayNameFor(model => model.EstimatedDate)
+        </th>
+        <th data-sortable="true" data-field="Status">
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th data-sortable="true" data-field="Severity">
+            @Html.DisplayNameFor(model => model.Severity)
+        </th>
+     
+        <th data-sortable="true" data-field="Unit">
+            @Html.DisplayNameFor(model => model.Unit)
+        </th>
+        <th data-sortable="true" data-field="ClosedDate">
+            @Html.DisplayNameFor(model => model.ClosedDate)
+        </th>
+      
         <th data-field="Actions" data-align="center">Actions</th>
     </tr>
     </thead>
@@ -51,6 +66,9 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy.FirstName)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.CreatedOn)
             </td>
             <td>
@@ -62,14 +80,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Severity)
             </td>
+         
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit.UnitNo)
+            </td>
+           
             <td>
                 @Html.DisplayFor(modelItem => item.ClosedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Unit.UnitId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy.Id)
             </td>
             <td class="hstack gap-3 justify-content-center">
                 <a asp-action="Edit" asp-route-id="@item.TicketId">
@@ -106,7 +123,7 @@
         text: 'Add new row',
         icon: 'fa-plus',
         event: function () {
-           window.location.assign("SACompany/Create/");
+           window.location.assign("SATicket/Create/");
         },
         attributes: {
           title: 'Add a new row to the table'
