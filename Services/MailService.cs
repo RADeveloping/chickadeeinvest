@@ -21,6 +21,7 @@ namespace chickadee.Services
         {
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
             email.Subject = mailRequest.Subject;
             var builder = new BodyBuilder();
@@ -69,6 +70,7 @@ namespace chickadee.Services
             MailText = MailText.Replace("[username]", request.UserName).Replace("[email]", request.ToEmail);
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
             email.To.Add(MailboxAddress.Parse(request.ToEmail));
             email.Subject = $"Welcome {request.UserName}";
             var builder = new BodyBuilder();
