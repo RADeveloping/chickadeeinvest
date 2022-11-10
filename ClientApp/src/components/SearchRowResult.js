@@ -15,6 +15,7 @@ export default function SearchRowResult({
                                             viewComponent,
                                             data
                                         }) {
+    console.log(data)
     return (
         <Grow in={data.length > 0}>
             <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}

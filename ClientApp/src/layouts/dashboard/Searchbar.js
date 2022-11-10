@@ -4,6 +4,7 @@ import { styled, alpha } from '@mui/material/styles';
 import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } from '@mui/material';
 // component
 import Iconify from '../../components/Iconify';
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -33,15 +34,28 @@ const SearchbarStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Searchbar() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [isOpen, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
 
   const handleOpen = () => {
+    setQuery(searchParams.get('query'));
     setOpen((prev) => !prev);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+  
+  const handleSearch = () => {
+    if (query) {
+      navigate('/dashboard/search?query=' + query);
+    }
+  }
+  
+  const searchDisabled = query === '' || searchParams.get('query') === query;
+  
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
@@ -58,15 +72,18 @@ export default function Searchbar() {
               autoFocus
               fullWidth
               disableUnderline
-              placeholder="Search…"
+              placeholder="Search"
               startAdornment={
                 <InputAdornment position="start">
                   <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
                 </InputAdornment>
               }
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
+              onChange={(e)=>setQuery(e.target.value)}
+              value={query}
+              onKeyDown={searchDisabled ? undefined : (e)=> {if (e.key=== 'Enter') {e.preventDefault(); handleSearch()}}}
             />
-            <Button variant="contained" onClick={handleClose}>
+            <Button disabled={searchDisabled} variant="contained" onClick={handleSearch}>
               Search
             </Button>
           </SearchbarStyle>
