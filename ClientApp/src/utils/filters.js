@@ -121,7 +121,7 @@ export const filterProperties = (data) => {
             id: d.propertyId,
             primary: getPropertiesBox(d),
             tertiary: d.address,
-            dir: d.address,
+            dir: d.name,
             unitCount: d.units ? d.units.length : 0,
             ...d
         });

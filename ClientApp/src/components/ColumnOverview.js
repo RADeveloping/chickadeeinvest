@@ -65,10 +65,10 @@ export default function ColumnOverview() {
             if (!firstLoad) {
                 setSelectedUnitId(null)
                 searchParams.delete('unit')
+                setSearchParams(searchParams)
             } else {
                 setFirstLoad(false)
             }
-            setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}`)
         }
     }, [selectedPropertyId, loadingProperties])
@@ -80,7 +80,7 @@ export default function ColumnOverview() {
             if (!selectedProperty || !selectedUnit) return
             searchParams.set('property', selectedPropertyId)
             searchParams.set('unit', selectedUnitId)
-            setSearchParams(searchParams)
+            if (!firstLoad) setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
         }
         setSelectedTicketId(null);
