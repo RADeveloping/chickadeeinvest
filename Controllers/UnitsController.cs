@@ -339,7 +339,14 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(unit);
+            return Ok(new {
+                UnitId = unit.UnitId,
+                UnitNo = unit.UnitNo,
+                UnitType = unit.UnitType,
+                PropertyId = unit.PropertyId,
+                Property = unit.Property,
+                PropertyManagerId = unit.PropertyManagerId
+            });
         }
 
         // DELETE: api/Unit/5

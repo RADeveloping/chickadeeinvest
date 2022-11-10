@@ -137,7 +137,12 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(ticketImage);
+            return Ok(new {
+                TicketImageId = ticketImage.TicketImageId,
+                Data = ticketImage.data,
+                UploadDate = ticketImage.UploadDate,
+                TicketId = ticketImage.TicketId
+            });
         }
 
         // DELETE: api/TicketImage/5
