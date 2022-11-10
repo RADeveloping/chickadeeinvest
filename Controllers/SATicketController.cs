@@ -52,7 +52,7 @@ namespace chickadee.Controllers
         // GET: SATicketManager/Create
         public IActionResult Create()
         {
-            ViewData["CreatedById"] = new SelectList(_context.User, "Id", "Id");
+            ViewData["CreatedById"] = new SelectList(_context.User, "Id", "FirstName");
             ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitId");
             return View();
         }
@@ -70,7 +70,7 @@ namespace chickadee.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreatedById"] = new SelectList(_context.User, "Id", "Id", ticket.CreatedById);
+            ViewData["CreatedById"] = new SelectList(_context.User, "Id", "FirstName", ticket.CreatedById);
             ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitId", ticket.UnitId);
             return View(ticket);
         }
@@ -88,8 +88,8 @@ namespace chickadee.Controllers
             {
                 return NotFound();
             }
-            ViewData["CreatedById"] = new SelectList(_context.User, "Id", "Id", ticket.CreatedById);
-            ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitId", ticket.UnitId);
+            ViewData["CreatedById"] = new SelectList(_context.User, "Id", "FirstName", ticket.CreatedById);
+            ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitNo", ticket.UnitId);
             return View(ticket);
         }
 
