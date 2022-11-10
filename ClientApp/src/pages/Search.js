@@ -128,7 +128,7 @@ export default function Search() {
                         />
                     </Grid>
                 </Grow>
-                {showNullResults &&
+                {showNullResults && !loadingSearch &&
                     <Grow in={showNullResults}>
                         <Box sx={{
                             height: '40vh',
