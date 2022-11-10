@@ -51,7 +51,7 @@ namespace chickadee.Controllers
         // GET: SAPropertyManager/Create
         public IActionResult Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "CompanyId");
+            ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Name");
             return View();
         }
 
@@ -68,7 +68,7 @@ namespace chickadee.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "CompanyId", propertyManager.CompanyId);
+            ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Name", propertyManager.CompanyId);
             return View(propertyManager);
         }
 
@@ -125,6 +125,7 @@ namespace chickadee.Controllers
                         throw;
                     }
                 }
+                
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "CompanyId", propertyManager.CompanyId);

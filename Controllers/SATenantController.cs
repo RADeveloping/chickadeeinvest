@@ -25,7 +25,7 @@ namespace chickadee.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Tenant != null ? 
-                          View(await _context.Tenant.ToListAsync()) :
+                          View(await _context.Tenant.Include(t=>t.Unit).ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Tenant'  is null.");
         }
 
@@ -38,6 +38,7 @@ namespace chickadee.Controllers
             }
 
             var tenant = await _context.Tenant
+                .Include(t=>t.Unit)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tenant == null)
             {
@@ -50,6 +51,7 @@ namespace chickadee.Controllers
         // GET: SATenant/Create
         public IActionResult Create()
         {
+            
             return View();
         }
 
@@ -66,6 +68,8 @@ namespace chickadee.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitId", tenant.UnitId);
+
             return View(tenant);
         }
 
@@ -77,11 +81,19 @@ namespace chickadee.Controllers
                 return NotFound();
             }
 
-            var tenant = await _context.Tenant.FindAsync(id);
+            var tenant = await _context.Tenant
+                .Include(t => t.Unit)
+                .Where(t => t.Id == id)
+                .FirstAsync();
+            
             if (tenant == null)
             {
                 return NotFound();
             }
+            // Need to implement properties here.
+            
+            ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitNo", tenant.UnitId);
+
             return View(tenant);
         }
 
@@ -101,6 +113,11 @@ namespace chickadee.Controllers
             {
                 try
                 {
+                    tenant.UserName = tenant.Email;
+                    tenant.NormalizedUserName = tenant.Email.ToUpper();
+                    tenant.NormalizedEmail = tenant.Email.ToUpper();
+                    Console.WriteLine(tenant.UnitId);
+
                     _context.Update(tenant);
                     await _context.SaveChangesAsync();
                 }
@@ -115,8 +132,11 @@ namespace chickadee.Controllers
                         throw;
                     }
                 }
+                
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitNo", tenant.UnitId);
+
             return View(tenant);
         }
 
@@ -129,6 +149,7 @@ namespace chickadee.Controllers
             }
 
             var tenant = await _context.Tenant
+                .Include(t=>t.Unit)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tenant == null)
             {
