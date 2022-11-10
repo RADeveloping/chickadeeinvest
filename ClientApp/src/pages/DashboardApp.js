@@ -6,32 +6,34 @@ import useFetch from '../components/FetchData';
 import {Link} from "react-router-dom";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
-import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
+import {
+    filterProperties,
+    filterTicket,
+    filterUnit,
+    getPropertiesUri,
+    getTicketsUri,
+    getUnitsUri
+} from "../utils/filters";
 import Widget from "../sections/@dashboard/app/Widget";
 import UserWidget from "../sections/@dashboard/app/UserWidget";
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
 
-    const ticketUri = '/api/Tickets';
-    const unitUri = '/api/Units';
-    const propertyUri = '/api/Properties';
+    const ticketUri = '/api/tickets';
+    const unitUri = '/api/units';
+    const propertyUri = '/api/properties?sort=desc&param=open_count';
 
-    const accountUri = '/api/Account';
-    const currentUnitUri = '/api/Units/current';
+    const accountUri = '/api/account';
+    const currentUnitUri = '/api/units/current';
 
     const [tickets, ticketsError, ticketsLoading] = useFetch(ticketUri, filterTicket);
     const [units, unitsError, unitsLoading] = useFetch(unitUri, filterUnit);
     const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri, filterProperties);
 
     const [account, accountError, accountLoading] = useFetch(accountUri);
-
-    const [currentUnit, currentUnitError, currentUnitLoading] = useFetch(currentUnitUri, (d) => {
-        d = d[0];
-        d.property = d.property.address;
-        return d;
-    });
-    const userLoading = accountLoading && currentUnitLoading
+    
+    const userLoading = accountLoading
     const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
 
     const openTickets = tickets.filter((ticket) => ticket.status === 0);
@@ -40,7 +42,7 @@ export default function DashboardApp() {
         {
             item:
                 <Link to="/authentication/profile" style={{textDecoration: 'none'}}>
-                    <UserWidget account={account} unit={currentUnit} loading={userLoading}/>
+                    <UserWidget account={account} loading={userLoading}/>
                 </Link>,
             for: [
                 "Tenant",
@@ -49,7 +51,7 @@ export default function DashboardApp() {
         },
         {
             item:
-                <Widget title="Open Tickets" uri={'tickets'} total={openTickets.length} items={openTickets}
+                <Widget title="Open Tickets" uri={getTicketsUri} total={openTickets.length} items={openTickets}
                         icon={'ant-design:folder-open-outlined'} loading={ticketsLoading}/>
             ,
             for: [
@@ -59,7 +61,7 @@ export default function DashboardApp() {
         },
         {
             item:
-                <Widget title="Properties" uri={'properties'} total={properties.length} items={properties}
+                <Widget title="Properties" uri={getPropertiesUri} total={properties.length} items={properties}
                         icon={'bxs:building-house'} loading={propertiesLoading}/>,
             for: [
                 "PropertyManager"
@@ -67,7 +69,7 @@ export default function DashboardApp() {
         },
         {
             item:
-                <Widget title="Units" uri={'units'} total={units.length} items={units} icon={'bxs:door-open'}
+                <Widget title="Units" uri={getUnitsUri} total={units.length} items={units} icon={'bxs:door-open'}
                         loading={unitsLoading}/>,
             for: [
                 "PropertyManager"

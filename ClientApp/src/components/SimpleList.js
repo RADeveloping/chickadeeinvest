@@ -32,7 +32,10 @@ export default function SimpleList({
                                        noRound,
                                        properties,
                                        loading,
-                                       disableSort
+                                       disableSort,
+                                       uri,
+                                       setOrderBy, order, setOrder,
+                                       immediateClick
                                    }) {
     const navigate = useNavigate();
     const borderStyles = isDesktop ? {
@@ -40,9 +43,6 @@ export default function SimpleList({
         borderTopLeftRadius: rightRound ? 0 : undefined, borderBottomLeftRadius: rightRound ? 0 : undefined,
         borderRadius: noRound ? 0 : undefined
     } : null
-
-    const [orderBy, setOrderBy] = useState(properties[0].id);
-    const [order, setOrder] = useState('desc');
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -129,8 +129,10 @@ export default function SimpleList({
                     <>
                         <Divider key={`${item.id}-${title}-dvd1`} component="li"/>
                         <ListItemButton key={`${item.id}-${title}-btn`} onClick={() => {
-                            if (selectedId && selectedId === item.id) {
-                                navigate(`/dashboard/${title.toLowerCase()}/${item.id}`);
+                            if (immediateClick || (selectedId && selectedId === item.id)) {
+                                if (uri) {
+                                    navigate(`/dashboard/${uri(item)}`);
+                                }
                             } else {
                                 setSelectedId(item.id)
                             }

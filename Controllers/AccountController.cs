@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using chickadee.Data;
+using chickadee.Enums;
 using chickadee.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace chickadee.Controllers;
 
@@ -21,36 +23,43 @@ namespace chickadee.Controllers;
             _userManager = userManager;
             _context = context;
         }
-
+        
         // GET: api/Accounts
         [HttpGet]
-        public  IActionResult GetUser()
+        public async Task<ActionResult> GetUser()
         {
-            var user = _userManager.GetUserAsync(User).Result;
-            
-            if (user != null)
+            var requestingUser = await _userManager.GetUserAsync(User);
+            if (requestingUser == null || _context.Property == null | _context.Unit == null || _context.Tickets == null)
             {
-                var roles = _userManager.GetRolesAsync(user).Result;
-                
-                var simpleUser = new
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Id = user.Id,
-                    Email = user.Email,
-                    Roles = roles,
-                    PhoneNumber = user.PhoneNumber,
-                    ProfilePicture = user.ProfilePicture,
-                    
-                };
-                
-                
-                return Ok(simpleUser);
+                return NotFound();
+            }
 
-            };
+            var unit = (Unit?)null;
             
-            return NoContent();
+            if (_context.Unit != null)
+            {
+                unit = _context.Unit
+                    .Include(u=>u.Property)
+                    .FirstOrDefault(u => requestingUser.UnitId != null && u.UnitId == requestingUser.UnitId);
+            }
+            
+            var roles = _userManager.GetRolesAsync(requestingUser).Result;
 
+            return Ok(new
+            {
+                FirstName = requestingUser.FirstName,
+                LastName = requestingUser.LastName,
+                Id = requestingUser.Id,
+                Email = requestingUser.Email,
+                Roles = roles,
+                PhoneNumber = requestingUser.PhoneNumber,
+                ProfilePicture = requestingUser.ProfilePicture,
+                PropertyName = unit?.Property?.Name ?? (string?)null,
+                UnitNo = unit?.UnitNo ?? (int?)null,
+                UnitType = unit?.UnitType ?? (UnitType?)null
+                
+            });
+            
         }
 
     }
