@@ -5,46 +5,44 @@
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h3 class="lead">Tickets</h3>
+<hr/>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Problem)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedOn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EstimatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Severity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Unit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Problem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EstimatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Severity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClosedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Unit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </th>
+        <th data-field="Actions" data-align="center">Actions</th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Problem)
@@ -73,12 +71,49 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy.Id)
             </td>
-            <td>
-                <a class="w-100 btn btn-lg btn-green" asp-action="Edit" asp-route-id="@item.TicketId">Edit</a>
-                <a asp-action="Details" asp-route-id="@item.TicketId">Details</a>
-                <a asp-action="Delete" asp-route-id="@item.TicketId">Delete</a>
+            <td class="hstack gap-3 justify-content-center">
+                <a asp-action="Edit" asp-route-id="@item.TicketId">
+                    <i class="bi bi-pencil-fill fa-table"></i>
+                </a>
+                <a asp-action="Details" asp-route-id="@item.TicketId">
+                    <i class="bi bi-info-circle-fill fa-table"></i>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.TicketId">
+                    <i class="bi bi-trash-fill fa-table"></i>
+                </a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
+
+
+@{
+    <script>
+    
+  function headerStyle() {
+    return {
+    css: {
+        background: '#103A31',
+        color: '#EEEFDF'
+    }
+    }
+  }
+  
+ function buttons () {
+    return {
+      btnAdd: {
+        text: 'Add new row',
+        icon: 'fa-plus',
+        event: function () {
+           window.location.assign("SACompany/Create/");
+        },
+        attributes: {
+          title: 'Add a new row to the table'
+        }
+      }
+    }
+  }
+    
+</script>
+}

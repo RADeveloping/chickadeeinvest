@@ -5,9 +5,10 @@
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Companies</h1>
 
-<table 
+<h3 class="lead">Companies</h3>
+<hr/>
+<table
     data-toggle="table"
     data-show-columns="true"
     data-pagination="true"
@@ -19,8 +20,7 @@
     data-header-style="headerStyle"
     data-buttons="buttons"
     data-icons-prefix="fa"
-    data-buttons-class="green"
->
+    data-buttons-class="green">
 
     <thead>
     <tr>
@@ -43,7 +43,8 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -61,9 +62,15 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td class="hstack gap-3 justify-content-center">
-                <a asp-action="Edit" asp-route-id="@item.CompanyId"><i class="bi bi-pencil-fill fa-table"></i></a>
-                <a asp-action="Details" asp-route-id="@item.CompanyId"><i class="bi bi-info-circle-fill fa-table"></i></a>
-                <a asp-action="Delete" asp-route-id="@item.CompanyId"><i class="bi bi-trash-fill fa-table"></i></a>
+                <a asp-action="Edit" asp-route-id="@item.CompanyId">
+                    <i class="bi bi-pencil-fill fa-table"></i>
+                </a>
+                <a asp-action="Details" asp-route-id="@item.CompanyId">
+                    <i class="bi bi-info-circle-fill fa-table"></i>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.CompanyId">
+                    <i class="bi bi-trash-fill fa-table"></i>
+                </a>
             </td>
         </tr>
     }

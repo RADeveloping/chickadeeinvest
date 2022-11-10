@@ -5,22 +5,20 @@
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>Unit</h4>
-<hr />
+<h3 class="lead">Create Units</h3>
+<hr/>
 <div class="row">
-    <div class="col">
+    <div class="col-md-9">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group mb-2">
                 <label asp-for="UnitId" class="control-label"></label>
-                <input asp-for="UnitId" class="form-control" />
+                <input asp-for="UnitId" class="form-control"/>
                 <span asp-validation-for="UnitId" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
                 <label asp-for="UnitNo" class="control-label"></label>
-                <input asp-for="UnitNo" class="form-control" />
+                <input asp-for="UnitNo" class="form-control"/>
                 <span asp-validation-for="UnitNo" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
@@ -30,23 +28,22 @@
             </div>
             <div class="form-group mb-2">
                 <label asp-for="PropertyId" class="control-label"></label>
-                <select asp-for="PropertyId" class ="form-control" asp-items="ViewBag.PropertyId"></select>
+                <select asp-for="PropertyId" class="form-control" asp-items="ViewBag.PropertyId"></select>
             </div>
             <div class="form-group mb-2">
                 <label asp-for="PropertyManagerId" class="control-label"></label>
-                <select asp-for="PropertyManagerId" class ="form-control" asp-items="ViewBag.PropertyManagerId"></select>
+                <select asp-for="PropertyManagerId" class="form-control" asp-items="ViewBag.PropertyManagerId"></select>
             </div>
             <div class="form-group mb-2">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary"/>
             </div>
         </form>
+        <div>
+            <a asp-action="Index" class="w-100 btn btn-lg btn-secondary">Back to List</a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" class="w-100 btn btn-lg btn-secondary">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
