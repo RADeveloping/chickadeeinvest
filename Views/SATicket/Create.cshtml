@@ -1,3 +1,5 @@
+@using chickadee.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model chickadee.Models.Ticket
 
 @{
@@ -28,12 +30,12 @@
             </div>
             <div class="form-group mb-2">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"></select>
+                <select asp-for="@Model.Status" class="form-control" asp-items="Html.GetEnumSelectList<TicketStatus>()">Ticket Status</select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
                 <label asp-for="Severity" class="control-label"></label>
-                <select asp-for="Severity" class="form-control"></select>
+                <select asp-for="@Model.Status" class="form-control" asp-items="Html.GetEnumSelectList<TicketSeverity>()">Ticket Status</select>
                 <span asp-validation-for="Severity" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">

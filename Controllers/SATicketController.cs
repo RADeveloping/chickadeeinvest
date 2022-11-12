@@ -53,7 +53,7 @@ namespace chickadee.Controllers
         public IActionResult Create()
         {
             ViewData["CreatedById"] = new SelectList(_context.User, "Id", "FirstName");
-            ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitId");
+            ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitNo");
             return View();
         }
 
