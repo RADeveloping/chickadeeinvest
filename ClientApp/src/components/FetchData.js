@@ -33,7 +33,7 @@ const useFetch = (url, filter, reset) => {
                     setLoading(false);
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.log(err);
                     setError(err);
                     setData([])
                     setLoading(false);
