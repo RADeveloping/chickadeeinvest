@@ -152,10 +152,29 @@ namespace chickadee.Controllers
         {
 
             var requestingUser = await _userManager.GetUserAsync(User);
-            if (_context.Unit == null || requestingUser == null || _context.Property == null)
-          {
-              return NotFound();
-          }
+
+            if (requestingUser == null && _context.Unit != null  || _context.Property != null)
+            {
+                // used for registration.
+                var unitsAnonymous = _context.Unit
+                    .Where(u => u.PropertyId == propertyId)
+                    .Select(unit => new
+                    {
+                        unitId = unit.UnitId,
+                        unitNo = unit.UnitNo,
+                        unitType = unit.UnitType,
+                        propertyId = unit.PropertyId,
+                    });
+
+                return Ok(unitsAnonymous.ToList());
+                
+            }
+            
+            
+            if (_context.Unit == null  || _context.Property == null)
+            {
+                return NotFound();
+            }
           
             var property = await _context.Property.FindAsync(propertyId);
             if (property == null)
@@ -173,8 +192,7 @@ namespace chickadee.Controllers
                     propertyId = unit.PropertyId,
                     propertyManagerId = unit.PropertyManagerId,
                 });
-              
-            
+
             switch (sort)
             {
                 case "asc" when param == "id":
@@ -208,8 +226,10 @@ namespace chickadee.Controllers
             {
                 return Ok(units.ToList());
             }
-            
+
+
             return NotFound();
+            
         }
 
         

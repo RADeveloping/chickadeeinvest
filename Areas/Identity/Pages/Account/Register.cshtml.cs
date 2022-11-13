@@ -10,13 +10,16 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using chickadee.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using chickadee.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -30,8 +33,10 @@ namespace chickadee.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
+            ApplicationDbContext dbContext,
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
@@ -44,6 +49,7 @@ namespace chickadee.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = dbContext;
         }
 
         /// <summary>
@@ -114,6 +120,14 @@ namespace chickadee.Areas.Identity.Pages.Account
             [Display(Name = "Date Of Birth")]
             public DateTime DateOfBirth { get; set; }
 
+            [TempData]
+            [Required]
+            [Display(Name = "Unit")]
+            public string? UnitId { get; set; }
+            
+            [Display(Name = "Company ID")]
+            public string? CompanyId { get; set;}
+            
         }
 
 
@@ -121,6 +135,37 @@ namespace chickadee.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            
+            List<SelectListItem> li = new List<SelectListItem> { new() };
+            foreach (var property in _context.Property.Where(p=>p.Units.Any()))
+            {
+                li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
+            }
+            ViewData["properties"] = li;
+            li.RemoveAt(0);
+
+            
+            List<SelectListItem> liCompanies = new List<SelectListItem> { new() };
+            if (_context.Company != null)
+                for (var index = 0; index < _context.Company.ToList().Count; index++)
+                {
+                    var company = _context.Company.ToList()[index];
+                    if (index == 0)
+                    {
+                        liCompanies.Add(new SelectListItem
+                            { Text = company.Address, Value = company.CompanyId, Selected = true });
+                    }
+                    else
+                    {
+                        liCompanies.Add(new SelectListItem
+                            { Text = company.Address, Value = company.CompanyId });
+                    }
+                   
+                }
+
+            liCompanies.RemoveAt(0);
+
+            ViewData["companies"] = liCompanies;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -136,6 +181,7 @@ namespace chickadee.Areas.Identity.Pages.Account
                     user.FirstName = Input.FirstName;
                     user.LastName = Input.LastName;
                     user.DateOfBirth = Input.DateOfBirth;
+                    user.UnitId = Input.UnitId;
                     
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -181,6 +227,7 @@ namespace chickadee.Areas.Identity.Pages.Account
                     user.FirstName = Input.FirstName;
                     user.LastName = Input.LastName;
                     user.DateOfBirth = Input.DateOfBirth;
+                    user.CompanyId = Input.CompanyId;
                     
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -220,7 +267,48 @@ namespace chickadee.Areas.Identity.Pages.Account
                     }
                 }
             }
+            
+            
+            
+            var message = string.Join(" | ", ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage));
+            Console.WriteLine(message);
 
+            
+            
+            
+            List<SelectListItem> li = new List<SelectListItem> { new() };
+            foreach (var property in _context.Property.Where(p=>p.Units.Any()))
+            {
+                li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
+            }
+            ViewData["properties"] = li;
+            li.RemoveAt(0);
+
+            
+            List<SelectListItem> liCompanies = new List<SelectListItem> { new() };
+            if (_context.Company != null)
+                for (var index = 0; index < _context.Company.ToList().Count; index++)
+                {
+                    var company = _context.Company.ToList()[index];
+                    if (index == 0)
+                    {
+                        liCompanies.Add(new SelectListItem
+                            { Text = company.Address, Value = company.CompanyId, Selected = true });
+                    }
+                    else
+                    {
+                        liCompanies.Add(new SelectListItem
+                            { Text = company.Address, Value = company.CompanyId });
+                    }
+                   
+                }
+
+            liCompanies.RemoveAt(0);
+
+            ViewData["companies"] = liCompanies;
+            
             // If we got this far, something failed, redisplay form
             return Page();
         }

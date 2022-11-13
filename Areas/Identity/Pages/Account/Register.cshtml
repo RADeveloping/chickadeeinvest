@@ -1,4 +1,5 @@
 @page
+@using chickadee.Enums
 @model RegisterModel
 @{
     ViewData["Title"] = "Sign up";
@@ -16,6 +17,14 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="container">
+            <div class="row g-1 mb-4">
+                <div class="col form-floating">
+                    <select asp-for="Input.Role" id="Input.Role" asp-items="Html.GetEnumSelectList<chickadee.Enums.PublicRoles>()" class="form-control" aria-required="true" onchange="@ViewBag.Role = this.value()">
+                    </select>
+                    <label asp-for="Input.Role"></label>
+                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                </div>
+            </div>
             <div class="row g-1 mb-3">
                 <div class="col form-floating">
                     <input asp-for="Input.FirstName" id="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder="First Name" />
@@ -28,8 +37,6 @@
                     <span asp-validation-for="Input.LastName" class="text-danger"></span>
                 </div>
             </div>
-
-
             <div class="row g-1 mb-3">
                 <div class="col form-floating">
                     <input asp-for="Input.Email" id="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Email Address" />
@@ -51,24 +58,38 @@
                 </div>
             </div>
             
-                        <div class="row g-1 mb-3">
-                            <div class="col form-floating">
-                <input asp-for="Input.DateOfBirth" id="Input.DateOfBirth" class="form-control"  aria-required="true" placeholder="Date of Birth" />
-                <label asp-for="Input.DateOfBirth" for="Input.DateOfBirth" class="form-label"></label>
-                <div class="mt-1"><span asp-validation-for="Input.DateOfBirth" class="text-danger mt-1"></span></div>
-            </div>
-            </div>
-            
-            
-            <div class="row g-1 mb-4">
+            <div class="row g-1 mb-3">
                 <div class="col form-floating">
-                    <select asp-for="Input.Role" id="Input.Role" asp-items="Html.GetEnumSelectList<chickadee.Enums.PublicRoles>()" class="form-control" aria-required="true">
-                        <option selected="selected" value="" for="Input.Role">Please select</option>
-                    </select>
-                    <label asp-for="Input.Role"></label>
-                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                    <input asp-for="Input.DateOfBirth" id="Input.DateOfBirth" class="form-control"  aria-required="true" placeholder="Date of Birth" />
+                    <label asp-for="Input.DateOfBirth" for="Input.DateOfBirth" class="form-label"></label>
+                    <div class="mt-1"><span asp-validation-for="Input.DateOfBirth" class="text-danger mt-1"></span></div>
                 </div>
             </div>
+            
+          
+            <div class="row g-1 mb-3" id="companiesDiv">
+                <div class="col form-floating">
+                    @Html.DropDownListFor(n => n.Input.CompanyId, @ViewBag.companies as List<SelectListItem>, new { @class = "form-control", @id = "Input.companies" })
+                    <label for="companies" class="form-label">Company</label>
+                    <div class="mt-1"><span asp-validation-for="Input.CompanyId" class="text-danger mt-1"></span></div>
+
+                </div>
+            </div>
+            
+            <div class="row g-1 mb-3" id="tenantDiv" disabled hidden>
+                <div class="col form-floating">
+                    @Html.DropDownList("properties", @ViewBag.properties as List<SelectListItem>, new { @class = "form-control"})
+                                    <label for="properties" class="form-label">Property</label>
+
+                    </div>
+                    <div class="col form-floating">
+                        <select asp-for="Input.UnitId" id="units" class="form-control">
+                            <option selected></option>
+                        </select>
+                        <label asp-for="Input.UnitId" for="Input.UnitId" class="form-label"></label>
+                        <div class="mt-1"><span asp-validation-for="Input.UnitId" class="text-danger mt-1"></span></div>
+                    </div>
+                    </div>
             <div>
                 <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-green">Sign up</button>
             </div>
@@ -80,4 +101,77 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+}
+
+
+@{
+    <script>
+    var unitId = "";
+    var activities = document.getElementById("properties");
+    var propertiesDropDown = document.getElementById("properties"); 
+    var unitsDropDown = document.getElementById("units"); 
+   
+    // on load
+     var str = propertiesDropDown.options[propertiesDropDown.selectedIndex].value;
+            document.getElementById("units").length = 0;
+             getUnits(str)
+             
+    // on changed
+    activities.addEventListener("change", function() {
+    var str = propertiesDropDown.options[propertiesDropDown.selectedIndex].value;
+        document.getElementById("units").length = 0;
+         getUnits(str)
+    });
+    
+      function getUnits(str) {
+            if (str !== ""){
+            fetch(`/api/properties/${str}/units`)
+                    .then(response => response.json())
+                    .then(data => updateUnitsDropDown(data))
+                    .catch(error => console.error('Unable to get items.', error));     
+          }
+         }
+         
+    function updateUnitsDropDown(data){
+            data.forEach(d=> {
+            document.getElementById("units").add(new Option(d.unitNo, d.unitId))    
+            });
+    
+         }
+         
+  
+    </script>
+    
+    <script>
+    const roleSelect = document.getElementById("Input.Role");
+    const companySelector = document.getElementById("Input.Role");
+
+        roleSelect.addEventListener("change", function() {
+        var roleString = document.getElementById("Input.Role").options[document.getElementById("Input.Role").selectedIndex].text
+        
+        if (roleString === "Property Manager"){
+            
+            document.getElementById("companiesDiv").hidden = false;
+            document.getElementById("companiesDiv").disabled = false;
+
+           document.getElementById("tenantDiv").hidden = true;
+            document.getElementById("tenantDiv").disabled = true;
+
+            
+        }else{
+        
+           document.getElementById("companiesDiv").hidden = true;
+             document.getElementById("companiesDiv").disabled = true;
+             
+           document.getElementById("tenantDiv").hidden = false;
+            document.getElementById("tenantDiv").disabled = false;
+
+           
+                   
+        }
+        });
+        
+    
+    </script>
+    
 }
