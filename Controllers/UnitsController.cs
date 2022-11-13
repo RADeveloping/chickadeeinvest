@@ -152,8 +152,14 @@ namespace chickadee.Controllers
         {
 
             var requestingUser = await _userManager.GetUserAsync(User);
+            
+            if (_context.Unit == null  || _context.Property == null)
+            {
+                return NotFound();
+            }
 
-            if (requestingUser == null && _context.Unit != null  || _context.Property != null)
+            
+            if (requestingUser == null)
             {
                 // used for registration.
                 var unitsAnonymous = _context.Unit
@@ -170,11 +176,6 @@ namespace chickadee.Controllers
                 
             }
             
-            
-            if (_context.Unit == null  || _context.Property == null)
-            {
-                return NotFound();
-            }
           
             var property = await _context.Property.FindAsync(propertyId);
             if (property == null)
@@ -183,6 +184,18 @@ namespace chickadee.Controllers
             }
 
             var units = _context.Unit
+                .Where(u => u.PropertyId == propertyId && (requestingUser.UnitId == u.UnitId || u.PropertyManagerId == requestingUser.Id))
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                    propertyId = unit.PropertyId,
+                    propertyManagerId = unit.PropertyManagerId,
+                });
+            
+            
+            var unitsSA = _context.Unit
                 .Where(u => u.PropertyId == propertyId)
                 .Select(unit => new
                 {
@@ -193,42 +206,50 @@ namespace chickadee.Controllers
                     propertyManagerId = unit.PropertyManagerId,
                 });
 
+
             switch (sort)
             {
                 case "asc" when param == "id":
                     units = units.OrderBy(s => s.unitId);
+                    unitsSA = unitsSA.OrderBy(s => s.unitId);
+
                     break;
                 case "desc" when param == "id":
                     units = units.OrderByDescending(s => s.unitId);
+                    unitsSA = unitsSA.OrderByDescending(s => s.unitId);
+
                     break;
                 
                 case "asc" when param == "number":
                     units = units.OrderBy(s => s.unitNo);
+                    unitsSA = unitsSA.OrderBy(s => s.unitNo);
+
                     break;
                 case "desc" when param == "number":
                     units = units.OrderByDescending(s => s.unitNo);
+                    unitsSA = unitsSA.OrderByDescending(s => s.unitNo);
+
                     break;
                
                 case "asc" when param == "type":
                     units = units.OrderBy(s => s.unitType);
+                    unitsSA = unitsSA.OrderBy(s => s.unitType);
+
                     break;
                 case "desc" when param == "type":
                     units = units.OrderByDescending(s => s.unitType);
+                    unitsSA = unitsSA.OrderByDescending(s => s.unitType);
+
                     break;
                 
                 default:
                     units = units.OrderBy(s => s.unitNo);
+                    unitsSA = unitsSA.OrderBy(s => s.unitNo);
                     break;
             }
-            
-            
-            if (User.IsInRole("SuperAdmin") || units.Any(p => p.propertyManagerId == requestingUser.Id || p.unitId == requestingUser.UnitId))
-            {
-                return Ok(units.ToList());
-            }
 
 
-            return NotFound();
+            return Ok(User.IsInRole("SuperAdmin") ? unitsSA.ToList() : units.ToList());
             
         }
 
