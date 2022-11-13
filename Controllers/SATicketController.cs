@@ -52,6 +52,14 @@ namespace chickadee.Controllers
         // GET: SATicketManager/Create
         public IActionResult Create()
         {
+            List<SelectListItem> li = new List<SelectListItem> { new() { Text = "", Value = "" } };
+            if (_context.Property != null)
+                foreach (var property in _context.Property.Where(p => p.Units != null && p.Units.Any()))
+                {
+                    li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
+                }
+
+            ViewData["properties"] = li;
             ViewData["CreatedById"] = new SelectList(_context.User, "Id", "FirstName");
             ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitNo");
             return View();
@@ -70,8 +78,19 @@ namespace chickadee.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
             ViewData["CreatedById"] = new SelectList(_context.User, "Id", "FirstName", ticket.CreatedById);
             ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitId", ticket.UnitId);
+            
+            if (_context.Property == null) return View(ticket);
+            List<SelectListItem> li = new List<SelectListItem> { new() { Text = "", Value = "" } };
+            foreach (var property in _context.Property.Where(p=>p.Units.Any()))
+            {
+                li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
+            }
+            ViewData["properties"] = li;
+
+            
             return View(ticket);
         }
 
@@ -88,6 +107,14 @@ namespace chickadee.Controllers
             {
                 return NotFound();
             }
+            List<SelectListItem> li = new List<SelectListItem> { new() { Text = "", Value = "" } };
+            if (_context.Property != null)
+                foreach (var property in _context.Property.Where(p => p.Units != null && p.Units.Any()))
+                {
+                    li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
+                }
+
+            ViewData["properties"] = li;
             ViewData["CreatedById"] = new SelectList(_context.User, "Id", "FirstName", ticket.CreatedById);
             ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitNo", ticket.UnitId);
             return View(ticket);
@@ -125,6 +152,14 @@ namespace chickadee.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            List<SelectListItem> li = new List<SelectListItem> { new() { Text = "", Value = "" } };
+            if (_context.Property != null)
+                foreach (var property in _context.Property.Where(p => p.Units != null && p.Units.Any()))
+                {
+                    li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
+                }
+
+            ViewData["properties"] = li;
             ViewData["CreatedById"] = new SelectList(_context.User, "Id", "Id", ticket.CreatedById);
             ViewData["UnitId"] = new SelectList(_context.Unit, "UnitId", "UnitId", ticket.UnitId);
             return View(ticket);
