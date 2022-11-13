@@ -43,6 +43,7 @@ namespace chickadee.Controllers
             var ticket = await _context.Tickets
                 .Include(t => t.CreatedBy)
                 .Include(t => t.Unit)
+                .ThenInclude(t=>t.Property)
                 .FirstOrDefaultAsync(m => m.TicketId == id);
             if (ticket == null)
             {
