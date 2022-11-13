@@ -15,7 +15,7 @@ export default function Widget({ title, uri, total, items, icon, loading, addCom
     const handleClose = () => 
         setOpen(false)
   return (
-      <>  {(open, handleClose)=>addComponent(open, handleClose)}
+      <>  {addComponent && addComponent(open, handleClose)}
       <Grow in={!loading}>
     <Card
       sx={{
