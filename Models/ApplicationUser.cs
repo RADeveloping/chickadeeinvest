@@ -32,6 +32,10 @@ namespace chickadee.Models {
         [Display(Name = "Unit ID")]
         public string? UnitId { get; set;}
         [ForeignKey("UnitId")]
+        
+        [NotMapped]
+        public string FullName => this.FirstName + " " + this.LastName;
+
 
         public ICollection<Message>? Messages { get; set; } = new List<Message>();
         

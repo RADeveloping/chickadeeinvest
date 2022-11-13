@@ -108,12 +108,6 @@
        
       document.getElementById("units").addEventListener("change", function() {
         unitId = unitsDropDown.options[unitsDropDown.selectedIndex].value;
-        console.log(unitId)
-        if (unitId === "" && document.getElementById("IdPhoto").src === "" || document.getElementById("leasePhoto").src === ""){
-          document.getElementById("update-profile-button").classList.add("disabled")
-        } else{
-          document.getElementById("update-profile-button").classList.remove("disabled")       
-        }
         });
 
 

@@ -52,7 +52,7 @@ namespace chickadee.Controllers
         public IActionResult Create()
         {
             ViewData["PropertyId"] = new SelectList(_context.Property, "PropertyId", "Name");
-            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "FirstName");
+            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "FullName");
             return View();
         }
 
@@ -70,7 +70,7 @@ namespace chickadee.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PropertyId"] = new SelectList(_context.Property, "PropertyId", "Name", unit.PropertyId);
-            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "FirstName", unit.PropertyManagerId);
+            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "FullName", unit.PropertyManagerId);
 
             return View(unit);
         }
@@ -90,7 +90,7 @@ namespace chickadee.Controllers
             }
             
             ViewData["PropertyId"] = new SelectList(_context.Property, "PropertyId", "Name", unit.PropertyId);
-            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "FirstName", unit.PropertyManagerId);
+            ViewData["PropertyManagerId"] = new SelectList(_context.PropertyManagers, "Id", "FullName", unit.PropertyManagerId);
             return View(unit);
         }
 
