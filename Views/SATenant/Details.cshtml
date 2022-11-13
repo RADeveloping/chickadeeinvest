@@ -123,6 +123,20 @@
            @* <dd class="col-sm-10"> *@
            @*     @Html.DisplayFor(model => model.AccessFailedCount) *@
            @* </dd> *@
+           
+           <dt class="col-sm-3">
+                          @Html.DisplayNameFor(model => model.IsIdVerified)
+                      </dt>
+                      <dd class="col-sm-9">
+                          @Html.DisplayFor(model => model.IsIdVerified)
+           </dd>
+           
+           <dt class="col-sm-3">
+             Property
+              </dt>
+               <dd class="col-sm-9">
+                                     @Html.DisplayFor(model => model.Unit.Property.Name)
+                                 </dd>
               <dt class="col-sm-3">
                           Unit Number
                       </dt>

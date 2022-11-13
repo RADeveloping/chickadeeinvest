@@ -47,6 +47,7 @@ namespace chickadee.Models
        [ForeignKey("UnitId")]
        public Unit? Unit { get; set; }
        
+       [Display(Name = "Created By")]
        public string CreatedById { get; set; } // OWNER OF TICKET. Anyone can create ticket
        [ForeignKey("CreatedById")]
        public ApplicationUser? CreatedBy { get; set; }
