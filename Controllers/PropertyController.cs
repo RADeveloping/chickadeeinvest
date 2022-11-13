@@ -48,7 +48,10 @@ namespace chickadee.Controllers
                     Address = x.Address,
                 })
                 .ToList();
-
+            if (requestingUser == null)
+                return Ok(anonymous);
+            
+            
             var properties = _context.Property
                 .Include(x => x.Units)
                 .Where(p => p.Units != null && p.Units.Any(u =>
@@ -168,8 +171,7 @@ namespace chickadee.Controllers
                         s.Name.Contains(query, StringComparison.InvariantCultureIgnoreCase)));
             }
 
-            if (requestingUser == null || User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin"))
-                return Ok(anonymous);
+         
 
 
             return Ok(User.IsInRole("SuperAdmin") ? propertiesSa : properties);
