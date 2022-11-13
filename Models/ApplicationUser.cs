@@ -21,8 +21,7 @@ namespace chickadee.Models {
         
         public int UsernameChangeLimit { get; set; } = 10;
 
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:d}")]
+        [DataType(DataType.Date)]
         [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
 

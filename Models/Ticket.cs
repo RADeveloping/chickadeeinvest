@@ -24,7 +24,7 @@ namespace chickadee.Models
        [Required] 
        [Display(Name = "Created On")] 
        [DataType(DataType.DateTime)]
-       public DateTime CreatedOn { get; set; }
+       public DateTime CreatedOn { get; set; } = DateTime.Now;
        
        [Display(Name = "Estimated Completion Date")] 
        [DataType(DataType.DateTime)]

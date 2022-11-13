@@ -12,7 +12,7 @@ namespace chickadee.Models {
         [Required]
         [Display(Name = "Upload Date")]
         [DataType(DataType.DateTime)]
-        public DateTime UploadDate { get; set; }
+        public DateTime UploadDate { get; set; } = DateTime.Now;
         
         public string UnitId { get; set; }
         [ForeignKey("UnitId")]

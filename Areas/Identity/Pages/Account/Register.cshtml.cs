@@ -109,6 +109,11 @@ namespace chickadee.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Role")]
             public Enums.Roles Role { get; set; }
+            
+            [DataType(DataType.Date)]
+            [Display(Name = "Date Of Birth")]
+            public DateTime DateOfBirth { get; set; }
+
         }
 
 
