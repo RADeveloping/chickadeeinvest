@@ -16,6 +16,7 @@ import {
 } from "../utils/filters";
 import Widget from "../sections/@dashboard/app/Widget";
 import UserWidget from "../sections/@dashboard/app/UserWidget";
+import AddTicket from "../components/AddTicket";
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
@@ -52,7 +53,7 @@ export default function DashboardApp() {
         {
             item:
                 <Widget title="Open Tickets" uri={getTicketsUri} total={openTickets.length} items={openTickets}
-                        icon={'ant-design:folder-open-outlined'} loading={ticketsLoading}/>
+                        icon={'ant-design:folder-open-outlined'} addComponent={(open, handleClose)=><AddTicket open={open} handleClose={handleClose}/>} loading={ticketsLoading}/>
             ,
             for: [
                 "Tenant",

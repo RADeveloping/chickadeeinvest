@@ -47,4 +47,44 @@ const useFetch = (url, filter, reset) => {
     return [data, error, loading];
 };
 
+/**
+ * Global fetch for put and post and returns common hooks for fetching.
+ * @param url {string} URL to fetch.
+ * @param [post = false] {Object} Object to be posted.
+ * @param [patch = false] {Object} Object to be patched.
+ * @returns {[*[],string,boolean]}
+ */
+export const usePost = (url, post, patch) => {
+    const [resp, setResp] = useState([]);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+        if (url && (post || patch)) {
+            console.log(url)
+            fetch(url, {
+                method: post ? 'POST' : patch ? 'PATCH' : undefined,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: post ? JSON.stringify(post) : patch ? JSON.stringify(patch) : undefined
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    setResp(data);
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setError(err);
+                    setLoading(false);
+                });
+        } else {
+            setLoading(false);
+        }
+    }, [url, post, patch]);
+
+    return [resp, error, loading];
+}
+
 export default useFetch;

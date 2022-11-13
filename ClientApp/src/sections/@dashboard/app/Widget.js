@@ -9,9 +9,13 @@ import {
 // components
 import Iconify from '../../../components/Iconify';
 import ListItems from '../../../components/ListItems';
-export default function Widget({ title, uri, total, items, icon, loading}) {
-    
+import {useState} from "react";
+export default function Widget({ title, uri, total, items, icon, loading, addComponent }) {
+    const [open, setOpen] = useState(false);
+    const handleClose = () => 
+        setOpen(false)
   return (
+      <>  {(open, handleClose)=>addComponent(open, handleClose)}
       <Grow in={!loading}>
     <Card
       sx={{
@@ -52,7 +56,7 @@ export default function Widget({ title, uri, total, items, icon, loading}) {
               </Grid>
           </Grid>
           <Grid  marginRight={2.25} item>
-              <IconButton>
+              <IconButton onClick={addComponent ? ()=>setOpen(true) : undefined}>
               <Iconify icon={'dashicons:plus-alt2'} sx={{color:(theme) => theme.palette['primary'].lighter}}/>
               </IconButton>
           </Grid>
@@ -61,5 +65,6 @@ export default function Widget({ title, uri, total, items, icon, loading}) {
         <ListItems uri={uri} items={items}/>
     </Card>
       </Grow>
+      </>
   );
 }
