@@ -17,6 +17,7 @@ import {
 import Iconify from "./Iconify";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import {abortFetch} from "./FetchData";
 
 export default function SimpleList({
                                        items,
@@ -129,6 +130,7 @@ export default function SimpleList({
                     <>
                         <Divider key={`${item.id}-${title}-dvd1`} component="li"/>
                         <ListItemButton key={`${item.id}-${title}-btn`} onClick={() => {
+                            abortFetch();
                             if (immediateClick || (selectedId && selectedId === item.id)) {
                                 if (uri) {
                                     navigate(`/dashboard/${uri(item)}`);

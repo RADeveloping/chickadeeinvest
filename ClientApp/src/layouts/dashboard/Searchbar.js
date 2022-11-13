@@ -5,6 +5,7 @@ import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } f
 // component
 import Iconify from '../../components/Iconify';
 import {useNavigate, useSearchParams} from "react-router-dom";
+import {abortFetch} from "../../components/FetchData";
 
 // ----------------------------------------------------------------------
 
@@ -50,6 +51,7 @@ export default function Searchbar() {
   
   const handleSearch = () => {
     if (query) {
+      abortFetch();
       navigate('/dashboard/search?query=' + query);
     }
   }
