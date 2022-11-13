@@ -37,6 +37,7 @@ namespace chickadee.Models
 
        public TicketSeverity Severity { get; set; }
        
+       [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "N/A")]
        [Display(Name = "Closed Date")] 
        [DataType(DataType.Date)]
        public DateTime? ClosedDate { get; set; }

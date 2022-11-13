@@ -30,13 +30,13 @@
         <th data-sortable="true" data-field="Description">
             @Html.DisplayNameFor(model => model.Description)
         </th>
-        <th data-sortable="true" data-field="CreatedBy">
+        <th data-sortable="true" data-field="CreatedBy" data-visible="false">
             @Html.DisplayNameFor(model => model.CreatedBy)
         </th>
-        <th data-sortable="true"  data-field="CreatedOn">
+        <th data-sortable="true"  data-field="CreatedOn" data-visible="false">
             @Html.DisplayNameFor(model => model.CreatedOn)
         </th>
-        <th data-sortable="true" data-field="EstimatedDate">
+        <th data-sortable="true" data-field="EstimatedDate" data-visible="false">
             @Html.DisplayNameFor(model => model.EstimatedDate)
         </th>
         <th data-sortable="true" data-field="Status">
@@ -46,12 +46,12 @@
             @Html.DisplayNameFor(model => model.Severity)
         </th>
         <th data-sortable="true" data-field="Property">
-            @Html.DisplayNameFor(model => model.Unit.Property.Name)
+            Property
         </th>
         <th data-sortable="true" data-field="Unit">
             @Html.DisplayNameFor(model => model.Unit)
         </th>
-        <th data-sortable="true" data-field="ClosedDate">
+        <th data-sortable="true" data-field="ClosedDate" data-visible="false">
             @Html.DisplayNameFor(model => model.ClosedDate)
         </th>
       

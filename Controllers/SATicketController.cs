@@ -25,7 +25,10 @@ namespace chickadee.Controllers
         // GET: SATicketManager
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Tickets.Include(t => t.CreatedBy).Include(t => t.Unit);
+            var applicationDbContext = _context.Tickets.Include(t => t.CreatedBy)
+                .Include(t => t.Unit)
+                .ThenInclude(u => u.Property);
+            
             return View(await applicationDbContext.ToListAsync());
         }
 
