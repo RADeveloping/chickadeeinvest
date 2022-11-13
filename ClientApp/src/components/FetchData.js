@@ -1,5 +1,19 @@
 import {useState, useEffect} from 'react';
-
+let controller = new AbortController();
+/**
+ * Aborts all fetches using useFetch.
+ */
+export const abortFetch = () => {
+    controller.abort();
+    controller = new AbortController();
+}
+/**
+ * Global fetch that returns common hooks for fetching.
+ * @param url {string} URL to fetch.
+ * @param [filter = false] {(a:[])=>void} Method to filter data before return.
+ * @param [reset = false] {boolean} Resets loading on new fetch.
+ * @returns {[*[],string,boolean]}
+ */
 const useFetch = (url, filter, reset) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
@@ -9,7 +23,7 @@ const useFetch = (url, filter, reset) => {
         if (url) {
             if (reset) setLoading(true)
             console.log(url)
-            fetch(url)
+            fetch(url, {signal: controller.signal})
                 .then((res) => res.json())
                 .then((data) => {
                     if (!data) data = []
@@ -19,7 +33,7 @@ const useFetch = (url, filter, reset) => {
                     setLoading(false);
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.log(err);
                     setError(err);
                     setData([])
                     setLoading(false);
