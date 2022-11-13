@@ -89,30 +89,34 @@
     var unitsDropDown = document.getElementById("units"); 
    
 
-    activities.addEventListener("change", function() {
-    var str = propertiesDropDown.options[propertiesDropDown.selectedIndex].value;
-        document.getElementById("units").length = 0;
-
-    function getUnits() {
-        if (str !== ""){
-            console.log(str)
-        fetch(`/api/properties/${str}/units`)
-                .then(response => response.json())
-                .then(data => updateUnitsDropDown(data))
-                .catch(error => console.error('Unable to get items.', error));     
-      }
-     }
-         getUnits()
-
-     function updateUnitsDropDown(data){
-        document.getElementById("units").add(new Option("", ""))   
-        data.forEach(d=> {
-        document.getElementById("units").add(new Option(d.unitNo, d.unitId))    
-        });
-
-     }
-        });
-
+   // on load
+        var str = propertiesDropDown.options[propertiesDropDown.selectedIndex].value;
+               document.getElementById("units").length = 0;
+                getUnits(str)
+                
+       // on changed
+       activities.addEventListener("change", function() {
+       var str = propertiesDropDown.options[propertiesDropDown.selectedIndex].value;
+           document.getElementById("units").length = 0;
+            getUnits(str)
+       });
+       
+         function getUnits(str) {
+               if (str !== ""){
+               fetch(`/api/properties/${str}/units`)
+                       .then(response => response.json())
+                       .then(data => updateUnitsDropDown(data))
+                       .catch(error => console.error('Unable to get items.', error));     
+             }
+            }
+            
+       function updateUnitsDropDown(data){
+               data.forEach(d=> {
+               document.getElementById("units").add(new Option(d.unitNo, d.unitId))    
+               });
+       
+            }
+            
 
     document.getElementById("units").addEventListener("change", function() {
         unitId = unitsDropDown.options[unitsDropDown.selectedIndex].value;
