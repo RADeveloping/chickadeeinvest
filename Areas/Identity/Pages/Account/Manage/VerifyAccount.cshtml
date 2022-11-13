@@ -68,20 +68,6 @@
     <hr/>
     <form id="profile-form" method="post" enctype="multipart/form-data">
         <div class="col">
-            <div class="row">
-                <div class="col my-3">
-                    <h3 class="subheadingFont">Property</h3>
-                    <p>Please select your address</p>
-                    @Html.DropDownList("properties", @ViewBag.properties as List<SelectListItem>, new { @class="form-control" })
-                </div>
-                <div class="col my-3">
-                    <h3 class="subheadingFont">Unit</h3>
-                    <p>Please select your unit</p>
-                   <select asp-for="@Model.UnitId" id="units" class="form-control">
-                       <option selected></option>
-                   </select>
-                </div>
-            </div>
             <div class="col-auto my-5">
                 <h3 class="subheadingFont">Photo ID</h3>
                 <p>Please upload a copy of your legal ID for verification</p>
@@ -152,47 +138,11 @@
 
 @{
     <script>
-    var unitId = "";
-    document.getElementById("update-profile-button").classList.add("disabled")
-
-    var activities = document.getElementById("properties");
-    var propertiesDropDown = document.getElementById("properties"); 
-    var unitsDropDown = document.getElementById("units"); 
-   
-    activities.addEventListener("change", function() {
-    var str = propertiesDropDown.options[propertiesDropDown.selectedIndex].value;
-        document.getElementById("units").length = 0;
-        
-    function getUnits() {
-        if (str !== ""){
-        fetch(`/api/properties/${str}/units`)
-                .then(response => response.json())
-                .then(data => updateUnitsDropDown(data))
-                .catch(error => console.error('Unable to get items.', error));     
-      }
-     }
-         getUnits()
-     function updateUnitsDropDown(data){
-        document.getElementById("units").add(new Option("", ""))   
-        data.forEach(d=> {
-        document.getElementById("units").add(new Option(d.unitNo, d.unitId))    
-        });
-
-     }
-        });
-    
-       
-      document.getElementById("units").addEventListener("change", function() {
-        unitId = unitsDropDown.options[unitsDropDown.selectedIndex].value;
-        console.log(unitId)
-        if (unitId === "" && document.getElementById("IdPhoto").src === "" || document.getElementById("leasePhoto").src === ""){
+        if (document.getElementById("IdPhoto").src === "" || document.getElementById("leasePhoto").src === ""){
           document.getElementById("update-profile-button").classList.add("disabled")
         } else{
           document.getElementById("update-profile-button").classList.remove("disabled")       
         }
-        });
-
-
     </script>
     
     
