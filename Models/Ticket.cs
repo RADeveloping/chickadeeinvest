@@ -23,11 +23,11 @@ namespace chickadee.Models
        
        [Required] 
        [Display(Name = "Created On")] 
-       [DataType(DataType.DateTime)]
+       [DataType(DataType.Date)]
        public DateTime CreatedOn { get; set; } = DateTime.Now;
        
-       [Display(Name = "Estimated Completion Date")] 
-       [DataType(DataType.DateTime)]
+       [Display(Name = "Est. Completion")] 
+       [DataType(DataType.Date)]
        public DateTime? EstimatedDate { get; set; }
  
        [Display(Name = "Status")] 
@@ -38,7 +38,7 @@ namespace chickadee.Models
        public TicketSeverity Severity { get; set; }
        
        [Display(Name = "Closed Date")] 
-       [DataType(DataType.DateTime)]
+       [DataType(DataType.Date)]
        public DateTime? ClosedDate { get; set; }
 
        

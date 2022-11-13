@@ -45,7 +45,9 @@
         <th data-sortable="true" data-field="Severity">
             @Html.DisplayNameFor(model => model.Severity)
         </th>
-     
+        <th data-sortable="true" data-field="Property">
+            @Html.DisplayNameFor(model => model.Unit.Property.Name)
+        </th>
         <th data-sortable="true" data-field="Unit">
             @Html.DisplayNameFor(model => model.Unit)
         </th>
@@ -68,12 +70,13 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy.FirstName)
+                @Html.DisplayFor(modelItem => item.CreatedBy.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedOn)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EstimatedDate)
+                @Html.DisplayFor(modelItem => @item.EstimatedDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
@@ -82,6 +85,9 @@
                 @Html.DisplayFor(modelItem => item.Severity)
             </td>
          
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit.Property.Name)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Unit.UnitNo)
             </td>
