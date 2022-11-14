@@ -75,7 +75,7 @@ export default function SimpleList({
                 <List subheader={
                     <ListSubheader component="div" id="nested-list-subheader">
                         <Stack direction={'column'}>
-                            <Collapse orientation="vertical" in={!isDesktop && setNestedSelect}>
+                            <Collapse orientation="vertical" in={!isDesktop && setNestedSelect != null}>
                                 <Box>
                                     <IconButton onClick={() => {
                                         setNestedSelect(null)
