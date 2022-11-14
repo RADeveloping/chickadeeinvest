@@ -144,6 +144,7 @@ export default function SimpleList({
                           minWidth: isDesktop && skinny ? 200 : 360,
                           bgcolor: 'background.paper',
                           overflowY: 'auto',
+                          overflowX: 'clip',
                           height: '100%'
                       }}>
 
