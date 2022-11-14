@@ -82,6 +82,10 @@ export default function ColumnOverview() {
             searchParams.set('unit', selectedUnitId)
             if (!firstLoad) setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
+        } else if(!selectedUnitId && selectedPropertyId) {
+            let selectedProperty = getItem(properties, selectedPropertyId)
+            if (!selectedProperty) return
+            setPath(`${selectedProperty.dir}`)
         }
         setSelectedTicketId(null);
     }, [selectedUnitId, loadingUnits])
