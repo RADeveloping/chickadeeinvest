@@ -17,6 +17,8 @@ import {
 } from "../utils/filters";
 import {useSearchParams} from "react-router-dom";
 import useFilter from "./FilterOrder";
+import AddTicket from "./AddTicket";
+
 export default function ColumnOverview() {
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -37,10 +39,10 @@ export default function ColumnOverview() {
         ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(ticketProperties);
 
     const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties);
-    const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ? 
+    const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ?
         `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit);
-    const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ? 
-        `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString()  : null, filterTicket);
+    const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ?
+        `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket);
 
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
     const [path, setPath] = useState('');
@@ -108,7 +110,13 @@ export default function ColumnOverview() {
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
                     isDesktop={isDesktop} properties={ticketProperties}
                     loading={loadingTickets} uri={getTicketsUri}
-                    setOrderBy={ticketSetOrderBy} order={ticketOrder} setOrder={ticketSetOrder}/>
+                    setOrderBy={ticketSetOrderBy} order={ticketOrder} setOrder={ticketSetOrder}
+                    addComponent={selectedUnitId && selectedPropertyId ?
+                        (open, handleClose) => <AddTicket unitId={selectedUnitId} propertyId={selectedPropertyId}
+                                                          open={open} handleClose={handleClose}/> 
+                        : undefined
+                    }
+        />
     ]
 
     function getActiveList() {

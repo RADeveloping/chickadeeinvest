@@ -34,12 +34,6 @@ export default function Tickets() {
                     <Typography variant="h4" gutterBottom>
                         {title}
                     </Typography>
-                    <Button
-                        variant="contained"
-                        endIcon={<Iconify icon="ant-design:plus-outlined"/>}
-                    >
-                        New Ticket
-                    </Button>
                     <ToggleButtonGroup
                         color="primary"
                         value={viewMode}
