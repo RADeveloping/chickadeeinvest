@@ -51,15 +51,38 @@ export default function AddTicket({propertyId, unitId, open, handleClose}) {
             <DialogTitle>Add Ticket</DialogTitle>
             <DialogContent>
                 <Stack direction={'column'}>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Problem"
-                        fullWidth
-                        value={problem}
-                        variant="standard"
-                        onChange={(e) => setProblem(e.target.value)}
-                    />
+                    <Stack direction={'row'} alignItems={'center'}>
+                        <TextField
+                            fullWidth
+                            autoFocus
+                            margin="dense"
+                            label="Problem"
+                            value={problem}
+                            variant="standard"
+                            onChange={(e) => setProblem(e.target.value)}
+                        />
+                        <FormControl sx={{minWidth: 90}} margin="dense" variant="standard">
+                            <InputLabel id="severity">Severity</InputLabel>
+                            <Select
+                                value={severity}
+                                labelId="severity"
+                                label="Severity"
+                                onChange={handleSeverityChange}
+                            >
+                                {Object.keys(SEVERITY).map((key) =>
+                                    <MenuItem key={key} value={key}>
+                                        <Label
+                                            variant="ghost"
+                                            color={SEVERITY[key].color}
+                                        >
+                                            {SEVERITY[key].text}
+                                        </Label>
+                                    </MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Stack>
+                 
                     <TextField
                         multiline
                         margin="dense"
@@ -69,27 +92,7 @@ export default function AddTicket({propertyId, unitId, open, handleClose}) {
                         variant="standard"
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <br/>
-                    <FormControl>
-                        <InputLabel id="severity">Severity</InputLabel>
-                        <Select
-                            value={severity}
-                            labelId="severity"
-                            label="Severity"
-                            onChange={handleSeverityChange}
-                        >
-                            {Object.keys(SEVERITY).map((key) =>
-                                <MenuItem key={key} value={key}>
-                                    <Label
-                                        variant="ghost"
-                                        color={SEVERITY[key].color}
-                                    >
-                                        {SEVERITY[key].text}
-                                    </Label>
-                                </MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
+                    
                 </Stack>
             </DialogContent>
             <DialogActions>
