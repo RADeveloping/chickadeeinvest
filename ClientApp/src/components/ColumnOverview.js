@@ -1,12 +1,10 @@
 ﻿import * as React from 'react';
 import {useEffect, useState} from 'react';
 import useFetch from "../components/FetchData";
-import {Box, Chip, Container, Grid, Grow, Stack, Typography} from "@mui/material";
-import Page from "../components/Page";
+import {Box, Grow, Stack} from "@mui/material";
 import SimpleList from "../components/SimpleList";
 import PageLoading from "../components/PageLoading";
 import useResponsive from "../hooks/useResponsive";
-import Label from "../components/Label";
 import {
     filterProperties,
     filterTicket,

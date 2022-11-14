@@ -1,7 +1,5 @@
 ﻿import {Grid, Grow} from "@mui/material";
 import SortControl from "./SortControl";
-import {propertyProperties} from "../utils/filters";
-import Property from "./Property";
 import * as React from "react";
 
 export default function SearchRowResult({

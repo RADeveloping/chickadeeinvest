@@ -1,14 +1,11 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import useFetch from "../components/FetchData";
-import {Box, Chip, Container, Grid, Grow, Stack, Typography} from "@mui/material";
-import Page from "../components/Page";
+import {Box, Grow} from "@mui/material";
 import SimpleList from "../components/SimpleList";
 import PageLoading from "../components/PageLoading";
 import useResponsive from "../hooks/useResponsive";
-import Label from "../components/Label";
 import {filterProperties, filterTicket, filterUnit} from "../utils/filters";
-import {useSearchParams} from "react-router-dom";
 
 const propertyProperties = [
     {id: 'propertyId', label: 'Property Id'},
