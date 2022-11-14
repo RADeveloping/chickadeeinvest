@@ -41,7 +41,8 @@ export default function Searchbar() {
   const [query, setQuery] = useState('');
 
   const handleOpen = () => {
-    setQuery(searchParams.get('query'));
+    let query = searchParams.get('query');
+    if (query) setQuery(query);
     setOpen((prev) => !prev);
   };
 
