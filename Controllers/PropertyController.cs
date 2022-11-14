@@ -144,6 +144,10 @@ namespace chickadee.Controllers
                     propertiesSa = propertiesSa.OrderByDescending(s => s.Name).ToList();
                     properties = properties.OrderByDescending(s => s.Name).ToList();
                     break;
+                default :
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.Address).ToList();
+                    properties = properties.OrderByDescending(s => s.Address).ToList();
+                    break;
             }
 
             if (query != null)
