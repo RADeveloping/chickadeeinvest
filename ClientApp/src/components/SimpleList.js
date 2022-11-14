@@ -36,9 +36,12 @@ export default function SimpleList({
                                        disableSort,
                                        uri,
                                        setOrderBy, order, setOrder,
-                                       immediateClick
+                                       immediateClick,
+                                       addComponent
                                    }) {
     const navigate = useNavigate();
+    const [openAdd, setOpenAdd] = useState(false);
+    const handleCloseAdd = () => setOpenAdd(false)
     const borderStyles = isDesktop ? {
         borderTopRightRadius: leftRound ? 0 : undefined, borderBottomRightRadius: leftRound ? 0 : undefined,
         borderTopLeftRadius: rightRound ? 0 : undefined, borderBottomLeftRadius: rightRound ? 0 : undefined,
@@ -67,110 +70,130 @@ export default function SimpleList({
     };
 
 
-    return (
-        <Card sx={{height: 450, width: skinny && isDesktop ? '60%' : '100%', ...borderStyles}}>
-
-            <List subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                    <Stack direction={'column'}>
-                        <Collapse orientation="vertical" in={!isDesktop && setNestedSelect}>
-                            <Box>
-                                <IconButton onClick={() => {
-                                    setNestedSelect(null)
-                                }}>
-                                    <Iconify icon="eva:arrow-back-outline"
-                                             sx={{color: 'text.disabled', width: 20, height: 20}}/>
-                                </IconButton>
-                                {path && `${path}`}
-                            </Box>
-                        </Collapse>
-                        <Stack direction={'row'} justifyContent={'space-between'}>
-                            {title}
-                            {!disableSort &&
-                                <>
-                                    <Grow in={items.length > 0}>
-                                        <div>
-                                            <IconButton onClick={handleClickListItem} size={'small'}>
-                                                <Iconify
-                                                    icon={order === 'desc' ? 'cil:sort-descending' : 'cil:sort-ascending'}
-                                                    sx={{color: (theme) => theme.palette['primary'].lighter}}/>
-                                            </IconButton>
-                                        </div>
-                                    </Grow>
-                                    <Menu
-                                        id="lock-menu"
-                                        anchorEl={anchorEl}
-                                        open={open}
-                                        onClose={handleClose}
-                                        MenuListProps={{
-                                            'aria-labelledby': 'lock-button',
-                                            role: 'listbox',
-                                        }}
-                                    >
-                                        {properties.map((option, index) => (
-                                            <MenuItem
-                                                key={option.id}
-                                                selected={index === selectedIndex}
-                                                onClick={(event) => handleMenuItemClick(event, index)}
+    return (<>{addComponent && addComponent(openAdd, handleCloseAdd)}
+            <Card sx={{height: '60vh', width: skinny && isDesktop ? '60%' : '100%', ...borderStyles}}>
+                <List subheader={
+                    <ListSubheader component="div" id="nested-list-subheader">
+                        <Stack direction={'column'}>
+                            <Collapse orientation="vertical" in={!isDesktop && setNestedSelect}>
+                                <Box>
+                                    <IconButton onClick={() => {
+                                        setNestedSelect(null)
+                                    }}>
+                                        <Iconify icon="eva:arrow-back-outline"
+                                                 sx={{color: 'text.disabled', width: 20, height: 20}}/>
+                                    </IconButton>
+                                    {path && `${path}`}
+                                </Box>
+                            </Collapse>
+                            <Stack direction={'row'} justifyContent={'space-between'}>
+                                {title}
+                                <Stack direction={'row'} gap={1}>
+                                    {!disableSort &&
+                                        <>
+                                            <Grow in={items.length > 0}>
+                                                <div>
+                                                    <IconButton onClick={handleClickListItem} size={'small'}>
+                                                        <Iconify
+                                                            icon={order === 'desc' ? 'cil:sort-descending' : 'cil:sort-ascending'}
+                                                            sx={{color: (theme) => theme.palette['primary'].lighter}}/>
+                                                    </IconButton>
+                                                </div>
+                                            </Grow>
+                                            <Menu
+                                                id="lock-menu"
+                                                anchorEl={anchorEl}
+                                                open={open}
+                                                onClose={handleClose}
+                                                MenuListProps={{
+                                                    'aria-labelledby': 'lock-button',
+                                                    role: 'listbox',
+                                                }}
                                             >
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Menu>
-                                </>
-                            }
+                                                {properties.map((option, index) => (
+                                                    <MenuItem
+                                                        key={option.id}
+                                                        selected={index === selectedIndex}
+                                                        onClick={(event) => handleMenuItemClick(event, index)}
+                                                    >
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </Menu>
+                                        </>
+                                    }
+                                    {addComponent &&
+                                        <Grow in={true}>
+                                            <div>
+                                                <IconButton onClick={() => setOpenAdd(true)} size={'small'}>
+                                                    <Iconify
+                                                        icon={'dashicons:plus-alt2'}
+                                                        sx={{color: (theme) => theme.palette['primary'].lighter}}/>
+                                                </IconButton>
+                                            </div>
+                                        </Grow>
+                                    }
+                                </Stack>
+                            </Stack>
+
                         </Stack>
-
-                    </Stack>
-                </ListSubheader>
-            }
-                  sx={{width: '100%', minWidth: isDesktop && skinny ? 200 : 360, bgcolor: 'background.paper'}}>
-
-                {items.length > 0 && items.map((item, index) =>
-                    <>
-                        <Divider key={`${item.id}-${title}-dvd1`} component="li"/>
-                        <ListItemButton key={`${item.id}-${title}-btn`} onClick={() => {
-                            abortFetch();
-                            if (immediateClick || (selectedId && selectedId === item.id)) {
-                                if (uri) {
-                                    navigate(`/dashboard/${uri(item)}`);
-                                }
-                            } else {
-                                setSelectedId(item.id)
-                            }
-
-                        }} alignItems="flex-start"
-                                        selected={selectedId && (item.id === selectedId)}>
-                            <ListItemText key={`${item.id}-${title}-txt`}
-                                          primary={item.primary}
-                                          secondary={
-                                              <>
-                                                  <Typography key={`${item.id}-${title}-typ`}
-                                                              sx={{display: 'inline'}}
-                                                              component="span"
-                                                              variant="body2"
-                                                              color="text.primary"
-                                                  >
-                                                      {item.secondary}
-                                                  </Typography>
-                                                  {item.tertiary}
-                                              </>
-                                          }
-                            />
-                        </ListItemButton>
-                        {index === items.length - 1 &&
-                            <Divider key={`${item.id}-${title}-dvd`} component="li"/>}
-                    </>)
+                    </ListSubheader>
                 }
-            </List>
-            {items.length === 0 &&
-                <Box sx={{
-                    height: '80%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'gainsboro'
-                }}>{`No ${title}`}</Box>}
-        </Card>
+                      sx={{
+                          width: '100%',
+                          minWidth: isDesktop && skinny ? 200 : 360,
+                          bgcolor: 'background.paper',
+                          overflowY: 'auto',
+                          overflowX: 'clip',
+                          height: '100%'
+                      }}>
+
+                    {items.length > 0 && items.map((item, index) =>
+                        <>
+                            <Divider key={`${item.id}-${title}-dvd1`} component="li"/>
+                            <ListItemButton key={`${item.id}-${title}-btn`} onClick={() => {
+                                abortFetch();
+                                if (immediateClick || (selectedId && selectedId === item.id)) {
+                                    if (uri) {
+                                        navigate(`/dashboard/${uri(item)}`);
+                                    }
+                                } else {
+                                    setSelectedId(item.id)
+                                }
+
+                            }} alignItems="flex-start"
+                                            selected={selectedId && (item.id === selectedId)}>
+                                <ListItemText key={`${item.id}-${title}-txt`}
+                                              primary={item.primary}
+                                              secondary={
+                                                  <>
+                                                      <Typography key={`${item.id}-${title}-typ`}
+                                                                  sx={{display: 'inline'}}
+                                                                  component="span"
+                                                                  variant="body2"
+                                                                  color="text.primary"
+                                                      >
+                                                          {item.secondary}
+                                                      </Typography>
+                                                      {item.tertiary}
+                                                  </>
+                                              }
+                                />
+                            </ListItemButton>
+                            {index === items.length - 1 &&
+                                <Divider key={`${item.id}-${title}-dvd`} component="li"/>}
+                        </>)
+                    }
+                    {items.length === 0 &&
+                        <Box sx={{
+                            height: '75%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'gainsboro'
+                        }}>{`No ${title}`}</Box>}
+                </List>
+            </Card>
+        </>
     );
 }

@@ -43,12 +43,12 @@ namespace chickadee.Models
        public DateTime? ClosedDate { get; set; }
 
        
-       public string UnitId { get; set; }
+       public string? UnitId { get; set; }
        [ForeignKey("UnitId")]
        public Unit? Unit { get; set; }
        
        [Display(Name = "Created By")]
-       public string CreatedById { get; set; } // OWNER OF TICKET. Anyone can create ticket
+       public string? CreatedById { get; set; } // OWNER OF TICKET. Anyone can create ticket
        [ForeignKey("CreatedById")]
        public ApplicationUser? CreatedBy { get; set; }
        

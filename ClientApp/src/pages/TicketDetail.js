@@ -1,5 +1,5 @@
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
-import {Button, Card, Container, Grid, Grow, Stack, Typography} from "@mui/material";
+import {Avatar, Button, Card, Container, Divider, Grid, Grow, Stack, Tooltip, Typography} from "@mui/material";
 import * as React from "react";
 import Page from "../components/Page";
 import Iconify from "../components/Iconify";
@@ -8,6 +8,7 @@ import useFetch from "../components/FetchData";
 import {SEVERITY, STATUS} from "../utils/filters";
 import Label from "../components/Label";
 import useResponsive from "../hooks/useResponsive";
+import {AvatarGroup} from "@mui/lab";
 
 export default function TicketDetail() {
     const title = "Ticket"
@@ -16,17 +17,14 @@ export default function TicketDetail() {
     const uid = searchParams.get('uid')
     const pid = searchParams.get('pid')
     const navigate = useNavigate();
-    const isDesktop = useResponsive('up', 'lg');
+    const isDesktop = useResponsive('up', 'sm');
 
     const [ticket, errorTicket, loadingTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`);
-    const [unit, errorUnit, loadingUnit] = useFetch(uid ? `/api/properties/${pid}/units/${uid}` : null);
-    const [property, errorProperty, loadingProperty] = useFetch(pid ? `/api/properties/${pid}` : null);
 
-    const {createdOn, description, estimatedDate, problem, severity, status, tenant} = ticket;
-    const {unitNo} = unit;
-    const {address} = property;
-    const loadingData = loadingTicket || loadingUnit || loadingProperty;
-    
+    const {createdOn, description, estimatedDate, problem, severity, status, tenant, unit} = ticket;
+
+    const loadingData = loadingTicket;
+    console.log(ticket)
     return (
         <Page title={`${title} #${id}`}>
             <Container>
@@ -55,9 +53,9 @@ export default function TicketDetail() {
                 <Grow in={!loadingData}>
                     <Card>
                         {ticket.length !== 0 &&
-                            <Grid container padding={3} spacing={3} direction={'column'}>
+                            <Grid container spacing={3} direction={'column'}>
                                 <Grid item>
-                                    <Stack direction={'column'} gap={1}>
+                                    <Stack direction={'column'} padding={3}  gap={1}>
                                         <Typography variant={'h4'}>
                                             {problem}
                                         </Typography>
@@ -81,21 +79,20 @@ export default function TicketDetail() {
                                                 <Label>
                                                     {new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
                                                 </Label>
-                                                <Label sx={{fontWeight: 'normal'}}>
-                                                    <div>
-                                                        Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
-                                                    </div>
-                                                </Label>
+                                                {estimatedDate &&
+                                                    <Label sx={{fontWeight: 'normal'}}>
+                                                        <div>
+                                                            Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                        </div>
+                                                    </Label>
+                                                }
                                             </Stack>
                                         </Stack>
                                     </Stack>
-
                                 </Grid>
-
+                                <Divider/>
                                 <Grid item>
-
-                                    <Grid container spacing={4} alignItems={'center'} justifyContent={'space-between'}>
-
+                                    <Grid container padding={4} paddingTop={0} spacing={isDesktop ? 5 : 4} alignItems={'center'} justifyContent={''}>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Description
@@ -109,25 +106,50 @@ export default function TicketDetail() {
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Address
                                             </Typography>
-                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                Unit #{unitNo}, {address}
+                                            {ticket.unit.property &&
+                                                <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
+                                                    Unit #{ticket.unit.unitNo}, {ticket.unit.property.address}
+                                                </Typography>
+                                            }
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
+                                                Property Name
                                             </Typography>
+                                            {ticket.unit.property &&
+                                                <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
+                                                    {ticket.unit.property.name}
+                                                </Typography>
+                                            }
                                         </Grid>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Property Manager
                                             </Typography>
-                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                {property.propertyManager && property.propertyManager.firstName} {property.propertyManager && property.propertyManager.lastName}
-                                            </Typography>
+                                            {ticket.unit.propertyManager &&
+                                                <Tooltip
+                                                    title={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
+                                                    arrow>
+                                                    <Avatar
+                                                        alt={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
+                                                        src={ticket.unit.propertyManager.profilePicture ? `data:image/jpeg;base64,${ticket.unit.propertyManager.profilePicture}` : 'd'}/>
+                                                </Tooltip>
+                                            }
                                         </Grid>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                                                Tenant
+                                                Tenants
                                             </Typography>
-                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                {tenant && tenant.firstName} {tenant && tenant.lastName}
-                                            </Typography>
+                                            {ticket.unit.tenants &&
+                                                <AvatarGroup max={4}>
+                                                    {ticket.unit.tenants.map((tenant) =>
+                                                        <Tooltip title={`${tenant.firstName} ${tenant.lastName}`} arrow>
+                                                            <Avatar alt={`${tenant.firstName} ${tenant.lastName}`}
+                                                                    src={`data:image/jpeg;base64,${tenant.profilePicture}`}/>
+                                                        </Tooltip>
+                                                    )}
+                                                </AvatarGroup>
+                                            }
                                         </Grid>
                                     </Grid>
                                 </Grid>

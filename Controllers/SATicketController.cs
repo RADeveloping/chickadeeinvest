@@ -115,11 +115,14 @@ namespace chickadee.Controllers
             }
             
             
-            List<SelectListItem> li = new List<SelectListItem> { new() { Text = ticket.Unit?.Property?.Name, Value = ticket.Unit?.PropertyId } };
+            List<SelectListItem> li = new List<SelectListItem> { new() { Text = ticket.Unit?.Property?.Address, Value = ticket.Unit?.PropertyId } };
             if (_context.Property != null)
                 foreach (var property in _context.Property.Where(p => p.Units != null && p.Units.Any()))
                 {
-                    li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
+                    if (property.PropertyId != ticket.Unit.PropertyId)
+                    {
+                        li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
+                    }
                 }
             
             ViewData["properties"] = li;

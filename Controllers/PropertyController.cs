@@ -56,7 +56,6 @@ namespace chickadee.Controllers
             
             
             var properties = _context.Property
-                .Include(x => x.Units)
                 .Where(p => p.Units != null && p.Units.Any(u =>
                         (u.PropertyManagerId == requestingUser.Id)
                     || u.UnitId == requestingUser.UnitId
@@ -66,12 +65,9 @@ namespace chickadee.Controllers
                     PropertyId = x.PropertyId,
                     Name = x.Name,
                     Address = x.Address,
-                    TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
+                    TenantsCount = _context.Tenant == null ? 0 : _context.Tenant.Count(t=>t.Unit != null && t.Unit.PropertyId == x.PropertyId),
                     UnitsCount = x.Units == null ? 0 : x.Units.Count,
-                    OutstandingTickets = x.Units == null
-                        ? 0
-                        : x.Units.Select(u => u.Tickets != null && u.Tickets.Any(t => t.Status == TicketStatus.Open))
-                            .Count(),
+                    OutstandingTickets = _context.Tickets == null ? 0 : _context.Tickets.Count(t=>t.Unit != null && t.Unit.PropertyId == x.PropertyId)
                 })
                 .ToList();
 
@@ -82,11 +78,10 @@ namespace chickadee.Controllers
                     PropertyId = x.PropertyId,
                     Name = x.Name,
                     Address = x.Address,
-                    TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
+                    TenantsCount = _context.Tenant == null ? 0 : _context.Tenant.Count(t=>t.Unit != null && t.Unit.PropertyId == x.PropertyId),
                     UnitsCount = x.Units == null ? 0 : x.Units.Count,
-                    OutstandingTickets = x.Units == null
-                        ? 0
-                        : x.Units.Select(u => u.Tickets != null && u.Tickets.Any(t => t.Status == TicketStatus.Open)).Count(),
+                    OutstandingTickets = _context.Tickets == null ? 0 : _context.Tickets.Count(t=>t.Unit != null && t.Unit.PropertyId == x.PropertyId)
+
                 })
                 .ToList();
 
@@ -148,6 +143,10 @@ namespace chickadee.Controllers
                 case "desc":
                     propertiesSa = propertiesSa.OrderByDescending(s => s.Name).ToList();
                     properties = properties.OrderByDescending(s => s.Name).ToList();
+                    break;
+                default :
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.Address).ToList();
+                    properties = properties.OrderByDescending(s => s.Address).ToList();
                     break;
             }
 

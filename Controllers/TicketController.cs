@@ -825,12 +825,6 @@ namespace chickadee.Controllers
             }
             var requestingUser = await _userManager.GetUserAsync(User);
 
-
-            // if (ticket.CreatedById != requestingUser.Id)
-            // {
-            //     HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            // }
-            //
             var unit = await _context.Unit.FindAsync(unitId);
 
             if (unit == null)
@@ -840,11 +834,8 @@ namespace chickadee.Controllers
               return BadRequest("Unit not found");
 
             }
-          if (ticket.CreatedById != requestingUser.Id)
-          {
-              HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-              return BadRequest("Creator Id does not match current user Id");
-          }
+            ticket.CreatedById = requestingUser.Id;
+            ticket.UnitId = unitId;
             ticket.Unit = unit;
             ticket.CreatedBy = requestingUser;
           
@@ -861,7 +852,8 @@ namespace chickadee.Controllers
                 Severity = ticket.Severity,
                 ClosedDate = ticket.ClosedDate,
                 UnitId = ticket.UnitId,
-                CreatedById = ticket.CreatedById
+                CreatedById = ticket.CreatedById,
+                PropertyId = propertyId
             });
         }
         //

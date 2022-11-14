@@ -1,28 +1,20 @@
 import {useState} from 'react';
-import {Link as RouterLink, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 // material
 import {
     Card,
     Table,
-    Stack,
-    Button,
     Checkbox,
     TableRow,
     TableBody,
     TableCell,
-    Container,
-    Typography,
     TableContainer,
     TablePagination, Box, Grow
 } from '@mui/material';
 // components
-import Page from '../components/Page';
 import Label from '../components/Label';
-import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from '../sections/@dashboard/list';
-// mock
 import useFetch from "../components/FetchData";
 import PageLoading from "../components/PageLoading";
 import * as React from "react";
@@ -53,7 +45,7 @@ export default function TableOverview() {
             d.propertyName = d.unit.property.address
             d.unitNo = d.unit.unitNo
             d.createdOn = new Date(d.createdOn)
-            d.estimatedDate = new Date(d.estimatedDate)
+            if (d.estimatedDate) d.estimatedDate = new Date(d.estimatedDate)
         })
         return data;
     }
@@ -195,7 +187,7 @@ export default function TableOverview() {
                                                 <TableCell
                                                     align="left">{createdOn.toLocaleDateString('en-CA', {dateStyle: 'medium'})} </TableCell>
                                                 <TableCell
-                                                    align="left">{estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'})}</TableCell>
+                                                    align="left">{estimatedDate ? estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'}) : null}</TableCell>
                                                 <TableCell align="left">
                                                     <Label
                                                         variant="ghost"

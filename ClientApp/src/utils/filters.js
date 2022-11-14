@@ -156,7 +156,7 @@ export const filterTicket = (data) => {
                 dir: `#${d.ticketId}`,
                 ...d,
                 createdOn: new Date(d.createdOn),
-                estimatedDate: new Date(d.estimatedDate),
+                estimatedDate: d.estimatedDate ? new Date(d.estimatedDate) : null,
             }
         );
     })

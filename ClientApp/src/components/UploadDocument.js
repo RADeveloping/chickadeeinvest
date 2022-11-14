@@ -1,9 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useDropzone} from 'react-dropzone';
-import {Container, Stack} from "@mui/material";
 import useFetch from "./FetchData";
-import {filterUnit} from "../utils/filters";
-import authService from "./api-authorization/AuthorizeService";
 
 const thumbsContainer = {
     display: 'flex',
