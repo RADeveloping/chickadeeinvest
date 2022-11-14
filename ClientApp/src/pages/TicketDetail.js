@@ -55,7 +55,7 @@ export default function TicketDetail() {
                         {ticket.length !== 0 &&
                             <Grid container spacing={3} direction={'column'}>
                                 <Grid item>
-                                    <Stack direction={'column'} padding={3} gap={1}>
+                                    <Stack direction={'column'} padding={3}  gap={1}>
                                         <Typography variant={'h4'}>
                                             {problem}
                                         </Typography>
@@ -92,7 +92,7 @@ export default function TicketDetail() {
                                 </Grid>
                                 <Divider/>
                                 <Grid item>
-                                    <Grid container padding={3} paddingTop={0} spacing={isDesktop ? 5 : 4} alignItems={'center'} justifyContent={''}>
+                                    <Grid container padding={4} paddingTop={0} spacing={isDesktop ? 5 : 4} alignItems={'center'} justifyContent={''}>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Description
