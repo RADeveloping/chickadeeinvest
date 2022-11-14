@@ -109,7 +109,7 @@ export default function DashboardApp() {
         let items = dashboardItems.filter(item => isMemberOf(account.roles, item.for))
         return items.map((item, index) =>
             (
-                <Grid item xs={12} sm={6} md={isBigWidget(index) ? 7 : 5}>
+                <Grid key={`${index}`} item xs={12} sm={6} md={isBigWidget(index) ? 7 : 5}>
                     {item.item}
                 </Grid>
             ))

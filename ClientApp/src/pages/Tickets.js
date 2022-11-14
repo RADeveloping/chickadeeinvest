@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {Button, Container, Stack, Typography} from "@mui/material";
 import * as React from "react";
 import Page from "../components/Page";
-import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
+import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import Iconify from "../components/Iconify";
 
 import {useSearchParams} from "react-router-dom";

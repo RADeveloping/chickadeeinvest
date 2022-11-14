@@ -24,7 +24,7 @@ export default function TicketDetail() {
     const {createdOn, description, estimatedDate, problem, severity, status, tenant, unit} = ticket;
 
     const loadingData = loadingTicket;
-    console.log(ticket)
+
     return (
         <Page title={`${title} #${id}`}>
             <Container>
@@ -143,8 +143,8 @@ export default function TicketDetail() {
                                             {ticket.unit.tenants &&
                                                 <AvatarGroup max={4}>
                                                     {ticket.unit.tenants.map((tenant) =>
-                                                        <Tooltip title={`${tenant.firstName} ${tenant.lastName}`} arrow>
-                                                            <Avatar alt={`${tenant.firstName} ${tenant.lastName}`}
+                                                        <Tooltip key={tenant.firstName} title={`${tenant.firstName} ${tenant.lastName}`} arrow>
+                                                            <Avatar key={tenant.lastName} alt={`${tenant.firstName} ${tenant.lastName}`}
                                                                     src={`data:image/jpeg;base64,${tenant.profilePicture}`}/>
                                                         </Tooltip>
                                                     )}

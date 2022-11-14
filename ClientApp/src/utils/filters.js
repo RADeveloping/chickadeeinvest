@@ -39,7 +39,7 @@ export const ticketProperties = [
 export const getTicketBox = (ticket) => {
     return (
         <>
-            <Grid container justifyContent={'space-between'} alignItems={'center'}>
+            <Grid key={ticket.ticketId} container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
                     <b>#{ticket.ticketId} {ticket.problem}</b>
                 </Grid>
@@ -54,7 +54,7 @@ export const getTicketBox = (ticket) => {
                 </Grid>
             </Grid>
 
-            <Stack direction={'row'} spacing={1}>
+            <Stack key={ticket.ticketId + 'stack'} direction={'row'} spacing={1}>
                 <Label
                     variant="ghost"
                     color={STATUS[ticket.status].color}
@@ -75,7 +75,7 @@ export const getTicketBox = (ticket) => {
 export const getUnitBox = (unit) => {
     return (
         <>
-            <Grid container justifyContent={'space-between'} alignItems={'center'}>
+            <Grid key={unit.unitNo} container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
                     <b>{unit.unitNo}</b>
                 </Grid>
@@ -93,12 +93,12 @@ export const getUnitBox = (unit) => {
 export const getPropertiesBox = (property) => {
     return (
         <>
-            <Grid container justifyContent={'space-between'} alignItems={'center'}>
+            <Grid key={property.name} container justifyContent={'space-between'} alignItems={'center'}>
                 <Grid item>
                     <b>{property.name}</b>
                 </Grid>
             </Grid>
-            <Stack direction={'row'} spacing={1}>
+            <Stack key={property.name + 'stack'} direction={'row'} spacing={1}>
                 <Label>
                     {property.unitsCount} unit{property.unitsCount !== 1 && 's'}
                 </Label>

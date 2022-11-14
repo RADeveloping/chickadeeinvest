@@ -1,5 +1,5 @@
 ﻿import {Card, FormControl, InputLabel, MenuItem, Select, Stack, Typography} from "@mui/material";
-import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
+import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import Iconify from "./Iconify";
 import * as React from "react";
 

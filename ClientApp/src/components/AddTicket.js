@@ -73,6 +73,7 @@ export default function AddTicket({title, propertyId, unitId, open, handleClose}
                                 {Object.keys(SEVERITY).map((key) =>
                                     <MenuItem key={key} value={key}>
                                         <Label
+                                            key={key}
                                             variant="ghost"
                                             color={SEVERITY[key].color}
                                         >
