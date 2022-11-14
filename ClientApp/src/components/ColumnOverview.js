@@ -110,7 +110,7 @@ export default function ColumnOverview() {
                     loading={loadingTickets} uri={getTicketsUri}
                     setOrderBy={ticketSetOrderBy} order={ticketOrder} setOrder={ticketSetOrder}
                     addComponent={selectedUnitId && selectedPropertyId ?
-                        (open, handleClose) => <AddTicket unitId={selectedUnitId} propertyId={selectedPropertyId}
+                        (open, handleClose) => <AddTicket title={units.length > 0 && selectedUnitId ? getItem(units, selectedUnitId).unitNo : null} unitId={selectedUnitId} propertyId={selectedPropertyId}
                                                           open={open} handleClose={handleClose}/> 
                         : undefined
                     }

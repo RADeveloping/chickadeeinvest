@@ -16,7 +16,7 @@ import {getTicketsUri, SEVERITY} from "../utils/filters";
 import {useNavigate} from "react-router-dom";
 import {LoadingButton} from "@mui/lab";
 
-export default function AddTicket({propertyId, unitId, open, handleClose}) {
+export default function AddTicket({title, propertyId, unitId, open, handleClose}) {
     const [problem, setProblem] = useState('');
     const [description, setDescription] = useState('');
     const [severity, setSeverity] = useState(0);
@@ -25,6 +25,7 @@ export default function AddTicket({propertyId, unitId, open, handleClose}) {
     const [units, errorUnits, loadingUnits] = useFetch('/api/units/');
     if (!propertyId) propertyId = properties.length > 0 ? properties[0].propertyId : null;
     if (!unitId) unitId = units.length > 0 ? units[0].unitId : null;
+    if (!title) title = units.length > 0 ? units[0].unitNo : null;
     const [resp, error, loading] = usePost(propertyId && unitId ? `/api/properties/${propertyId}/units/${unitId}/tickets` : null, ticket)
     const navigate = useNavigate();
 
@@ -48,7 +49,7 @@ export default function AddTicket({propertyId, unitId, open, handleClose}) {
 
     return (
         <Dialog fullWidth open={open} onClose={handleClose}>
-            <DialogTitle>Add Ticket</DialogTitle>
+            <DialogTitle>Add Ticket {title ? `to Unit ${title}` : null}</DialogTitle>
             <DialogContent>
                 <Stack direction={'column'}>
                     <Stack direction={'row'} alignItems={'center'}>
