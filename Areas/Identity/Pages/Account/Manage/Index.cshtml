@@ -35,7 +35,6 @@
                     }
 
                 </div>
-
                 <div class="mb-3">
                     <p style="text-align: left">Click "Choose File" button to upload a profile picture:</p>
 
@@ -46,8 +45,6 @@
                                           onchange="document.getElementById('profilePicture').src = window.URL.createObjectURL(this.files[0]); document.getElementById('profilePicture').classList.remove('d-none')"/>
                                    <span asp-validation-for="Input.ProfilePicture" class="text-danger"></span>
                 </div>
-
-
             </div>
 
             <div class="form-floating mb-3">
@@ -64,6 +61,13 @@
                 <input asp-for="Username" id="username"class="form-control" disabled/>
                 <label asp-for="Username" for="username" class="form-label"></label>
             </div>
+            
+            <div class="form-floating mb-3">
+                    <input asp-for="Input.DateOfBirth" id="Input.DateOfBirth" class="form-control"  aria-required="true" placeholder="Date of Birth" />
+                    <label asp-for="Input.DateOfBirth" for="Input.DateOfBirth" class="form-label"></label>
+                    <div class="mt-1"><span asp-validation-for="Input.DateOfBirth" class="text-danger mt-1"></span></div>
+                </div>
+            
             <div class="form-floating mb-3">
                 <input asp-for="Input.PhoneNumber" id="Input.PhoneNumber" class="form-control" placeholder="Phone Number"/>
                 <label asp-for="Input.PhoneNumber" for="Input.PhoneNumber" class="form-label"></label>

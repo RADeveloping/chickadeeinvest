@@ -50,8 +50,15 @@
                 <span asp-validation-for="ClosedDate" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
+                <label class="control-label">Property</label>
+                @Html.DropDownList("properties", @ViewBag.properties as List<SelectListItem>, new { @class="form-control" })
+            </div>
+            <div class="form-group mb-2">
+            
                 <label asp-for="UnitId" class="control-label"></label>
-                <select asp-for="UnitId" class="form-control" asp-items="ViewBag.UnitId"></select>
+                <select asp-for="UnitId" id="units" class="form-control" asp-items="ViewBag.UnitId">
+                    <option selected></option>
+                </select>   
                 <span asp-validation-for="UnitId" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
@@ -71,4 +78,51 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
+
+@{
+    <script>
+    var unitId = "";
+    var activities = document.getElementById("properties");
+    var propertiesDropDown = document.getElementById("properties"); 
+    var unitsDropDown = document.getElementById("units"); 
+   
+
+   // on load
+        var str = propertiesDropDown.options[propertiesDropDown.selectedIndex].value;
+               document.getElementById("units").length = 0;
+                getUnits(str)
+                
+       // on changed
+       activities.addEventListener("change", function() {
+       var str = propertiesDropDown.options[propertiesDropDown.selectedIndex].value;
+           document.getElementById("units").length = 0;
+            getUnits(str)
+       });
+       
+         function getUnits(str) {
+               if (str !== ""){
+               fetch(`/api/properties/${str}/units`)
+                       .then(response => response.json())
+                       .then(data => updateUnitsDropDown(data))
+                       .catch(error => console.error('Unable to get items.', error));     
+             }
+            }
+            
+       function updateUnitsDropDown(data){
+               data.forEach(d=> {
+               document.getElementById("units").add(new Option(d.unitNo, d.unitId))    
+               });
+       
+            }
+            
+
+    document.getElementById("units").addEventListener("change", function() {
+        unitId = unitsDropDown.options[unitsDropDown.selectedIndex].value;
+        });
+
+
+    </script>
+
 }
