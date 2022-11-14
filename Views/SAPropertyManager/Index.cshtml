@@ -12,6 +12,7 @@
     data-show-columns="true"
     data-pagination="true"
     data-search="true"
+    data-search-on-enter-key="true"
     data-search-align="left"
     data-show-search-button="true"
     data-mobile-responsive="true"
@@ -26,11 +27,8 @@
         <th data-sortable="true" data-field="Company">
             @Html.DisplayNameFor(model => model.Company)
         </th>
-        <th data-sortable="true" data-field="FirstName">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th data-sortable="true" data-field="LastName">
-            @Html.DisplayNameFor(model => model.LastName)
+        <th data-sortable="true" data-field="Name">
+            @Html.DisplayNameFor(model => model.FullName)
         </th>
         <th data-sortable="true" data-field="DateOfBirth">
         @Html.DisplayNameFor(model => model.DateOfBirth)
@@ -38,7 +36,7 @@
             @Html.DisplayNameFor(model => model.Email)
         </th>
         <th data-sortable="true" data-field="PhoneNumber">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
+           Phone Number
         </th>
         <th data-field="Actions" data-align="center">Actions</th>
     </tr>
@@ -51,10 +49,7 @@
                 @Html.DisplayFor(modelItem => item.Company.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateOfBirth)

@@ -6,6 +6,7 @@
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
     <link href="~/css/custom.css" rel="stylesheet" type="text/css" />
 
+    
 }
 
 @if (User.IsInRole("SuperAdmin"))
@@ -39,7 +40,8 @@
     
     <a class="nav-link text-yellow @ManageNavPages.IndexNavClass(ViewContext)" id="profile" href="/Identity/Account/Manage/Index"><i class="fa fa-user fa-nav"></i>Profile</a>
 </li>
-@if (!User.IsInRole("SuperAdmin") || !User.IsInRole("PropertyManager"))
+
+@if (User.IsInRole("Tenant"))
 {
     <li class="nav-item" >
         <a class="nav-link text-yellow @ManageNavPages.VerifyAccountNavClass(ViewContext)" id="verify" href="/Identity/Account/Manage/VerifyAccount"><i class="fa fa-check fa-nav"></i>Verify Account</a>

@@ -25,7 +25,9 @@ namespace chickadee.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Tenant != null ? 
-                          View(await _context.Tenant.Include(t=>t.Unit).ToListAsync()) :
+                          View(await _context.Tenant.Include(t=>t.Unit)
+                              .ThenInclude(u=>u!.Property)
+                              .ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Tenant'  is null.");
         }
 
@@ -39,6 +41,7 @@ namespace chickadee.Controllers
 
             var tenant = await _context.Tenant
                 .Include(t=>t.Unit)
+                .ThenInclude(p=>p!.Property)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tenant == null)
             {
@@ -83,6 +86,7 @@ namespace chickadee.Controllers
 
             var tenant = await _context.Tenant
                 .Include(t => t.Unit)
+                .ThenInclude(p=>p!.Property)
                 .Where(t => t.Id == id)
                 .FirstAsync();
             
@@ -102,7 +106,7 @@ namespace chickadee.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,UsernameChangeLimit,DateOfBirth,ProfilePicture,UnitId,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Tenant tenant)
+        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,UsernameChangeLimit,DateOfBirth,ProfilePicture,UnitId,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount,isIdVerified")] Tenant tenant)
         {
             if (id != tenant.Id)
             {
@@ -150,6 +154,7 @@ namespace chickadee.Controllers
 
             var tenant = await _context.Tenant
                 .Include(t=>t.Unit)
+                .ThenInclude(p=>p!.Property)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tenant == null)
             {

@@ -51,8 +51,6 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string StatusMessage { get; set; }
         
-        [TempData]
-        public string UnitId { get; set; }
         
         
         /// <summary>
@@ -126,14 +124,6 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
 
                 await LoadAsync(user);
             }
-
-            if (_context.Property == null) return Page();
-            List<SelectListItem> li = new List<SelectListItem> { new() { Text = "", Value = "" } };
-            foreach (var property in _context.Property.Where(p=>p.Units.Any()))
-            {
-                li.Add(new SelectListItem { Text = property.Address, Value = property.PropertyId });
-            }
-            ViewData["properties"] = li;
             
             return Page();
         }
@@ -147,15 +137,9 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
             //
             // }
 
-            Console.WriteLine(Request.Form["UnitId"] == "");
             Console.WriteLine(Request.Form["IdPhoto"] == "");
             Console.WriteLine(Request.Form["leasePhoto"] == "");
-
-
-            if (Request.Form["UnitId"] == "")
-            {
-                ModelState.AddModelError(string.Empty, "Unit selection is missing.");
-            };
+            
             
             if (Request.Form["IdPhoto"] == "")
             {
@@ -167,7 +151,7 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
                 ModelState.AddModelError(string.Empty, "Lease agreement photo is required and needs to be uploaded.");
             }
 
-            if (Request.Form["UnitId"] == "" || Request.Form["IdPhoto"] == "" || Request.Form["leasePhoto"] == "")
+            if (Request.Form["IdPhoto"] == "" || Request.Form["leasePhoto"] == "")
             {
                 return await OnGetAsync();
             }
@@ -253,16 +237,6 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
                     }
 
 
-                    try
-                    {
-                        user.UnitId = Request.Form["UnitId"];
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        Console.WriteLine("DB ERROR");
-                    }
-                
                 
                 }
             }

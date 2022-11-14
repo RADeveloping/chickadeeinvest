@@ -11,8 +11,8 @@ namespace chickadee.Models {
         
         [Required]
         [Display(Name = "Upload Date")]
-        [DataType(DataType.DateTime)]
-        public DateTime UploadDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime UploadDate { get; set; } = DateTime.Now;
         
         public int TicketId { get; set; }
         [ForeignKey("TicketId")]

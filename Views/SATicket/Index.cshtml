@@ -12,6 +12,7 @@
     data-show-columns="true"
     data-pagination="true"
     data-search="true"
+    data-search-on-enter-key="true"
     data-search-align="left"
     data-show-search-button="true"
     data-mobile-responsive="true"
@@ -29,13 +30,13 @@
         <th data-sortable="true" data-field="Description">
             @Html.DisplayNameFor(model => model.Description)
         </th>
-        <th data-sortable="true" data-field="CreatedBy">
+        <th data-sortable="true" data-field="CreatedBy" data-visible="false">
             @Html.DisplayNameFor(model => model.CreatedBy)
         </th>
-        <th data-sortable="true"  data-field="CreatedOn">
+        <th data-sortable="true"  data-field="CreatedOn" data-visible="false">
             @Html.DisplayNameFor(model => model.CreatedOn)
         </th>
-        <th data-sortable="true" data-field="EstimatedDate">
+        <th data-sortable="true" data-field="EstimatedDate" data-visible="false">
             @Html.DisplayNameFor(model => model.EstimatedDate)
         </th>
         <th data-sortable="true" data-field="Status">
@@ -44,11 +45,13 @@
         <th data-sortable="true" data-field="Severity">
             @Html.DisplayNameFor(model => model.Severity)
         </th>
-     
+        <th data-sortable="true" data-field="Property">
+            Property
+        </th>
         <th data-sortable="true" data-field="Unit">
             @Html.DisplayNameFor(model => model.Unit)
         </th>
-        <th data-sortable="true" data-field="ClosedDate">
+        <th data-sortable="true" data-field="ClosedDate" data-visible="false">
             @Html.DisplayNameFor(model => model.ClosedDate)
         </th>
       
@@ -66,13 +69,13 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy.FirstName)
+                @Html.DisplayFor(modelItem => item.CreatedBy.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedOn)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EstimatedDate)
+                @Html.DisplayFor(modelItem => @item.EstimatedDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
@@ -81,6 +84,9 @@
                 @Html.DisplayFor(modelItem => item.Severity)
             </td>
          
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit.Property.Name)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Unit.UnitNo)
             </td>
