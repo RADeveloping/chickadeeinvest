@@ -2,12 +2,12 @@
 import {useEffect, useState} from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
 
-export default function AddTicket({open, handleClose}) {
+export default function AddTicket({propertyId, unitId, open, handleClose}) {
     const [ticket, setTicket] = useState(null);
     const [properties, errorProperties, loadingProperties] = useFetch('/api/properties/');
     const [units, errorUnits, loadingUnits] = useFetch('/api/units/');
-    const propertyId = properties.length > 0 ? properties[0].propertyId : null;
-    const unitId = units.length > 0 ? units[0].unitId : null;
+    if (!propertyId) propertyId = properties.length > 0 ? properties[0].propertyId : null;
+    if (!unitId) unitId = units.length > 0 ? units[0].unitId : null;
     const [resp, error, loading] = usePost(propertyId && unitId ? `/api/properties/${propertyId}/units/${unitId}/tickets` : null, ticket)
     
     const handleAdd = () => {

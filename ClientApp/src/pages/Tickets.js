@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Container, Stack, Typography} from "@mui/material";
+import {Button, Container, Stack, Typography} from "@mui/material";
 import * as React from "react";
 import Page from "../components/Page";
 import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
@@ -34,6 +34,12 @@ export default function Tickets() {
                     <Typography variant="h4" gutterBottom>
                         {title}
                     </Typography>
+                    <Button
+                        variant="contained"
+                        endIcon={<Iconify icon="ant-design:plus-outlined"/>}
+                    >
+                        New Ticket
+                    </Button>
                     <ToggleButtonGroup
                         color="primary"
                         value={viewMode}
