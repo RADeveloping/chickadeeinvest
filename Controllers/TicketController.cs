@@ -852,7 +852,8 @@ namespace chickadee.Controllers
                 Severity = ticket.Severity,
                 ClosedDate = ticket.ClosedDate,
                 UnitId = ticket.UnitId,
-                CreatedById = ticket.CreatedById
+                CreatedById = ticket.CreatedById,
+                PropertyId = propertyId
             });
         }
         //
