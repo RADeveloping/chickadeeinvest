@@ -61,6 +61,7 @@ export const usePost = (url, post, patch) => {
     
     useEffect(() => {
         if (url && (post || patch)) {
+            setLoading(true);
             console.log(url)
             fetch(url, {
                 method: post ? 'POST' : patch ? 'PATCH' : undefined,

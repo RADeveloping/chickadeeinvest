@@ -14,6 +14,7 @@ import * as React from "react";
 import Label from "./Label";
 import {getTicketsUri, SEVERITY} from "../utils/filters";
 import {useNavigate} from "react-router-dom";
+import {LoadingButton} from "@mui/lab";
 
 export default function AddTicket({propertyId, unitId, open, handleClose}) {
     const [problem, setProblem] = useState('');
@@ -93,7 +94,8 @@ export default function AddTicket({propertyId, unitId, open, handleClose}) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button disabled={description === '' || problem === ''} onClick={handleAdd}>Add</Button>
+                <LoadingButton loading={loading} disabled={description === '' || problem === '' || resp.ticketId}
+                               onClick={handleAdd}>{resp.ticketId ? 'Added' : 'Add'}</LoadingButton>
             </DialogActions>
         </Dialog>
     )
