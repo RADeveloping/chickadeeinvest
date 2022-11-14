@@ -146,6 +146,7 @@ export const filterUnit = (data) => {
 
 export const filterTicket = (data) => {
     let simpleData = []
+    console.log(data)
     data.forEach((d) => {
         simpleData.push({
                 id: d.ticketId,
@@ -156,7 +157,7 @@ export const filterTicket = (data) => {
                 dir: `#${d.ticketId}`,
                 ...d,
                 createdOn: new Date(d.createdOn),
-                estimatedDate: new Date(d.estimatedDate),
+                estimatedDate: d.estimatedDate ? new Date(d.estimatedDate) : null,
             }
         );
     })

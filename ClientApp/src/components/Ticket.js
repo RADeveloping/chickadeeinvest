@@ -41,11 +41,13 @@ export default function Ticket({ data, navigate }) {
                                     <Label>
                                         {new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
                                     </Label>
+                                    {estimatedDate && 
                                     <Label sx={{fontWeight: 'normal'}}>
                                         <div>
                                             Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
                                         </div>
                                     </Label>
+                                    }
                                 </Stack>
                             </Stack>
                         </Stack>

@@ -53,7 +53,7 @@ export default function TableOverview() {
             d.propertyName = d.unit.property.address
             d.unitNo = d.unit.unitNo
             d.createdOn = new Date(d.createdOn)
-            d.estimatedDate = new Date(d.estimatedDate)
+            if (d.estimatedDate) d.estimatedDate = new Date(d.estimatedDate)
         })
         return data;
     }
@@ -195,7 +195,7 @@ export default function TableOverview() {
                                                 <TableCell
                                                     align="left">{createdOn.toLocaleDateString('en-CA', {dateStyle: 'medium'})} </TableCell>
                                                 <TableCell
-                                                    align="left">{estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'})}</TableCell>
+                                                    align="left">{estimatedDate ? estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'}) : null}</TableCell>
                                                 <TableCell align="left">
                                                     <Label
                                                         variant="ghost"
