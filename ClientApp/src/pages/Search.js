@@ -96,7 +96,8 @@ export default function Search() {
                 </Stack>
                 <Grow in={showResults}>
                     <Grid container spacing={2}>
-                        <SearchRowResult viewComponent={(data) => <Property navigate={navigate} data={data}/>}
+                        <SearchRowResult key={'prop-search'}
+                                         viewComponent={(data) => <Property key={data.propertyId} navigate={navigate} data={data}/>}
                                          title={"Properties"}
                                          orderBy={propertyOrderBy}
                                          handleOrderByChange={propertyHandleOrderByChange}
@@ -106,7 +107,8 @@ export default function Search() {
                                          isDesktop={isDesktop}
                                          data={properties}
                         />
-                        <SearchRowResult viewComponent={(data) => <Unit navigate={navigate} data={data}/>}
+                        <SearchRowResult key={'unit-search'}
+                                         viewComponent={(data) => <Unit key={data.unitId} navigate={navigate} data={data}/>}
                                          title={"Units"}
                                          orderBy={unitOrderBy}
                                          handleOrderByChange={unitHandleOrderByChange}
@@ -116,7 +118,8 @@ export default function Search() {
                                          isDesktop={isDesktop}
                                          data={units}
                         />
-                        <SearchRowResult viewComponent={(data) => <Ticket navigate={navigate} data={data}/>}
+                        <SearchRowResult key={'ticket-search'}
+                                         viewComponent={(data) => <Ticket key={data.ticketId} navigate={navigate} data={data}/>}
                                          title={"Tickets"}
                                          orderBy={ticketOrderBy}
                                          handleOrderByChange={ticketHandleOrderByChange}
