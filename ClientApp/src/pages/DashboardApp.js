@@ -33,7 +33,7 @@ export default function DashboardApp() {
     const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri, filterProperties);
 
     const [account, accountError, accountLoading] = useFetch(accountUri);
-    
+
     const userLoading = accountLoading
     const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
 
@@ -53,7 +53,15 @@ export default function DashboardApp() {
         {
             item:
                 <Widget title="Open Tickets" uri={getTicketsUri} total={openTickets.length} items={openTickets}
-                        icon={'ant-design:folder-open-outlined'} addComponent={(open, handleClose)=><AddTicket open={open} handleClose={handleClose}/>} loading={ticketsLoading}/>
+                        icon={'ant-design:folder-open-outlined'}
+                        addComponent={
+                            account.roles ?
+                                !account.roles.includes('PropertyManager') ?
+                                (open, handleClose) => <AddTicket open={open} handleClose={handleClose}/> : undefined
+                                : undefined
+                        }
+                        loading={ticketsLoading}
+                />
             ,
             for: [
                 "Tenant",
