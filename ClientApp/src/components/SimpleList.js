@@ -149,7 +149,7 @@ export default function SimpleList({
                       }}>
 
                     {items.length > 0 && items.map((item, index) =>
-                        <>
+                        <React.Fragment key={'simpleList-item'+ index}>
                             <Divider key={`${item.id}-${title}-dvd1`} component="li"/>
                             <ListItemButton key={`${item.id}-${title}-btn`} onClick={() => {
                                 abortFetch();
@@ -182,7 +182,7 @@ export default function SimpleList({
                             </ListItemButton>
                             {index === items.length - 1 &&
                                 <Divider key={`${item.id}-${title}-dvd`} component="li"/>}
-                        </>)
+                        </React.Fragment>)
                     }
                     {items.length === 0 &&
                         <Box sx={{

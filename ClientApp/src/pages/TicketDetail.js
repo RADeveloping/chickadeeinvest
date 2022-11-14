@@ -1,5 +1,5 @@
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
-import {Avatar, Button, Card, Container, Divider, Grid, Grow, Stack, Tooltip, Typography} from "@mui/material";
+import {Avatar, Button, Card, Container, Divider, Grid, Grow, Stack, Tooltip, Typography, AvatarGroup} from "@mui/material";
 import * as React from "react";
 import Page from "../components/Page";
 import Iconify from "../components/Iconify";
@@ -8,7 +8,6 @@ import useFetch from "../components/FetchData";
 import {SEVERITY, STATUS} from "../utils/filters";
 import Label from "../components/Label";
 import useResponsive from "../hooks/useResponsive";
-import {AvatarGroup} from "@mui/lab";
 
 export default function TicketDetail() {
     const title = "Ticket"

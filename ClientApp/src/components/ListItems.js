@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 export default function ListItems({uri, items}) {
     return (<>
     {items && items.length > 0 && items.map((item, index)=>
-        <>
+        <React.Fragment key={"list" + index}>
             {index !== 0 && <Divider sx={{marginLeft: 3}} key={`${item.id}-dvd1`} />}
             <ListItemButton key={`${item.id}-btn`} component={Link} to={`/dashboard/${uri(item)}`} alignItems="flex-start"
             >
@@ -30,6 +30,6 @@ export default function ListItems({uri, items}) {
                 />
             </ListItemButton>
             {index === items.length - 1 && <Divider sx={{marginLeft: 3}} key={`${item.id}-dvd`} />}
-        </>)
+        </React.Fragment>)
     }</>)
 }
