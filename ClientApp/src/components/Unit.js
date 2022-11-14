@@ -5,7 +5,7 @@ import {getUnitsUri} from "../utils/filters";
 export default function Unit({ data, navigate }) {
     const {unitNo, propertyName, propertyId, unitId} = data;
     return (
-        <Grow in={true}>
+        <Grow key={unitId} in={true}>
             <Grid xs={12} sm={12} md={6} l={4} xl={4} item>
                 <Card sx={{height: 150}}>
                     <CardContent sx={{height: '100%'}} onClick={()=>navigate('/dashboard/' + getUnitsUri(data))}>

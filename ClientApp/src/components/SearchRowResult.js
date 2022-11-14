@@ -14,8 +14,8 @@ export default function SearchRowResult({
                                             data
                                         }) {
     return (
-        <Grow in={data.length > 0}>
-            <Grid item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}
+        <Grow key={'row-result'} in={data.length > 0}>
+            <Grid key={'row-result-grid'} item container spacing={1} justifyContent={isDesktop ? undefined : 'center'}
                   sx={{display: data.length === 0 ? 'none' : undefined}}>
                 <Grid width={'100%'} item>
                     <SortControl title={title}
