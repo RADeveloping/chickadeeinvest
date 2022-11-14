@@ -61,7 +61,7 @@ export default function AddTicket({propertyId, unitId, open, handleClose}) {
                             variant="standard"
                             onChange={(e) => setProblem(e.target.value)}
                         />
-                        <FormControl sx={{minWidth: 90}} margin="dense" variant="standard">
+                        <FormControl sx={{minWidth: 90, marginBottom:'5px'}} margin="dense" variant="standard">
                             <InputLabel id="severity">Severity</InputLabel>
                             <Select
                                 value={severity}
