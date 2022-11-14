@@ -68,7 +68,7 @@ export default function SimpleList({
 
 
     return (
-        <Card sx={{height: 450, width: skinny && isDesktop ? '60%' : '100%', ...borderStyles}}>
+        <Card sx={{height:'60vh', width: skinny && isDesktop ? '60%' : '100%', ...borderStyles}}>
 
             <List subheader={
                 <ListSubheader component="div" id="nested-list-subheader">
@@ -124,7 +124,7 @@ export default function SimpleList({
                     </Stack>
                 </ListSubheader>
             }
-                  sx={{width: '100%', minWidth: isDesktop && skinny ? 200 : 360, bgcolor: 'background.paper'}}>
+                  sx={{width: '100%', minWidth: isDesktop && skinny ? 200 : 360, bgcolor: 'background.paper', overflowY: 'auto', height:'100%'}}>
 
                 {items.length > 0 && items.map((item, index) =>
                     <>
@@ -162,15 +162,16 @@ export default function SimpleList({
                             <Divider key={`${item.id}-${title}-dvd`} component="li"/>}
                     </>)
                 }
+                {items.length === 0 &&
+                    <Box sx={{
+                        height: '75%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'gainsboro'
+                    }}>{`No ${title}`}</Box>}
             </List>
-            {items.length === 0 &&
-                <Box sx={{
-                    height: '80%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'gainsboro'
-                }}>{`No ${title}`}</Box>}
+           
         </Card>
     );
 }
