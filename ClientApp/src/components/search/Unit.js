@@ -2,6 +2,13 @@
 import * as React from "react";
 import {getUnitsUri} from "../../utils/constants";
 
+/**
+ * Unit component to display search results for units.
+ * @param data Unit data.
+ * @param navigate Navigate method from useNavigation.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function Unit({data, navigate}) {
     const {unitNo, propertyName, propertyId, unitId} = data;
     return (

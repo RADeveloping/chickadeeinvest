@@ -3,6 +3,13 @@ import * as React from "react";
 import {getTicketsUri, SEVERITY, STATUS} from "../../utils/constants";
 import Label from "../common/Label";
 
+/**
+ * Ticket component to display search results for tickets.
+ * @param data Ticket data.
+ * @param navigate Navigate method from useNavigation.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function Ticket({data, navigate}) {
     const {ticketId, problem, description, createdOn, estimatedDate, status, severity} = data;
     return (

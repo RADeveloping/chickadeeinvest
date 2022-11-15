@@ -17,7 +17,7 @@ import Label from "../common/Label";
 
 
 /**
- * Component for Add Ticket overlay.
+ * Add ticket overlay component.
  * @param title {string} String displayed in the title.
  * @param propertyId {string} Property Id.
  * @param unitId {string} Unit Id.

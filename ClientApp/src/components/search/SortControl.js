@@ -3,6 +3,17 @@ import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import * as React from "react";
 import Iconify from "../common/Iconify";
 
+/**
+ * Sort control used in each SearchRowResult.
+ * @param title Title of SearchRow
+ * @param orderBy {string} Order by state.
+ * @param handleOrderByChange {()=>void} Handles order by state change.
+ * @param properties {[object]} Properties to be mapped to order by.
+ * @param order {string} Order, asc or desc state.
+ * @param handleOrderChange {()=>void} Handles order state change.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function SortControl({
                                         title,
                                         orderBy,

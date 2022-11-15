@@ -1,6 +1,13 @@
 // @mui
 import {Avatar, Card, Grow, Typography} from '@mui/material';
 
+/**
+ * User component for dashboard.
+ * @param account {object} Account object.
+ * @param loading {bool} Loading state.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function UserWidget({account, loading}) {
     const {profilePicture, firstName, unitNo, propertyName} = account;
     return (

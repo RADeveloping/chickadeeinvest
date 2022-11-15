@@ -4,7 +4,7 @@ import {getPropertiesUri} from "../../utils/constants";
 import Label from "../common/Label";
 
 /**
- * Property component to display properties in search.
+ * Property component to display search results for properties.
  * @param data Property data.
  * @param navigate Navigate method from useNavigation.
  * @returns {JSX.Element}

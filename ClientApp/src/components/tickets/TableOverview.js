@@ -35,7 +35,11 @@ const TABLE_HEAD = [
 ];
 
 // ----------------------------------------------------------------------
-
+/**
+ * Table overview for Tickets page.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function TableOverview() {
     const navigate = useNavigate();
     // CONFIG ---------------------------------------------------------------

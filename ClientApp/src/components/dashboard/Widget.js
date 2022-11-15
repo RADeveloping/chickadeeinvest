@@ -11,6 +11,18 @@ import {useState} from "react";
 import Iconify from "../common/Iconify";
 import ListItems from "../common/ListItems";
 
+/**
+ * Generic widget component for dashboard.
+ * @param title {string} Title of widget.
+ * @param uri {string} URI string.
+ * @param total {number} Count of items.
+ * @param items {[object]} Array of items. 
+ * @param icon {string} Iconify icon string.
+ * @param loading {boolean} Loading state.
+ * @param addComponent {()=>JSX.Element} Component for adding items. 
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function Widget({title, uri, total, items, icon, loading, addComponent}) {
     const [open, setOpen] = useState(false);
     const handleClose = () =>

@@ -19,6 +19,31 @@ import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {abortFetch} from "../../utils/fetch";
 
+/**
+ * Generic list component used in ColumnOverview.
+ * @param items {[object]} Array of items.
+ * @param title {string} Title of list.
+ * @param setSelectedId {function} Sets selectedId state.
+ * @param setNestedSelect {function} Sets the nestedId state.
+ * @param path {string} Path for mobile view.
+ * @param selectedId {string} SelectedId state for this list of items.
+ * @param skinny {boolean} Set the width of the column to skinny.
+ * @param isDesktop {boolean} isDesktop state.
+ * @param leftRound {boolean} Left border is rounded, for the left side of the column.
+ * @param rightRound {boolean} Right border is rounded, for the right side of the column.
+ * @param noRound {boolean} No rounded border, for the middle sections of the column view.
+ * @param properties {[object]} Array of properties for sorting. 
+ * @param loading {boolean} Loading state.
+ * @param disableSort {boolean} Hides sort button.
+ * @param uri {string} URI string.
+ * @param setOrderBy {function} Sets the orderBy state.
+ * @param order {string} Order, desc or asc state.
+ * @param setOrder {function} Sets the order state.
+ * @param immediateClick {boolean} Immediate action after click, for use with the last column. 
+ * @param addComponent {()=>JSX.Element} Method that returns the add component, a plus symbol will appear.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function SimpleList({
                                        items,
                                        title,

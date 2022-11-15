@@ -2,6 +2,20 @@
 import SortControl from "./SortControl";
 import * as React from "react";
 
+/**
+ * Component for Search. Each SearchRowResult represents a category with its own results.
+ * @param isDesktop {bool} isDesktop state.
+ * @param title {string} Title of row.
+ * @param orderBy {string} Order by state.
+ * @param handleOrderByChange {()=>void} Handles order by state change.
+ * @param properties {[object]} Properties to be mapped to order by.
+ * @param order {string} Order, asc or desc state.
+ * @param handleOrderChange {()=>void} Handles order state change.
+ * @param viewComponent {()=>JSX.Element} Method to return the component to view the data.
+ * @param data {[object]} Array of data.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function SearchRowResult({
                                             isDesktop,
                                             title,
