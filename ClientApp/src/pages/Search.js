@@ -7,26 +7,24 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import PageLoading from "../components/PageLoading";
 import * as React from "react";
-import Page from "../components/Page";
-import {ListToolbar} from "../sections/@dashboard/list";
-import {useCallback, useEffect, useState} from "react";
-import useFetch from "../components/FetchData";
-import useResponsive from "../hooks/useResponsive";
+import Page from "../components/common/Page";
+import {useEffect} from "react";
+import useFetch from "../utils/fetch";
 import {
     filterProperties, filterTicket, filterUnit,
     propertyProperties,
     ticketProperties,
     unitProperties
-} from "../utils/filters";
-import Property from "../components/Property";
-import useFilter from "../components/FilterOrder";
-import SearchRowResult from "../components/SearchRowResult";
-import Unit from "../components/Unit";
-import Ticket from "../components/Ticket";
+} from "../utils/constants";
+import Property from "../components/search/Property";
+import useFilter from "../utils/filter";
+import SearchRowResult from "../components/search/SearchRowResult";
+import Unit from "../components/search/Unit";
+import Ticket from "../components/search/Ticket";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import Iconify from "../components/Iconify";
+import Iconify from "../components/common/Iconify";
+import useResponsive from "../utils/responsive";
 
 export default function Search() {
     const title = "Search"
@@ -97,7 +95,8 @@ export default function Search() {
                 <Grow in={showResults}>
                     <Grid container spacing={2}>
                         <SearchRowResult key={'prop-search'}
-                                         viewComponent={(data) => <Property key={data.propertyId} navigate={navigate} data={data}/>}
+                                         viewComponent={(data) => <Property key={data.propertyId} navigate={navigate}
+                                                                            data={data}/>}
                                          title={"Properties"}
                                          orderBy={propertyOrderBy}
                                          handleOrderByChange={propertyHandleOrderByChange}
@@ -108,7 +107,8 @@ export default function Search() {
                                          data={properties}
                         />
                         <SearchRowResult key={'unit-search'}
-                                         viewComponent={(data) => <Unit key={data.unitId} navigate={navigate} data={data}/>}
+                                         viewComponent={(data) => <Unit key={data.unitId} navigate={navigate}
+                                                                        data={data}/>}
                                          title={"Units"}
                                          orderBy={unitOrderBy}
                                          handleOrderByChange={unitHandleOrderByChange}
@@ -119,7 +119,8 @@ export default function Search() {
                                          data={units}
                         />
                         <SearchRowResult key={'ticket-search'}
-                                         viewComponent={(data) => <Ticket key={data.ticketId} navigate={navigate} data={data}/>}
+                                         viewComponent={(data) => <Ticket key={data.ticketId} navigate={navigate}
+                                                                          data={data}/>}
                                          title={"Tickets"}
                                          orderBy={ticketOrderBy}
                                          handleOrderByChange={ticketHandleOrderByChange}

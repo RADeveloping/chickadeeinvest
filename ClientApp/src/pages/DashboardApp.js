@@ -1,10 +1,10 @@
 // @mui
 import {Container, Grid, Stack, Typography} from '@mui/material';
 // components
-import Page from '../components/Page';
-import useFetch from '../components/FetchData';
+import Page from '../components/common/Page';
+import useFetch from '../utils/fetch';
 import {Link} from "react-router-dom";
-import PageLoading from "../components/PageLoading";
+import PageLoading from "../components/common/PageLoading";
 import * as React from "react";
 import {
     filterProperties,
@@ -13,10 +13,10 @@ import {
     getPropertiesUri,
     getTicketsUri,
     getUnitsUri
-} from "../utils/filters";
-import Widget from "../sections/@dashboard/app/Widget";
-import UserWidget from "../sections/@dashboard/app/UserWidget";
-import AddTicket from "../components/AddTicket";
+} from "../utils/constants";
+import AddTicket from "../components/overlay/AddTicket";
+import Widget from "../components/dashboard/Widget";
+import UserWidget from "../components/dashboard/UserWidget";
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
@@ -57,7 +57,8 @@ export default function DashboardApp() {
                         addComponent={
                             account.roles ?
                                 !account.roles.includes('PropertyManager') ?
-                                (open, handleClose) => <AddTicket open={open} handleClose={handleClose}/> : undefined
+                                    (open, handleClose) => <AddTicket open={open}
+                                                                      handleClose={handleClose}/> : undefined
                                 : undefined
                         }
                         loading={ticketsLoading}

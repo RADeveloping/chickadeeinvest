@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
 import {Button, Container, Stack, Typography} from "@mui/material";
 import * as React from "react";
-import Page from "../components/Page";
+import Page from "../components/common/Page";
 import {ToggleButton, ToggleButtonGroup} from "@mui/material";
-import Iconify from "../components/Iconify";
+import Iconify from "../components/common/Iconify";
 
 import {useSearchParams} from "react-router-dom";
-import ColumnOverview from "../components/ColumnOverview";
-import TableOverview from "../components/TableOverview";
+import ColumnOverview from "../components/tickets/ColumnOverview";
+import TableOverview from "../components/tickets/TableOverview";
 
 export default function Tickets() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -21,13 +21,13 @@ export default function Tickets() {
             setSearchParams(searchParams)
         }
     };
-    
+
     useEffect(() => {
         let view = searchParams.get('viewMode')
         if (view) setViewMode(view)
     }, [])
-    
-    return(
+
+    return (
         <Page title={title}>
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -45,10 +45,10 @@ export default function Tickets() {
                     </ToggleButtonGroup>
                 </Stack>
                 <div style={{display: viewMode !== 'column' ? 'none' : undefined}}>
-                    <ColumnOverview />
+                    <ColumnOverview/>
                 </div>
                 <div style={{display: viewMode === 'column' ? 'none' : undefined}}>
-                    <TableOverview />
+                    <TableOverview/>
                 </div>
             </Container>
         </Page>

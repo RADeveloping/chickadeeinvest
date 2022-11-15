@@ -1,13 +1,25 @@
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
-import {Avatar, Button, Card, Container, Divider, Grid, Grow, Stack, Tooltip, Typography, AvatarGroup} from "@mui/material";
+import {
+    Avatar,
+    Button,
+    Card,
+    Container,
+    Divider,
+    Grid,
+    Grow,
+    Stack,
+    Tooltip,
+    Typography,
+    AvatarGroup
+} from "@mui/material";
 import * as React from "react";
-import Page from "../components/Page";
-import Iconify from "../components/Iconify";
-import PageLoading from "../components/PageLoading";
-import useFetch from "../components/FetchData";
-import {SEVERITY, STATUS} from "../utils/filters";
-import Label from "../components/Label";
-import useResponsive from "../hooks/useResponsive";
+import Page from "../components/common/Page";
+import Iconify from "../components/common/Iconify";
+import PageLoading from "../components/common/PageLoading";
+import useFetch from "../utils/fetch";
+import {SEVERITY, STATUS} from "../utils/constants";
+import Label from "../components/common/Label";
+import useResponsive from "../utils/responsive";
 
 export default function TicketDetail() {
     const title = "Ticket"
@@ -54,7 +66,7 @@ export default function TicketDetail() {
                         {ticket.length !== 0 &&
                             <Grid container spacing={3} direction={'column'}>
                                 <Grid item>
-                                    <Stack direction={'column'} padding={3}  gap={1}>
+                                    <Stack direction={'column'} padding={3} gap={1}>
                                         <Typography variant={'h4'}>
                                             {problem}
                                         </Typography>
@@ -91,7 +103,8 @@ export default function TicketDetail() {
                                 </Grid>
                                 <Divider/>
                                 <Grid item>
-                                    <Grid container padding={4} paddingTop={0} spacing={isDesktop ? 5 : 4} alignItems={'center'} justifyContent={''}>
+                                    <Grid container padding={4} paddingTop={0} spacing={isDesktop ? 5 : 4}
+                                          alignItems={'center'} justifyContent={''}>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Description
@@ -142,8 +155,10 @@ export default function TicketDetail() {
                                             {ticket.unit.tenants &&
                                                 <AvatarGroup max={4}>
                                                     {ticket.unit.tenants.map((tenant) =>
-                                                        <Tooltip key={tenant.firstName} title={`${tenant.firstName} ${tenant.lastName}`} arrow>
-                                                            <Avatar key={tenant.lastName} alt={`${tenant.firstName} ${tenant.lastName}`}
+                                                        <Tooltip key={tenant.firstName}
+                                                                 title={`${tenant.firstName} ${tenant.lastName}`} arrow>
+                                                            <Avatar key={tenant.lastName}
+                                                                    alt={`${tenant.firstName} ${tenant.lastName}`}
                                                                     src={`data:image/jpeg;base64,${tenant.profilePicture}`}/>
                                                         </Tooltip>
                                                     )}
