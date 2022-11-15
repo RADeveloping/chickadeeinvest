@@ -4,13 +4,12 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
-// hooks
-import useResponsive from '../../hooks/useResponsive';
 // components
 import Logo from '../../components/common/Logo';
 import Scrollbar from '../../components/nav/Scrollbar';
 import { useTheme } from '@emotion/react';
 import { NavMenu } from '../../components/nav/NavMenu';
+import useResponsive from "../../utils/responsive";
 
 // ----------------------------------------------------------------------
 

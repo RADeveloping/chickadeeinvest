@@ -6,8 +6,8 @@ import Iconify from "../components/common/Iconify";
 import PageLoading from "../components/common/PageLoading";
 import useFetch from "../utils/fetch";
 import {SEVERITY, STATUS} from "../utils/constants";
-import useResponsive from "../hooks/useResponsive";
 import Label from "../components/common/Label";
+import useResponsive from "../utils/responsive";
 
 export default function TicketDetail() {
     const title = "Ticket"

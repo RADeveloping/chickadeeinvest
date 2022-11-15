@@ -11,10 +11,10 @@ import {
     unitProperties
 } from "../../utils/constants";
 import useFetch from "../../utils/fetch";
-import useResponsive from "../../hooks/useResponsive";
 import SimpleList from "./SimpleList";
 import AddTicket from "../overlay/AddTicket";
 import PageLoading from "../common/PageLoading";
+import useResponsive from "../../utils/responsive";
 
 
 /**

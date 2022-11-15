@@ -15,10 +15,10 @@ import {
 import * as React from "react";
 import useFetch from "../../utils/fetch";
 import {getTicketsUri, SEVERITY, STATUS} from "../../utils/constants";
-import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from "../../sections/@dashboard/list";
 import PageLoading from "../common/PageLoading";
 import SearchNotFound from "./SearchNotFound";
 import Label from "../common/Label";
+import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from "../table";
 
 // ----------------------------------------------------------------------
 

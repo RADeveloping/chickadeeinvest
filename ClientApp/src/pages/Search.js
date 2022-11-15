@@ -11,7 +11,6 @@ import * as React from "react";
 import Page from "../components/common/Page";
 import {useEffect} from "react";
 import useFetch from "../utils/fetch";
-import useResponsive from "../hooks/useResponsive";
 import {
     filterProperties, filterTicket, filterUnit,
     propertyProperties,
@@ -25,6 +24,7 @@ import Unit from "../components/search/Unit";
 import Ticket from "../components/search/Ticket";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import Iconify from "../components/common/Iconify";
+import useResponsive from "../utils/responsive";
 
 export default function Search() {
     const title = "Search"

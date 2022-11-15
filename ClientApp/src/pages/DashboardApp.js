@@ -14,9 +14,9 @@ import {
     getTicketsUri,
     getUnitsUri
 } from "../utils/constants";
-import Widget from "../sections/@dashboard/app/Widget";
-import UserWidget from "../sections/@dashboard/app/UserWidget";
 import AddTicket from "../components/overlay/AddTicket";
+import Widget from "../components/dashboard/Widget";
+import UserWidget from "../components/dashboard/UserWidget";
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {

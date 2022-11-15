@@ -7,9 +7,9 @@ import {
     Typography
 } from '@mui/material';
 // components
-import Iconify from '../../../components/common/Iconify';
-import ListItems from '../../../components/common/ListItems';
 import {useState} from "react";
+import Iconify from "../common/Iconify";
+import ListItems from "../common/ListItems";
 
 export default function Widget({title, uri, total, items, icon, loading, addComponent}) {
     const [open, setOpen] = useState(false);
