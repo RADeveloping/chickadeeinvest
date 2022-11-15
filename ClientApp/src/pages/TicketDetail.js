@@ -16,10 +16,12 @@ import * as React from "react";
 import Page from "../components/common/Page";
 import Iconify from "../components/common/Iconify";
 import PageLoading from "../components/common/PageLoading";
-import useFetch from "../utils/fetch";
-import {SEVERITY, STATUS} from "../utils/constants";
+import useFetch, {usePost} from "../utils/fetch";
+import {isMemberOf, SEVERITY, STATUS} from "../utils/constants";
 import Label from "../components/common/Label";
 import useResponsive from "../utils/responsive";
+import {useState} from "react";
+import {LoadingButton} from "@mui/lab";
 
 export default function TicketDetail() {
     const title = "Ticket"
@@ -29,13 +31,32 @@ export default function TicketDetail() {
     const pid = searchParams.get('pid')
     const navigate = useNavigate();
     const isDesktop = useResponsive('up', 'sm');
-
-    const [ticket, errorTicket, loadingTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`);
-
-    const {createdOn, description, estimatedDate, problem, severity, status, tenant, unit} = ticket;
-
+    const [patchTicket, setPatchTicket] = useState(null);
+    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`);
+    const [account, accountError, accountLoading] = useFetch('/api/account');
+    const isTenant = account ? account.roles.contains('Tenant') && !account.roles.contains('SuperAdmin') : null;
+    const {createdOn, description, estimatedDate, problem, severity, status} = ticket;
     const loadingData = loadingTicket;
 
+    const onCompleted = () => {
+        reloadTicket()
+    }
+    
+    const [respPatch, errorPatch, loadingPatch] = usePost(`/api/properties/${pid}/units/${uid}/tickets/${id}`,
+        undefined, patchTicket, onCompleted);
+
+    const setCompleted = () => {
+        setPatchTicket([
+            {
+                "op": "replace",
+                "path": "/status",
+                "value": 1
+            }
+        ])
+    }
+    
+    console.log(respPatch)
+    
     return (
         <Page title={`${title} #${id}`}>
             <Container>
@@ -52,13 +73,16 @@ export default function TicketDetail() {
                             Back
                         </Button>
                     </Stack>
-                    <Button
+                    <LoadingButton
+                        loading={loadingPatch}
+                        onClick={setCompleted}
+                        disabled={status === 1}
                         variant="contained"
                         to="#"
                         startIcon={<Iconify icon="akar-icons:check"/>}
                     >
-                        {`Complete`}
-                    </Button>
+                        {status === 0 ? "Complete" : "Completed"}
+                    </LoadingButton>
                 </Stack>
                 <PageLoading loadingData={loadingData}/>
                 <Grow in={!loadingData}>

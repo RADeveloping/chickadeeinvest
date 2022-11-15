@@ -35,6 +35,17 @@ export const ticketProperties = [
     {id: 'status', label: 'Status'},
 ];
 
+export const isMemberOf = (userRoles, roles) => {
+    if (!userRoles) return false
+    for (let i = 0; i < userRoles.length; i++) {
+        for (let j = 0; j < roles.length; j++) {
+            if (userRoles[i] === roles[j]) {
+                return true
+            }
+        }
+    }
+    return false
+}
 
 export const getTicketBox = (ticket) => {
     return (

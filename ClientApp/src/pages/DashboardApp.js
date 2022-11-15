@@ -12,7 +12,7 @@ import {
     filterUnit,
     getPropertiesUri,
     getTicketsUri,
-    getUnitsUri
+    getUnitsUri, isMemberOf
 } from "../utils/constants";
 import AddTicket from "../components/overlay/AddTicket";
 import Widget from "../components/dashboard/Widget";
@@ -86,18 +86,6 @@ export default function DashboardApp() {
             ]
         }
     ]
-
-    const isMemberOf = (userRoles, roles) => {
-        if (!userRoles) return false
-        for (let i = 0; i < userRoles.length; i++) {
-            for (let j = 0; j < roles.length; j++) {
-                if (userRoles[i] === roles[j]) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
 
     const isBigWidget = (index) => {
         let remainder = index % 2
