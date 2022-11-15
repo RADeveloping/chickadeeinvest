@@ -95,7 +95,8 @@ export default function Search() {
                 <Grow in={showResults}>
                     <Grid container spacing={2}>
                         <SearchRowResult key={'prop-search'}
-                                         viewComponent={(data) => <Property key={data.propertyId} navigate={navigate} data={data}/>}
+                                         viewComponent={(data) => <Property key={data.propertyId} navigate={navigate}
+                                                                            data={data}/>}
                                          title={"Properties"}
                                          orderBy={propertyOrderBy}
                                          handleOrderByChange={propertyHandleOrderByChange}
@@ -106,7 +107,8 @@ export default function Search() {
                                          data={properties}
                         />
                         <SearchRowResult key={'unit-search'}
-                                         viewComponent={(data) => <Unit key={data.unitId} navigate={navigate} data={data}/>}
+                                         viewComponent={(data) => <Unit key={data.unitId} navigate={navigate}
+                                                                        data={data}/>}
                                          title={"Units"}
                                          orderBy={unitOrderBy}
                                          handleOrderByChange={unitHandleOrderByChange}
@@ -117,7 +119,8 @@ export default function Search() {
                                          data={units}
                         />
                         <SearchRowResult key={'ticket-search'}
-                                         viewComponent={(data) => <Ticket key={data.ticketId} navigate={navigate} data={data}/>}
+                                         viewComponent={(data) => <Ticket key={data.ticketId} navigate={navigate}
+                                                                          data={data}/>}
                                          title={"Tickets"}
                                          orderBy={ticketOrderBy}
                                          handleOrderByChange={ticketHandleOrderByChange}

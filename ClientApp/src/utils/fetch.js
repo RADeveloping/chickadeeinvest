@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+
 let controller = new AbortController();
 /**
  * Aborts all fetches using useFetch.
@@ -58,7 +59,7 @@ export const usePost = (url, post, patch) => {
     const [resp, setResp] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
-    
+
     useEffect(() => {
         if (url && (post || patch)) {
             setLoading(true);

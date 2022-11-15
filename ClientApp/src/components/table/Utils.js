@@ -24,16 +24,16 @@ export function applySortFilter(array, comparator, query, filterProperty) {
         return a[1] - b[1];
     });
     if (query) {
-            return filter(array, (data) => {
-                if (typeof data[filterProperty] == 'string') {
-                    return data[filterProperty].toLowerCase().indexOf(query.toLowerCase()) !== -1
-                } else if (data[filterProperty] instanceof Date) {
-                    return data[filterProperty].toLocaleDateString('en-CA', {dateStyle: 'medium'}).toLowerCase().includes(query.toLowerCase());
-                } else {
-                    return data[filterProperty].toString().toLowerCase().includes(query.toLowerCase());
-                }
-            });
-       
+        return filter(array, (data) => {
+            if (typeof data[filterProperty] == 'string') {
+                return data[filterProperty].toLowerCase().indexOf(query.toLowerCase()) !== -1
+            } else if (data[filterProperty] instanceof Date) {
+                return data[filterProperty].toLocaleDateString('en-CA', {dateStyle: 'medium'}).toLowerCase().includes(query.toLowerCase());
+            } else {
+                return data[filterProperty].toString().toLowerCase().includes(query.toLowerCase());
+            }
+        });
+
     }
     return stabilizedThis.map((el) => el[0]);
 }

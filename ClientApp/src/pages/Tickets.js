@@ -21,13 +21,13 @@ export default function Tickets() {
             setSearchParams(searchParams)
         }
     };
-    
+
     useEffect(() => {
         let view = searchParams.get('viewMode')
         if (view) setViewMode(view)
     }, [])
-    
-    return(
+
+    return (
         <Page title={title}>
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -45,10 +45,10 @@ export default function Tickets() {
                     </ToggleButtonGroup>
                 </Stack>
                 <div style={{display: viewMode !== 'column' ? 'none' : undefined}}>
-                    <ColumnOverview />
+                    <ColumnOverview/>
                 </div>
                 <div style={{display: viewMode === 'column' ? 'none' : undefined}}>
-                    <TableOverview />
+                    <TableOverview/>
                 </div>
             </Container>
         </Page>

@@ -57,7 +57,8 @@ export default function DashboardApp() {
                         addComponent={
                             account.roles ?
                                 !account.roles.includes('PropertyManager') ?
-                                (open, handleClose) => <AddTicket open={open} handleClose={handleClose}/> : undefined
+                                    (open, handleClose) => <AddTicket open={open}
+                                                                      handleClose={handleClose}/> : undefined
                                 : undefined
                         }
                         loading={ticketsLoading}
