@@ -211,7 +211,7 @@ export default function SimpleList({
                     }
                     {items.length === 0 &&
                         <Box sx={{
-                            height: '75%',
+                            height: isDesktop ? '75%' : '65%',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',

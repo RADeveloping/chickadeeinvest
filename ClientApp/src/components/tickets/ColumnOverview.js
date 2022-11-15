@@ -100,20 +100,20 @@ export default function ColumnOverview() {
     }
 
     const viewList = [
-        <SimpleList key={"simpleList1"} leftRound items={properties} title={"Properties"}
+        <SimpleList leftRound items={properties} title={"Properties"}
                     setSelectedId={setSelectedPropertyId}
                     selectedId={selectedPropertyId}
                     isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
                     loading={loadingProperties} uri={getPropertiesUri}
                     setOrderBy={propertySetOrderBy} order={propertyOrder} setOrder={propertySetOrder}/>,
-        <SimpleList key={"simpleList2"} noRound skinny items={selectedPropertyId ?
+        <SimpleList noRound skinny items={selectedPropertyId ?
             units : []}
                     title={"Units"} setNestedSelect={setSelectedPropertyId} path={path}
                     setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
                     isDesktop={isDesktop} properties={unitProperties}
                     loading={loadingUnits} uri={getUnitsUri}
                     setOrderBy={unitSetOrderBy} order={unitOrder} setOrder={unitSetOrder}/>,
-        <SimpleList key={"simpleList3"} rightRound immediateClick items={selectedUnitId ? tickets : []}
+        <SimpleList rightRound immediateClick items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
                     isDesktop={isDesktop} properties={ticketProperties}
