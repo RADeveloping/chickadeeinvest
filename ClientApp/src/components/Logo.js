@@ -10,7 +10,14 @@ Logo.propTypes = {
   disabledLink: PropTypes.bool,
   sx: PropTypes.object,
 };
-
+/**
+ * Chickadee logo.
+ * @param disabledLink Disables RouterLink.
+ * @param dark For use on light backgrounds.
+ * @param sx Additional styles.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function Logo({ disabledLink = false, dark = false, sx }) {
   const theme = useTheme();
 

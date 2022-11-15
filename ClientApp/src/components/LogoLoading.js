@@ -1,6 +1,11 @@
 import Logo from "./Logo";
 import {CircularProgress, Grow} from "@mui/material";
 
+/**
+ * Logo wrapped in CircularProgress.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function LogoLoading() {
     return <Grow in={true}>
         <div style={{
