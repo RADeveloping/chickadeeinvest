@@ -7,12 +7,13 @@ import {Link} from "react-router-dom";
 import PageLoading from "../components/common/PageLoading";
 import * as React from "react";
 import {
+    accountUri,
     filterProperties,
     filterTicket,
     filterUnit,
     getPropertiesUri,
     getTicketsUri,
-    getUnitsUri, isMemberOf
+    getUnitsUri, isMemberOf, propertyUri, ticketUri, unitUri
 } from "../utils/constants";
 import AddTicket from "../components/overlay/AddTicket";
 import Widget from "../components/dashboard/Widget";
@@ -21,16 +22,9 @@ import UserWidget from "../components/dashboard/UserWidget";
 
 export default function DashboardApp() {
 
-    const ticketUri = '/api/tickets';
-    const unitUri = '/api/units';
-    const propertyUri = '/api/properties?sort=desc&param=open_count';
-
-    const accountUri = '/api/account';
-    const currentUnitUri = '/api/units/current';
-
     const [tickets, ticketsError, ticketsLoading] = useFetch(ticketUri, filterTicket);
     const [units, unitsError, unitsLoading] = useFetch(unitUri, filterUnit);
-    const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri, filterProperties);
+    const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri + '?sort=desc&param=open_count', filterProperties);
 
     const [account, accountError, accountLoading] = useFetch(accountUri);
 

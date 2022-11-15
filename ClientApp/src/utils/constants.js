@@ -2,6 +2,11 @@
 import * as React from "react";
 import Label from "../components/common/Label";
 
+export const ticketUri = '/api/tickets';
+export const unitUri = '/api/units';
+export const propertyUri = '/api/properties';
+export const accountUri = '/api/account';
+
 export const SEVERITY = {
     0: {color: 'success', text: 'Low'},
     1: {color: 'warning', text: 'Medium'},

@@ -17,7 +17,7 @@ import Page from "../components/common/Page";
 import Iconify from "../components/common/Iconify";
 import PageLoading from "../components/common/PageLoading";
 import useFetch, {usePost} from "../utils/fetch";
-import {isMemberOf, SEVERITY, STATUS} from "../utils/constants";
+import {accountUri, isMemberOf, SEVERITY, STATUS} from "../utils/constants";
 import Label from "../components/common/Label";
 import useResponsive from "../utils/responsive";
 import {useState} from "react";
@@ -33,15 +33,15 @@ export default function TicketDetail() {
     const isDesktop = useResponsive('up', 'sm');
     const [patchTicket, setPatchTicket] = useState(null);
     const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`);
-    const [account, accountError, accountLoading] = useFetch('/api/account');
-    const isTenant = account ? account.roles.contains('Tenant') && !account.roles.contains('SuperAdmin') : null;
-    const {createdOn, description, estimatedDate, problem, severity, status} = ticket;
+    const [account] = useFetch(accountUri);
+    const showComplete = account ? isMemberOf(account.roles, ["SuperAdmin", "PropertyManager"]) : null;
+    const {createdOn, description, estimatedDate, problem, severity, status, closedDate} = ticket;
     const loadingData = loadingTicket;
 
     const onCompleted = () => {
         reloadTicket()
     }
-    
+
     const [respPatch, errorPatch, loadingPatch] = usePost(`/api/properties/${pid}/units/${uid}/tickets/${id}`,
         undefined, patchTicket, onCompleted);
 
@@ -54,9 +54,7 @@ export default function TicketDetail() {
             }
         ])
     }
-    
-    console.log(respPatch)
-    
+
     return (
         <Page title={`${title} #${id}`}>
             <Container>
@@ -73,16 +71,18 @@ export default function TicketDetail() {
                             Back
                         </Button>
                     </Stack>
-                    <LoadingButton
-                        loading={loadingPatch}
-                        onClick={setCompleted}
-                        disabled={status === 1}
-                        variant="contained"
-                        to="#"
-                        startIcon={<Iconify icon="akar-icons:check"/>}
-                    >
-                        {status === 0 ? "Complete" : "Completed"}
-                    </LoadingButton>
+                    <Grow in={showComplete === true}>
+                        <LoadingButton
+                            loading={loadingPatch}
+                            onClick={setCompleted}
+                            disabled={status === 1}
+                            variant="contained"
+                            to="#"
+                            startIcon={<Iconify icon="akar-icons:check"/>}
+                        >
+                            {status === 0 ? "Complete" : "Completed"}
+                        </LoadingButton>
+                    </Grow>
                 </Stack>
                 <PageLoading loadingData={loadingData}/>
                 <Grow in={!loadingData}>
@@ -111,13 +111,22 @@ export default function TicketDetail() {
                                                 </Label>
                                             </Stack>
                                             <Stack direction={'row'} alignItems={'center'} gap={1}>
-                                                <Label>
-                                                    {new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
+                                                <Label sx={{fontWeight: 'normal'}}>
+                                                    <div>
+                                                        Opened: <b>{new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                    </div>
                                                 </Label>
-                                                {estimatedDate &&
+                                                {estimatedDate && !closedDate &&
                                                     <Label sx={{fontWeight: 'normal'}}>
                                                         <div>
                                                             Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                        </div>
+                                                    </Label>
+                                                }
+                                                {closedDate &&
+                                                    <Label sx={{fontWeight: 'normal'}}>
+                                                        <div>
+                                                            Closed: <b>{new Date(closedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
                                                         </div>
                                                     </Label>
                                                 }

@@ -1,5 +1,6 @@
 // @mui
 import {
+    Box,
     Card,
     Grid,
     Grow,
@@ -10,6 +11,7 @@ import {
 import {useState} from "react";
 import Iconify from "../common/Iconify";
 import ListItems from "../common/ListItems";
+import * as React from "react";
 
 /**
  * Generic widget component for dashboard.
@@ -80,6 +82,14 @@ export default function Widget({title, uri, total, items, icon, loading, addComp
                         </Grid>
                     </div>
                     <ListItems uri={uri} items={items}/>
+                    {items.length === 0 &&
+                        <Box sx={{
+                            height: '70%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'gainsboro'
+                        }}>{`No ${title}`}</Box>}
                 </Card>
             </Grow>
         </>
