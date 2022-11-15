@@ -32,16 +32,18 @@ export default function TicketDetail() {
     const navigate = useNavigate();
     const isDesktop = useResponsive('up', 'sm');
     const [patchTicket, setPatchTicket] = useState(null);
-    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`);
+    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, undefined,
+        true);
     const [account] = useFetch(accountUri);
     const showComplete = account ? isMemberOf(account.roles, ["SuperAdmin", "PropertyManager"]) : null;
     const {createdOn, description, estimatedDate, problem, severity, status, closedDate} = ticket;
-    const loadingData = loadingTicket;
+    const firstLoad = !ticket;
+    const loadingData = loadingTicket && firstLoad;
 
     const onCompleted = () => {
         reloadTicket()
     }
-
+    
     const [respPatch, errorPatch, loadingPatch] = usePost(`/api/properties/${pid}/units/${uid}/tickets/${id}`,
         undefined, patchTicket, onCompleted);
 
@@ -73,7 +75,7 @@ export default function TicketDetail() {
                     </Stack>
                     <Grow in={showComplete === true}>
                         <LoadingButton
-                            loading={loadingPatch}
+                            loading={loadingPatch || loadingTicket}
                             onClick={setCompleted}
                             disabled={status === 1}
                             variant="contained"
