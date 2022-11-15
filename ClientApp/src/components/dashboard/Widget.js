@@ -16,10 +16,10 @@ import ListItems from "../common/ListItems";
  * @param title {string} Title of widget.
  * @param uri {string} URI string.
  * @param total {number} Count of items.
- * @param items {[object]} Array of items. 
+ * @param items {[object]} Array of items.
  * @param icon {string} Iconify icon string.
  * @param loading {boolean} Loading state.
- * @param addComponent {()=>JSX.Element} Component for adding items. 
+ * @param addComponent {()=>JSX.Element} Component for adding items.
  * @returns {JSX.Element}
  * @constructor
  */
