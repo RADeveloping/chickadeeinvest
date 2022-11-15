@@ -1,14 +1,14 @@
 ﻿import {Card, CardContent, Grid, Grow, Stack, Typography} from "@mui/material";
-import Label from "./Label";
 import * as React from "react";
-import {getTicketsUri, SEVERITY, STATUS} from "../utils/filters";
+import {getTicketsUri, SEVERITY, STATUS} from "../../utils/constants";
+import Label from "../common/Label";
 
-export default function Ticket({ data, navigate }) {
+export default function Ticket({data, navigate}) {
     const {ticketId, problem, description, createdOn, estimatedDate, status, severity} = data;
     return (
         <Grow key={'ticket' + ticketId} in={true}>
             <Grid xs={12} sm={12} md={6} l={4} xl={4} item>
-                <Card sx={{height: 150}} onClick={()=>navigate('/dashboard/' + getTicketsUri(data))}>
+                <Card sx={{height: 150}} onClick={() => navigate('/dashboard/' + getTicketsUri(data))}>
                     <CardContent sx={{height: '100%'}}>
                         <Stack direction={'column'} justifyContent={'space-between'} alignItems={'flex-start'}
                                sx={{height: '100%'}}>
@@ -40,12 +40,12 @@ export default function Ticket({ data, navigate }) {
                                     <Label>
                                         {new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
                                     </Label>
-                                    {estimatedDate && 
-                                    <Label sx={{fontWeight: 'normal'}}>
-                                        <div>
-                                            Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
-                                        </div>
-                                    </Label>
+                                    {estimatedDate &&
+                                        <Label sx={{fontWeight: 'normal'}}>
+                                            <div>
+                                                Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                            </div>
+                                        </Label>
                                     }
                                 </Stack>
                             </Stack>

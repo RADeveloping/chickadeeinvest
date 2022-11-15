@@ -2,8 +2,8 @@ import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
+import Iconify from "../../../components/common/Iconify";
 // component
-import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 

@@ -12,7 +12,7 @@ import {
     MenuItem, Select, Box, Fade, InputLabel, FormControl
 } from '@mui/material';
 // component
-import Iconify from '../../../components/Iconify';
+import Iconify from '../../../components/common/Iconify';
 import * as React from "react";
 import {useRef, useState} from "react";
 

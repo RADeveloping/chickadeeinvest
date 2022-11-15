@@ -1,21 +1,31 @@
-﻿import useFetch, {usePost} from "./FetchData";
-import {useEffect, useState} from "react";
+﻿import {useEffect, useState} from "react";
 import {
     Button,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle, FormControl, InputLabel, MenuItem,
     Select, Stack,
     TextField
 } from "@mui/material";
 import * as React from "react";
-import Label from "./Label";
-import {getTicketsUri, SEVERITY} from "../utils/filters";
 import {useNavigate} from "react-router-dom";
 import {LoadingButton} from "@mui/lab";
+import useFetch, {usePost} from "../../utils/fetch";
+import {getTicketsUri, SEVERITY} from "../../utils/constants";
+import Label from "../common/Label";
 
+
+/**
+ * Component for Add Ticket overlay.
+ * @param title {string} String displayed in the title.
+ * @param propertyId {string} Property Id.
+ * @param unitId {string} Unit Id.
+ * @param open {boolean} Overlay open state.
+ * @param handleClose Handles close for the open state.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function AddTicket({title, propertyId, unitId, open, handleClose}) {
     const [problem, setProblem] = useState('');
     const [description, setDescription] = useState('');
@@ -62,7 +72,7 @@ export default function AddTicket({title, propertyId, unitId, open, handleClose}
                             variant="standard"
                             onChange={(e) => setProblem(e.target.value)}
                         />
-                        <FormControl sx={{minWidth: 90, marginBottom:'5px'}} margin="dense" variant="standard">
+                        <FormControl sx={{minWidth: 90, marginBottom: '5px'}} margin="dense" variant="standard">
                             <InputLabel id="severity">Severity</InputLabel>
                             <Select
                                 value={severity}
@@ -84,7 +94,7 @@ export default function AddTicket({title, propertyId, unitId, open, handleClose}
                             </Select>
                         </FormControl>
                     </Stack>
-                 
+
                     <TextField
                         multiline
                         margin="dense"
@@ -94,7 +104,7 @@ export default function AddTicket({title, propertyId, unitId, open, handleClose}
                         variant="standard"
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    
+
                 </Stack>
             </DialogContent>
             <DialogActions>

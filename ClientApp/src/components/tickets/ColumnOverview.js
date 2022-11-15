@@ -1,22 +1,27 @@
 ﻿import * as React from 'react';
 import {useEffect, useState} from 'react';
-import useFetch from "../components/FetchData";
 import {Box, Grow, Stack} from "@mui/material";
-import SimpleList from "../components/SimpleList";
-import PageLoading from "../components/PageLoading";
-import useResponsive from "../hooks/useResponsive";
-import {
-    filterProperties,
-    filterTicket,
-    filterUnit,
-    getPropertiesUri,
-    getTicketsUri,
-    getUnitsUri, propertyProperties, ticketProperties, unitProperties
-} from "../utils/filters";
 import {useSearchParams} from "react-router-dom";
-import useFilter from "./FilterOrder";
-import AddTicket from "./AddTicket";
+import useFilter from "../../utils/filter";
+import {
+    filterProperties, filterTicket,
+    filterUnit, getPropertiesUri, getTicketsUri, getUnitsUri,
+    propertyProperties,
+    ticketProperties,
+    unitProperties
+} from "../../utils/constants";
+import useFetch from "../../utils/fetch";
+import useResponsive from "../../hooks/useResponsive";
+import SimpleList from "./SimpleList";
+import AddTicket from "../overlay/AddTicket";
+import PageLoading from "../common/PageLoading";
 
+
+/**
+ * Component column view for Tickets page.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function ColumnOverview() {
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -82,7 +87,7 @@ export default function ColumnOverview() {
             searchParams.set('unit', selectedUnitId)
             if (!firstLoad) setSearchParams(searchParams)
             setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
-        } else if(!selectedUnitId && selectedPropertyId) {
+        } else if (!selectedUnitId && selectedPropertyId) {
             let selectedProperty = getItem(properties, selectedPropertyId)
             if (!selectedProperty) return
             setPath(`${selectedProperty.dir}`)
@@ -95,27 +100,30 @@ export default function ColumnOverview() {
     }
 
     const viewList = [
-        <SimpleList key={"simpleList1"} leftRound items={properties} title={"Properties"} setSelectedId={setSelectedPropertyId}
+        <SimpleList key={"simpleList1"} leftRound items={properties} title={"Properties"}
+                    setSelectedId={setSelectedPropertyId}
                     selectedId={selectedPropertyId}
                     isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
                     loading={loadingProperties} uri={getPropertiesUri}
                     setOrderBy={propertySetOrderBy} order={propertyOrder} setOrder={propertySetOrder}/>,
-        <SimpleList key={"simpleList2"}  noRound skinny items={selectedPropertyId ?
+        <SimpleList key={"simpleList2"} noRound skinny items={selectedPropertyId ?
             units : []}
                     title={"Units"} setNestedSelect={setSelectedPropertyId} path={path}
                     setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
                     isDesktop={isDesktop} properties={unitProperties}
                     loading={loadingUnits} uri={getUnitsUri}
                     setOrderBy={unitSetOrderBy} order={unitOrder} setOrder={unitSetOrder}/>,
-        <SimpleList key={"simpleList3"}  rightRound immediateClick items={selectedUnitId ? tickets : []}
+        <SimpleList key={"simpleList3"} rightRound immediateClick items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
                     isDesktop={isDesktop} properties={ticketProperties}
                     loading={loadingTickets} uri={getTicketsUri}
                     setOrderBy={ticketSetOrderBy} order={ticketOrder} setOrder={ticketSetOrder}
                     addComponent={selectedUnitId && selectedPropertyId ?
-                        (open, handleClose) => <AddTicket title={units.length > 0 && selectedUnitId ? getItem(units, selectedUnitId).unitNo : null} unitId={selectedUnitId} propertyId={selectedPropertyId}
-                                                          open={open} handleClose={handleClose}/> 
+                        (open, handleClose) => <AddTicket
+                            title={units.length > 0 && selectedUnitId ? getItem(units, selectedUnitId).unitNo : null}
+                            unitId={selectedUnitId} propertyId={selectedPropertyId}
+                            open={open} handleClose={handleClose}/>
                         : undefined
                     }
         />

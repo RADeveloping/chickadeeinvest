@@ -7,13 +7,10 @@ import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/mater
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // components
-import Logo from '../../components/Logo';
-import Scrollbar from '../../components/Scrollbar';
-import NavSection from '../../components/NavSection';
-//
-import navConfig from './NavConfig';
+import Logo from '../../components/common/Logo';
+import Scrollbar from '../../components/nav/Scrollbar';
 import { useTheme } from '@emotion/react';
-import { NavMenu } from '../../components/NavMenu';
+import { NavMenu } from '../../components/nav/NavMenu';
 
 // ----------------------------------------------------------------------
 

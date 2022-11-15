@@ -1,6 +1,6 @@
-﻿import {Chip, Grid, Stack, Typography} from "@mui/material";
-import Label from "../components/Label";
+﻿import {Grid, Stack, Typography} from "@mui/material";
 import * as React from "react";
+import Label from "../components/common/Label";
 
 export const SEVERITY = {
     0: {color: 'success', text: 'Low'},

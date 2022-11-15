@@ -7,26 +7,24 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import PageLoading from "../components/PageLoading";
 import * as React from "react";
-import Page from "../components/Page";
-import {ListToolbar} from "../sections/@dashboard/list";
-import {useCallback, useEffect, useState} from "react";
-import useFetch from "../components/FetchData";
+import Page from "../components/common/Page";
+import {useEffect} from "react";
+import useFetch from "../utils/fetch";
 import useResponsive from "../hooks/useResponsive";
 import {
     filterProperties, filterTicket, filterUnit,
     propertyProperties,
     ticketProperties,
     unitProperties
-} from "../utils/filters";
-import Property from "../components/Property";
-import useFilter from "../components/FilterOrder";
-import SearchRowResult from "../components/SearchRowResult";
-import Unit from "../components/Unit";
-import Ticket from "../components/Ticket";
+} from "../utils/constants";
+import Property from "../components/search/Property";
+import useFilter from "../utils/filter";
+import SearchRowResult from "../components/search/SearchRowResult";
+import Unit from "../components/search/Unit";
+import Ticket from "../components/search/Ticket";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import Iconify from "../components/Iconify";
+import Iconify from "../components/common/Iconify";
 
 export default function Search() {
     const title = "Search"

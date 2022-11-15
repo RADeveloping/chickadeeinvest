@@ -14,10 +14,10 @@ import {
     MenuItem,
     Stack
 } from "@mui/material";
-import Iconify from "./Iconify";
+import Iconify from "../common/Iconify";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {abortFetch} from "./FetchData";
+import {abortFetch} from "../../utils/fetch";
 
 export default function SimpleList({
                                        items,
@@ -149,7 +149,7 @@ export default function SimpleList({
                       }}>
 
                     {items.length > 0 && items.map((item, index) =>
-                        <React.Fragment key={'simpleList-item'+ index}>
+                        <React.Fragment key={'simpleList-item' + index}>
                             <Divider key={`${item.id}-${title}-dvd1`} component="li"/>
                             <ListItemButton key={`${item.id}-${title}-btn`} onClick={() => {
                                 abortFetch();

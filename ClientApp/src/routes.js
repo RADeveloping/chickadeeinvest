@@ -17,7 +17,6 @@ import LandingPage from "./pages/LandingPage";
 import Tickets from "./pages/Tickets";
 import TicketDetail from "./pages/TicketDetail";
 import Search from "./pages/Search";
-import Verification from "./pages/Verification";
 
 // ----------------------------------------------------------------------
 
@@ -69,12 +68,6 @@ export default function Router() {
               path="authentication/logged-out"
               element={<Navigate to="/dashboard/app" />}
           />
-
-        <Route
-            path="dashboard/verification"
-            element={<Verification />}
-        />
-        
 
           {/*
           Routes for layouts that only have logo.

@@ -12,13 +12,13 @@ import {
     TablePagination, Box, Grow
 } from '@mui/material';
 // components
-import Label from '../components/Label';
-import SearchNotFound from '../components/SearchNotFound';
-import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from '../sections/@dashboard/list';
-import useFetch from "../components/FetchData";
-import PageLoading from "../components/PageLoading";
 import * as React from "react";
-import {getTicketsUri, SEVERITY, STATUS} from "../utils/filters";
+import useFetch from "../../utils/fetch";
+import {getTicketsUri, SEVERITY, STATUS} from "../../utils/constants";
+import {applySortFilter, getComparator, ListHead, ListToolbar, MoreMenu} from "../../sections/@dashboard/list";
+import PageLoading from "../common/PageLoading";
+import SearchNotFound from "./SearchNotFound";
+import Label from "../common/Label";
 
 // ----------------------------------------------------------------------
 
