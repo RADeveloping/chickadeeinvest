@@ -18,21 +18,10 @@ services:
       ACCEPT_EULA: Y
       MSSQL_SA_PASSWORD: SqlPassword!
 
-  chickadee-smtp:
-    image: "catatnight/postfix"
-    ports:
-      - "25:25"
-      - "587:587"
-    environment:
-      - maildomain=chickadeeinvest.ca
-      - smtp_user=webmaster:XCpK6L05w06sUId%M03^PFW6^EEyPYZM523A*hZ@VIu8k879^0
-    restart: always
-
   chickadee:
     image: chickadeeinvest/chickadee:1667099502
     depends_on:
       - chickadee-db
-      - chickadee-smtp
     ports:
       - "80:80"
       - "443:443"
