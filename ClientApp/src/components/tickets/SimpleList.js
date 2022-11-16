@@ -41,7 +41,7 @@ import NoItems from "../common/NoItems";
  * @param order {string} Order, desc or asc state.
  * @param setOrder {function} Sets the order state.
  * @param immediateClick {boolean} Immediate action after click, for use with the last column.
- * @param addComponent {()=>JSX.Element} Method that returns the add component, a plus symbol will appear.
+ * @param addComponent {(open: boolean, handleClose: function)=>JSX.Element} Method that returns the add component, a plus symbol will appear.
  * @returns {JSX.Element}
  * @constructor
  */
