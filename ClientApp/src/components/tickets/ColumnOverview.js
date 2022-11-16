@@ -77,7 +77,7 @@ export default function ColumnOverview() {
     }, [])
 
     useEffect(() => {
-        if (selectedPropertyId && !loadingProperties) {
+        if (selectedPropertyId) {
             searchParams.set('property', selectedPropertyId)
             if (!firstLoad) {
                 setSelectedUnitId(null)
@@ -92,10 +92,10 @@ export default function ColumnOverview() {
                 setSearchParams(searchParams)
             }
         }
-    }, [selectedPropertyId, loadingProperties])
+    }, [selectedPropertyId])
 
     useEffect(() => {
-        if (selectedUnitId && !loadingUnits) {
+        if (selectedUnitId) {
             searchParams.set('property', selectedPropertyId)
             searchParams.set('unit', selectedUnitId)
             if (!firstLoad) setSearchParams(searchParams)
@@ -105,7 +105,7 @@ export default function ColumnOverview() {
             if (!firstLoad) setSearchParams(searchParams)
         }
         setSelectedTicketId(null);
-    }, [selectedUnitId, loadingUnits])
+    }, [selectedUnitId])
 
     useEffect(() => {
         if (mobileReady) handlePath();
