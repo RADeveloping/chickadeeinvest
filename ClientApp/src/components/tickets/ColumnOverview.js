@@ -23,14 +23,23 @@ import useResponsive from "../../utils/responsive";
  * @constructor
  */
 export default function ColumnOverview() {
+    // mobileWait uses these constants to delay the transition from column views while loading in mobile view.
+    const WAIT = -2
+    const BACK = -1
+    const READY = 0
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [selectedPropertyId, setSelectedPropertyId] = useState(null);
     const [selectedUnitId, setSelectedUnitId] = useState(null);
     const [selectedTicketId, setSelectedTicketId] = useState(null);
-    
+
     const [mobileWait, setMobileWait] = useState(-1);
-    
+
+    const mobileWaitRefresh = () => {
+        if (mobileWait === WAIT) setMobileWait(READY)
+    }
+
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
         propertyOrder, propertySetOrder, propertyHandleOrderChange] = useFilter(propertyProperties);
@@ -43,17 +52,27 @@ export default function ColumnOverview() {
         ticketOrderBy, ticketSetOrderBy, ticketHandleOrderByChange,
         ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(ticketProperties);
 
-    const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties, undefined, ()=>{if (mobileWait === -2) setMobileWait(0)});
+    const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties, undefined,
+        mobileWaitRefresh);
     const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ?
-        `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit, undefined, ()=>{if(mobileWait === -2) setMobileWait(1)});
+        `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit, undefined, 
+        mobileWaitRefresh);
     const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ?
-        `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket, undefined, ()=>setMobileWait(2));
+        `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket, undefined,
+        mobileWaitRefresh);
 
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'lg');
     const firstLoadingData = loadingData & firstLoad;
+
+    const getItem = (items, id) => {
+        return items.find(item => item.id === id)
+    }
+
+    const selectedProperty = getItem(properties, selectedPropertyId)
+    const selectedUnit = getItem(units, selectedUnitId)
 
     useEffect(() => {
         if (!loadingData) {
@@ -66,9 +85,6 @@ export default function ColumnOverview() {
 
     useEffect(() => {
         if (selectedPropertyId && !loadingProperties) {
-            let selectedProperty = getItem(properties, selectedPropertyId)
-            console.log(selectedProperty)
-            if (!selectedProperty) return
             searchParams.set('property', selectedPropertyId)
             if (!firstLoad) {
                 setSelectedUnitId(null)
@@ -77,7 +93,6 @@ export default function ColumnOverview() {
             } else {
                 setFirstLoad(false)
             }
-            setPath(`${selectedProperty.dir}`)
         } else if (!selectedPropertyId) {
             if (!firstLoad) {
                 searchParams.delete('property');
@@ -88,32 +103,29 @@ export default function ColumnOverview() {
 
     useEffect(() => {
         if (selectedUnitId && !loadingUnits) {
-            let selectedProperty = getItem(properties, selectedPropertyId)
-            let selectedUnit = getItem(units, selectedUnitId)
-            if (!selectedProperty || !selectedUnit) return
             searchParams.set('property', selectedPropertyId)
             searchParams.set('unit', selectedUnitId)
             if (!firstLoad) setSearchParams(searchParams)
-            setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
         } else if (!selectedUnitId && selectedPropertyId) {
-            let selectedProperty = getItem(properties, selectedPropertyId)
-            if (!selectedProperty) return
             searchParams.set('property', selectedPropertyId)
             searchParams.delete('unit')
             if (!firstLoad) setSearchParams(searchParams)
-            setPath(`${selectedProperty.dir}`)
         }
         setSelectedTicketId(null);
     }, [selectedUnitId, loadingUnits])
-    
+
+    useEffect(() => {
+        handlePath();
+    }, [selectedProperty, selectedUnit])
+
     const handlePath = () => {
-        
+        if (selectedProperty && selectedUnit) {
+            setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
+        } else if (selectedProperty) {
+            setPath(`${selectedProperty.dir}`)
+        }
     }
 
-    const getItem = (items, id) => {
-        return items.find(item => item.id === id)
-    }
-    
     const getSelect = (mobileVal, setSelected) => {
         return (val) => {
             setFirstLoad(false);
@@ -151,20 +163,19 @@ export default function ColumnOverview() {
                     }
         />
     ]
-    
+
     function getActiveList() {
         if (selectedPropertyId && selectedUnitId) {
-            if (mobileWait === 2 || mobileWait === -1) return viewList[2]
+            if (mobileWait === BACK || mobileWait === READY) return viewList[2]
             return viewList[1]
         } else if (selectedPropertyId) {
-            if (mobileWait === 1 || mobileWait === -1) return viewList[1]
+            if (mobileWait === BACK || mobileWait === READY) return viewList[1]
             return viewList[0]
         } else {
             return viewList[0]
         }
     }
-    
-    console.log(mobileWait)
+
     return (
         <>
             <PageLoading loadingData={firstLoadingData}/>
