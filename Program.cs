@@ -21,9 +21,7 @@ var db = builder.Configuration["DBNAME"] ?? "chickadee";
 
 var connectionString = $"Server=tcp:{host},{port};Database={db};UID={user};PWD={password};";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString,
-        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
-));
+    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllersWithViews()
