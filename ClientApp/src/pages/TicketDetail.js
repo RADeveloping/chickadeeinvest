@@ -79,7 +79,7 @@ export default function TicketDetail() {
                             Back
                         </Button>
                     </Stack>
-                    <Grow in={showComplete === true}>
+                    <Grow in={showComplete === true && !loadingData}>
                         <LoadingButton
                             loading={loadingCompleteButton}
                             onClick={setCompletedButton}
@@ -180,7 +180,7 @@ export default function TicketDetail() {
                                                 Property Manager
                                             </Typography>
                                             {ticket.unit.propertyManager &&
-                                                <Tooltip
+                                                <Tooltip enterTouchDelay={0}
                                                     title={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
                                                     arrow>
                                                     <Avatar
@@ -196,7 +196,7 @@ export default function TicketDetail() {
                                             {ticket.unit.tenants &&
                                                 <AvatarGroup max={4}>
                                                     {ticket.unit.tenants.map((tenant) =>
-                                                        <Tooltip key={tenant.firstName}
+                                                        <Tooltip enterTouchDelay={0} key={tenant.firstName}
                                                                  title={`${tenant.firstName} ${tenant.lastName}`} arrow>
                                                             <Avatar key={tenant.lastName}
                                                                     alt={`${tenant.firstName} ${tenant.lastName}`}
