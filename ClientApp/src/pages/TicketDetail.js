@@ -83,7 +83,7 @@ export default function TicketDetail() {
                         <LoadingButton
                             loading={loadingCompleteButton}
                             onClick={setCompletedButton}
-                            disabled={status === 1}
+                            disabled={status === 1 ? true : false}
                             variant="contained"
                             to="#"
                             startIcon={<Iconify icon="akar-icons:check"/>}
