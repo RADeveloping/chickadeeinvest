@@ -110,8 +110,8 @@ export default function ColumnOverview() {
     }, [selectedUnitId, loadingUnits])
 
     useEffect(() => {
-        handlePath();
-    }, [selectedProperty, selectedUnit])
+        if (mobileReady) handlePath();
+    }, [selectedProperty, selectedUnit, mobileReady])
 
     const handlePath = () => {
         if (selectedProperty && selectedUnit) {
