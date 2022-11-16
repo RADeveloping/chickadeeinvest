@@ -18,6 +18,7 @@ import Iconify from "../common/Iconify";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {abortFetch} from "../../utils/fetch";
+import NoItems from "../common/NoItems";
 
 /**
  * Generic list component used in ColumnOverview.
@@ -209,14 +210,7 @@ export default function SimpleList({
                                 <Divider key={`${item.id}-${title}-dvd`} component="li"/>}
                         </React.Fragment>)
                     }
-                    {items.length === 0 &&
-                        <Box sx={{
-                            height: isDesktop ? '75%' : '65%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'gainsboro'
-                        }}>{`No ${title}`}</Box>}
+                    <NoItems title={title} items={items} height={isDesktop ? '75%' : '65%'}/>
                 </List>
             </Card>
         </>

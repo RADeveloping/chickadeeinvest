@@ -132,7 +132,7 @@ export default function TicketDetail() {
                                                     </Label>
                                                 }
                                                 {closedDate &&
-                                                    <Label sx={{fontWeight: 'normal'}}>
+                                                    <Label color={'primary'} sx={{fontWeight: 'normal'}}>
                                                         <div>
                                                             Closed: <b>{new Date(closedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
                                                         </div>
@@ -145,7 +145,7 @@ export default function TicketDetail() {
                                 <Divider/>
                                 <Grid item>
                                     <Grid container padding={4} paddingTop={0} spacing={isDesktop ? 5 : 4}
-                                          alignItems={'center'} justifyContent={''}>
+                                          alignItems={'center'}>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Description
