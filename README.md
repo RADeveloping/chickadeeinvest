@@ -112,6 +112,175 @@ The SuperAdmin is not using the same API the front end is using. Therefore if th
 
 There is too much to explain regarding the MVC in ASP.NET that wouldn't be beneficial to include here, however Microsoft's [Documentation](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/controller-methods-views?view=aspnetcore-6.0) is a great resource to refer to.
 
+## Back-End Controllers
+
+After doing ```dot net watch run``` and you are led to a localhost environment, you can add ```/swagger``` behind the URL to access swagger and all the API paths provisioned in the controllers.
+# POST requests
+
+Except for the ```Ticket``` model, the models in the ```/Models``` directory all have their Ids created automatically via ```Guid.NewGuid().ToString()``` so one need not provision the POST call with the id inside the object that you pass through. The following are examples of JSON objects that you can pass to create objects for each data model.
+
+# Company
+
+```Authorized for SuperAdmin only```
+```
+{
+    "name": "Company A",
+    "address": "785 Evergreen Terrace",
+    "phone": "778-777-7777",
+    "email": "company@gmail.com"
+}
+```
+
+# Message
+
+```Anyone can send messages```
+```
+{
+    "content": "content",
+    "senderId": "4752bbeb-696a-4641-b91d-ce5f526ab16d",
+    "ticketId": 1
+}
+```
+Where senderId is the Id of the current user and ticketId is the Id of the ticket.
+
+# Property
+
+```Authorized for PropertyManager and SuperAdmin```
+```
+{
+    "name": "The Orient managed by PM1",
+    "address": "785 Evergreen Terrace"
+}
+```
+
+# Property Manager
+
+```Authorized for SuperAdmin only```
+```
+{
+    "email": "james@jones.com",
+    "firstName":"James",
+    "lastName":"Jones",
+    "profilePicture": null
+}
+```
+
+# Tenants
+
+```Authorized for PropertyManager and SuperAdmin```
+
+```Requires propertyId and unitId beforehand```
+
+```
+propertyId: 1421253d-b524-419c-8cad-f7b616092409
+unitId:     b4804e35-ee25-44b3-980f-fed3a965af10
+
+{
+    "email": "james@tortia.com",
+    "phoneNumber": "7788888888",
+    "firstName": "James",
+    "lastName": "Tortia",
+    "unitId": "b4804e35-ee25-44b3-980f-fed3a965af10"
+}
+```
+
+# Units
+
+```Authorized for SuperAdmin only```
+
+```Requires propertyId```
+
+```
+propertyId: 1421253d-b524-419c-8cad-f7b616092409
+
+{
+    "unitNo": 101,
+    "unitType": 0,
+    "propertyId": "1421253d-b524-419c-8cad-f7b616092409"
+}
+```
+You can also provide ```propertyManagerId``` as well
+
+# Tickets
+
+```Anyone can make tickets```
+
+```Requires propertyId and unitId```
+
+```
+propertyId:  1421253d-b524-419c-8cad-f7b616092409
+unitId:      b4804e35-ee25-44b3-980f-fed3a965af10
+
+{
+    "problem": "Problem",
+    "description": "Short Description here",
+    "estimatedDate": "2022-11-08T05:57:50.681Z",
+    "status": 0,
+    "severity": 3,
+    "unitId": "b4804e35-ee25-44b3-980f-fed3a965af10"
+}
+```
+Do not need to fill out ```createdOn``` as it will be filled automatically as the object
+is created.
+
+Do not need to fill in the ```createdById``` as it will take the id of the current user
+
+# TicketImages
+
+```Only the creator of the ticket can put images```
+
+```Requires ticketId```
+
+```
+createdById:  4752bbeb-696a-4641-b91d-ce5f526ab16d
+{
+    "data": "U3dhZ2dlciByb2Nrcw==",
+    "ticketId": 1,
+    "createdById": "4752bbeb-696a-4641-b91d-ce5f526ab16d"
+}
+```
+```createdById``` can be attained by GET request for the specific ticket.
+# UnitImages
+
+```Authorized for PropertyManager and SuperAdmin```
+
+```Requires propertyId and unitId```
+
+```
+propertyId:  d9087d78-fb59-474c-87fc-67174186be48
+unitId:      fb904b58-b19f-463a-b6ff-c94e811165e2
+
+{
+    "data": "U3dhZ2dlciByb2Nrcw==",
+    "unitId": "fb904b58-b19f-463a-b6ff-c94e811165e2"
+}
+```
+```data``` is a ```byte[]``` type.
+
+# UnitNotes
+
+```Authorized for PropertyManager in charge of the unit```
+
+```
+{
+    "message": "hey",
+    "unitId": "03c253b1-54d1-4c25-afe9-63100dce6303"
+}
+```
+# VerificationDocuments
+
+```Authorized for Tenants```
+
+```
+{
+    "data": "U3dhZ2dlciByb2Nrcw==",
+    "documentType": 0
+}
+```
+The datatype of ```data``` is ```byte[]```.
+
+The ```tenantId``` will be filled out with the current user's Id (Given that the user is a tenant who exists in the database, of course.).
+
 ## Navigation Menu
 
 The navigation menu for the ASP.NET side is included in the ```/Areas/Identity/Pages/``` directory, inside ```_ManageNav.cshtml``` 
