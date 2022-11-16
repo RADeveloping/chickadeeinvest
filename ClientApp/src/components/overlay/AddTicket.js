@@ -14,6 +14,7 @@ import {LoadingButton} from "@mui/lab";
 import useFetch, {usePost} from "../../utils/fetch";
 import {getTicketsUri, SEVERITY} from "../../utils/constants";
 import Label from "../common/Label";
+import Iconify from "../common/Iconify";
 
 
 /**
@@ -110,7 +111,7 @@ export default function AddTicket({title, propertyId, unitId, open, handleClose}
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
                 <LoadingButton loading={loading} disabled={description === '' || problem === '' || resp.ticketId}
-                               onClick={handleAdd}>{resp.ticketId ? 'Added' : 'Add'}</LoadingButton>
+                               onClick={handleAdd}>{resp.ticketId ? <Iconify icon="akar-icons:check"/> : 'Add'}</LoadingButton>
             </DialogActions>
         </Dialog>
     )
