@@ -59,7 +59,7 @@ export default function ColumnOverview() {
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
-    const isDesktop = useResponsive('up', 'lg');
+    const isDesktop = useResponsive('up', 'md');
     const firstLoadingData = loadingData & firstLoad;
 
     const getItem = (items, id) => {
