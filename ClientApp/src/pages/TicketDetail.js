@@ -16,10 +16,12 @@ import * as React from "react";
 import Page from "../components/common/Page";
 import Iconify from "../components/common/Iconify";
 import PageLoading from "../components/common/PageLoading";
-import useFetch from "../utils/fetch";
-import {SEVERITY, STATUS} from "../utils/constants";
+import useFetch, {usePost} from "../utils/fetch";
+import {accountUri, isMemberOf, SEVERITY, STATUS} from "../utils/constants";
 import Label from "../components/common/Label";
 import useResponsive from "../utils/responsive";
+import {useState} from "react";
+import {LoadingButton} from "@mui/lab";
 
 export default function TicketDetail() {
     const title = "Ticket"
@@ -29,13 +31,38 @@ export default function TicketDetail() {
     const pid = searchParams.get('pid')
     const navigate = useNavigate();
     const isDesktop = useResponsive('up', 'sm');
+    const [patchTicket, setPatchTicket] = useState(null);
 
-    const [ticket, errorTicket, loadingTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`);
+    const onFetch = () => {
+        setLoadingCompleteButton(false);
+    }
+    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, undefined,
+        true, onFetch);
+    
+    const onPost = () => {
+        reloadTicket()
+    }
+    const [respPatch, errorPatch, loadingPatch] = usePost(`/api/properties/${pid}/units/${uid}/tickets/${id}`,
+        undefined, patchTicket, onPost);
+    
+    const [account] = useFetch(accountUri);
+    const showComplete = account ? isMemberOf(account.roles, ["SuperAdmin", "PropertyManager"]) : null;
+    
+    const [loadingCompleteButton, setLoadingCompleteButton] = useState(false);
+    const {createdOn, description, estimatedDate, problem, severity, status, closedDate} = ticket;
+    const firstLoad = ticket.length === 0;
+    const loadingData = loadingTicket && firstLoad;
 
-    const {createdOn, description, estimatedDate, problem, severity, status, tenant, unit} = ticket;
-
-    const loadingData = loadingTicket;
-
+    const setCompletedButton = () => {
+        setLoadingCompleteButton(true);
+        setPatchTicket([
+            {
+                "op": "replace",
+                "path": "/status",
+                "value": 1
+            }
+        ])
+    }
     return (
         <Page title={`${title} #${id}`}>
             <Container>
@@ -52,13 +79,18 @@ export default function TicketDetail() {
                             Back
                         </Button>
                     </Stack>
-                    <Button
-                        variant="contained"
-                        to="#"
-                        startIcon={<Iconify icon="akar-icons:check"/>}
-                    >
-                        {`Complete`}
-                    </Button>
+                    <Grow in={showComplete === true}>
+                        <LoadingButton
+                            loading={loadingCompleteButton}
+                            onClick={setCompletedButton}
+                            disabled={status === 1 ? true : false}
+                            variant="contained"
+                            to="#"
+                            startIcon={<Iconify icon="akar-icons:check"/>}
+                        >
+                            {status === 0 ? "Complete" : "Completed"}
+                        </LoadingButton>
+                    </Grow>
                 </Stack>
                 <PageLoading loadingData={loadingData}/>
                 <Grow in={!loadingData}>
@@ -87,13 +119,22 @@ export default function TicketDetail() {
                                                 </Label>
                                             </Stack>
                                             <Stack direction={'row'} alignItems={'center'} gap={1}>
-                                                <Label>
-                                                    {new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
+                                                <Label sx={{fontWeight: 'normal'}}>
+                                                    <div>
+                                                        Opened: <b>{new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                    </div>
                                                 </Label>
-                                                {estimatedDate &&
+                                                {estimatedDate && !closedDate &&
                                                     <Label sx={{fontWeight: 'normal'}}>
                                                         <div>
                                                             Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                        </div>
+                                                    </Label>
+                                                }
+                                                {closedDate &&
+                                                    <Label color={'primary'} sx={{fontWeight: 'normal'}}>
+                                                        <div>
+                                                            Closed: <b>{new Date(closedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
                                                         </div>
                                                     </Label>
                                                 }
@@ -104,7 +145,7 @@ export default function TicketDetail() {
                                 <Divider/>
                                 <Grid item>
                                     <Grid container padding={4} paddingTop={0} spacing={isDesktop ? 5 : 4}
-                                          alignItems={'center'} justifyContent={''}>
+                                          alignItems={'center'}>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Description

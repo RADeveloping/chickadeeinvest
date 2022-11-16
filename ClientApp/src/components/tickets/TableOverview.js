@@ -127,17 +127,16 @@ export default function TableOverview() {
             <PageLoading loadingData={loadingData}/>
             <Grow in={!loadingData}>
                 <Card sx={{display: loadingData ? 'none' : undefined}}>
-                    <ListToolbar
-                        numSelected={selected.length}
-                        filterQuery={filterQuery}
-                        onFilterQuery={handleFilterByQuery}
-                        properties={properties}
-                        filterQueryProperty={filterQueryProperty}
-                        setFilterQueryProperty={setFilterQueryProperty}
-                        setFilterQuery={setFilterQuery}
-                    />
-
-
+                    {/* For enabling local search bar and select, uncomment: */}
+                    {/*<ListToolbar*/}
+                    {/*    numSelected={selected.length}*/}
+                    {/*    filterQuery={filterQuery}*/}
+                    {/*    onFilterQuery={handleFilterByQuery}*/}
+                    {/*    properties={properties}*/}
+                    {/*    filterQueryProperty={filterQueryProperty}*/}
+                    {/*    setFilterQueryProperty={setFilterQueryProperty}*/}
+                    {/*    setFilterQuery={setFilterQuery}*/}
+                    {/*/>*/}
                     <TableContainer>
                         <Table>
                             <ListHead
