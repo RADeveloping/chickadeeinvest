@@ -280,6 +280,7 @@ public static class ModelBuilderExtensions {
                     TicketId = 3,
                     CreatedOn = new DateTime(1999, 10, 3),
                     EstimatedDate = new DateTime(2000, 11, 3),
+                    ClosedDate = new DateTime(2000, 11, 11),
                     Problem = "Tornado damage",
                     Description = "Need to fix the roof that was damaged by the tornado",
                     Status = Enums.TicketStatus.Closed,
