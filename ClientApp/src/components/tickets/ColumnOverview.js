@@ -23,21 +23,16 @@ import useResponsive from "../../utils/responsive";
  * @constructor
  */
 export default function ColumnOverview() {
-    // mobileWait uses these constants to delay the transition from column views while loading in mobile view.
-    const WAIT = -2
-    const BACK = -1
-    const READY = 0
-
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [selectedPropertyId, setSelectedPropertyId] = useState(null);
     const [selectedUnitId, setSelectedUnitId] = useState(null);
     const [selectedTicketId, setSelectedTicketId] = useState(null);
 
-    const [mobileWait, setMobileWait] = useState(-1);
+    const [mobileReady, setMobileReady] = useState(true);
 
-    const mobileWaitRefresh = () => {
-        if (mobileWait === WAIT) setMobileWait(READY)
+    const mobileReadyRefresh = () => {
+        setMobileReady(true)
     }
 
     const [propertySearchParams,
@@ -53,13 +48,13 @@ export default function ColumnOverview() {
         ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(ticketProperties);
 
     const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties, undefined,
-        mobileWaitRefresh);
+        mobileReadyRefresh);
     const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ?
         `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit, undefined, 
-        mobileWaitRefresh);
+        mobileReadyRefresh);
     const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ?
         `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket, undefined,
-        mobileWaitRefresh);
+        mobileReadyRefresh);
 
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
     const [path, setPath] = useState('');
@@ -126,30 +121,30 @@ export default function ColumnOverview() {
         }
     }
 
-    const getSelect = (mobileVal, setSelected) => {
+    const getSelect = (ready, setSelected) => {
         return (val) => {
             setFirstLoad(false);
-            setMobileWait(mobileVal)
+            setMobileReady(ready)
             setSelected(val)
         }
     }
 
     const viewList = [
         <SimpleList key={isDesktop ? "sl-1" : undefined} leftRound items={properties} title={"Properties"}
-                    setSelectedId={getSelect(-2, setSelectedPropertyId)}
+                    setSelectedId={getSelect(false, setSelectedPropertyId)}
                     selectedId={selectedPropertyId}
                     isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
                     loading={loadingProperties} uri={getPropertiesUri}
                     setOrderBy={propertySetOrderBy} order={propertyOrder} setOrder={propertySetOrder}/>,
         <SimpleList key={isDesktop ? "sl-2" : undefined} noRound skinny items={selectedPropertyId ?
             units : []}
-                    title={"Units"} setNestedSelect={getSelect(-1, setSelectedPropertyId)} path={path}
-                    setSelectedId={getSelect(-2, setSelectedUnitId)} selectedId={selectedUnitId}
+                    title={"Units"} setNestedSelect={getSelect(true, setSelectedPropertyId)} path={path}
+                    setSelectedId={getSelect(false, setSelectedUnitId)} selectedId={selectedUnitId}
                     isDesktop={isDesktop} properties={unitProperties}
                     loading={loadingUnits} uri={getUnitsUri}
                     setOrderBy={unitSetOrderBy} order={unitOrder} setOrder={unitSetOrder}/>,
         <SimpleList key={isDesktop ? "sl-3" : undefined} rightRound immediateClick items={selectedUnitId ? tickets : []}
-                    title={"Tickets"} setNestedSelect={getSelect(-1, setSelectedUnitId)} path={path}
+                    title={"Tickets"} setNestedSelect={getSelect(true, setSelectedUnitId)} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
                     isDesktop={isDesktop} properties={ticketProperties}
                     loading={loadingTickets} uri={getTicketsUri}
@@ -166,10 +161,10 @@ export default function ColumnOverview() {
 
     function getActiveList() {
         if (selectedPropertyId && selectedUnitId) {
-            if (mobileWait === BACK || mobileWait === READY) return viewList[2]
+            if (mobileReady) return viewList[2]
             return viewList[1]
         } else if (selectedPropertyId) {
-            if (mobileWait === BACK || mobileWait === READY) return viewList[1]
+            if (mobileReady) return viewList[1]
             return viewList[0]
         } else {
             return viewList[0]
