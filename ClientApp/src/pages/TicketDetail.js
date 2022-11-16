@@ -32,22 +32,29 @@ export default function TicketDetail() {
     const navigate = useNavigate();
     const isDesktop = useResponsive('up', 'sm');
     const [patchTicket, setPatchTicket] = useState(null);
-    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, undefined,
-        true);
-    const [account] = useFetch(accountUri);
-    const showComplete = account ? isMemberOf(account.roles, ["SuperAdmin", "PropertyManager"]) : null;
-    const {createdOn, description, estimatedDate, problem, severity, status, closedDate} = ticket;
-    const firstLoad = !ticket;
-    const loadingData = loadingTicket && firstLoad;
 
-    const onCompleted = () => {
+    const onFetch = () => {
+        setLoadingCompleteButton(false);
+    }
+    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, undefined,
+        true, onFetch);
+    
+    const onPost = () => {
         reloadTicket()
     }
-    
     const [respPatch, errorPatch, loadingPatch] = usePost(`/api/properties/${pid}/units/${uid}/tickets/${id}`,
-        undefined, patchTicket, onCompleted);
+        undefined, patchTicket, onPost);
+    
+    const [account] = useFetch(accountUri);
+    const showComplete = account ? isMemberOf(account.roles, ["SuperAdmin", "PropertyManager"]) : null;
+    
+    const [loadingCompleteButton, setLoadingCompleteButton] = useState(false);
+    const {createdOn, description, estimatedDate, problem, severity, status, closedDate} = ticket;
+    const firstLoad = ticket.length === 0;
+    const loadingData = loadingTicket && firstLoad;
 
-    const setCompleted = () => {
+    const setCompletedButton = () => {
+        setLoadingCompleteButton(true);
         setPatchTicket([
             {
                 "op": "replace",
@@ -56,7 +63,6 @@ export default function TicketDetail() {
             }
         ])
     }
-
     return (
         <Page title={`${title} #${id}`}>
             <Container>
@@ -75,8 +81,8 @@ export default function TicketDetail() {
                     </Stack>
                     <Grow in={showComplete === true}>
                         <LoadingButton
-                            loading={loadingPatch || loadingTicket}
-                            onClick={setCompleted}
+                            loading={loadingCompleteButton}
+                            onClick={setCompletedButton}
                             disabled={status === 1}
                             variant="contained"
                             to="#"

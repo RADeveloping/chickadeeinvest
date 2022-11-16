@@ -13,9 +13,10 @@ export const abortFetch = () => {
  * @param url {string} URL to fetch.
  * @param [filter = false] {(a:[])=>void} Method to filter data before return.
  * @param [reset = false] {boolean} Resets loading on new fetch.
+ * @param [callBack = false] {function} Callback to be called after completion.
  * @returns {[*[],string,boolean,function]}
  */
-const useFetch = (url, filter, reset) => {
+const useFetch = (url, filter, reset, callBack) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
@@ -32,6 +33,7 @@ const useFetch = (url, filter, reset) => {
             fetch(url, {signal: controller.signal})
                 .then((res) => res.json())
                 .then((data) => {
+                    if (callBack) callBack();
                     if (!data) data = []
                     if (data.status && data.status === 404) data = []
                     if (Array.isArray(data) && filter) data = filter(data);
