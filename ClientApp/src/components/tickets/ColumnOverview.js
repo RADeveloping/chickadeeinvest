@@ -46,14 +46,14 @@ export default function ColumnOverview() {
     const [ticketSearchParams,
         ticketOrderBy, ticketSetOrderBy, ticketHandleOrderByChange,
         ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(ticketProperties);
-
+    
     const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties, undefined,
         mobileReadyRefresh);
     const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ?
-        `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit, undefined, 
+            `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit, undefined,
         mobileReadyRefresh);
     const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ?
-        `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket, undefined,
+            `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket, undefined,
         mobileReadyRefresh);
 
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
@@ -68,15 +68,13 @@ export default function ColumnOverview() {
 
     const selectedProperty = getItem(properties, selectedPropertyId)
     const selectedUnit = getItem(units, selectedUnitId)
-
+    
     useEffect(() => {
-        if (!loadingData) {
-            let propertyId = searchParams.get('property')
-            let unitId = searchParams.get('unit')
-            if (propertyId) setSelectedPropertyId(propertyId)
-            if (unitId) setSelectedUnitId(unitId)
-        }
-    }, [loadingData])
+        let propertyId = searchParams.get('property')
+        let unitId = searchParams.get('unit')
+        if (propertyId) setSelectedPropertyId(propertyId)
+        if (unitId) setSelectedUnitId(unitId)
+    }, [])
 
     useEffect(() => {
         if (selectedPropertyId && !loadingProperties) {
