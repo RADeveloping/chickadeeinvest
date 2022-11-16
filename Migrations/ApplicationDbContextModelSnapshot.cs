@@ -115,10 +115,10 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c4aab1fb-8fff-4988-8fba-12c081e0700d",
+                            Id = "4b6e2833-1510-4587-988d-ee29fc40721f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "013d87fd-b487-4c46-80e7-7a57eb3c3a23",
-                            DateOfBirth = new DateTime(1992, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "891de5b8-dfcd-49e4-9dd2-2b45195cee26",
+                            DateOfBirth = new DateTime(1992, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             Email = "superadmin@chickadeeinvest.ca",
                             EmailConfirmed = true,
                             FirstName = "Matt",
@@ -126,9 +126,9 @@ namespace chickadee.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERADMIN@CHICKADEEINVEST.CA",
                             NormalizedUserName = "SUPERADMIN@CHICKADEEINVEST.CA",
-                            PasswordHash = "AQAAAAEAACcQAAAAEH9ZzVnbm4CWEStoZZewkOlMF8i+0uUs6WLnD+r3FzWWwxGjFy/pdDuq1KFuqC6kgg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKk2GFMfvZ0h2MssgoHfJ4tfI0s8qNdGu905VQtEWIApKdQe5xYECDi5eMdAuNbbbQ==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "fbf32d36-54b4-4273-85bb-58352bcb1abe",
+                            SecurityStamp = "226d77e3-51a7-4929-982d-3d437ce81c8a",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@chickadeeinvest.ca",
                             UsernameChangeLimit = 10
@@ -166,7 +166,7 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            CompanyId = "a1f4d455-4fc3-4aaf-8a64-ca9e5471acaa",
+                            CompanyId = "d6d94692-1c2f-4012-91d7-5cb065c64dc8",
                             Address = "123 Main St",
                             Email = "main@companyOne.com",
                             Name = "Company One",
@@ -174,7 +174,7 @@ namespace chickadee.Migrations
                         },
                         new
                         {
-                            CompanyId = "55f62cbb-4bc2-4144-bbec-ec9de6831b9a",
+                            CompanyId = "651347d4-386f-4047-b7d8-2aa2eb4c14ce",
                             Address = "Wall street",
                             Email = "main@companyTwo.com",
                             Name = "Company Two",
@@ -217,10 +217,10 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            MessageId = "1de1a3e1-f2ed-431b-a3cd-b5b2c5ee706e",
+                            MessageId = "d02d4acb-34e0-4415-a74f-8c00076ddba4",
                             Content = "This is a message",
-                            CreatedDate = new DateTime(2022, 11, 14, 19, 6, 50, 854, DateTimeKind.Local).AddTicks(9130),
-                            SenderId = "278cd096-73f8-4adb-b85a-1497fb39d6eb",
+                            CreatedDate = new DateTime(2022, 11, 15, 11, 39, 47, 420, DateTimeKind.Local).AddTicks(6290),
+                            SenderId = "7fc25bb1-1643-4404-92c1-1c6808d4b3fb",
                             TicketId = 1
                         });
                 });
@@ -245,19 +245,19 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            PropertyId = "6fc4c395-cf01-448d-83da-fa17fff3ad3b",
+                            PropertyId = "b1eb5bf1-dad9-4cf2-bef2-55b0bf566e79",
                             Address = "742 Evergreen Terrace",
                             Name = "The Evergreen Managed By PM 1"
                         },
                         new
                         {
-                            PropertyId = "c6cfcbb2-8823-4c85-b613-f44c670061f0",
+                            PropertyId = "41dfd714-1145-4b0f-b10b-184a3ad6c9f0",
                             Address = "123 Sesame Street",
                             Name = "Montana Apartments Managed By PM 2"
                         },
                         new
                         {
-                            PropertyId = "82233389-b6fa-461a-9491-48817eb76052",
+                            PropertyId = "074fcec7-3d7e-4826-a21e-e8baa3394c1d",
                             Address = "7488 Hazel Street",
                             Name = "Arcola Managed by PM 2"
                         });
@@ -314,51 +314,51 @@ namespace chickadee.Migrations
                         new
                         {
                             TicketId = 1,
-                            CreatedById = "278cd096-73f8-4adb-b85a-1497fb39d6eb",
+                            CreatedById = "7fc25bb1-1643-4404-92c1-1c6808d4b3fb",
                             CreatedOn = new DateTime(2022, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Massive Leak from the Kitchen pipe",
                             EstimatedDate = new DateTime(2022, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Problem = "Massive Leakage",
                             Severity = 2,
                             Status = 0,
-                            UnitId = "ec48de50-ae2f-456d-aca1-1143791e04f0"
+                            UnitId = "0faa7c38-31de-460f-a190-d51b4cac5959"
                         },
                         new
                         {
                             TicketId = 2,
-                            CreatedById = "278cd096-73f8-4adb-b85a-1497fb39d6eb",
+                            CreatedById = "7fc25bb1-1643-4404-92c1-1c6808d4b3fb",
                             CreatedOn = new DateTime(2021, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Need repairing the floors from last earthquake",
                             EstimatedDate = new DateTime(2022, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Problem = "Earthquake repair",
                             Severity = 1,
                             Status = 0,
-                            UnitId = "ec48de50-ae2f-456d-aca1-1143791e04f0"
+                            UnitId = "0faa7c38-31de-460f-a190-d51b4cac5959"
                         },
                         new
                         {
                             TicketId = 3,
                             ClosedDate = new DateTime(2000, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedById = "bbe4c087-0627-4b9b-a230-70abfa8d7caa",
+                            CreatedById = "c0a40d13-57b5-44c6-a6c9-354c485800a9",
                             CreatedOn = new DateTime(1999, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Need to fix the roof that was damaged by the tornado",
                             EstimatedDate = new DateTime(2000, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Problem = "Tornado damage",
                             Severity = 2,
                             Status = 1,
-                            UnitId = "81de2dac-09ee-4cb3-9f32-9851984172f7"
+                            UnitId = "a9669682-33b9-4c5a-8987-c6fcefc1b978"
                         },
                         new
                         {
                             TicketId = 4,
-                            CreatedById = "bbe4c087-0627-4b9b-a230-70abfa8d7caa",
+                            CreatedById = "c0a40d13-57b5-44c6-a6c9-354c485800a9",
                             CreatedOn = new DateTime(2019, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Currently getting by with rat traps",
                             EstimatedDate = new DateTime(2022, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Problem = "Rat infestation",
                             Severity = 1,
                             Status = 0,
-                            UnitId = "81de2dac-09ee-4cb3-9f32-9851984172f7"
+                            UnitId = "a9669682-33b9-4c5a-8987-c6fcefc1b978"
                         });
                 });
 
@@ -421,24 +421,24 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            UnitId = "ec48de50-ae2f-456d-aca1-1143791e04f0",
-                            PropertyId = "6fc4c395-cf01-448d-83da-fa17fff3ad3b",
-                            PropertyManagerId = "e77e4547-6907-4bef-aa75-3b3b987c128e",
+                            UnitId = "0faa7c38-31de-460f-a190-d51b4cac5959",
+                            PropertyId = "b1eb5bf1-dad9-4cf2-bef2-55b0bf566e79",
+                            PropertyManagerId = "4a5cee0b-0a7c-461f-858c-b256d920d21e",
                             UnitNo = 100,
                             UnitType = 0
                         },
                         new
                         {
-                            UnitId = "81de2dac-09ee-4cb3-9f32-9851984172f7",
-                            PropertyId = "c6cfcbb2-8823-4c85-b613-f44c670061f0",
-                            PropertyManagerId = "e5f3f086-79c8-42cc-b9b3-eef00f870f6f",
+                            UnitId = "a9669682-33b9-4c5a-8987-c6fcefc1b978",
+                            PropertyId = "41dfd714-1145-4b0f-b10b-184a3ad6c9f0",
+                            PropertyManagerId = "a98185a3-bbbc-4ee8-a000-f121f03b6f11",
                             UnitNo = 200,
                             UnitType = 1
                         },
                         new
                         {
-                            UnitId = "61460fba-d5e1-4241-a207-4c0f4bd06564",
-                            PropertyId = "c6cfcbb2-8823-4c85-b613-f44c670061f0",
+                            UnitId = "99c90207-6a4f-4491-8814-09a3f726d5eb",
+                            PropertyId = "41dfd714-1145-4b0f-b10b-184a3ad6c9f0",
                             UnitNo = 300,
                             UnitType = 1
                         });
@@ -509,7 +509,6 @@ namespace chickadee.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TenantId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -524,10 +523,10 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            VerificationDocumentId = "e1e93b03-ad39-4d56-964c-09be1d4d22f3",
+                            VerificationDocumentId = "8e648eb1-7221-472d-be1d-270028c55617",
                             Data = new byte[0],
                             DocumentType = 0,
-                            TenantId = "278cd096-73f8-4adb-b85a-1497fb39d6eb"
+                            TenantId = "7fc25bb1-1643-4404-92c1-1c6808d4b3fb"
                         });
                 });
 
@@ -701,29 +700,29 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4dcce8dd-1fd5-4e35-b13b-3fe7cfafaa6d",
-                            ConcurrencyStamp = "2e84ad33-9368-4f75-a910-c5ec3121c533",
+                            Id = "5010f6d5-45f3-4fcc-9681-10e301bb916d",
+                            ConcurrencyStamp = "1abf569f-0265-4346-a38a-a3778e868302",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "3cd8d25f-a71c-4020-8788-ca10bf86abbd",
-                            ConcurrencyStamp = "0eea7a65-8925-4749-89d3-8e65ccb79cfa",
+                            Id = "802b67c2-be4d-4649-b719-7f9d654ea03a",
+                            ConcurrencyStamp = "1e2d8705-45ed-45f0-968a-f43d6cfe71f2",
                             Name = "PropertyManager",
                             NormalizedName = "PROPERTYMANAGER"
                         },
                         new
                         {
-                            Id = "08c1d70b-75fd-4d0d-ba71-fd655e93d823",
-                            ConcurrencyStamp = "11c5326c-19aa-4613-964b-f4c10ae6229c",
+                            Id = "6ce385b2-74bb-458a-ab66-626bb9b9f1c8",
+                            ConcurrencyStamp = "5cde2100-66fd-4d00-8740-05d128a52101",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3010062b-44cc-4626-a5da-bd073e7526b4",
-                            ConcurrencyStamp = "0a3e01d5-9fed-4970-b070-b8bee7f76f38",
+                            Id = "38828def-c56c-471b-928f-0c7b31ea95a4",
+                            ConcurrencyStamp = "45a92828-d1bc-4256-97f3-169bebe09919",
                             Name = "Tenant",
                             NormalizedName = "TENANT"
                         });
@@ -818,43 +817,43 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "c4aab1fb-8fff-4988-8fba-12c081e0700d",
-                            RoleId = "3010062b-44cc-4626-a5da-bd073e7526b4"
+                            UserId = "4b6e2833-1510-4587-988d-ee29fc40721f",
+                            RoleId = "38828def-c56c-471b-928f-0c7b31ea95a4"
                         },
                         new
                         {
-                            UserId = "c4aab1fb-8fff-4988-8fba-12c081e0700d",
-                            RoleId = "3cd8d25f-a71c-4020-8788-ca10bf86abbd"
+                            UserId = "4b6e2833-1510-4587-988d-ee29fc40721f",
+                            RoleId = "802b67c2-be4d-4649-b719-7f9d654ea03a"
                         },
                         new
                         {
-                            UserId = "c4aab1fb-8fff-4988-8fba-12c081e0700d",
-                            RoleId = "08c1d70b-75fd-4d0d-ba71-fd655e93d823"
+                            UserId = "4b6e2833-1510-4587-988d-ee29fc40721f",
+                            RoleId = "6ce385b2-74bb-458a-ab66-626bb9b9f1c8"
                         },
                         new
                         {
-                            UserId = "c4aab1fb-8fff-4988-8fba-12c081e0700d",
-                            RoleId = "4dcce8dd-1fd5-4e35-b13b-3fe7cfafaa6d"
+                            UserId = "4b6e2833-1510-4587-988d-ee29fc40721f",
+                            RoleId = "5010f6d5-45f3-4fcc-9681-10e301bb916d"
                         },
                         new
                         {
-                            UserId = "e77e4547-6907-4bef-aa75-3b3b987c128e",
-                            RoleId = "3cd8d25f-a71c-4020-8788-ca10bf86abbd"
+                            UserId = "4a5cee0b-0a7c-461f-858c-b256d920d21e",
+                            RoleId = "802b67c2-be4d-4649-b719-7f9d654ea03a"
                         },
                         new
                         {
-                            UserId = "e5f3f086-79c8-42cc-b9b3-eef00f870f6f",
-                            RoleId = "3cd8d25f-a71c-4020-8788-ca10bf86abbd"
+                            UserId = "a98185a3-bbbc-4ee8-a000-f121f03b6f11",
+                            RoleId = "802b67c2-be4d-4649-b719-7f9d654ea03a"
                         },
                         new
                         {
-                            UserId = "278cd096-73f8-4adb-b85a-1497fb39d6eb",
-                            RoleId = "3010062b-44cc-4626-a5da-bd073e7526b4"
+                            UserId = "7fc25bb1-1643-4404-92c1-1c6808d4b3fb",
+                            RoleId = "38828def-c56c-471b-928f-0c7b31ea95a4"
                         },
                         new
                         {
-                            UserId = "bbe4c087-0627-4b9b-a230-70abfa8d7caa",
-                            RoleId = "3010062b-44cc-4626-a5da-bd073e7526b4"
+                            UserId = "c0a40d13-57b5-44c6-a6c9-354c485800a9",
+                            RoleId = "38828def-c56c-471b-928f-0c7b31ea95a4"
                         });
                 });
 
@@ -891,10 +890,10 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e77e4547-6907-4bef-aa75-3b3b987c128e",
+                            Id = "4a5cee0b-0a7c-461f-858c-b256d920d21e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1da6171c-5744-4fb7-bc03-2320183c03ad",
-                            DateOfBirth = new DateTime(1992, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "6bef5003-a97f-4833-9089-226192939925",
+                            DateOfBirth = new DateTime(1992, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             Email = "propertymanager@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Property",
@@ -902,20 +901,20 @@ namespace chickadee.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PROPERTYMANAGER@GMAIL.COM",
                             NormalizedUserName = "PROPERTYMANAGER@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEN0MyybuV/wdj56xIbH3Oe2ljNv/7Nm9b4Ez9932Au2rVqHAwMwr6PNinTRG3kkeiQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHxnVJO2x6UgUDw6bGBziYFhuW/6XiuFSrRQYGakC7ymgQO6Jl8OVRQWxa6hiknmFw==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "e48eb177-620b-4e70-af85-f46517c916e2",
+                            SecurityStamp = "1998e8b2-e1fe-46d8-b97c-af83d598cdc4",
                             TwoFactorEnabled = false,
                             UserName = "propertymanager@gmail.com",
                             UsernameChangeLimit = 10,
-                            CompanyId = "a1f4d455-4fc3-4aaf-8a64-ca9e5471acaa"
+                            CompanyId = "d6d94692-1c2f-4012-91d7-5cb065c64dc8"
                         },
                         new
                         {
-                            Id = "e5f3f086-79c8-42cc-b9b3-eef00f870f6f",
+                            Id = "a98185a3-bbbc-4ee8-a000-f121f03b6f11",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3cbc3612-1a60-4f2d-8839-5a4f02895c01",
-                            DateOfBirth = new DateTime(1992, 8, 3, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "4395986c-3b1e-433c-8a6c-d2e14c6773d8",
+                            DateOfBirth = new DateTime(1992, 8, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             Email = "propertymanager2@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Manager",
@@ -923,13 +922,13 @@ namespace chickadee.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PROPERTYMANAGER2@GMAIL.COM",
                             NormalizedUserName = "PROPERTYMANAGER2@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELPKn/GdT9MgtoNBqmKd8DvquVSwELs1Stn65GeugCzpR812tNbHZpPCOrcWPh5zLw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAdQTr3Ux42nT/RavHyRasgMQNw9Ccxp7iavaSOkeV+0+2Hgvn3s1F5t2ofimryynQ==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "52d9254a-0c1a-4783-9251-39b302d16554",
+                            SecurityStamp = "058b7528-3512-46a2-b389-b7eabb10b5b1",
                             TwoFactorEnabled = false,
                             UserName = "propertymanager2@gmail.com",
                             UsernameChangeLimit = 10,
-                            CompanyId = "55f62cbb-4bc2-4144-bbec-ec9de6831b9a"
+                            CompanyId = "651347d4-386f-4047-b7d8-2aa2eb4c14ce"
                         });
                 });
 
@@ -950,10 +949,10 @@ namespace chickadee.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "278cd096-73f8-4adb-b85a-1497fb39d6eb",
+                            Id = "7fc25bb1-1643-4404-92c1-1c6808d4b3fb",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5ef79f7e-af80-4952-bb6f-17a3fa7e969e",
-                            DateOfBirth = new DateTime(2002, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "1f755c43-1ad3-4569-ab42-0f44c43ae1ff",
+                            DateOfBirth = new DateTime(2002, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             Email = "tenant@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Tenant",
@@ -961,21 +960,21 @@ namespace chickadee.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TENANT@GMAIL.COM",
                             NormalizedUserName = "TENANT@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENqzh350zFRm/1bz04u3XKc6sbRwXqMLHffkDFbT9XPqEVd52qslbJYnJDsw97BKEg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBmsYkFOq6Yvio3DZ2r3lubSNn3EsQY0GzL03VEFyULSbDc90dDXS2J5i7cgB9P5fg==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "9f1ee9d0-188d-4c5f-9b67-efa9fdcb762a",
+                            SecurityStamp = "0ac98522-8b27-4845-9304-808579df285f",
                             TwoFactorEnabled = false,
-                            UnitId = "ec48de50-ae2f-456d-aca1-1143791e04f0",
+                            UnitId = "0faa7c38-31de-460f-a190-d51b4cac5959",
                             UserName = "tenant@gmail.com",
                             UsernameChangeLimit = 10,
                             IsIdVerified = false
                         },
                         new
                         {
-                            Id = "bbe4c087-0627-4b9b-a230-70abfa8d7caa",
+                            Id = "c0a40d13-57b5-44c6-a6c9-354c485800a9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cd349035-3728-4cdd-9ebf-4c194a76f416",
-                            DateOfBirth = new DateTime(2002, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "55bf5f06-7988-4ba0-ab24-cecd9589ca54",
+                            DateOfBirth = new DateTime(2002, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             Email = "tenant2@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "User",
@@ -983,11 +982,11 @@ namespace chickadee.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TENANT2@GMAIL.COM",
                             NormalizedUserName = "TENANT2@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMlc2c4uqZ1YNe/lSmf+/7+VAZSYiZ3EVgE65RaJeSxhU+xUS2PLyFU/YX/9YwQuZA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMnWXa5EAMGO0+jqbobjvtRYdqNOml8whCuqjiGLyzzYDnh7FvovqUWAmW4cgWyeAg==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "04882105-d053-4cad-9edb-5b19b9f55d13",
+                            SecurityStamp = "bc02b5a1-b35c-417f-bdf5-45b1f2d3d087",
                             TwoFactorEnabled = false,
-                            UnitId = "81de2dac-09ee-4cb3-9f32-9851984172f7",
+                            UnitId = "a9669682-33b9-4c5a-8987-c6fcefc1b978",
                             UserName = "tenant2@gmail.com",
                             UsernameChangeLimit = 10,
                             IsIdVerified = false
