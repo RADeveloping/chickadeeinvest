@@ -41,7 +41,7 @@ import NoItems from "../common/NoItems";
  * @param order {string} Order, desc or asc state.
  * @param setOrder {function} Sets the order state.
  * @param immediateClick {boolean} Immediate action after click, for use with the last column.
- * @param addComponent {()=>JSX.Element} Method that returns the add component, a plus symbol will appear.
+ * @param addComponent {(open: boolean, handleClose: function)=>JSX.Element} Method that returns the add component, a plus symbol will appear.
  * @returns {JSX.Element}
  * @constructor
  */
@@ -102,15 +102,21 @@ export default function SimpleList({
                     <ListSubheader component="div" id="nested-list-subheader">
                         <Stack direction={'column'}>
                             <Collapse orientation="vertical" in={!isDesktop && setNestedSelect != null}>
-                                <Box>
-                                    <IconButton onClick={() => {
-                                        setNestedSelect(null)
-                                    }}>
-                                        <Iconify icon="eva:arrow-back-outline"
-                                                 sx={{color: 'text.disabled', width: 20, height: 20}}/>
-                                    </IconButton>
-                                    {path && `${path}`}
-                                </Box>
+                                <Stack direction={'row'} alignItems={'center'}>
+                                    <div>
+                                        <IconButton onClick={() => {
+                                            setNestedSelect(null)
+                                        }}>
+                                            <Iconify icon="eva:arrow-back-outline"
+                                                     sx={{color: 'text.disabled', width: 20, height: 20}}/>
+                                        </IconButton>
+                                    </div>
+                                    {path && <div style={{
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis'
+                                    }}>{path}</div>}
+                                </Stack>
                             </Collapse>
                             <Stack direction={'row'} justifyContent={'space-between'}>
                                 {title}
@@ -167,7 +173,7 @@ export default function SimpleList({
                 }
                       sx={{
                           width: '100%',
-                          minWidth: isDesktop && skinny ? 200 : 360,
+                          minWidth: isDesktop && skinny ? 200 : !isDesktop ? undefined : 320,
                           bgcolor: 'background.paper',
                           overflowY: 'auto',
                           overflowX: 'clip',
