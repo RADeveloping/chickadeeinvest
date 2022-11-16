@@ -14,9 +14,10 @@ export const abortFetch = () => {
  * @param [filter = false] {(a:[])=>void} Method to filter data before return.
  * @param [reset = false] {boolean} Resets loading on new fetch.
  * @param [callBack = false] {function} Callback to be called after completion.
+ * @param [resetOnNull = false] {boolean} Reset loading on null url in addition to at load.
  * @returns {[*[],string,boolean,function]}
  */
-const useFetch = (url, filter, reset, callBack) => {
+const useFetch = (url, filter, reset, callBack, resetOnNull) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ const useFetch = (url, filter, reset, callBack) => {
     
     useEffect(() => {
         if (url) {
-            if (reset) setLoading(true)
+            if (reset || resetOnNull) setLoading(true)
             console.log(url)
             fetch(url, {signal: controller.signal})
                 .then((res) => res.json())
@@ -48,7 +49,7 @@ const useFetch = (url, filter, reset, callBack) => {
                 });
         } else {
             setData([])
-            if (!reset) setLoading(false);
+            if (!reset || resetOnNull) setLoading(false);
         }
     }, [url, reload]);
 

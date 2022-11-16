@@ -35,6 +35,8 @@ export default function ColumnOverview() {
         setMobileReady(true)
     }
 
+    const [resetOnNull, setResetOnNull] = useState(true)
+
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
         propertyOrder, propertySetOrder, propertyHandleOrderChange] = useFilter(propertyProperties);
@@ -46,21 +48,20 @@ export default function ColumnOverview() {
     const [ticketSearchParams,
         ticketOrderBy, ticketSetOrderBy, ticketHandleOrderByChange,
         ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(ticketProperties);
-    
+
     const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties, undefined,
-        mobileReadyRefresh);
+        mobileReadyRefresh, resetOnNull);
     const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ?
             `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit, undefined,
-        mobileReadyRefresh);
+        mobileReadyRefresh, resetOnNull);
     const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ?
             `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket, undefined,
-        mobileReadyRefresh);
+        mobileReadyRefresh, resetOnNull);
 
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
     const isDesktop = useResponsive('up', 'md');
-    const firstLoadingData = loadingData & firstLoad;
 
     const getItem = (items, id) => {
         return items.find(item => item.id === id)
@@ -68,7 +69,11 @@ export default function ColumnOverview() {
 
     const selectedProperty = getItem(properties, selectedPropertyId)
     const selectedUnit = getItem(units, selectedUnitId)
-    
+
+    useEffect(() => {
+        if (!loadingData) setResetOnNull(false)
+    }, [loadingData])
+
     useEffect(() => {
         let propertyId = searchParams.get('property')
         let unitId = searchParams.get('unit')
@@ -171,16 +176,16 @@ export default function ColumnOverview() {
 
     return (
         <>
-            <PageLoading loadingData={firstLoadingData}/>
-            {!firstLoadingData && isDesktop &&
-                <Grow in={!firstLoadingData}>
+            <PageLoading loadingData={loadingData}/>
+            {!loadingData && isDesktop &&
+                <Grow in={!loadingData}>
                     <Stack direction="row">
                         {viewList}
                     </Stack>
                 </Grow>
             }
-            {!firstLoadingData && !isDesktop &&
-                <Grow in={!firstLoadingData}>
+            {!loadingData && !isDesktop &&
+                <Grow in={!loadingData}>
                     <Box>
                         {getActiveList()}
                     </Box>
