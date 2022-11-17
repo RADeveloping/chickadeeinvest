@@ -4,12 +4,6 @@ services:
   chickadee-db:
     image: mcr.microsoft.com/azure-sql-edge
 
-    volumes:
-      - sqlsystem:/var/opt/mssql/
-      - sqldata:/var/opt/sqlserver/data
-      - sqllog:/var/opt/sqlserver/log
-      - sqlbackup:/var/opt/sqlserver/backup
-
     ports:
       - "1433:1433"
     restart: always
@@ -33,9 +27,3 @@ services:
       - DBPASSWORD=SqlPassword!
       - DBNAME=chickadee
       - ASPNETCORE_ENVIRONMENT=Development
-
-volumes:
-  sqlsystem:
-  sqldata:
-  sqllog:
-  sqlbackup:
