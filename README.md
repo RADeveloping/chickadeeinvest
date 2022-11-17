@@ -132,13 +132,13 @@ The possible values for ```sort``` are ```asc``` (ascending) or ```desc``` (desc
 
 Also, as noticed by the column list in the front-end, some of the GET requests are built on top of another - For example, to get all units related to a specific property, you would have to pass in ```/api/properties/<propertyId>/units``` and then build on top of that if you want to get all tickets from that unit like ```/api/properties/<propertyId>/units/<unitId>/tickets```.
 
-# Property
+## Property
 
 The GET request for all properties depends on the user. If the user is a SuperAdmin, it will return all properties with selected fields. Otherwise, it will return properties related to the requesting user (For PM, properties that they are managing and for Tenants, properties that their unit situated in).
 
 The ```param``` values for Property are ```address```, ```id```, ```open_count``` (Number of open tickets), ```unit_count```, ```tenants_count```, and ```name```.
 
-# Unit
+## Unit
 
 The GET request for all properties depends on the user. If the user is a SuperAdmin, it will return all units with selected fields. Otherwise, it will return units related to the requesting user (For PM, units that they are managing and for Tenants, units that they reside in).
 
@@ -148,7 +148,7 @@ The ```param``` values for Unit are ```id```, ```number``` (Unit Number - e.g. 1
 
 Except for the ```Ticket``` model, the models in the ```/Models``` directory all have their Ids created automatically via ```Guid.NewGuid().ToString()``` so one need not provision the POST call with the id inside the object that you pass through. The following are examples of JSON objects that you can pass to create objects for each data model.
 
-# Company
+## Company
 
 ```Authorized for SuperAdmin only```
 ```
@@ -160,7 +160,7 @@ Except for the ```Ticket``` model, the models in the ```/Models``` directory all
 }
 ```
 
-# Message
+## Message
 
 ```Anyone can send messages```
 ```
@@ -172,7 +172,7 @@ Except for the ```Ticket``` model, the models in the ```/Models``` directory all
 ```
 Where senderId is the Id of the current user and ticketId is the Id of the ticket.
 
-# Property
+## Property
 
 ```Authorized for PropertyManager and SuperAdmin```
 ```
@@ -182,7 +182,7 @@ Where senderId is the Id of the current user and ticketId is the Id of the ticke
 }
 ```
 
-# Property Manager
+## Property Manager
 
 ```Authorized for SuperAdmin only```
 ```
@@ -194,7 +194,7 @@ Where senderId is the Id of the current user and ticketId is the Id of the ticke
 }
 ```
 
-# Tenants
+## Tenants
 
 ```Authorized for PropertyManager and SuperAdmin```
 
@@ -213,7 +213,7 @@ unitId:     b4804e35-ee25-44b3-980f-fed3a965af10
 }
 ```
 
-# Units
+## Units
 
 ```Authorized for SuperAdmin only```
 
@@ -230,7 +230,7 @@ propertyId: 1421253d-b524-419c-8cad-f7b616092409
 ```
 You can also provide ```propertyManagerId``` as well
 
-# Tickets
+## Tickets
 
 ```Anyone can make tickets```
 
@@ -254,7 +254,7 @@ is created.
 
 Do not need to fill in the ```createdById``` as it will take the id of the current user
 
-# TicketImages
+## TicketImages
 
 ```Only the creator of the ticket can put images```
 
@@ -269,7 +269,7 @@ createdById:  4752bbeb-696a-4641-b91d-ce5f526ab16d
 }
 ```
 ```createdById``` can be attained by GET request for the specific ticket.
-# UnitImages
+## UnitImages
 
 ```Authorized for PropertyManager and SuperAdmin```
 
@@ -286,7 +286,7 @@ unitId:      fb904b58-b19f-463a-b6ff-c94e811165e2
 ```
 ```data``` is a ```byte[]``` type.
 
-# UnitNotes
+## UnitNotes
 
 ```Authorized for PropertyManager in charge of the unit```
 
@@ -296,7 +296,7 @@ unitId:      fb904b58-b19f-463a-b6ff-c94e811165e2
     "unitId": "03c253b1-54d1-4c25-afe9-63100dce6303"
 }
 ```
-# VerificationDocuments
+## VerificationDocuments
 
 ```Authorized for Tenants```
 
