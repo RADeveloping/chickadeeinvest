@@ -1,10 +1,11 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Outlet} from 'react-router-dom';
 // material
 import {styled} from '@mui/material/styles';
 //
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
+import authService from "../../components/api-authorization/AuthorizeService";
 
 // ----------------------------------------------------------------------
 
@@ -34,11 +35,18 @@ const MainStyle = styled('div')(({theme}) => ({
 
 export default function DashboardLayout() {
     const [open, setOpen] = useState(false);
+    const [authenticated, setAuthenticated] = useState(null);
+
+    useEffect(()=> {
+        authService.isAuthenticated().then((auth)=>{
+            setAuthenticated(auth);
+        })
+    }, [])
 
     return (
         <RootStyle>
             <DashboardNavbar onOpenSidebar={() => setOpen(true)}/>
-            <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)}/>
+            <DashboardSidebar authenticated={authenticated} isOpenSidebar={open} onCloseSidebar={() => setOpen(false)}/>
             <MainStyle>
                 <Outlet/>
             </MainStyle>
