@@ -3,7 +3,7 @@ import {useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 // material
 import {styled} from '@mui/material/styles';
-import {Box, Drawer, Grow} from '@mui/material';
+import {Box, Drawer, Fade, Grow} from '@mui/material';
 // components
 import Logo from '../../components/common/Logo';
 import Scrollbar from '../../components/nav/Scrollbar';
@@ -64,9 +64,9 @@ export default function DashboardSidebar({authenticated, isOpenSidebar, onCloseS
             </Box>
 
             <Box sx={{px: 2.5, py: 5, display: 'inline-flex'}}></Box>
-            <Grow in={authenticated !== null}>
+            <Grow timeout={!isDesktop ? 0 : undefined} in={authenticated !== null}>
                 <div>
-                    <NavSection navConfig={authenticated ? navConfig : anonymousNavConfig}/>
+                    <NavSection navConfig={authenticated === true ? navConfig : anonymousNavConfig}/>
                 </div>
             </Grow>
             <Box sx={{flexGrow: 1}}/>
