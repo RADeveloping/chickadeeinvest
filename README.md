@@ -112,11 +112,38 @@ The SuperAdmin is not using the same API the front end is using. Therefore if th
 
 There is too much to explain regarding the MVC in ASP.NET that wouldn't be beneficial to include here, however Microsoft's [Documentation](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/controller-methods-views?view=aspnetcore-6.0) is a great resource to refer to.
 
-## Back-End Controllers
+## Non-SA Back-End Controllers
 
 The controllers are inside ```/Controllers``` folder. Inside each controller are CRUD-based functions that act as GET, POST, PUT/PATCH, and DELETE requests.
 
-After doing ```dot net watch run``` and you are led to a localhost environment, you can add ```/swagger``` behind the URL to access swagger and all the API paths provisioned in the controllers.
+After doing ```dot net watch run``` and you are led to a localhost environment, you can add ```/swagger``` behind the URL to access swagger and all the API paths provisioned in the controllers. There, you can try out each call and test authorization as well after logging in as a ```SuperAdmin```, ```PropertyManager```, or ```Tenant```.
+
+The basic CRUD calls are implemented via ```dotnet-aspnet-codegenerator```. Anything that goes beyond the basic template will be noted below.
+
+## GET requests
+
+Due to the searchable nature of ```Property```, ```Unit```, and ```Ticket```, the GET requests for the above objects take in ```sort```, ```param```, and ```query``` field.
+
+The possible values for ```sort``` are ```asc``` (ascending) or ```desc``` (descending).
+
+```param``` values are dependent on the object and will be further detailed below.
+
+```query``` values are basically search values. Therefore, you will see ```stringComparison``` happening inside ```param``` string values like ```address``` and ```name``` for ```Property``` object.
+
+Also, as noticed by the column list in the front-end, some of the GET requests are built on top of another - For example, to get all units related to a specific property, you would have to pass in ```/api/properties/<propertyId>/units``` and then build on top of that if you want to get all tickets from that unit like ```/api/properties/<propertyId>/units/<unitId>/tickets```.
+
+# Property
+
+The GET request for all properties depends on the user. If the user is a SuperAdmin, it will return all properties with selected fields. Otherwise, it will return properties related to the requesting user (For PM, properties that they are managing and for Tenants, properties that their unit situated in).
+
+The ```param``` values for Property are ```address```, ```id```, ```open_count``` (Number of open tickets), ```unit_count```, ```tenants_count```, and ```name```.
+
+# Unit
+
+The GET request for all properties depends on the user. If the user is a SuperAdmin, it will return all units with selected fields. Otherwise, it will return units related to the requesting user (For PM, units that they are managing and for Tenants, units that they reside in).
+
+The ```param``` values for Unit are ```id```, ```number``` (Unit Number - e.g. 101), and ```type``` (e.g. OneBedroom).
+
 ## POST requests
 
 Except for the ```Ticket``` model, the models in the ```/Models``` directory all have their Ids created automatically via ```Guid.NewGuid().ToString()``` so one need not provision the POST call with the id inside the object that you pass through. The following are examples of JSON objects that you can pass to create objects for each data model.
