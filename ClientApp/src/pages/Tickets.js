@@ -8,11 +8,13 @@ import Iconify from "../components/common/Iconify";
 import {useSearchParams} from "react-router-dom";
 import ColumnOverview from "../components/tickets/ColumnOverview";
 import TableOverview from "../components/tickets/TableOverview";
+import useResponsive from "../utils/responsive";
 
 export default function Tickets() {
     const [searchParams, setSearchParams] = useSearchParams();
     const title = "Tickets"
     const [viewMode, setViewMode] = useState('column');
+    const isDesktop = useResponsive('up', 'md');
 
     const handleViewModeChange = (event, newViewMode) => {
         if (newViewMode) {
@@ -34,22 +36,28 @@ export default function Tickets() {
                     <Typography variant="h4" gutterBottom>
                         {title}
                     </Typography>
-                    <ToggleButtonGroup
-                        color="primary"
-                        value={viewMode}
-                        exclusive
-                        onChange={handleViewModeChange}
-                    >
-                        <ToggleButton value="column"><Iconify icon="cil:view-column"/></ToggleButton>
-                        <ToggleButton value="table"><Iconify icon="carbon:table-split"/></ToggleButton>
-                    </ToggleButtonGroup>
+                    {isDesktop &&
+                        <ToggleButtonGroup
+                            color="primary"
+                            value={viewMode}
+                            exclusive
+                            onChange={handleViewModeChange}
+                        >
+                            <ToggleButton value="column"><Iconify icon="cil:view-column"/></ToggleButton>
+                            <ToggleButton value="table"><Iconify icon="carbon:table-split"/></ToggleButton>
+                        </ToggleButtonGroup>
+                    }
                 </Stack>
-                <div style={{display: viewMode !== 'column' ? 'none' : undefined}}>
-                    <ColumnOverview/>
-                </div>
-                <div style={{display: viewMode === 'column' ? 'none' : undefined}}>
-                    <TableOverview/>
-                </div>
+                {isDesktop ?
+                    <>
+                        <div style={{display: viewMode !== 'column' ? 'none' : undefined}}>
+                            <ColumnOverview/>
+                        </div>
+                        <div style={{display: viewMode === 'column' ? 'none' : undefined}}>
+                            <TableOverview/>
+                        </div>
+                    </> :
+                    <ColumnOverview/>}
             </Container>
         </Page>
     )
