@@ -14,7 +14,7 @@ export default function Tickets() {
     const [searchParams, setSearchParams] = useSearchParams();
     const title = "Tickets"
     const [viewMode, setViewMode] = useState('column');
-    const isDesktop = useResponsive('up', 'md');
+    const isDesktop = useResponsive('up', 'sm');
 
     const handleViewModeChange = (event, newViewMode) => {
         if (newViewMode) {
