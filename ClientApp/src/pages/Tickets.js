@@ -14,7 +14,7 @@ export default function Tickets() {
     const [searchParams, setSearchParams] = useSearchParams();
     const title = "Tickets"
     const [viewMode, setViewMode] = useState('column');
-    const isDesktop = useResponsive('up', 'sm');
+    const isDesktop = useResponsive('up', 'md');
 
     const handleViewModeChange = (event, newViewMode) => {
         if (newViewMode) {
@@ -48,16 +48,12 @@ export default function Tickets() {
                         </ToggleButtonGroup>
                     }
                 </Stack>
-                {isDesktop ?
-                    <>
-                        <div style={{display: viewMode !== 'column' ? 'none' : undefined}}>
-                            <ColumnOverview/>
-                        </div>
-                        <div style={{display: viewMode === 'column' ? 'none' : undefined}}>
-                            <TableOverview/>
-                        </div>
-                    </> :
-                    <ColumnOverview/>}
+                <div style={{display: viewMode !== 'column' && isDesktop ? 'none' : undefined}}>
+                    <ColumnOverview/>
+                </div>
+                <div style={{display: viewMode === 'column' || !isDesktop ? 'none' : undefined}}>
+                    <TableOverview/>
+                </div>
             </Container>
         </Page>
     )
