@@ -36,7 +36,7 @@ import NoItems from "../common/NoItems";
  * @param properties {[object]} Array of properties for sorting.
  * @param loading {boolean} Loading state.
  * @param disableSort {boolean} Hides sort button.
- * @param uri {string} URI string.
+ * @param uri {function} URI method that returns the URI string for action after a click.
  * @param setOrderBy {function} Sets the orderBy state.
  * @param order {string} Order, desc or asc state.
  * @param setOrder {function} Sets the order state.

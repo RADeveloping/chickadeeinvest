@@ -69,11 +69,7 @@ export default function ColumnOverview() {
 
     const selectedProperty = getItem(properties, selectedPropertyId)
     const selectedUnit = getItem(units, selectedUnitId)
-
-    useEffect(() => {
-        if (!loadingData) setResetOnNull(false)
-    }, [loadingData])
-
+    
     useEffect(() => {
         let propertyId = searchParams.get('property')
         let unitId = searchParams.get('unit')
@@ -82,33 +78,27 @@ export default function ColumnOverview() {
     }, [])
 
     useEffect(() => {
+        if (!loadingData) setResetOnNull(false)
+    }, [loadingData])
+
+    useEffect(() => {
+        let newSearchParams = new URLSearchParams();
+        if (selectedPropertyId) newSearchParams.set('property', selectedPropertyId);
+        if (selectedUnitId) newSearchParams.set('unit', selectedUnitId)
+        if (!firstLoad) setSearchParams(newSearchParams)
+    }, [selectedPropertyId, selectedUnitId])
+
+    useEffect(() => {
         if (selectedPropertyId) {
-            searchParams.set('property', selectedPropertyId)
             if (!firstLoad) {
                 setSelectedUnitId(null)
-                searchParams.delete('unit')
-                setSearchParams(searchParams)
             } else {
                 setFirstLoad(false)
-            }
-        } else if (!selectedPropertyId) {
-            if (!firstLoad) {
-                searchParams.delete('property');
-                setSearchParams(searchParams)
             }
         }
     }, [selectedPropertyId])
 
     useEffect(() => {
-        if (selectedUnitId) {
-            searchParams.set('property', selectedPropertyId)
-            searchParams.set('unit', selectedUnitId)
-            if (!firstLoad) setSearchParams(searchParams)
-        } else if (!selectedUnitId && selectedPropertyId) {
-            searchParams.set('property', selectedPropertyId)
-            searchParams.delete('unit')
-            if (!firstLoad) setSearchParams(searchParams)
-        }
         setSelectedTicketId(null);
     }, [selectedUnitId])
 
@@ -137,14 +127,14 @@ export default function ColumnOverview() {
                     setSelectedId={getSelect(false, setSelectedPropertyId)}
                     selectedId={selectedPropertyId}
                     isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
-                    loading={loadingProperties} uri={getPropertiesUri}
+                    loading={loadingProperties}
                     setOrderBy={propertySetOrderBy} order={propertyOrder} setOrder={propertySetOrder}/>,
         <SimpleList key={isDesktop ? "sl-2" : undefined} noRound skinny items={selectedPropertyId ?
             units : []}
                     title={"Units"} setNestedSelect={getSelect(true, setSelectedPropertyId)} path={path}
                     setSelectedId={getSelect(false, setSelectedUnitId)} selectedId={selectedUnitId}
                     isDesktop={isDesktop} properties={unitProperties}
-                    loading={loadingUnits} uri={getUnitsUri}
+                    loading={loadingUnits}
                     setOrderBy={unitSetOrderBy} order={unitOrder} setOrder={unitSetOrder}/>,
         <SimpleList key={isDesktop ? "sl-3" : undefined} rightRound immediateClick items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={getSelect(true, setSelectedUnitId)} path={path}
