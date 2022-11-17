@@ -114,8 +114,10 @@ There is too much to explain regarding the MVC in ASP.NET that wouldn't be benef
 
 ## Back-End Controllers
 
+The controllers are inside ```/Controllers``` folder. Inside each controller are CRUD-based functions that act as GET, POST, PUT/PATCH, and DELETE requests.
+
 After doing ```dot net watch run``` and you are led to a localhost environment, you can add ```/swagger``` behind the URL to access swagger and all the API paths provisioned in the controllers.
-# POST requests
+## POST requests
 
 Except for the ```Ticket``` model, the models in the ```/Models``` directory all have their Ids created automatically via ```Guid.NewGuid().ToString()``` so one need not provision the POST call with the id inside the object that you pass through. The following are examples of JSON objects that you can pass to create objects for each data model.
 
@@ -281,6 +283,24 @@ The datatype of ```data``` is ```byte[]```.
 
 The ```tenantId``` will be filled out with the current user's Id (Given that the user is a tenant who exists in the database, of course.).
 
+## PATCH request
+
+So far, there is only one PATCH request and it is for closing tickets. In order to PATCH the ```status``` field in ```Ticket``` object, you have to pass the following JSON body as a part of the PATCH request
+
+```
+[
+    {
+        "op": "replace",
+        "path": "/status",
+        "value": 1
+    }
+]
+```
+The ```op``` stands for operation of the PATCH which in this case is replacing the value inside the object.
+
+The ```path``` refers to the field we are replacing the value for.
+
+The ```value``` is 1 because the ```status``` field inside the Ticket object is an enum of 0 and 1 where 0 is ```open``` and 1 is ```closed```.
 ## Navigation Menu
 
 The navigation menu for the ASP.NET side is included in the ```/Areas/Identity/Pages/``` directory, inside ```_ManageNav.cshtml``` 
