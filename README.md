@@ -78,9 +78,11 @@ Use the following instructions to deploy the project to one of the two available
       1. Click on the build status indicator next to the commit hash.
       
          <img width="320" alt="Screenshot 2022-11-18 at 12 05 23 AM" src="https://user-images.githubusercontent.com/5898658/202653247-c931e187-77a8-4fcc-a0ca-fcb1ec58815f.png">
+      2. Find the CI job in the pop-up.
    2. If you are on your feature branch
       1. Open a pull request with either `develop` (recommended) or `main` as the base branch.
-      2. Find the CI section at the bottom of your pull request. From now on, every commit you push to your branch will trigger a build action to run.
+      2. Find the CI job at the bottom of your pull request. From now on, every commit you push to your branch will trigger a build action to run as a CI job.
+      <img width="900" alt="Screenshot 2022-11-18 at 1 13 34 AM" src="https://user-images.githubusercontent.com/5898658/202665501-71bdf882-93a6-4545-88e6-63b31d31c89c.png">
 2. Click **Details**.
 
    <img width="500" alt="Screenshot 2022-11-18 at 12 06 53 AM" src="https://user-images.githubusercontent.com/5898658/202653363-638a8a93-0ca3-4f75-9538-aef822570532.png">
@@ -91,7 +93,7 @@ Use the following instructions to deploy the project to one of the two available
 4. Near the end of the output, copy the image tag after the message "Successfully tagged" e.g. `chickadeeinvest/chickadee:1667885238`. You will be deploying this specific image to a remote environment soon.
    <img width="500" alt="Screenshot 2022-11-18 at 12 11 25 AM" src="https://user-images.githubusercontent.com/5898658/202654133-d9d6358a-d240-41ac-8e34-caff270c3917.png">
 5. Sign in to [Azure Portal](https://portal.azure.com/).
-6. Go to the Azure App Service resource for the environment you would like to deploy the image to.
+6. Go to the Azure App Service resource for the environment to which you would like to deploy the image. You may want to double-check with your team to ensure the environment is not in use by someone.
    <img width="1756" alt="Screenshot 2022-11-18 at 12 43 37 AM" src="https://user-images.githubusercontent.com/5898658/202659347-842bbfa9-d1ee-4862-bd8e-83bbb1cd1c2e.png">
 
 7. Under the **Deployment** section, click **Deployment Center**.
