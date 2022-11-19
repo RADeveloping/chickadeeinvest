@@ -43,8 +43,6 @@
     <None Remove="Enums\" />
     <None Remove="Swashbuckle.AspNetCore" />
     <None Remove="Views\" />
-    <None Remove="Views\RoleManager\" />
-    <None Remove="Views\UserRoles\" />
     <None Remove="Settings\" />
     <None Remove="MailKit" />
     <None Remove="MimeKit" />
@@ -54,8 +52,6 @@
   <ItemGroup>
     <Folder Include="Enums\" />
     <Folder Include="Views\" />
-    <Folder Include="Views\RoleManager\" />
-    <Folder Include="Views\UserRoles\" />
     <Folder Include="Settings\" />
     <Folder Include="Services\" />
     <Folder Include="Templates\" />
@@ -88,7 +84,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)build\**" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

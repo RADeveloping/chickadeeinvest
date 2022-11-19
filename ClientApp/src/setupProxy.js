@@ -10,15 +10,12 @@ const target = env.ASPNETCORE_HTTPS_PORT
         : 'http://localhost:24088';
 
 const context = [
-    '/weatherforecast',
     '/_configuration',
     '/.well-known',
     '/Identity',
     '/connect',
     '/ApplyDatabaseMigrations',
     '/_framework',
-    '/RoleManager',
-    '/UserRoles',
     '/Identity/css',
     '/api/Account',
     '/css',
