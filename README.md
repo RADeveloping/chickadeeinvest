@@ -158,4 +158,6 @@ The navigation menu for the ASP.NET side is included in the ```/Areas/Identity/P
 
  - ASP.NET "partials" can be used to reduce the amount of code between the pages since most pages have similar content.
  - Depending on what the client wants, fields can be added or removed from each of the individual pages.
+ - Update the registration email styling sent to users.
+ - Update ticket details.
 
