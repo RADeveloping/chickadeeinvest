@@ -17,6 +17,6 @@ namespace chickadee.Models {
         
         [ForeignKey("UserId")]
         public Tenant? Tenant { get; set; }
-        public string TenantId { get; set; }
+        public string? TenantId { get; set; }
     }
 }

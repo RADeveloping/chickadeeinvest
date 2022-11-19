@@ -149,7 +149,7 @@ namespace chickadee.Controllers
           }
 
           var requestingUser = await _userManager.GetUserAsync(User);
-          var tenant = await _context.Tenant.FindAsync(verificationDocument.TenantId);
+          var tenant = await _context.Tenant.FindAsync(requestingUser.Id);
 
           if (tenant == null)
           {
@@ -158,12 +158,7 @@ namespace chickadee.Controllers
                return BadRequest("Tenant not found");
           }
 
-          if (verificationDocument.TenantId != requestingUser.Id)
-          {
-               // If tenant does not exist, they cannot 
-               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-               return BadRequest("Your Id does not match Tenant Id");
-          }
+          verificationDocument.TenantId = requestingUser.Id;
 
           verificationDocument.Tenant = tenant;
 
