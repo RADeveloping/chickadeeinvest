@@ -41,7 +41,7 @@
     <a class="nav-link text-yellow @ManageNavPages.IndexNavClass(ViewContext)" id="profile" href="/Identity/Account/Manage/Index"><i class="fa fa-user fa-nav"></i>Profile</a>
 </li>
 
-@if (User.IsInRole("Tenant"))
+@if (User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin"))
 {
     <li class="nav-item" >
         <a class="nav-link text-yellow @ManageNavPages.VerifyAccountNavClass(ViewContext)" id="verify" href="/Identity/Account/Manage/VerifyAccount"><i class="fa fa-check fa-nav"></i>Verify Account</a>
