@@ -70,37 +70,38 @@ npm start
 For a detailed explanation of how things work, check out the [guide](https://reactjs.org/docs/getting-started.html) and [API docs](https://reactjs.org/docs/react-api.html) for React; and the [guide](https://learn.microsoft.com/en-us/aspnet/tutorials) and [API docs](https://learn.microsoft.com/en-us/aspnet/core/) for ASP.NET.
 
 ---
+
 # ASP.NET MVC
 
 ## Layout File
 
-The ```Areas/Identity/Pages/Account/Manage/_Layout.cshtml``` file is the starting point of all ASP.NET pages.
+The `Areas/Identity/Pages/Account/Manage/_Layout.cshtml` file is the starting point of all ASP.NET pages.
 
-This file contains the main container and then rendering each of the other pages using ``` @RenderBody()```.
+This file contains the main container and then rendering each of the other pages using ` @RenderBody()`.
 
 ## Profile Page View ASP.NET
 
-Anything related to the user profile, including changing password, email, etc are in the ```Areas/Identity/Pages/Account``` directory.
+Anything related to the user profile, including changing password, email, etc are in the `Areas/Identity/Pages/Account` directory.
 
-Each page has a ```.cshtml``` file and a corresponding ```.cshtml.cs``` file. 
+Each page has a `.cshtml` file and a corresponding `.cshtml.cs` file.
 
-<i>For the most part, in this directory, you shouldn't really need to go inside the ```.cshtml.cs``` file.</i>
+<i>For the most part, in this directory, you shouldn't really need to go inside the `.cshtml.cs` file.</i>
 
 ## SuperAdmin View ASP.NET
 
-The controllers are in the ```/Controllers``` directory
-The views are in the ```/Views``` directory.
-The models are in the ```/Models``` directory.
+The controllers are in the `/Controllers` directory
+The views are in the `/Views` directory.
+The models are in the `/Models` directory.
 
 This structure must be maintained. If the structure is modified, then the api mapping must also be changed to reflect the changes.
 
 The controllers for the SuperAdmin are prefixed with "SA" followed by the page name.
 
-For example:  ```SACompanyController```
+For example: `SACompanyController`
 
-For each controller there is also a accompanying model in the ```/Models``` directory.
+For each controller there is also a accompanying model in the `/Models` directory.
 
-To make changes the views, simply go to ```/View/{ControllerName}``` directory and select the corresponding .cshtml file you would like to edit.
+To make changes the views, simply go to `/View/{ControllerName}` directory and select the corresponding .cshtml file you would like to edit.
 
 The pages use bootstrap, so updating them should be fairly simple.
 
@@ -114,43 +115,44 @@ There is too much to explain regarding the MVC in ASP.NET that wouldn't be benef
 
 ## Non-SA Back-End Controllers
 
-The controllers are inside ```/Controllers``` folder. Inside each controller are CRUD-based functions that act as GET, POST, PUT/PATCH, and DELETE requests.
+The controllers are inside `/Controllers` folder. Inside each controller are CRUD-based functions that act as GET, POST, PUT/PATCH, and DELETE requests.
 
-After doing ```dot net watch run``` and you are led to a localhost environment, you can add ```/swagger``` behind the URL to access swagger and all the API paths provisioned in the controllers. There, you can try out each call and test authorization as well after logging in as a ```SuperAdmin```, ```PropertyManager```, or ```Tenant```.
+After doing `dot net watch run` and you are led to a localhost environment, you can add `/swagger` behind the URL to access swagger and all the API paths provisioned in the controllers. There, you can try out each call and test authorization as well after logging in as a `SuperAdmin`, `PropertyManager`, or `Tenant`.
 
-The basic CRUD calls are implemented via ```dotnet-aspnet-codegenerator```. Anything that goes beyond the basic template will be noted below.
+The basic CRUD calls are implemented via `dotnet-aspnet-codegenerator`. Anything that goes beyond the basic template will be noted below.
 
 ## GET requests
 
-Due to the searchable nature of ```Property```, ```Unit```, and ```Ticket```, the GET requests for the above objects take in ```sort```, ```param```, and ```query``` field.
+Due to the searchable nature of `Property`, `Unit`, and `Ticket`, the GET requests for the above objects take in `sort`, `param`, and `query` field.
 
-The possible values for ```sort``` are ```asc``` (ascending) or ```desc``` (descending).
+The possible values for `sort` are `asc` (ascending) or `desc` (descending).
 
-```param``` values are dependent on the object and will be further detailed below.
+`param` values are dependent on the object and will be further detailed below.
 
-```query``` values are basically search values. Therefore, you will see ```stringComparison``` happening inside ```param``` string values like ```address``` and ```name``` for ```Property``` object.
+`query` values are basically search values. Therefore, you will see `stringComparison` happening inside `param` string values like `address` and `name` for `Property` object.
 
-Also, as noticed by the column list in the front-end, some of the GET requests are built on top of another - For example, to get all units related to a specific property, you would have to pass in ```/api/properties/<propertyId>/units``` and then build on top of that if you want to get all tickets from that unit like ```/api/properties/<propertyId>/units/<unitId>/tickets```.
+Also, as noticed by the column list in the front-end, some of the GET requests are built on top of another - For example, to get all units related to a specific property, you would have to pass in `/api/properties/<propertyId>/units` and then build on top of that if you want to get all tickets from that unit like `/api/properties/<propertyId>/units/<unitId>/tickets`.
 
 ## Property
 
 The GET request for all properties depends on the user. If the user is a SuperAdmin, it will return all properties with selected fields. Otherwise, it will return properties related to the requesting user (For PM, properties that they are managing and for Tenants, properties that their unit situated in).
 
-The ```param``` values for Property are ```address```, ```id```, ```open_count``` (Number of open tickets), ```unit_count```, ```tenants_count```, and ```name```.
+The `param` values for Property are `address`, `id`, `open_count` (Number of open tickets), `unit_count`, `tenants_count`, and `name`.
 
 ## Unit
 
 The GET request for all properties depends on the user. If the user is a SuperAdmin, it will return all units with selected fields. Otherwise, it will return units related to the requesting user (For PM, units that they are managing and for Tenants, units that they reside in).
 
-The ```param``` values for Unit are ```id```, ```number``` (Unit Number - e.g. 101), and ```type``` (e.g. OneBedroom).
+The `param` values for Unit are `id`, `number` (Unit Number - e.g. 101), and `type` (e.g. OneBedroom).
 
 ## POST requests
 
-Except for the ```Ticket``` model, the models in the ```/Models``` directory all have their Ids created automatically via ```Guid.NewGuid().ToString()``` so one need not provision the POST call with the id inside the object that you pass through. The following are examples of JSON objects that you can pass to create objects for each data model.
+Except for the `Ticket` model, the models in the `/Models` directory all have their Ids created automatically via `Guid.NewGuid().ToString()` so one need not provision the POST call with the id inside the object that you pass through. The following are examples of JSON objects that you can pass to create objects for each data model.
 
 ## Company
 
-```Authorized for SuperAdmin only```
+`Authorized for SuperAdmin only`
+
 ```
 {
     "name": "Company A",
@@ -162,7 +164,8 @@ Except for the ```Ticket``` model, the models in the ```/Models``` directory all
 
 ## Message
 
-```Anyone can send messages```
+`Anyone can send messages`
+
 ```
 {
     "content": "content",
@@ -170,11 +173,13 @@ Except for the ```Ticket``` model, the models in the ```/Models``` directory all
     "ticketId": 1
 }
 ```
+
 Where senderId is the Id of the current user and ticketId is the Id of the ticket.
 
 ## Property
 
-```Authorized for PropertyManager and SuperAdmin```
+`Authorized for PropertyManager and SuperAdmin`
+
 ```
 {
     "name": "The Orient managed by PM1",
@@ -184,7 +189,8 @@ Where senderId is the Id of the current user and ticketId is the Id of the ticke
 
 ## Property Manager
 
-```Authorized for SuperAdmin only```
+`Authorized for SuperAdmin only`
+
 ```
 {
     "email": "james@jones.com",
@@ -196,9 +202,9 @@ Where senderId is the Id of the current user and ticketId is the Id of the ticke
 
 ## Tenants
 
-```Authorized for PropertyManager and SuperAdmin```
+`Authorized for PropertyManager and SuperAdmin`
 
-```Requires propertyId and unitId beforehand```
+`Requires propertyId and unitId beforehand`
 
 ```
 propertyId: 1421253d-b524-419c-8cad-f7b616092409
@@ -215,9 +221,9 @@ unitId:     b4804e35-ee25-44b3-980f-fed3a965af10
 
 ## Units
 
-```Authorized for SuperAdmin only```
+`Authorized for SuperAdmin only`
 
-```Requires propertyId```
+`Requires propertyId`
 
 ```
 propertyId: 1421253d-b524-419c-8cad-f7b616092409
@@ -228,13 +234,14 @@ propertyId: 1421253d-b524-419c-8cad-f7b616092409
     "propertyId": "1421253d-b524-419c-8cad-f7b616092409"
 }
 ```
-You can also provide ```propertyManagerId``` as well
+
+You can also provide `propertyManagerId` as well
 
 ## Tickets
 
-```Anyone can make tickets```
+`Anyone can make tickets`
 
-```Requires propertyId and unitId```
+`Requires propertyId and unitId`
 
 ```
 propertyId:  1421253d-b524-419c-8cad-f7b616092409
@@ -249,16 +256,17 @@ unitId:      b4804e35-ee25-44b3-980f-fed3a965af10
     "unitId": "b4804e35-ee25-44b3-980f-fed3a965af10"
 }
 ```
-Do not need to fill out ```createdOn``` as it will be filled automatically as the object
+
+Do not need to fill out `createdOn` as it will be filled automatically as the object
 is created.
 
-Do not need to fill in the ```createdById``` as it will take the id of the current user
+Do not need to fill in the `createdById` as it will take the id of the current user
 
 ## TicketImages
 
-```Only the creator of the ticket can put images```
+`Only the creator of the ticket can put images`
 
-```Requires ticketId```
+`Requires ticketId`
 
 ```
 createdById:  4752bbeb-696a-4641-b91d-ce5f526ab16d
@@ -268,12 +276,14 @@ createdById:  4752bbeb-696a-4641-b91d-ce5f526ab16d
     "createdById": "4752bbeb-696a-4641-b91d-ce5f526ab16d"
 }
 ```
-```createdById``` can be attained by GET request for the specific ticket.
+
+`createdById` can be attained by GET request for the specific ticket.
+
 ## UnitImages
 
-```Authorized for PropertyManager and SuperAdmin```
+`Authorized for PropertyManager and SuperAdmin`
 
-```Requires propertyId and unitId```
+`Requires propertyId and unitId`
 
 ```
 propertyId:  d9087d78-fb59-474c-87fc-67174186be48
@@ -284,11 +294,12 @@ unitId:      fb904b58-b19f-463a-b6ff-c94e811165e2
     "unitId": "fb904b58-b19f-463a-b6ff-c94e811165e2"
 }
 ```
-```data``` is a ```byte[]``` type.
+
+`data` is a `byte[]` type.
 
 ## UnitNotes
 
-```Authorized for PropertyManager in charge of the unit```
+`Authorized for PropertyManager in charge of the unit`
 
 ```
 {
@@ -296,9 +307,10 @@ unitId:      fb904b58-b19f-463a-b6ff-c94e811165e2
     "unitId": "03c253b1-54d1-4c25-afe9-63100dce6303"
 }
 ```
+
 ## VerificationDocuments
 
-```Authorized for Tenants```
+`Authorized for Tenants`
 
 ```
 {
@@ -306,13 +318,14 @@ unitId:      fb904b58-b19f-463a-b6ff-c94e811165e2
     "documentType": 0
 }
 ```
-The datatype of ```data``` is ```byte[]```.
 
-The ```tenantId``` will be filled out with the current user's Id (Given that the user is a tenant who exists in the database, of course.).
+The datatype of `data` is `byte[]`.
+
+The `tenantId` will be filled out with the current user's Id (Given that the user is a tenant who exists in the database, of course.).
 
 ## PATCH request
 
-So far, there is only one PATCH request and it is for closing tickets. In order to PATCH the ```status``` field in ```Ticket``` object, you have to pass the following JSON body as a part of the PATCH request
+So far, there is only one PATCH request and it is for closing tickets. In order to PATCH the `status` field in `Ticket` object, you have to pass the following JSON body as a part of the PATCH request
 
 ```
 [
@@ -323,17 +336,24 @@ So far, there is only one PATCH request and it is for closing tickets. In order 
     }
 ]
 ```
-The ```op``` stands for operation of the PATCH which in this case is replacing the value inside the object.
 
-The ```path``` refers to the field we are replacing the value for.
+The `op` stands for operation of the PATCH which in this case is replacing the value inside the object.
 
-The ```value``` is 1 because the ```status``` field inside the Ticket object is an enum of 0 and 1 where 0 is ```open``` and 1 is ```closed```.
+The `path` refers to the field we are replacing the value for.
+
+The `value` is 1 because the `status` field inside the Ticket object is an enum of 0 and 1 where 0 is `open` and 1 is `closed`.
+
+## DELETE request
+
+The DELETE requests should work with just the specific `id` provisioned for the desired objects.
+
 ## Navigation Menu
 
-The navigation menu for the ASP.NET side is included in the ```/Areas/Identity/Pages/``` directory, inside ```_ManageNav.cshtml``` 
+The navigation menu for the ASP.NET side is included in the `/Areas/Identity/Pages/` directory, inside `_ManageNav.cshtml`
 
 ## Improvements
 
- - ASP.NET "partials" can be used to reduce the amount of code between the pages since most pages have similar content.
- - Depending on what the client wants, fields can be added or removed from each of the individual pages.
+- ASP.NET "partials" can be used to reduce the amount of code between the pages since most pages have similar content.
+- Depending on what the client wants, fields can be added or removed from each of the individual pages.
 
+- As aforementioned in the `DELETE request` section in `Non-SA Back-end`, the DELETE requests in each controller as is should be enough to delete specific objects from the database but some data like users may need to be `labeled` deleted and not completely deleted off the database. One may need to introduce a `DeletedAt` parameter in the objects that need to be retained in the database (Initially declared `null` but having its value replaced with an actual DATE and filtered out)
