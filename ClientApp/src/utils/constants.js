@@ -2,6 +2,11 @@
 import * as React from "react";
 import Label from "../components/common/Label";
 
+export const ticketUri = '/api/tickets';
+export const unitUri = '/api/units';
+export const propertyUri = '/api/properties';
+export const accountUri = '/api/account';
+
 export const SEVERITY = {
     0: {color: 'success', text: 'Low'},
     1: {color: 'warning', text: 'Medium'},
@@ -35,6 +40,17 @@ export const ticketProperties = [
     {id: 'status', label: 'Status'},
 ];
 
+export const isMemberOf = (userRoles, roles) => {
+    if (!userRoles) return false
+    for (let i = 0; i < userRoles.length; i++) {
+        for (let j = 0; j < roles.length; j++) {
+            if (userRoles[i] === roles[j]) {
+                return true
+            }
+        }
+    }
+    return false
+}
 
 export const getTicketBox = (ticket) => {
     return (

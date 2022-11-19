@@ -18,6 +18,7 @@ import Iconify from "../common/Iconify";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {abortFetch} from "../../utils/fetch";
+import NoItems from "../common/NoItems";
 
 /**
  * Generic list component used in ColumnOverview.
@@ -35,12 +36,12 @@ import {abortFetch} from "../../utils/fetch";
  * @param properties {[object]} Array of properties for sorting.
  * @param loading {boolean} Loading state.
  * @param disableSort {boolean} Hides sort button.
- * @param uri {string} URI string.
+ * @param uri {function} URI method that returns the URI string for action after a click.
  * @param setOrderBy {function} Sets the orderBy state.
  * @param order {string} Order, desc or asc state.
  * @param setOrder {function} Sets the order state.
  * @param immediateClick {boolean} Immediate action after click, for use with the last column.
- * @param addComponent {()=>JSX.Element} Method that returns the add component, a plus symbol will appear.
+ * @param addComponent {(open: boolean, handleClose: function)=>JSX.Element} Method that returns the add component, a plus symbol will appear.
  * @returns {JSX.Element}
  * @constructor
  */
@@ -101,15 +102,21 @@ export default function SimpleList({
                     <ListSubheader component="div" id="nested-list-subheader">
                         <Stack direction={'column'}>
                             <Collapse orientation="vertical" in={!isDesktop && setNestedSelect != null}>
-                                <Box>
-                                    <IconButton onClick={() => {
-                                        setNestedSelect(null)
-                                    }}>
-                                        <Iconify icon="eva:arrow-back-outline"
-                                                 sx={{color: 'text.disabled', width: 20, height: 20}}/>
-                                    </IconButton>
-                                    {path && `${path}`}
-                                </Box>
+                                <Stack direction={'row'} alignItems={'center'}>
+                                    <div>
+                                        <IconButton onClick={() => {
+                                            setNestedSelect(null)
+                                        }}>
+                                            <Iconify icon="eva:arrow-back-outline"
+                                                     sx={{color: 'text.disabled', width: 20, height: 20}}/>
+                                        </IconButton>
+                                    </div>
+                                    {path && <div style={{
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis'
+                                    }}>{path}</div>}
+                                </Stack>
                             </Collapse>
                             <Stack direction={'row'} justifyContent={'space-between'}>
                                 {title}
@@ -166,7 +173,7 @@ export default function SimpleList({
                 }
                       sx={{
                           width: '100%',
-                          minWidth: isDesktop && skinny ? 200 : 360,
+                          minWidth: isDesktop && skinny ? 200 : !isDesktop ? undefined : 320,
                           bgcolor: 'background.paper',
                           overflowY: 'auto',
                           overflowX: 'clip',
@@ -209,14 +216,7 @@ export default function SimpleList({
                                 <Divider key={`${item.id}-${title}-dvd`} component="li"/>}
                         </React.Fragment>)
                     }
-                    {items.length === 0 &&
-                        <Box sx={{
-                            height: isDesktop ? '75%' : '65%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'gainsboro'
-                        }}>{`No ${title}`}</Box>}
+                    <NoItems title={title} items={items} height={isDesktop ? '75%' : '65%'}/>
                 </List>
             </Card>
         </>

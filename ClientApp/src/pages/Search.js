@@ -82,7 +82,7 @@ export default function Search() {
                         <Typography variant="h4" gutterBottom>
                             {title} results for "{searchParams.get('query')}"
                         </Typography>
-                        <Grow timeout={3000} in={loadingSearch}><CircularProgress size={30}/></Grow>
+                        <Grow timeout={{enter: 3000}} in={loadingSearch}><CircularProgress size={30}/></Grow>
                     </Stack>
                     <Button
                         variant="contained"

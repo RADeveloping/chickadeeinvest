@@ -1,15 +1,16 @@
 import PropTypes from 'prop-types';
 import {useEffect} from 'react';
-import {Link as RouterLink, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 // material
 import {styled} from '@mui/material/styles';
-import {Box, Link, Button, Drawer, Typography, Avatar, Stack} from '@mui/material';
+import {Box, Drawer, Fade, Grow} from '@mui/material';
 // components
 import Logo from '../../components/common/Logo';
 import Scrollbar from '../../components/nav/Scrollbar';
 import {useTheme} from '@emotion/react';
-import {NavMenu} from '../../components/nav/NavMenu';
 import useResponsive from "../../utils/responsive";
+import NavSection from "../../components/nav/NavSection";
+import navConfig, {anonymousNavConfig} from "./NavConfig";
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +38,7 @@ DashboardSidebar.propTypes = {
     onCloseSidebar: PropTypes.func,
 };
 
-export default function DashboardSidebar({isOpenSidebar, onCloseSidebar}) {
+export default function DashboardSidebar({authenticated, isOpenSidebar, onCloseSidebar}) {
     const {pathname} = useLocation();
 
     const isDesktop = useResponsive('up', 'lg');
@@ -63,8 +64,11 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar}) {
             </Box>
 
             <Box sx={{px: 2.5, py: 5, display: 'inline-flex'}}></Box>
-
-            <NavMenu/>
+            <Grow timeout={!isDesktop ? 0 : undefined} in={authenticated !== null}>
+                <div>
+                    <NavSection navConfig={authenticated === true ? navConfig : anonymousNavConfig}/>
+                </div>
+            </Grow>
             <Box sx={{flexGrow: 1}}/>
         </Scrollbar>
     );

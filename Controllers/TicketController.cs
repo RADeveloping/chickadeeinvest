@@ -72,7 +72,6 @@ namespace chickadee.Controllers
                             t.Unit.PropertyManager.Id,
                             t.Unit.PropertyManager.UserName,
                             t.Unit.PropertyManager.Email,
-                            t.Unit.PropertyManager.ProfilePicture
                         } ,
                         property = new
                         {
@@ -87,7 +86,6 @@ namespace chickadee.Controllers
                             Id = tenant.Id,
                             Email = tenant.UserName,
                             PhoneNumber = tenant.PhoneNumber,
-                            ProfilePicture = tenant.ProfilePicture
                         })
                     },
                     createdBy = new
@@ -97,7 +95,6 @@ namespace chickadee.Controllers
                         Id = t.CreatedBy.Id,
                         Email = t.CreatedBy.UserName,
                         PhoneNumber = t.CreatedBy.PhoneNumber,
-                        ProfilePicture = t.CreatedBy.ProfilePicture
                     },
                     // messages = t.Messages,
                     // images = t.Images,
@@ -136,7 +133,6 @@ namespace chickadee.Controllers
                                 t.Unit.PropertyManager.Id,
                                 t.Unit.PropertyManager.UserName,
                                 t.Unit.PropertyManager.Email,
-                                t.Unit.PropertyManager.ProfilePicture
                             },
                         property = new
                         {
@@ -153,7 +149,6 @@ namespace chickadee.Controllers
                                 Id = tenant.Id,
                                 Email = tenant.UserName,
                                 PhoneNumber = tenant.PhoneNumber,
-                                ProfilePicture = tenant.ProfilePicture
                             })
                     },
                     createdBy = new
@@ -163,7 +158,6 @@ namespace chickadee.Controllers
                         Id = t.CreatedBy.Id,
                         Email = t.CreatedBy.UserName,
                         PhoneNumber = t.CreatedBy.PhoneNumber,
-                        ProfilePicture = t.CreatedBy.ProfilePicture
                     },
                     // messages = t.Messages,
                     // images = t.Images,
@@ -511,7 +505,6 @@ namespace chickadee.Controllers
                                 t.Unit.PropertyManager.Id,
                                 t.Unit.PropertyManager.UserName,
                                 t.Unit.PropertyManager.Email,
-                                t.Unit.PropertyManager.ProfilePicture
                             },
                         property = new
                         {
@@ -528,7 +521,6 @@ namespace chickadee.Controllers
                                 Id = tenant.Id,
                                 Email = tenant.UserName,
                                 PhoneNumber = tenant.PhoneNumber,
-                                ProfilePicture = tenant.ProfilePicture
                             })
                     },
                     createdBy = new
@@ -538,7 +530,6 @@ namespace chickadee.Controllers
                         Id = t.CreatedBy.Id,
                         Email = t.CreatedBy.UserName,
                         PhoneNumber = t.CreatedBy.PhoneNumber,
-                        ProfilePicture = t.CreatedBy.ProfilePicture
                     },
                     // messages = t.Messages,
                     // images = t.Images,
@@ -575,7 +566,6 @@ namespace chickadee.Controllers
                                 t.Unit.PropertyManager.Id,
                                 t.Unit.PropertyManager.UserName,
                                 t.Unit.PropertyManager.Email,
-                                t.Unit.PropertyManager.ProfilePicture
                             },
                         tenants = t.Unit.Tenants == null
                             ? null
@@ -586,7 +576,6 @@ namespace chickadee.Controllers
                                 Id = tenant.Id,
                                 Email = tenant.UserName,
                                 PhoneNumber = tenant.PhoneNumber,
-                                ProfilePicture = tenant.ProfilePicture
                             })
                     },
                     createdBy = new
@@ -596,7 +585,6 @@ namespace chickadee.Controllers
                         Id = t.CreatedBy.Id,
                         Email = t.CreatedBy.UserName,
                         PhoneNumber = t.CreatedBy.PhoneNumber,
-                        ProfilePicture = t.CreatedBy.ProfilePicture
                     },
                     // messages = t.Messages,
                     // images = t.Images,

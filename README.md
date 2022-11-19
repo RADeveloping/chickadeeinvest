@@ -69,6 +69,44 @@ npm start
 
 For a detailed explanation of how things work, check out the [guide](https://reactjs.org/docs/getting-started.html) and [API docs](https://reactjs.org/docs/react-api.html) for React; and the [guide](https://learn.microsoft.com/en-us/aspnet/tutorials) and [API docs](https://learn.microsoft.com/en-us/aspnet/core/) for ASP.NET.
 
+## Remote Environment Setup
+
+Use the following instructions to deploy the project to one of the two available remote environments on Azure - `dev` and `dev2` as of 11/18/2022:
+
+1. Go to the CI action for your commit. Depending on which branch you are on, you can find it in different places.
+   1. If you are on the `main` or `develop` branch
+      1. Click on the build status indicator next to the commit hash.
+      
+         <img width="320" alt="Screenshot 2022-11-18 at 12 05 23 AM" src="https://user-images.githubusercontent.com/5898658/202653247-c931e187-77a8-4fcc-a0ca-fcb1ec58815f.png">
+      2. Find the CI job in the pop-up.
+   2. If you are on your feature branch
+      1. Open a pull request with either `develop` (recommended) or `main` as the base branch.
+      2. Find the CI job at the bottom of your pull request. From now on, every commit you push to your branch will trigger a build action to run as a CI job.
+      <img width="900" alt="Screenshot 2022-11-18 at 1 13 34 AM" src="https://user-images.githubusercontent.com/5898658/202665501-71bdf882-93a6-4545-88e6-63b31d31c89c.png">
+2. Click **Details**.
+
+   <img width="500" alt="Screenshot 2022-11-18 at 12 06 53 AM" src="https://user-images.githubusercontent.com/5898658/202653363-638a8a93-0ca3-4f75-9538-aef822570532.png">
+
+3. In the **build** job, expand the step **Build and push the Docker image**.
+   <img width="500" alt="Screenshot 2022-11-18 at 12 10 06 AM" src="https://user-images.githubusercontent.com/5898658/202653623-1fc0107d-3cdb-42a2-94a7-9f2cde8696fc.png">
+
+4. Near the end of the output, copy the image tag after the message "Successfully tagged" e.g. `chickadeeinvest/chickadee:1667885238`. You will be deploying this specific image to a remote environment soon.
+   <img width="500" alt="Screenshot 2022-11-18 at 12 11 25 AM" src="https://user-images.githubusercontent.com/5898658/202654133-d9d6358a-d240-41ac-8e34-caff270c3917.png">
+5. Sign in to [Azure Portal](https://portal.azure.com/).
+6. Go to the Azure App Service resource for the environment to which you would like to deploy the image. You may want to double-check with your team to ensure the environment is not in use by someone.
+   <img width="1756" alt="Screenshot 2022-11-18 at 12 43 37 AM" src="https://user-images.githubusercontent.com/5898658/202659347-842bbfa9-d1ee-4862-bd8e-83bbb1cd1c2e.png">
+
+7. Under the **Deployment** section, click **Deployment Center**.
+
+   <img width="250" alt="Screenshot 2022-11-18 at 12 45 22 AM" src="https://user-images.githubusercontent.com/5898658/202659664-660c9836-76fc-4912-b889-412f5d5886a2.png">
+
+8. In **Registry settings/Config**, replace the image tag at `services.chickadee.image` with the one you copied in step 4. You may want to choose a new **Configuration File** if it was changed since the last deployment.
+   <img width="720" alt="Screenshot 2022-11-18 at 12 49 13 AM" src="https://user-images.githubusercontent.com/5898658/202660511-ca06acd7-4fff-48a2-9426-b35645c4a5c0.png">
+
+9. Click **Save**. Your image is now being deployed. Allow 5-10 minutes for the deployment to complete.
+
+   <img width="100" alt="Screenshot 2022-11-18 at 12 51 23 AM" src="https://user-images.githubusercontent.com/5898658/202660900-76acfbb4-3927-45da-9155-f8990879c1c6.png">
+
 ---
 
 # ASP.NET MVC
@@ -353,7 +391,7 @@ The navigation menu for the ASP.NET side is included in the `/Areas/Identity/Pag
 
 ## Improvements
 
-- ASP.NET "partials" can be used to reduce the amount of code between the pages since most pages have similar content.
-- Depending on what the client wants, fields can be added or removed from each of the individual pages.
-
-- As aforementioned in the `DELETE request` section in `Non-SA Back-end`, the DELETE requests in each controller as is should be enough to delete specific objects from the database but some data like users may need to be `labeled` deleted and not completely deleted off the database. One may need to introduce a `DeletedAt` parameter in the objects that need to be retained in the database (Initially declared `null` but having its value replaced with an actual DATE and filtered out)
+ - ASP.NET "partials" can be used to reduce the amount of code between the pages since most pages have similar content.
+ - Depending on what the client wants, fields can be added or removed from each of the individual pages.
+ - Update the registration email styling sent to users.
+ - Update ticket details.

@@ -1,4 +1,4 @@
-﻿import {Box, CircularProgress} from "@mui/material";
+﻿import {Box, CircularProgress, Grow} from "@mui/material";
 import * as React from "react";
 
 /**
@@ -14,7 +14,7 @@ export default function PageLoading({loadingData}) {
                  justifyContent="center"
                  alignItems="center"
                  height="50vh">
-                <CircularProgress/>
+                <Grow timeout={{enter: 3000}} in={loadingData}><CircularProgress/></Grow>
             </Box> : null
     )
 }

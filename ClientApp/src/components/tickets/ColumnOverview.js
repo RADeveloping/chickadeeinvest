@@ -29,6 +29,14 @@ export default function ColumnOverview() {
     const [selectedUnitId, setSelectedUnitId] = useState(null);
     const [selectedTicketId, setSelectedTicketId] = useState(null);
 
+    const [mobileReady, setMobileReady] = useState(true);
+
+    const mobileReadyRefresh = () => {
+        setMobileReady(true)
+    }
+
+    const [resetOnNull, setResetOnNull] = useState(true)
+
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
         propertyOrder, propertySetOrder, propertyHandleOrderChange] = useFilter(propertyProperties);
@@ -41,80 +49,95 @@ export default function ColumnOverview() {
         ticketOrderBy, ticketSetOrderBy, ticketHandleOrderByChange,
         ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(ticketProperties);
 
-    const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties);
+    const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties, undefined,
+        mobileReadyRefresh, resetOnNull);
     const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ?
-        `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit);
+            `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit, undefined,
+        mobileReadyRefresh, resetOnNull);
     const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ?
-        `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket);
+            `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket, undefined,
+        mobileReadyRefresh, resetOnNull);
 
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
     const [path, setPath] = useState('');
     const [firstLoad, setFirstLoad] = useState(true);
-    const isDesktop = useResponsive('up', 'lg');
-    const firstLoadingData = loadingData & firstLoad;
-
-    useEffect(() => {
-        if (!loadingData) {
-            let propertyId = searchParams.get('property')
-            let unitId = searchParams.get('unit')
-            if (propertyId) setSelectedPropertyId(propertyId)
-            if (unitId) setSelectedUnitId(unitId)
-        }
-    }, [loadingData])
-
-    useEffect(() => {
-        if (selectedPropertyId && !loadingProperties) {
-            let selectedProperty = getItem(properties, selectedPropertyId)
-            if (!selectedProperty) return
-            searchParams.set('property', selectedPropertyId)
-            if (!firstLoad) {
-                setSelectedUnitId(null)
-                searchParams.delete('unit')
-                setSearchParams(searchParams)
-            } else {
-                setFirstLoad(false)
-            }
-            setPath(`${selectedProperty.dir}`)
-        }
-    }, [selectedPropertyId, loadingProperties])
-
-    useEffect(() => {
-        if (selectedUnitId && !loadingUnits) {
-            let selectedProperty = getItem(properties, selectedPropertyId)
-            let selectedUnit = getItem(units, selectedUnitId)
-            if (!selectedProperty || !selectedUnit) return
-            searchParams.set('property', selectedPropertyId)
-            searchParams.set('unit', selectedUnitId)
-            if (!firstLoad) setSearchParams(searchParams)
-            setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
-        } else if (!selectedUnitId && selectedPropertyId) {
-            let selectedProperty = getItem(properties, selectedPropertyId)
-            if (!selectedProperty) return
-            setPath(`${selectedProperty.dir}`)
-        }
-        setSelectedTicketId(null);
-    }, [selectedUnitId, loadingUnits])
+    const isDesktop = useResponsive('up', 'md');
 
     const getItem = (items, id) => {
         return items.find(item => item.id === id)
     }
 
+    const selectedProperty = getItem(properties, selectedPropertyId)
+    const selectedUnit = getItem(units, selectedUnitId)
+    
+    useEffect(() => {
+        let propertyId = searchParams.get('property')
+        let unitId = searchParams.get('unit')
+        if (propertyId) setSelectedPropertyId(propertyId)
+        if (unitId) setSelectedUnitId(unitId)
+    }, [])
+
+    useEffect(() => {
+        if (!loadingData) setResetOnNull(false)
+    }, [loadingData])
+
+    useEffect(() => {
+        let newSearchParams = new URLSearchParams();
+        if (selectedPropertyId) newSearchParams.set('property', selectedPropertyId);
+        if (selectedUnitId) newSearchParams.set('unit', selectedUnitId)
+        if (!firstLoad) setSearchParams(newSearchParams)
+    }, [selectedPropertyId, selectedUnitId])
+
+    useEffect(() => {
+        if (selectedPropertyId) {
+            if (!firstLoad) {
+                setSelectedUnitId(null)
+            } else {
+                setFirstLoad(false)
+            }
+        }
+    }, [selectedPropertyId])
+
+    useEffect(() => {
+        setSelectedTicketId(null);
+    }, [selectedUnitId])
+
+    useEffect(() => {
+        if (mobileReady) handlePath();
+    }, [selectedProperty, selectedUnit, mobileReady])
+
+    const handlePath = () => {
+        if (selectedProperty && selectedUnit) {
+            setPath(`${selectedProperty.dir}/Units/${selectedUnit.dir}`)
+        } else if (selectedProperty) {
+            setPath(`${selectedProperty.dir}`)
+        }
+    }
+
+    const getSelect = (ready, setSelected) => {
+        return (val) => {
+            setFirstLoad(false);
+            setMobileReady(ready)
+            setSelected(val)
+        }
+    }
+
     const viewList = [
         <SimpleList key={isDesktop ? "sl-1" : undefined} leftRound items={properties} title={"Properties"}
-                    setSelectedId={setSelectedPropertyId}
+                    setSelectedId={getSelect(false, setSelectedPropertyId)}
                     selectedId={selectedPropertyId}
                     isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
-                    loading={loadingProperties} uri={getPropertiesUri}
+                    loading={loadingProperties}
                     setOrderBy={propertySetOrderBy} order={propertyOrder} setOrder={propertySetOrder}/>,
         <SimpleList key={isDesktop ? "sl-2" : undefined} noRound skinny items={selectedPropertyId ?
             units : []}
-                    title={"Units"} setNestedSelect={setSelectedPropertyId} path={path}
-                    setSelectedId={setSelectedUnitId} selectedId={selectedUnitId}
+                    title={"Units"} setNestedSelect={getSelect(true, setSelectedPropertyId)} path={path}
+                    setSelectedId={getSelect(false, setSelectedUnitId)} selectedId={selectedUnitId}
                     isDesktop={isDesktop} properties={unitProperties}
-                    loading={loadingUnits} uri={getUnitsUri}
+                    loading={loadingUnits}
                     setOrderBy={unitSetOrderBy} order={unitOrder} setOrder={unitSetOrder}/>,
         <SimpleList key={isDesktop ? "sl-3" : undefined} rightRound immediateClick items={selectedUnitId ? tickets : []}
-                    title={"Tickets"} setNestedSelect={setSelectedUnitId} path={path}
+                    title={"Tickets"} setNestedSelect={getSelect(true, setSelectedUnitId)} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
                     isDesktop={isDesktop} properties={ticketProperties}
                     loading={loadingTickets} uri={getTicketsUri}
@@ -131,9 +154,11 @@ export default function ColumnOverview() {
 
     function getActiveList() {
         if (selectedPropertyId && selectedUnitId) {
-            return viewList[2]
-        } else if (selectedPropertyId) {
+            if (mobileReady) return viewList[2]
             return viewList[1]
+        } else if (selectedPropertyId) {
+            if (mobileReady) return viewList[1]
+            return viewList[0]
         } else {
             return viewList[0]
         }
@@ -141,16 +166,16 @@ export default function ColumnOverview() {
 
     return (
         <>
-            <PageLoading loadingData={firstLoadingData}/>
-            {!firstLoadingData && isDesktop &&
-                <Grow in={!firstLoadingData}>
+            <PageLoading loadingData={loadingData}/>
+            {!loadingData && isDesktop &&
+                <Grow in={!loadingData}>
                     <Stack direction="row">
                         {viewList}
                     </Stack>
                 </Grow>
             }
-            {!firstLoadingData && !isDesktop &&
-                <Grow in={!firstLoadingData}>
+            {!loadingData && !isDesktop &&
+                <Grow in={!loadingData}>
                     <Box>
                         {getActiveList()}
                     </Box>

@@ -222,12 +222,12 @@ body {
     margin-bottom: 0px;
 }
 
- .nav-scroller {
-     position: relative;
-     z-index: 2;
-     height: 2.75rem;
-     overflow-y: hidden;
- }
+.nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
+}
 
 .nav-scroller .nav {
     display: flex;
@@ -241,7 +241,7 @@ body {
 
 }
 body {
-    font-size: .875rem;
+    /* font-size: .875rem; */
 }
 
 
@@ -261,9 +261,9 @@ body {
 }
 
 @media (max-width: 767.98px) {
-  .sidebar {
-    top: 5rem;
-  }
+    #logo{
+        display:none
+    }
 }
 
 .sidebar-sticky {
@@ -288,7 +288,7 @@ body {
 }
 
 .navbar .navbar-toggler {
-    top: .25rem;
+    /* top: .25rem; */
     right: 1rem;
 }
 
