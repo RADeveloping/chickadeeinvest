@@ -124,41 +124,38 @@ public static class ModelBuilderExtensions
 
     private static List<PropertyManager> SeedDefaultPropertyManagers(string password, PasswordHasher<ApplicationUser> passwordHasher, List<Company> companies)
     {
-        List<PropertyManager> propertyManagers = new List<PropertyManager>();
-        PropertyManager propertyManagerOne = new PropertyManager()
+        // Seed Default Property Managers
+        List<PropertyManager> propertyManagers = new List<PropertyManager>
         {
-            UserName = "propertymanager@gmail.com",
-            Email = "propertymanager@gmail.com",
-            FirstName = "Property",
-            LastName = "Manager",
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true,
-            DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
-            CompanyId = companies[0].CompanyId
-
+            new PropertyManager
+            {
+                UserName = "propertymanager@gmail.com",
+                Email = "propertymanager@gmail.com",
+                FirstName = "Property",
+                LastName = "Manager",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
+                CompanyId = companies[0].CompanyId
+            },
+            new PropertyManager
+            {
+                UserName = "propertymanager2@gmail.com",
+                Email = "propertymanager2@gmail.com",
+                FirstName = "Manager",
+                LastName = "Property",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-3).AddDays(-12),
+                CompanyId = companies[1].CompanyId
+            }
         };
-        propertyManagerOne.NormalizedUserName = propertyManagerOne.UserName.ToUpper();
-        propertyManagerOne.NormalizedEmail = propertyManagerOne.Email.ToUpper();
-        propertyManagerOne.PasswordHash = passwordHasher.HashPassword(propertyManagerOne, password);
-
-        PropertyManager propertyManagerTwo = new PropertyManager()
+        foreach (PropertyManager propertyManager in propertyManagers)
         {
-            UserName = "propertymanager2@gmail.com",
-            Email = "propertymanager2@gmail.com",
-            FirstName = "Manager",
-            LastName = "Property",
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true,
-            DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-3).AddDays(-12),
-            CompanyId = companies[1].CompanyId
-        };
-        propertyManagerTwo.NormalizedUserName = propertyManagerTwo.UserName.ToUpper();
-        propertyManagerTwo.NormalizedEmail = propertyManagerTwo.Email.ToUpper();
-        propertyManagerTwo.PasswordHash = passwordHasher.HashPassword(propertyManagerTwo, password);
-
-        propertyManagers.Add(propertyManagerOne);
-        propertyManagers.Add(propertyManagerTwo);
-
+            propertyManager.NormalizedUserName = propertyManager.UserName.ToUpper();
+            propertyManager.NormalizedEmail = propertyManager.Email.ToUpper();
+            propertyManager.PasswordHash = passwordHasher.HashPassword(propertyManager, password);
+        }
         return propertyManagers;
     }
 
