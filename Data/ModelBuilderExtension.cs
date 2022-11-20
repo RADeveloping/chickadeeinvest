@@ -101,20 +101,25 @@ public static class ModelBuilderExtensions
 
     private static List<Company> SeedDefaultCompanies()
     {
-        return new List<Company>() {
-            new Company(){
+        // Seed Default Companies
+        List<Company> companies = new List<Company>
+        {
+            new Company
+            {
                 Name = "Company One",
                 Address = "123 Main St",
                 Phone = "604-235-7890",
                 Email = "main@companyOne.com",
             },
-            new Company(){
+            new Company
+            {
                 Name = "Company Two",
                 Address = "Wall street",
                 Phone = "778-334-4594",
                 Email = "main@companyTwo.com",
-            },
+            }
         };
+        return companies;
     }
 
     private static List<PropertyManager> SeedDefaultPropertyManagers(string password, PasswordHasher<ApplicationUser> passwordHasher, List<Company> companies)
