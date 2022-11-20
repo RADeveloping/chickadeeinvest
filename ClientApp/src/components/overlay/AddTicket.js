@@ -111,7 +111,8 @@ export default function AddTicket({title, propertyId, unitId, open, handleClose}
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
                 <LoadingButton loading={loading} disabled={description === '' || problem === '' || resp.ticketId}
-                               onClick={handleAdd}>{resp.ticketId ? <Iconify icon="akar-icons:check"/> : 'Add'}</LoadingButton>
+                               onClick={handleAdd}>{resp.ticketId ?
+                    <Iconify icon="akar-icons:check"/> : 'Add'}</LoadingButton>
             </DialogActions>
         </Dialog>
     )

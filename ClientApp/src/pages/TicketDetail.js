@@ -38,16 +38,16 @@ export default function TicketDetail() {
     }
     const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(getApiTicketUri(pid, uid, id), undefined,
         true, onFetch);
-    
+
     const onPost = () => {
         reloadTicket()
     }
     const [respPatch, errorPatch, loadingPatch] = usePost(getApiTicketUri(pid, uid, id),
         undefined, patchTicket, onPost);
-    
+
     const [account] = useFetch(ACCOUNTS_API);
     const showComplete = account ? isMemberOf(account.roles, ["SuperAdmin", "PropertyManager"]) : null;
-    
+
     const [loadingCompleteButton, setLoadingCompleteButton] = useState(false);
     const {createdOn, description, estimatedDate, problem, severity, status, closedDate} = ticket;
     const firstLoad = ticket.length === 0;
@@ -181,8 +181,8 @@ export default function TicketDetail() {
                                             </Typography>
                                             {ticket.unit.propertyManager &&
                                                 <Tooltip enterTouchDelay={0}
-                                                    title={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
-                                                    arrow>
+                                                         title={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
+                                                         arrow>
                                                     <Avatar
                                                         alt={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
                                                         src={ticket.unit.propertyManager.profilePicture ? `data:image/jpeg;base64,${ticket.unit.propertyManager.profilePicture}` : 'd'}/>

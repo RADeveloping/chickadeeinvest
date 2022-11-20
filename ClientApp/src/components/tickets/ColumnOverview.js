@@ -6,9 +6,9 @@ import useFilter from "../../utils/filter";
 import {
     filterProperties, filterTicket,
     filterUnit, getApiTicketsUri, getApiUnitsUri, getTicketsUri,
-    PROPERTY,
-    TICKET,
-    UNIT
+    PROPERTY_PROPS,
+    TICKET_PROPS,
+    UNIT_PROPS
 } from "../../utils/constants";
 import useFetch from "../../utils/fetch";
 import SimpleList from "./SimpleList";
@@ -39,15 +39,15 @@ export default function ColumnOverview() {
 
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
-        propertyOrder, propertySetOrder, propertyHandleOrderChange] = useFilter(PROPERTY);
+        propertyOrder, propertySetOrder, propertyHandleOrderChange] = useFilter(PROPERTY_PROPS);
 
     const [unitSearchParams,
         unitOrderBy, unitSetOrderBy, unitHandleOrderByChange,
-        unitOrder, unitSetOrder, unitHandleOrderChange] = useFilter(UNIT);
+        unitOrder, unitSetOrder, unitHandleOrderChange] = useFilter(UNIT_PROPS);
 
     const [ticketSearchParams,
         ticketOrderBy, ticketSetOrderBy, ticketHandleOrderByChange,
-        ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(TICKET);
+        ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(TICKET_PROPS);
 
     const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties, undefined,
         mobileReadyRefresh, resetOnNull);
@@ -69,7 +69,7 @@ export default function ColumnOverview() {
 
     const selectedProperty = getItem(properties, selectedPropertyId)
     const selectedUnit = getItem(units, selectedUnitId)
-    
+
     useEffect(() => {
         let propertyId = searchParams.get('pid')
         let unitId = searchParams.get('uid')
@@ -126,20 +126,20 @@ export default function ColumnOverview() {
         <SimpleList key={isDesktop ? "sl-1" : undefined} leftRound items={properties} title={"Properties"}
                     setSelectedId={getSelect(false, setSelectedPropertyId)}
                     selectedId={selectedPropertyId}
-                    isDesktop={isDesktop} properties={PROPERTY} initialSort={PROPERTY[0].id}
+                    isDesktop={isDesktop} properties={PROPERTY_PROPS} initialSort={PROPERTY_PROPS[0].id}
                     loading={loadingProperties}
                     setOrderBy={propertySetOrderBy} order={propertyOrder} setOrder={propertySetOrder}/>,
         <SimpleList key={isDesktop ? "sl-2" : undefined} noRound skinny items={selectedPropertyId ?
             units : []}
                     title={"Units"} setNestedSelect={getSelect(true, setSelectedPropertyId)} path={path}
                     setSelectedId={getSelect(false, setSelectedUnitId)} selectedId={selectedUnitId}
-                    isDesktop={isDesktop} properties={UNIT}
+                    isDesktop={isDesktop} properties={UNIT_PROPS}
                     loading={loadingUnits}
                     setOrderBy={unitSetOrderBy} order={unitOrder} setOrder={unitSetOrder}/>,
         <SimpleList key={isDesktop ? "sl-3" : undefined} rightRound immediateClick items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={getSelect(true, setSelectedUnitId)} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
-                    isDesktop={isDesktop} properties={TICKET}
+                    isDesktop={isDesktop} properties={TICKET_PROPS}
                     loading={loadingTickets} uri={getTicketsUri}
                     setOrderBy={ticketSetOrderBy} order={ticketOrder} setOrder={ticketSetOrder}
                     addComponent={selectedUnitId && selectedPropertyId ?

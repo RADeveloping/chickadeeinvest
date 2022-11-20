@@ -30,7 +30,7 @@ export const STATUS = {
     1: {color: 'primary', text: 'Closed'},
 }
 
-export const PROPERTY = [
+export const PROPERTY_PROPS = [
     {id: 'address', label: 'Address'},
     {id: 'open_count', label: 'Open Ticket Count'},
     {id: 'unit_count', label: 'Unit Count'},
@@ -38,12 +38,12 @@ export const PROPERTY = [
     {id: 'name', label: 'Property Name'},
 ];
 
-export const UNIT = [
+export const UNIT_PROPS = [
     {id: 'number', label: 'Unit Number'},
     {id: 'type', label: 'Unit Type'},
 ];
 
-export const TICKET = [
+export const TICKET_PROPS = [
     {id: 'id', label: 'Ticket Id'},
     {id: 'createdOn', label: 'Created On'},
     {id: 'estimatedDate', label: 'Estimated Date'},
