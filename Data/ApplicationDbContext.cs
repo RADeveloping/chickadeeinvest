@@ -3,16 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Duende.IdentityServer.EntityFramework.Options;
 using chickadee.Models;
+using chickadee.Settings;
 
 namespace chickadee.Data;
 
 public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
 {
-    public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions)
+    private readonly UserSettings userSettings;
+
+    public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions, IOptions<UserSettings> userSettings)
         : base(options, operationalStoreOptions)
     {
-       
-
+        this.userSettings = userSettings.Value;
     }
 
     
@@ -63,7 +65,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .Property(t => t.UploadDate)
             .HasDefaultValueSql("GETDATE()");
 
-        builder.Seed();
+        builder.Seed(this.userSettings);
 
     }
 

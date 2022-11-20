@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace chickadee.Migrations
+namespace chickadee.Data.Migrations
 {
-    public partial class seedingFixAfterVerifDoc : Migration
+    public partial class m1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -420,24 +420,24 @@ namespace chickadee.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "38828def-c56c-471b-928f-0c7b31ea95a4", "45a92828-d1bc-4256-97f3-169bebe09919", "Tenant", "TENANT" },
-                    { "5010f6d5-45f3-4fcc-9681-10e301bb916d", "1abf569f-0265-4346-a38a-a3778e868302", "SuperAdmin", "SUPERADMIN" },
-                    { "6ce385b2-74bb-458a-ab66-626bb9b9f1c8", "5cde2100-66fd-4d00-8740-05d128a52101", "Admin", "ADMIN" },
-                    { "802b67c2-be4d-4649-b719-7f9d654ea03a", "1e2d8705-45ed-45f0-968a-f43d6cfe71f2", "PropertyManager", "PROPERTYMANAGER" }
+                    { "3b925fa5-e4c8-4acd-b3cf-540f81a0f8cf", "9fa63914-907f-4fc4-bbe2-f3edaf5d807e", "Admin", "ADMIN" },
+                    { "955d4fa7-03d1-4625-a0b7-b9d7955ab3e7", "31343e9e-68f7-430c-a814-563d7e4c0ae0", "SuperAdmin", "SUPERADMIN" },
+                    { "a4c7ebd2-5033-4557-ad21-d1c05c13b880", "3d84c75d-4c15-4504-a4f3-c068578a922e", "PropertyManager", "PROPERTYMANAGER" },
+                    { "b541e097-9ae2-4a01-8a2f-fd5b0cc858c4", "7200565e-a5e2-40cc-9551-2652d3d35152", "Tenant", "TENANT" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateOfBirth", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UnitId", "UserName", "UsernameChangeLimit" },
-                values: new object[] { "4b6e2833-1510-4587-988d-ee29fc40721f", 0, "891de5b8-dfcd-49e4-9dd2-2b45195cee26", new DateTime(1992, 6, 6, 0, 0, 0, 0, DateTimeKind.Local), "ApplicationUser", "superadmin@chickadeeinvest.ca", true, "Matt", "Hardwick", false, null, "SUPERADMIN@CHICKADEEINVEST.CA", "SUPERADMIN@CHICKADEEINVEST.CA", "AQAAAAEAACcQAAAAEKk2GFMfvZ0h2MssgoHfJ4tfI0s8qNdGu905VQtEWIApKdQe5xYECDi5eMdAuNbbbQ==", null, true, null, "226d77e3-51a7-4929-982d-3d437ce81c8a", false, null, "superadmin@chickadeeinvest.ca", 10 });
+                values: new object[] { "71101e89-cb73-4980-a0e3-97cffdc17daa", 0, "937e9d18-0a36-411c-b96d-a3ae332a1376", new DateTime(1992, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), "ApplicationUser", "superadmin@chickadeeinvest.ca", true, "Matt", "Hardwick", false, null, "SUPERADMIN@CHICKADEEINVEST.CA", "SUPERADMIN@CHICKADEEINVEST.CA", "AQAAAAEAACcQAAAAEDGVEkZ6yVB5pb1qY0WbqLOAwPBK47ifPbBWExUUekwQhyJ18OSOPsleCExuCMr80Q==", null, true, null, "37dd8474-5e97-442d-ab31-5fbdb07b5356", false, null, "superadmin@chickadeeinvest.ca", 10 });
 
             migrationBuilder.InsertData(
                 table: "Company",
                 columns: new[] { "CompanyId", "Address", "Email", "Logo", "Name", "Phone" },
                 values: new object[,]
                 {
-                    { "651347d4-386f-4047-b7d8-2aa2eb4c14ce", "Wall street", "main@companyTwo.com", null, "Company Two", "778-334-4594" },
-                    { "d6d94692-1c2f-4012-91d7-5cb065c64dc8", "123 Main St", "main@companyOne.com", null, "Company One", "604-235-7890" }
+                    { "44a23eb2-205f-48d6-bcd0-4503a9b6b75c", "Wall street", "main@companyTwo.com", null, "Company Two", "778-334-4594" },
+                    { "f88d0495-a989-415b-b76d-d1b50da34720", "123 Main St", "main@companyOne.com", null, "Company One", "604-235-7890" }
                 });
 
             migrationBuilder.InsertData(
@@ -445,25 +445,25 @@ namespace chickadee.Migrations
                 columns: new[] { "PropertyId", "Address", "Name" },
                 values: new object[,]
                 {
-                    { "074fcec7-3d7e-4826-a21e-e8baa3394c1d", "7488 Hazel Street", "Arcola Managed by PM 2" },
-                    { "41dfd714-1145-4b0f-b10b-184a3ad6c9f0", "123 Sesame Street", "Montana Apartments Managed By PM 2" },
-                    { "b1eb5bf1-dad9-4cf2-bef2-55b0bf566e79", "742 Evergreen Terrace", "The Evergreen Managed By PM 1" }
+                    { "5fb8cf69-bca2-43f5-bdb0-12edcad22580", "742 Evergreen Terrace", "The Evergreen Managed By PM 1" },
+                    { "b47a2986-6489-4c67-ae84-feff7227145f", "123 Sesame Street", "Montana Apartments Managed By PM 2" },
+                    { "ea8761f4-d67e-4067-843a-0e34c3dc605c", "7488 Hazel Street", "Arcola Managed by PM 2" }
                 });
 
             migrationBuilder.InsertData(
                 table: "VerificationDocuments",
                 columns: new[] { "VerificationDocumentId", "Data", "DocumentType", "ResponseMessage", "TenantId", "UserId" },
-                values: new object[] { "8e648eb1-7221-472d-be1d-270028c55617", new byte[0], 0, null, "7fc25bb1-1643-4404-92c1-1c6808d4b3fb", null });
+                values: new object[] { "bec43f46-2e5b-40a4-8fc1-189d075f0d88", new byte[0], 0, null, "6df27233-bf80-4927-9bd4-60d7554e1994", null });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "38828def-c56c-471b-928f-0c7b31ea95a4", "4b6e2833-1510-4587-988d-ee29fc40721f" },
-                    { "5010f6d5-45f3-4fcc-9681-10e301bb916d", "4b6e2833-1510-4587-988d-ee29fc40721f" },
-                    { "6ce385b2-74bb-458a-ab66-626bb9b9f1c8", "4b6e2833-1510-4587-988d-ee29fc40721f" },
-                    { "802b67c2-be4d-4649-b719-7f9d654ea03a", "4b6e2833-1510-4587-988d-ee29fc40721f" }
+                    { "3b925fa5-e4c8-4acd-b3cf-540f81a0f8cf", "71101e89-cb73-4980-a0e3-97cffdc17daa" },
+                    { "955d4fa7-03d1-4625-a0b7-b9d7955ab3e7", "71101e89-cb73-4980-a0e3-97cffdc17daa" },
+                    { "a4c7ebd2-5033-4557-ad21-d1c05c13b880", "71101e89-cb73-4980-a0e3-97cffdc17daa" },
+                    { "b541e097-9ae2-4a01-8a2f-fd5b0cc858c4", "71101e89-cb73-4980-a0e3-97cffdc17daa" }
                 });
 
             migrationBuilder.InsertData(
@@ -471,22 +471,22 @@ namespace chickadee.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "CompanyId", "ConcurrencyStamp", "DateOfBirth", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UnitId", "UserName", "UsernameChangeLimit" },
                 values: new object[,]
                 {
-                    { "4a5cee0b-0a7c-461f-858c-b256d920d21e", 0, "d6d94692-1c2f-4012-91d7-5cb065c64dc8", "6bef5003-a97f-4833-9089-226192939925", new DateTime(1992, 6, 6, 0, 0, 0, 0, DateTimeKind.Local), "PropertyManager", "propertymanager@gmail.com", true, "Property", "Manager", false, null, "PROPERTYMANAGER@GMAIL.COM", "PROPERTYMANAGER@GMAIL.COM", "AQAAAAEAACcQAAAAEHxnVJO2x6UgUDw6bGBziYFhuW/6XiuFSrRQYGakC7ymgQO6Jl8OVRQWxa6hiknmFw==", null, true, null, "1998e8b2-e1fe-46d8-b97c-af83d598cdc4", false, null, "propertymanager@gmail.com", 10 },
-                    { "a98185a3-bbbc-4ee8-a000-f121f03b6f11", 0, "651347d4-386f-4047-b7d8-2aa2eb4c14ce", "4395986c-3b1e-433c-8a6c-d2e14c6773d8", new DateTime(1992, 8, 4, 0, 0, 0, 0, DateTimeKind.Local), "PropertyManager", "propertymanager2@gmail.com", true, "Manager", "Property", false, null, "PROPERTYMANAGER2@GMAIL.COM", "PROPERTYMANAGER2@GMAIL.COM", "AQAAAAEAACcQAAAAEAdQTr3Ux42nT/RavHyRasgMQNw9Ccxp7iavaSOkeV+0+2Hgvn3s1F5t2ofimryynQ==", null, true, null, "058b7528-3512-46a2-b389-b7eabb10b5b1", false, null, "propertymanager2@gmail.com", 10 }
+                    { "4db404c3-4492-4134-87b7-1b2c096f4b2a", 0, "f88d0495-a989-415b-b76d-d1b50da34720", "ebea5dc9-0991-4db8-9891-0a35101862db", new DateTime(1992, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), "PropertyManager", "propertymanager@gmail.com", true, "Property", "Manager", false, null, "PROPERTYMANAGER@GMAIL.COM", "PROPERTYMANAGER@GMAIL.COM", "AQAAAAEAACcQAAAAEDMeYImHS2g21BEHbKfhSK4xMYiz0PSTHNuU5mcCkhrVY2lZGXnTgCRypW5erMLbSQ==", null, true, null, "6e4ef49d-f0d8-4005-800b-60815ee686a3", false, null, "propertymanager@gmail.com", 10 },
+                    { "6ad5dbe5-0d47-4d49-be1c-2b0cbeea1ac5", 0, "44a23eb2-205f-48d6-bcd0-4503a9b6b75c", "33265f74-9460-487b-a81b-ee5da8a21191", new DateTime(1992, 8, 7, 0, 0, 0, 0, DateTimeKind.Local), "PropertyManager", "propertymanager2@gmail.com", true, "Manager", "Property", false, null, "PROPERTYMANAGER2@GMAIL.COM", "PROPERTYMANAGER2@GMAIL.COM", "AQAAAAEAACcQAAAAEEjY9Rmgd/IFxMonP4lGnsUwx/BKoenXJIGsF8OUDU2NuthT2p7algIf0C5zuESzUw==", null, true, null, "ac043e48-7dca-4761-8735-b9e4de209a0a", false, null, "propertymanager2@gmail.com", 10 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Unit",
                 columns: new[] { "UnitId", "PropertyId", "PropertyManagerId", "UnitNo", "UnitType" },
-                values: new object[] { "99c90207-6a4f-4491-8814-09a3f726d5eb", "41dfd714-1145-4b0f-b10b-184a3ad6c9f0", null, 300, 1 });
+                values: new object[] { "df02a543-b8a3-4714-9da5-30a1aba4b463", "b47a2986-6489-4c67-ae84-feff7227145f", null, 300, 1 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "802b67c2-be4d-4649-b719-7f9d654ea03a", "4a5cee0b-0a7c-461f-858c-b256d920d21e" },
-                    { "802b67c2-be4d-4649-b719-7f9d654ea03a", "a98185a3-bbbc-4ee8-a000-f121f03b6f11" }
+                    { "a4c7ebd2-5033-4557-ad21-d1c05c13b880", "4db404c3-4492-4134-87b7-1b2c096f4b2a" },
+                    { "a4c7ebd2-5033-4557-ad21-d1c05c13b880", "6ad5dbe5-0d47-4d49-be1c-2b0cbeea1ac5" }
                 });
 
             migrationBuilder.InsertData(
@@ -494,27 +494,27 @@ namespace chickadee.Migrations
                 columns: new[] { "UnitId", "PropertyId", "PropertyManagerId", "UnitNo", "UnitType" },
                 values: new object[,]
                 {
-                    { "0faa7c38-31de-460f-a190-d51b4cac5959", "b1eb5bf1-dad9-4cf2-bef2-55b0bf566e79", "4a5cee0b-0a7c-461f-858c-b256d920d21e", 100, 0 },
-                    { "a9669682-33b9-4c5a-8987-c6fcefc1b978", "41dfd714-1145-4b0f-b10b-184a3ad6c9f0", "a98185a3-bbbc-4ee8-a000-f121f03b6f11", 200, 1 }
+                    { "6ef3a0bb-7d97-429b-9fbb-af6d51cb7594", "b47a2986-6489-4c67-ae84-feff7227145f", "6ad5dbe5-0d47-4d49-be1c-2b0cbeea1ac5", 200, 1 },
+                    { "daf6ad35-eea1-4df5-ba23-68a41a153aa9", "5fb8cf69-bca2-43f5-bdb0-12edcad22580", "4db404c3-4492-4134-87b7-1b2c096f4b2a", 100, 0 }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateOfBirth", "Discriminator", "Email", "EmailConfirmed", "FirstName", "IsIdVerified", "LastName", "LeaseNumber", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UnitId", "UserName", "UsernameChangeLimit" },
-                values: new object[] { "7fc25bb1-1643-4404-92c1-1c6808d4b3fb", 0, "1f755c43-1ad3-4569-ab42-0f44c43ae1ff", new DateTime(2002, 6, 6, 0, 0, 0, 0, DateTimeKind.Local), "Tenant", "tenant@gmail.com", true, "Tenant", false, "User", null, false, null, "TENANT@GMAIL.COM", "TENANT@GMAIL.COM", "AQAAAAEAACcQAAAAEBmsYkFOq6Yvio3DZ2r3lubSNn3EsQY0GzL03VEFyULSbDc90dDXS2J5i7cgB9P5fg==", null, true, null, "0ac98522-8b27-4845-9304-808579df285f", false, "0faa7c38-31de-460f-a190-d51b4cac5959", "tenant@gmail.com", 10 });
+                values: new object[] { "6df27233-bf80-4927-9bd4-60d7554e1994", 0, "a5ca0eec-dff6-4113-87b5-c0204ea02cc9", new DateTime(2002, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), "Tenant", "tenant@gmail.com", true, "Tenant", false, "User", null, false, null, "TENANT@GMAIL.COM", "TENANT@GMAIL.COM", "AQAAAAEAACcQAAAAEG74Q1g+yex8PIZFB+L/fp1H5AGZkCXWiLWx0RkqFgnnX2QDOzrcE6hZOcGfFcpovg==", null, true, null, "45d5968d-4d6f-4c13-b2ca-93abd3c6174a", false, "daf6ad35-eea1-4df5-ba23-68a41a153aa9", "tenant@gmail.com", 10 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateOfBirth", "Discriminator", "Email", "EmailConfirmed", "FirstName", "IsIdVerified", "LastName", "LeaseNumber", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UnitId", "UserName", "UsernameChangeLimit" },
-                values: new object[] { "c0a40d13-57b5-44c6-a6c9-354c485800a9", 0, "55bf5f06-7988-4ba0-ab24-cecd9589ca54", new DateTime(2002, 6, 6, 0, 0, 0, 0, DateTimeKind.Local), "Tenant", "tenant2@gmail.com", true, "User", false, "Tenant", null, false, null, "TENANT2@GMAIL.COM", "TENANT2@GMAIL.COM", "AQAAAAEAACcQAAAAEMnWXa5EAMGO0+jqbobjvtRYdqNOml8whCuqjiGLyzzYDnh7FvovqUWAmW4cgWyeAg==", null, true, null, "bc02b5a1-b35c-417f-bdf5-45b1f2d3d087", false, "a9669682-33b9-4c5a-8987-c6fcefc1b978", "tenant2@gmail.com", 10 });
+                values: new object[] { "98e99374-d0c9-4eeb-b649-7d95045ec829", 0, "64c2e7b4-7cfb-40ca-a0ba-18b0ab04a881", new DateTime(2002, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), "Tenant", "tenant2@gmail.com", true, "User", false, "Tenant", null, false, null, "TENANT2@GMAIL.COM", "TENANT2@GMAIL.COM", "AQAAAAEAACcQAAAAEMIItCeitspKy0tuOXqC3eY4DqW4J+/Teo22rKgRrkxiuijJGL8ZByOGHDroGF0ETQ==", null, true, null, "f96abf10-a666-46db-ab10-03847536ec0d", false, "6ef3a0bb-7d97-429b-9fbb-af6d51cb7594", "tenant2@gmail.com", 10 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "38828def-c56c-471b-928f-0c7b31ea95a4", "7fc25bb1-1643-4404-92c1-1c6808d4b3fb" },
-                    { "38828def-c56c-471b-928f-0c7b31ea95a4", "c0a40d13-57b5-44c6-a6c9-354c485800a9" }
+                    { "b541e097-9ae2-4a01-8a2f-fd5b0cc858c4", "6df27233-bf80-4927-9bd4-60d7554e1994" },
+                    { "b541e097-9ae2-4a01-8a2f-fd5b0cc858c4", "98e99374-d0c9-4eeb-b649-7d95045ec829" }
                 });
 
             migrationBuilder.InsertData(
@@ -522,16 +522,16 @@ namespace chickadee.Migrations
                 columns: new[] { "TicketId", "ClosedDate", "CreatedById", "CreatedOn", "Description", "EstimatedDate", "Problem", "Severity", "Status", "UnitId" },
                 values: new object[,]
                 {
-                    { 1, null, "7fc25bb1-1643-4404-92c1-1c6808d4b3fb", new DateTime(2022, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Massive Leak from the Kitchen pipe", new DateTime(2022, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Massive Leakage", 2, 0, "0faa7c38-31de-460f-a190-d51b4cac5959" },
-                    { 2, null, "7fc25bb1-1643-4404-92c1-1c6808d4b3fb", new DateTime(2021, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Need repairing the floors from last earthquake", new DateTime(2022, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Earthquake repair", 1, 0, "0faa7c38-31de-460f-a190-d51b4cac5959" },
-                    { 3, new DateTime(2000, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "c0a40d13-57b5-44c6-a6c9-354c485800a9", new DateTime(1999, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Need to fix the roof that was damaged by the tornado", new DateTime(2000, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tornado damage", 2, 1, "a9669682-33b9-4c5a-8987-c6fcefc1b978" },
-                    { 4, null, "c0a40d13-57b5-44c6-a6c9-354c485800a9", new DateTime(2019, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Currently getting by with rat traps", new DateTime(2022, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Rat infestation", 1, 0, "a9669682-33b9-4c5a-8987-c6fcefc1b978" }
+                    { 1, null, "6df27233-bf80-4927-9bd4-60d7554e1994", new DateTime(2022, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Massive Leak from the Kitchen pipe", new DateTime(2022, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Massive Leakage", 2, 0, "daf6ad35-eea1-4df5-ba23-68a41a153aa9" },
+                    { 2, null, "6df27233-bf80-4927-9bd4-60d7554e1994", new DateTime(2021, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Need repairing the floors from last earthquake", new DateTime(2022, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Earthquake repair", 1, 0, "daf6ad35-eea1-4df5-ba23-68a41a153aa9" },
+                    { 3, new DateTime(2000, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "98e99374-d0c9-4eeb-b649-7d95045ec829", new DateTime(1999, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Need to fix the roof that was damaged by the tornado", new DateTime(2000, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tornado damage", 2, 1, "6ef3a0bb-7d97-429b-9fbb-af6d51cb7594" },
+                    { 4, null, "98e99374-d0c9-4eeb-b649-7d95045ec829", new DateTime(2019, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Currently getting by with rat traps", new DateTime(2022, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Rat infestation", 1, 0, "6ef3a0bb-7d97-429b-9fbb-af6d51cb7594" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Messages",
                 columns: new[] { "MessageId", "Content", "CreatedDate", "SenderId", "TicketId", "UserId" },
-                values: new object[] { "d02d4acb-34e0-4415-a74f-8c00076ddba4", "This is a message", new DateTime(2022, 11, 15, 11, 39, 47, 420, DateTimeKind.Local).AddTicks(6290), "7fc25bb1-1643-4404-92c1-1c6808d4b3fb", 1, null });
+                values: new object[] { "e2a4eeb2-fc27-41b8-9382-3dd232875a3d", "This is a message", new DateTime(2022, 11, 18, 23, 18, 1, 19, DateTimeKind.Local).AddTicks(5140), "6df27233-bf80-4927-9bd4-60d7554e1994", 1, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
