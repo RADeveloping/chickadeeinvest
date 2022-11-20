@@ -185,25 +185,31 @@ public static class ModelBuilderExtensions
 
     private static List<Unit> SeedDefaultUnits(List<PropertyManager> propertyManagers, List<Property> properties)
     {
-        return new List<Unit>() {
-            new Unit() {
+        // Seed Default Units
+        List<Unit> units = new List<Unit>
+        {
+            new Unit
+            {
                 UnitNo = 100,
                 UnitType = UnitType.Studio,
                 PropertyId = properties[0].PropertyId,
                 PropertyManagerId = propertyManagers[0].Id,
             },
-            new Unit() {
+            new Unit
+            {
                 UnitNo = 200,
                 UnitType = UnitType.OneBedroom,
                 PropertyId = properties[1].PropertyId,
                 PropertyManagerId = propertyManagers[1].Id,
             },
-            new Unit() {
+            new Unit
+            {
                 UnitNo = 300,
                 UnitType = UnitType.OneBedroom,
                 PropertyId = properties[1].PropertyId,
-            },
+            }
         };
+        return units;
     }
 
     private static List<Tenant> SeedDefaultTenants(string password, PasswordHasher<ApplicationUser> passwordHasher, List<Unit> units)
