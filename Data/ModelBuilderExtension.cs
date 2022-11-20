@@ -300,8 +300,11 @@ public static class ModelBuilderExtensions
 
     private static List<Ticket> SeedDefaultTickets(List<Unit> units, List<Tenant> tenants)
     {
-        return new List<Ticket>() {
-                new Ticket() {
+        // Seed Default Tickets
+        List<Ticket> tickets = new List<Ticket>
+        {
+                new Ticket
+                {
                     TicketId = 1,
                     Problem = "Massive Leakage",
                     Description = "Massive Leak from the Kitchen pipe",
@@ -312,7 +315,8 @@ public static class ModelBuilderExtensions
                     UnitId = units[0].UnitId,
                     CreatedById = tenants[0].Id
                 },
-                new Ticket() {
+                new Ticket
+                {
                     TicketId = 2,
                     CreatedOn = new DateTime(2021, 10, 3),
                     EstimatedDate = new DateTime(2022, 10, 3),
@@ -323,7 +327,8 @@ public static class ModelBuilderExtensions
                     UnitId = units[0].UnitId,
                     CreatedById = tenants[0].Id
                 },
-                new Ticket() {
+                new Ticket
+                {
                     TicketId = 3,
                     CreatedOn = new DateTime(1999, 10, 3),
                     EstimatedDate = new DateTime(2000, 11, 3),
@@ -335,7 +340,8 @@ public static class ModelBuilderExtensions
                     UnitId = units[1].UnitId,
                     CreatedById = tenants[1].Id
                 },
-                new Ticket() {
+                new Ticket
+                {
                     TicketId = 4,
                     CreatedOn = new DateTime(2019, 10, 3),
                     EstimatedDate = new DateTime(2022, 11, 3),
@@ -345,8 +351,9 @@ public static class ModelBuilderExtensions
                     Severity = Enums.TicketSeverity.Medium,
                     UnitId = units[1].UnitId,
                     CreatedById = tenants[1].Id
-                },
+                }
         };
+        return tickets;
     }
 
     private static List<Message> SeedDefaultMessages(List<Tenant> tenants, List<Ticket> tickets)
