@@ -374,12 +374,16 @@ public static class ModelBuilderExtensions
 
     private static List<VerificationDocument> SeedDefaultVerificationDocuments(List<Tenant> tenants)
     {
-        return new List<VerificationDocument>() {
-            new VerificationDocument() {
+        // Seed Default Verification Documents
+        List<VerificationDocument> verificationDocuments = new List<VerificationDocument>
+        {
+            new VerificationDocument
+            {
                 Data = Array.Empty<byte>(),
                 DocumentType = Enums.DocumentType.PhotoIdentification,
                 TenantId = tenants[0].Id
-            },
+            }
         };
+        return verificationDocuments;
     }
 }
