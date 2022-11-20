@@ -358,14 +358,18 @@ public static class ModelBuilderExtensions
 
     private static List<Message> SeedDefaultMessages(List<Tenant> tenants, List<Ticket> tickets)
     {
-        return new List<Message>() {
-            new Message(){
+        // Seed Default Messages
+        List<Message> messages = new List<Message>
+        {
+            new Message
+            {
                 Content = "This is a message",
                 SenderId = tenants[0].Id,
                 CreatedDate = DateTime.Now.AddHours(-23),
                 TicketId = tickets[0].TicketId,
-            },
+            }
         };
+        return messages;
     }
 
     private static List<VerificationDocument> SeedDefaultVerificationDocuments(List<Tenant> tenants)
