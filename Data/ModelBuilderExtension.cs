@@ -1,10 +1,9 @@
+using chickadee.Enums;
+using chickadee.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace chickadee.Data;
-
-using Enums;
-using Models;
 
 public static class ModelBuilderExtensions
 {
