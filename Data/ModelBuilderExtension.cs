@@ -14,8 +14,8 @@ public static class ModelBuilderExtensions
         var password = "ytyv)9kSBXmg";
         var passwordHasher = new PasswordHasher<ApplicationUser>();
 
-        List<IdentityRole> roles;
         List<ApplicationUser> users;
+        List<IdentityRole> roles;
         List<Company> companies;
         List<PropertyManager> propertyManagers;
         List<Property> properties;
@@ -44,7 +44,7 @@ public static class ModelBuilderExtensions
             (tenants = SeedDefaultTenants(password, passwordHasher, units))
         );
         builder.Entity<IdentityUserRole<string>>().HasData(
-            SeedDefaultUserRoles(roles, users, propertyManagers, tenants)
+            SeedDefaultUserRoles(users, roles, propertyManagers, tenants)
         );
         builder.Entity<Ticket>().HasData(
             (tickets = SeedDefaultTickets(units, tenants))
@@ -59,44 +59,43 @@ public static class ModelBuilderExtensions
 
     private static List<IdentityRole> SeedDefaultRoles()
     {
-        // Seed Roles
-        var superAdminRole = new IdentityRole(Enums.Roles.SuperAdmin.ToString());
-        superAdminRole.NormalizedName = superAdminRole.Name.ToUpper();
-
-        var propertyManagerRole = new IdentityRole(Enums.Roles.PropertyManager.ToString());
-        propertyManagerRole.NormalizedName = propertyManagerRole.Name.ToUpper();
-
-
-        var adminRole = new IdentityRole(Enums.Roles.Admin.ToString());
-        adminRole.NormalizedName = adminRole.Name.ToUpper();
-
-        var tenantRole = new IdentityRole(Enums.Roles.Tenant.ToString());
-        tenantRole.NormalizedName = tenantRole.Name.ToUpper();
-
-        List<IdentityRole> roles = new List<IdentityRole>()
+        // Seed Default Roles
+        List<IdentityRole> roles = new List<IdentityRole>
         {
-            superAdminRole, propertyManagerRole, adminRole, tenantRole
+            new IdentityRole(Enums.Roles.SuperAdmin.ToString()),
+            new IdentityRole(Enums.Roles.PropertyManager.ToString()),
+            new IdentityRole(Enums.Roles.Admin.ToString()),
+            new IdentityRole(Enums.Roles.Tenant.ToString())
         };
+        foreach (IdentityRole role in roles)
+        {
+            role.NormalizedName = role.Name.ToUpper();
+        }
         return roles;
     }
 
     private static List<ApplicationUser> SeedDefaultUsers(string password, PasswordHasher<ApplicationUser> passwordHasher)
     {
-        List<ApplicationUser> users = new List<ApplicationUser>();
-        ApplicationUser superAdminUser = new ApplicationUser()
+        // Seed Default Users
+        List<ApplicationUser> users = new List<ApplicationUser>
         {
-            UserName = "superadmin@chickadeeinvest.ca",
-            Email = "superadmin@chickadeeinvest.ca",
-            FirstName = "Matt",
-            LastName = "Hardwick",
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true,
-            DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
+            new ApplicationUser
+            {
+                UserName = "superadmin@chickadeeinvest.ca",
+                Email = "superadmin@chickadeeinvest.ca",
+                FirstName = "Matt",
+                LastName = "Hardwick",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
+            }
         };
-        superAdminUser.NormalizedUserName = superAdminUser.UserName.ToUpper();
-        superAdminUser.NormalizedEmail = superAdminUser.Email.ToUpper();
-        superAdminUser.PasswordHash = passwordHasher.HashPassword(superAdminUser, password);
-        users.Add(superAdminUser);
+        foreach (ApplicationUser user in users)
+        {
+            user.NormalizedUserName = user.UserName.ToUpper();
+            user.NormalizedEmail = user.Email.ToUpper();
+            user.PasswordHash = passwordHasher.HashPassword(user, password);
+        }
         return users;
     }
 
@@ -239,58 +238,52 @@ public static class ModelBuilderExtensions
         return tenants;
     }
 
-    private static List<IdentityUserRole<string>> SeedDefaultUserRoles(List<IdentityRole> roles, List<ApplicationUser> users, List<PropertyManager> propertyManagers, List<Tenant> tenants)
+    private static List<IdentityUserRole<string>> SeedDefaultUserRoles(List<ApplicationUser> users, List<IdentityRole> roles, List<PropertyManager> propertyManagers, List<Tenant> tenants)
     {
-        // Seed UserRoles
-        List<IdentityUserRole<string>> userRoles = new List<IdentityUserRole<string>>();
-
-        userRoles.Add(new IdentityUserRole<string>
+        // Seed Default User Roles
+        List<IdentityUserRole<string>> userRoles = new List<IdentityUserRole<string>>
         {
-            UserId = users[0].Id,
-            RoleId = roles.First(q => q.Name == Enums.Roles.Tenant.ToString()).Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = users[0].Id,
-            RoleId = roles.First(q => q.Name == Enums.Roles.PropertyManager.ToString()).Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = users[0].Id,
-            RoleId = roles.First(q => q.Name == Enums.Roles.Admin.ToString()).Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = users[0].Id,
-            RoleId = roles.First(q => q.Name == Enums.Roles.SuperAdmin.ToString()).Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = propertyManagers[0].Id,
-            RoleId = roles.First(q => q.Name == Enums.Roles.PropertyManager.ToString()).Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = propertyManagers[1].Id,
-            RoleId = roles.First(q => q.Name == Enums.Roles.PropertyManager.ToString()).Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = tenants[0].Id,
-            RoleId = roles.First(q => q.Name == Enums.Roles.Tenant.ToString()).Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = tenants[1].Id,
-            RoleId = roles.First(q => q.Name == Enums.Roles.Tenant.ToString()).Id
-        });
+            new IdentityUserRole<string>
+            {
+                UserId = users[0].Id,
+                RoleId = roles.First(q => q.Name == Enums.Roles.Tenant.ToString()).Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = users[0].Id,
+                RoleId = roles.First(q => q.Name == Enums.Roles.PropertyManager.ToString()).Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = users[0].Id,
+                RoleId = roles.First(q => q.Name == Enums.Roles.Admin.ToString()).Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = users[0].Id,
+                RoleId = roles.First(q => q.Name == Enums.Roles.SuperAdmin.ToString()).Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = propertyManagers[0].Id,
+                RoleId = roles.First(q => q.Name == Enums.Roles.PropertyManager.ToString()).Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = propertyManagers[1].Id,
+                RoleId = roles.First(q => q.Name == Enums.Roles.PropertyManager.ToString()).Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = tenants[0].Id,
+                RoleId = roles.First(q => q.Name == Enums.Roles.Tenant.ToString()).Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = tenants[1].Id,
+                RoleId = roles.First(q => q.Name == Enums.Roles.Tenant.ToString()).Id
+            }
+        };
         return userRoles;
     }
 
