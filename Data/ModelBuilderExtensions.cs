@@ -26,7 +26,7 @@ public static class ModelBuilderExtensions
             (roles = SeedDefaultRoles())
         );
         builder.Entity<ApplicationUser>().HasData(
-            (users = SeedDefaultUsers(password, passwordHasher))
+            (users = SeedDefaultUsers(password, passwordHasher, userSettings))
         );
         builder.Entity<Company>().HasData(
             (companies = SeedDefaultCompanies())
@@ -74,17 +74,17 @@ public static class ModelBuilderExtensions
         return roles;
     }
 
-    private static List<ApplicationUser> SeedDefaultUsers(string password, PasswordHasher<ApplicationUser> passwordHasher)
+    private static List<ApplicationUser> SeedDefaultUsers(string password, PasswordHasher<ApplicationUser> passwordHasher, UserSettings userSettings)
     {
         // Seed Default Users
         List<ApplicationUser> users = new List<ApplicationUser>
         {
             new ApplicationUser
             {
-                UserName = "superadmin@chickadeeinvest.ca",
-                Email = "superadmin@chickadeeinvest.ca",
-                FirstName = "Matt",
-                LastName = "Hardwick",
+                UserName = userSettings.SuperAdminEmail,
+                Email = userSettings.SuperAdminEmail,
+                FirstName = userSettings.SuperAdminFirstName,
+                LastName = userSettings.SuperAdminLastName,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
