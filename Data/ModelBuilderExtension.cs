@@ -161,20 +161,26 @@ public static class ModelBuilderExtensions
 
     private static List<Property> SeedDefaultProperties()
     {
-        return new List<Property>() {
-            new Property() {
+        // Seed Default Properties
+        List<Property> properties = new List<Property>
+        {
+            new Property
+            {
                 Name = "The Evergreen Managed By PM 1",
                 Address = "742 Evergreen Terrace",
             },
-            new Property() {
+            new Property
+            {
                 Name = "Montana Apartments Managed By PM 2",
                 Address = "123 Sesame Street",
             },
-            new Property() {
+            new Property
+            {
                 Name = "Arcola Managed by PM 2",
                 Address = "7488 Hazel Street",
-            },
+            }
         };
+        return properties;
     }
 
     private static List<Unit> SeedDefaultUnits(List<PropertyManager> propertyManagers, List<Property> properties)
