@@ -17,7 +17,7 @@ import Page from "../components/common/Page";
 import Iconify from "../components/common/Iconify";
 import PageLoading from "../components/common/PageLoading";
 import useFetch, {usePost} from "../utils/fetch";
-import {accountUri, isMemberOf, SEVERITY, STATUS} from "../utils/constants";
+import {ACCOUNTS_API, getApiTicketUri, isMemberOf, SEVERITY, STATUS} from "../utils/constants";
 import Label from "../components/common/Label";
 import useResponsive from "../utils/responsive";
 import {useState} from "react";
@@ -36,16 +36,16 @@ export default function TicketDetail() {
     const onFetch = () => {
         setLoadingCompleteButton(false);
     }
-    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, undefined,
+    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(getApiTicketUri(pid, uid, id), undefined,
         true, onFetch);
     
     const onPost = () => {
         reloadTicket()
     }
-    const [respPatch, errorPatch, loadingPatch] = usePost(`/api/properties/${pid}/units/${uid}/tickets/${id}`,
+    const [respPatch, errorPatch, loadingPatch] = usePost(getApiTicketUri(pid, uid, id),
         undefined, patchTicket, onPost);
     
-    const [account] = useFetch(accountUri);
+    const [account] = useFetch(ACCOUNTS_API);
     const showComplete = account ? isMemberOf(account.roles, ["SuperAdmin", "PropertyManager"]) : null;
     
     const [loadingCompleteButton, setLoadingCompleteButton] = useState(false);

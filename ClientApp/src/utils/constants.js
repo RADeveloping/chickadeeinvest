@@ -2,10 +2,22 @@
 import * as React from "react";
 import Label from "../components/common/Label";
 
-export const ticketUri = '/api/tickets';
-export const unitUri = '/api/units';
-export const propertyUri = '/api/properties';
-export const accountUri = '/api/account';
+export const TICKETS_API = '/api/tickets';
+export const UNITS_API = '/api/units';
+export const PROPERTIES_API = '/api/properties';
+export const ACCOUNTS_API = '/api/account';
+export const getApiTicketUri = (pid, uid, id) =>
+    `/api/properties/${pid}/units/${uid}/tickets/${id}`;
+export const getApiTicketsUri = (pid, uid) =>
+    `/api/properties/${pid}/units/${uid}/tickets`;
+export const getApiUnitsUri = (pid) =>
+    `/api/properties/${pid}/units`;
+export const getTicketsUri = (ticket) =>
+    `tickets/${ticket.ticketId}?pid=${ticket.propertyId}&uid=${ticket.unitId}`;
+export const getPropertiesUri = (property) =>
+    `tickets?property=${property.propertyId}`;
+export const getUnitsUri = (unit) =>
+    `tickets?property=${unit.propertyId}&unit=${unit.unitId}`;
 
 export const SEVERITY = {
     0: {color: 'success', text: 'Low'},
@@ -18,7 +30,7 @@ export const STATUS = {
     1: {color: 'primary', text: 'Closed'},
 }
 
-export const propertyProperties = [
+export const PROPERTY = [
     {id: 'address', label: 'Address'},
     {id: 'open_count', label: 'Open Ticket Count'},
     {id: 'unit_count', label: 'Unit Count'},
@@ -26,12 +38,12 @@ export const propertyProperties = [
     {id: 'name', label: 'Property Name'},
 ];
 
-export const unitProperties = [
+export const UNIT = [
     {id: 'number', label: 'Unit Number'},
     {id: 'type', label: 'Unit Type'},
 ];
 
-export const ticketProperties = [
+export const TICKET = [
     {id: 'id', label: 'Ticket Id'},
     {id: 'createdOn', label: 'Created On'},
     {id: 'estimatedDate', label: 'Estimated Date'},
@@ -177,16 +189,4 @@ export const filterTicket = (data) => {
         );
     })
     return simpleData;
-}
-
-export const getTicketsUri = (ticket) => {
-    return `tickets/${ticket.ticketId}?pid=${ticket.propertyId}&uid=${ticket.unitId}`
-}
-
-export const getPropertiesUri = (property) => {
-    return `tickets?property=${property.propertyId}`
-}
-
-export const getUnitsUri = (unit) => {
-    return `tickets?property=${unit.propertyId}&unit=${unit.unitId}`
 }

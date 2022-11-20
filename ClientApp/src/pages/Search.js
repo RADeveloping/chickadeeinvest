@@ -13,9 +13,9 @@ import {useEffect} from "react";
 import useFetch from "../utils/fetch";
 import {
     filterProperties, filterTicket, filterUnit,
-    propertyProperties,
-    ticketProperties,
-    unitProperties
+    PROPERTY,
+    TICKET,
+    UNIT
 } from "../utils/constants";
 import Property from "../components/search/Property";
 import useFilter from "../utils/filter";
@@ -34,17 +34,17 @@ export default function Search() {
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
         propertyOrder, propertySetOrder, propertyHandleOrderChange,
-        propertyFilterQuery, handlePropertyFilterByQuery, setPropertyFilterQuery] = useFilter(propertyProperties);
+        propertyFilterQuery, handlePropertyFilterByQuery, setPropertyFilterQuery] = useFilter(PROPERTY);
 
     const [unitSearchParams,
         unitOrderBy, unitSetOrderBy, unitHandleOrderByChange,
         unitOrder, unitSetOrder, unitHandleOrderChange,
-        unitFilterQuery, handleUnitFilterByQuery, setUnitFilterQuery] = useFilter(unitProperties);
+        unitFilterQuery, handleUnitFilterByQuery, setUnitFilterQuery] = useFilter(UNIT);
 
     const [ticketSearchParams,
         ticketOrderBy, ticketSetOrderBy, ticketHandleOrderByChange,
         ticketOrder, ticketSetOrder, ticketHandleOrderChange,
-        ticketFilterQuery, handleTicketFilterByQuery, setTicketFilterQuery] = useFilter(ticketProperties);
+        ticketFilterQuery, handleTicketFilterByQuery, setTicketFilterQuery] = useFilter(TICKET);
 
     const [properties, errorProperties, loadingProperties] = useFetch(
         propertySearchParams.get('query') ?
@@ -100,7 +100,7 @@ export default function Search() {
                                          title={"Properties"}
                                          orderBy={propertyOrderBy}
                                          handleOrderByChange={propertyHandleOrderByChange}
-                                         properties={propertyProperties}
+                                         properties={PROPERTY}
                                          order={propertyOrder}
                                          handleOrderChange={propertyHandleOrderChange}
                                          isDesktop={isDesktop}
@@ -112,7 +112,7 @@ export default function Search() {
                                          title={"Units"}
                                          orderBy={unitOrderBy}
                                          handleOrderByChange={unitHandleOrderByChange}
-                                         properties={unitProperties}
+                                         properties={UNIT}
                                          order={unitOrder}
                                          handleOrderChange={unitHandleOrderChange}
                                          isDesktop={isDesktop}
@@ -124,7 +124,7 @@ export default function Search() {
                                          title={"Tickets"}
                                          orderBy={ticketOrderBy}
                                          handleOrderByChange={ticketHandleOrderByChange}
-                                         properties={ticketProperties}
+                                         properties={TICKET}
                                          order={ticketOrder}
                                          handleOrderChange={ticketHandleOrderChange}
                                          isDesktop={isDesktop}
