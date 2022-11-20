@@ -1,5 +1,6 @@
 using chickadee.Enums;
 using chickadee.Models;
+using chickadee.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +8,10 @@ namespace chickadee.Data;
 
 public static class ModelBuilderExtensions
 {
-    public static void Seed(this ModelBuilder builder)
+    public static void Seed(this ModelBuilder builder, UserSettings userSettings)
     {
 
-        var password = "ytyv)9kSBXmg";
+        var password = userSettings.DefaultPassword;
         var passwordHasher = new PasswordHasher<ApplicationUser>();
 
         List<ApplicationUser> users;
