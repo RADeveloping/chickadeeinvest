@@ -214,41 +214,38 @@ public static class ModelBuilderExtensions
 
     private static List<Tenant> SeedDefaultTenants(string password, PasswordHasher<ApplicationUser> passwordHasher, List<Unit> units)
     {
-        List<Tenant> tenants = new List<Tenant>();
-        Tenant tenantOne = new Tenant()
+        // Seed Default Tenants
+        List<Tenant> tenants = new List<Tenant>
         {
-            UserName = "tenant@gmail.com",
-            Email = "tenant@gmail.com",
-            FirstName = "Tenant",
-            LastName = "User",
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true,
-            DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
-            UnitId = units[0].UnitId,
-
+            new Tenant
+            {
+                UserName = "tenant@gmail.com",
+                Email = "tenant@gmail.com",
+                FirstName = "Tenant",
+                LastName = "User",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
+                UnitId = units[0].UnitId,
+            },
+            new Tenant
+            {
+                UserName = "tenant2@gmail.com",
+                Email = "tenant2@gmail.com",
+                FirstName = "User",
+                LastName = "Tenant",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
+                UnitId = units[1].UnitId,
+            }
         };
-        tenantOne.NormalizedUserName = tenantOne.UserName.ToUpper();
-        tenantOne.NormalizedEmail = tenantOne.Email.ToUpper();
-        tenantOne.PasswordHash = passwordHasher.HashPassword(tenantOne, password);
-
-        Tenant tenantTwo = new Tenant()
+        foreach (Tenant tenant in tenants)
         {
-            UserName = "tenant2@gmail.com",
-            Email = "tenant2@gmail.com",
-            FirstName = "User",
-            LastName = "Tenant",
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true,
-            DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
-            UnitId = units[1].UnitId,
-
-
-        };
-        tenantTwo.NormalizedUserName = tenantTwo.UserName.ToUpper();
-        tenantTwo.NormalizedEmail = tenantTwo.Email.ToUpper();
-        tenantTwo.PasswordHash = passwordHasher.HashPassword(tenantTwo, password);
-        tenants.Add(tenantOne);
-        tenants.Add(tenantTwo);
+            tenant.NormalizedUserName = tenant.UserName.ToUpper();
+            tenant.NormalizedEmail = tenant.Email.ToUpper();
+            tenant.PasswordHash = passwordHasher.HashPassword(tenant, password);
+        }
         return tenants;
     }
 
