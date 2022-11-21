@@ -1,35 +1,68 @@
-import {useNavigate, useParams} from "react-router-dom";
-import {Button, Card, Container, Grid, Grow, Stack, Typography} from "@mui/material";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {
+    Avatar,
+    Button,
+    Card,
+    Container,
+    Divider,
+    Grid,
+    Grow,
+    Stack,
+    Tooltip,
+    Typography,
+    AvatarGroup
+} from "@mui/material";
 import * as React from "react";
-import Page from "../components/Page";
-import Iconify from "../components/Iconify";
-import PageLoading from "../components/PageLoading";
-import useFetch from "../components/FetchData";
-import {SEVERITY, STATUS} from "../utils/filters";
-import Label from "../components/Label";
-import useResponsive from "../hooks/useResponsive";
+import Page from "../components/common/Page";
+import Iconify from "../components/common/Iconify";
+import PageLoading from "../components/common/PageLoading";
+import useFetch, {usePost} from "../utils/fetch";
+import {accountUri, isMemberOf, SEVERITY, STATUS} from "../utils/constants";
+import Label from "../components/common/Label";
+import useResponsive from "../utils/responsive";
+import {useState} from "react";
+import {LoadingButton} from "@mui/lab";
 
 export default function TicketDetail() {
-    const filterTickets = (data) => {
-        data.createdOn = new Date(data.createdOn)
-        data.estimatedDate = new Date(data.estimatedDate)
-        return data;
-    }
     const title = "Ticket"
     const {id} = useParams();
+    const [searchParams] = useSearchParams();
+    const uid = searchParams.get('uid')
+    const pid = searchParams.get('pid')
     const navigate = useNavigate();
-    const isDesktop = useResponsive('up', 'lg');
+    const isDesktop = useResponsive('up', 'sm');
+    const [patchTicket, setPatchTicket] = useState(null);
 
-    const [ticket, errorTicket, loadingTicket] = useFetch(`/api/Tickets/${id}`, filterTickets);
-    const [unit, errorUnit, loadingUnit] = useFetch(ticket.unitId ? `/api/Units/${ticket.unitId}` : null);
-    const [property, errorProperty, loadingProperty] = useFetch(unit.propertyId ? `/api/Properties/${unit.propertyId}` : null);
+    const onFetch = () => {
+        setLoadingCompleteButton(false);
+    }
+    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, undefined,
+        true, onFetch);
+    
+    const onPost = () => {
+        reloadTicket()
+    }
+    const [respPatch, errorPatch, loadingPatch] = usePost(`/api/properties/${pid}/units/${uid}/tickets/${id}`,
+        undefined, patchTicket, onPost);
+    
+    const [account] = useFetch(accountUri);
+    const showComplete = account ? isMemberOf(account.roles, ["SuperAdmin", "PropertyManager"]) : null;
+    
+    const [loadingCompleteButton, setLoadingCompleteButton] = useState(false);
+    const {createdOn, description, estimatedDate, problem, severity, status, closedDate} = ticket;
+    const firstLoad = ticket.length === 0;
+    const loadingData = loadingTicket && firstLoad;
 
-    const {createdOn, description, estimatedDate, problem, severity, status, tenant} = ticket;
-    const {unitNo} = unit;
-    const {address} = property;
-    const loadingData = loadingTicket || loadingUnit || loadingProperty;
-
-    console.log(ticket, unit, property)
+    const setCompletedButton = () => {
+        setLoadingCompleteButton(true);
+        setPatchTicket([
+            {
+                "op": "replace",
+                "path": "/status",
+                "value": 1
+            }
+        ])
+    }
     return (
         <Page title={`${title} #${id}`}>
             <Container>
@@ -46,58 +79,73 @@ export default function TicketDetail() {
                             Back
                         </Button>
                     </Stack>
-                    <Button
-                        variant="contained"
-                        to="#"
-                        startIcon={<Iconify icon="akar-icons:check" />}
-                    >
-                        {`Complete`}
-                    </Button>
+                    <Grow in={showComplete === true && !loadingData}>
+                        <LoadingButton
+                            loading={loadingCompleteButton}
+                            onClick={setCompletedButton}
+                            disabled={status === 1 ? true : false}
+                            variant="contained"
+                            to="#"
+                            startIcon={<Iconify icon="akar-icons:check"/>}
+                        >
+                            {status === 0 ? "Complete" : "Completed"}
+                        </LoadingButton>
+                    </Grow>
                 </Stack>
                 <PageLoading loadingData={loadingData}/>
                 <Grow in={!loadingData}>
-                    <Card sx={{display: loadingData ? 'none' : undefined}}>
-                        {!loadingData &&
-                            <Grid container padding={3} spacing={3} direction={'column'}>
+                    <Card>
+                        {ticket.length !== 0 &&
+                            <Grid container spacing={3} direction={'column'}>
                                 <Grid item>
-                                    <Stack direction={'column'} gap={1}>
-                                    <Typography variant={'h4'}>
-                                        {problem}
-                                    </Typography>
-                                    <Stack direction={isDesktop ? 'row' : 'column'} justifyContent={'space-between'} gap={1}>
-                                        <Stack direction={'row'} alignItems={'center'} gap={1}>
-                                            <Label
-                                                variant="ghost"
-                                                color={STATUS[status].color}
-                                            >
-                                                {STATUS[status].text}
-                                            </Label>
-                                            <Label
-                                                variant="ghost"
-                                                color={SEVERITY[severity].color}
-                                            >
-                                                {SEVERITY[severity].text}
-                                            </Label>
-                                        </Stack>
-                                        <Stack direction={'row'} alignItems={'center'} gap={1}>
-                                            <Label>
-                                                {createdOn.toLocaleDateString('en-CA', {dateStyle: 'medium'})}
-                                            </Label>
-                                            <Label sx={{fontWeight: 'normal'}}>
-                                                <div>
-                                                    Estimated: <b>{estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
-                                                </div>
-                                            </Label>
+                                    <Stack direction={'column'} padding={3} gap={1}>
+                                        <Typography variant={'h4'}>
+                                            {problem}
+                                        </Typography>
+                                        <Stack direction={isDesktop ? 'row' : 'column'} justifyContent={'space-between'}
+                                               gap={1}>
+                                            <Stack direction={'row'} alignItems={'center'} gap={1}>
+                                                <Label
+                                                    variant="ghost"
+                                                    color={STATUS[status].color}
+                                                >
+                                                    {STATUS[status].text}
+                                                </Label>
+                                                <Label
+                                                    variant="ghost"
+                                                    color={SEVERITY[severity].color}
+                                                >
+                                                    {SEVERITY[severity].text}
+                                                </Label>
+                                            </Stack>
+                                            <Stack direction={'row'} alignItems={'center'} gap={1}>
+                                                <Label sx={{fontWeight: 'normal'}}>
+                                                    <div>
+                                                        Opened: <b>{new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                    </div>
+                                                </Label>
+                                                {estimatedDate && !closedDate &&
+                                                    <Label sx={{fontWeight: 'normal'}}>
+                                                        <div>
+                                                            Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                        </div>
+                                                    </Label>
+                                                }
+                                                {closedDate &&
+                                                    <Label color={'primary'} sx={{fontWeight: 'normal'}}>
+                                                        <div>
+                                                            Closed: <b>{new Date(closedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                        </div>
+                                                    </Label>
+                                                }
+                                            </Stack>
                                         </Stack>
                                     </Stack>
-                                    </Stack>
-                               
                                 </Grid>
-
+                                <Divider/>
                                 <Grid item>
-
-                                    <Grid container spacing={4} alignItems={'center'} justifyContent={'space-between'}>
-
+                                    <Grid container padding={4} paddingTop={0} spacing={isDesktop ? 5 : 4}
+                                          alignItems={'center'}>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Description
@@ -111,25 +159,52 @@ export default function TicketDetail() {
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Address
                                             </Typography>
-                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                Unit #{unitNo}, {address}
+                                            {ticket.unit.property &&
+                                                <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
+                                                    Unit #{ticket.unit.unitNo}, {ticket.unit.property.address}
+                                                </Typography>
+                                            }
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
+                                                Property Name
                                             </Typography>
+                                            {ticket.unit.property &&
+                                                <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
+                                                    {ticket.unit.property.name}
+                                                </Typography>
+                                            }
                                         </Grid>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                                                 Property Manager
                                             </Typography>
-                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                {property.propertyManager.firstName} {property.propertyManager.lastName}
-                                            </Typography>
+                                            {ticket.unit.propertyManager &&
+                                                <Tooltip enterTouchDelay={0}
+                                                    title={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
+                                                    arrow>
+                                                    <Avatar
+                                                        alt={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
+                                                        src={ticket.unit.propertyManager.profilePicture ? `data:image/jpeg;base64,${ticket.unit.propertyManager.profilePicture}` : 'd'}/>
+                                                </Tooltip>
+                                            }
                                         </Grid>
                                         <Grid item>
                                             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                                                Tenant
+                                                Tenants
                                             </Typography>
-                                            <Typography variant={'h6'} sx={{fontWeight: 'normal'}}>
-                                                {tenant.firstName} {tenant.lastName}
-                                            </Typography>
+                                            {ticket.unit.tenants &&
+                                                <AvatarGroup max={4}>
+                                                    {ticket.unit.tenants.map((tenant) =>
+                                                        <Tooltip enterTouchDelay={0} key={tenant.firstName}
+                                                                 title={`${tenant.firstName} ${tenant.lastName}`} arrow>
+                                                            <Avatar key={tenant.lastName}
+                                                                    alt={`${tenant.firstName} ${tenant.lastName}`}
+                                                                    src={`data:image/jpeg;base64,${tenant.profilePicture}`}/>
+                                                        </Tooltip>
+                                                    )}
+                                                </AvatarGroup>
+                                            }
                                         </Grid>
                                     </Grid>
                                 </Grid>

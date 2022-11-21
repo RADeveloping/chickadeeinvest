@@ -89,7 +89,6 @@ namespace chickadee.Controllers
         // POST: api/TicketImage
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Tenant")]
         public async Task<ActionResult<TicketImage>> PostTicketImage(TicketImage ticketImage)
         {
           if (_context.TicketImage == null)
@@ -137,7 +136,12 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(ticketImage);
+            return Ok(new {
+                TicketImageId = ticketImage.TicketImageId,
+                Data = ticketImage.data,
+                UploadDate = ticketImage.UploadDate,
+                TicketId = ticketImage.TicketId
+            });
         }
 
         // DELETE: api/TicketImage/5

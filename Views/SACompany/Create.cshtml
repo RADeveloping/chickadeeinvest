@@ -1,0 +1,52 @@
+@model chickadee.Models.Company
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h3 class="lead">Create Company</h3>
+
+<hr/>
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-2">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="Logo" class="control-label"></label>
+                <input asp-for="Logo" class="form-control"/>
+                <span asp-validation-for="Logo" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control"/>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control"/>
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <input type="submit" value="Create" class="w-100 btn btn-lg btn-green"/>
+            </div>
+        </form>
+        <div>
+            <a asp-action="Index" class="w-100 btn btn-lg btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

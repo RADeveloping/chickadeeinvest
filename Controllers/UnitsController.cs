@@ -13,9 +13,7 @@ using System.Net;
 
 namespace chickadee.Controllers
 {
-    [Route("api/properties/{propertyId}/units")]
     [ApiController]
-    
     public class UnitsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -27,15 +25,157 @@ namespace chickadee.Controllers
             _userManager = userManager;
         }
 
-        // GET: api/properties/{propertyId}/units
+        // GET: api/units
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Unit>>> GetUnits(string propertyId)
+        [Route("api/units")]
+        public async Task<ActionResult<IEnumerable<Unit>>> GetAllUnits(string? sort, string? param, string? query)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
             if (_context.Unit == null || requestingUser == null || _context.Property == null)
-          {
-              return NotFound();
-          }
+            {
+                return NotFound();
+            }
+
+            var units = _context.Unit
+                .Where(u => u.PropertyManager != null &&
+                            (requestingUser.UnitId == u.UnitId || u.PropertyManager.Id == requestingUser.Id))
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                    propertyId = unit.PropertyId,
+                    propertyName = unit.Property.Name,
+                    propertyManagerId = unit.PropertyManagerId,
+                }).AsEnumerable();
+
+            var unitsSa = _context.Unit
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                    propertyId = unit.PropertyId,
+                    propertyName = unit.Property.Name,
+                    propertyManagerId = unit.PropertyManagerId,
+                }).AsEnumerable();
+
+            switch (sort)
+            {
+                case "asc" when param == "id":
+                    units = units.OrderBy(s => s.unitId);
+                    unitsSa = unitsSa.OrderBy(s => s.unitId);
+
+                    break;
+                case "desc" when param == "id":
+                    units = units.OrderByDescending(s => s.unitId);
+                    unitsSa = unitsSa.OrderByDescending(s => s.unitId);
+
+                    break;
+                
+                case "asc" when param == "number":
+                    units = units.OrderBy(s => s.unitNo);
+                    unitsSa = unitsSa.OrderBy(s => s.unitNo);
+
+                    break;
+                case "desc" when param == "number":
+                    units = units.OrderByDescending(s => s.unitNo);
+                    unitsSa = unitsSa.OrderByDescending(s => s.unitNo);
+
+                    break;
+               
+                case "asc" when param == "type":
+                    units = units.OrderBy(s => s.unitType);
+                    unitsSa = unitsSa.OrderBy(s => s.unitType);
+
+                    break;
+                case "desc" when param == "type":
+                    units = units.OrderByDescending(s => s.unitType);
+                    unitsSa = unitsSa.OrderByDescending(s => s.unitType);
+
+                    break;
+                
+                default:
+                    units = units.OrderBy(s => s.unitNo);
+                    unitsSa = unitsSa.OrderBy(s => s.unitNo);
+                    break;
+            }
+
+             if (query != null)
+            {
+                try
+                {
+
+                    var parsedInt = int.Parse(query);
+                    if (User.IsInRole("SuperAdmin"))
+                    {
+                        return Ok(unitsSa.Where(s =>
+                            s.unitNo == parsedInt).ToList());
+                    }
+                    else
+                    {
+                        return Ok(units.Where(s =>
+                            s.unitNo == parsedInt).ToList());
+                    }
+                    
+
+                }catch
+                {
+                    if (User.IsInRole("SuperAdmin"))
+                    {
+                        
+                        Console.WriteLine(query);
+
+                        return Ok(unitsSa.Where(s =>
+                            s.propertyName.Contains(query, StringComparison.InvariantCultureIgnoreCase)).ToList());
+                    }
+                    else
+                    {
+                        return Ok(units.Where(s =>
+                            s.propertyName.Contains(query, StringComparison.InvariantCultureIgnoreCase)).ToList());
+
+                    }
+                }
+            }
+            
+
+            return Ok(User.IsInRole("SuperAdmin") ? unitsSa : units);
+        }
+        
+        
+       
+        
+        // GET: api/properties/{propertyId}/units
+        [HttpGet]
+        [Route("api/properties/{propertyId}/units")]
+        public async Task<ActionResult> GetUnits(string propertyId, string? sort, string? param)
+        {
+
+            var requestingUser = await _userManager.GetUserAsync(User);
+            
+            if (_context.Unit == null  || _context.Property == null)
+            {
+                return NotFound();
+            }
+
+            
+            if (requestingUser == null)
+            {
+                // used for registration.
+                var unitsAnonymous = _context.Unit
+                    .Where(u => u.PropertyId == propertyId)
+                    .Select(unit => new
+                    {
+                        unitId = unit.UnitId,
+                        unitNo = unit.UnitNo,
+                        unitType = unit.UnitType,
+                        propertyId = unit.PropertyId,
+                    });
+
+                return Ok(unitsAnonymous.ToList());
+                
+            }
+            
           
             var property = await _context.Property.FindAsync(propertyId);
             if (property == null)
@@ -44,29 +184,79 @@ namespace chickadee.Controllers
             }
 
             var units = _context.Unit
-              .Where(u=> u.PropertyId == propertyId)
-              .Select(unit => new
-              {
-                  unitId = unit.UnitId,
-                  unitNo = unit.UnitNo,
-                  unitType = unit.UnitType,
-                  propertyId = unit.PropertyId,
-                  propertyManagerId = unit.PropertyManagerId,
-              })
-              .ToList();
-              
-            if (User.IsInRole("SuperAdmin") || units.Any(p => p.propertyManagerId == requestingUser.Id || p.unitId == requestingUser.UnitId))
-            {
-                return Ok(units);
-            }
+                .Where(u => u.PropertyId == propertyId && (requestingUser.UnitId == u.UnitId || u.PropertyManagerId == requestingUser.Id))
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                    propertyId = unit.PropertyId,
+                    propertyManagerId = unit.PropertyManagerId,
+                });
             
-            return NotFound();
+            
+            var unitsSA = _context.Unit
+                .Where(u => u.PropertyId == propertyId)
+                .Select(unit => new
+                {
+                    unitId = unit.UnitId,
+                    unitNo = unit.UnitNo,
+                    unitType = unit.UnitType,
+                    propertyId = unit.PropertyId,
+                    propertyManagerId = unit.PropertyManagerId,
+                });
+
+
+            switch (sort)
+            {
+                case "asc" when param == "id":
+                    units = units.OrderBy(s => s.unitId);
+                    unitsSA = unitsSA.OrderBy(s => s.unitId);
+
+                    break;
+                case "desc" when param == "id":
+                    units = units.OrderByDescending(s => s.unitId);
+                    unitsSA = unitsSA.OrderByDescending(s => s.unitId);
+
+                    break;
+                
+                case "asc" when param == "number":
+                    units = units.OrderBy(s => s.unitNo);
+                    unitsSA = unitsSA.OrderBy(s => s.unitNo);
+
+                    break;
+                case "desc" when param == "number":
+                    units = units.OrderByDescending(s => s.unitNo);
+                    unitsSA = unitsSA.OrderByDescending(s => s.unitNo);
+
+                    break;
+               
+                case "asc" when param == "type":
+                    units = units.OrderBy(s => s.unitType);
+                    unitsSA = unitsSA.OrderBy(s => s.unitType);
+
+                    break;
+                case "desc" when param == "type":
+                    units = units.OrderByDescending(s => s.unitType);
+                    unitsSA = unitsSA.OrderByDescending(s => s.unitType);
+
+                    break;
+                
+                default:
+                    units = units.OrderBy(s => s.unitNo);
+                    unitsSA = unitsSA.OrderBy(s => s.unitNo);
+                    break;
+            }
+
+
+            return Ok(User.IsInRole("SuperAdmin") ? unitsSA.ToList() : units.ToList());
+            
         }
 
         
         // GET: api/properties/{propertyId}/units/{unitId
         [HttpGet]
-        [Route("{unitId}")]
+        [Route("api/properties/{propertyId}/units/{unitId}")]
         public async Task<ActionResult<Unit>> GetUnit(string? unitId, string? propertyId)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
@@ -105,7 +295,8 @@ namespace chickadee.Controllers
 
         // PUT: api/Unit/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("/api/units/{id}")]
         public async Task<IActionResult> PutUnit(string id, Unit unit)
         {
             if (id != unit.UnitId)
@@ -138,6 +329,7 @@ namespace chickadee.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "SuperAdmin")]
+        [Route("api/units")]
         public async Task<ActionResult<Unit>> PostUnit(string? propertyId, Unit unit)
         {
           if (_context.Unit == null)
@@ -188,11 +380,20 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(unit);
+            return Ok(new {
+                UnitId = unit.UnitId,
+                UnitNo = unit.UnitNo,
+                UnitType = unit.UnitType,
+                PropertyId = unit.PropertyId,
+                Property = unit.Property,
+                PropertyManagerId = unit.PropertyManagerId
+            });
         }
 
         // DELETE: api/Unit/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("api/units/{id}")]
+
         public async Task<IActionResult> DeleteUnit(string id)
         {
             if (_context.Unit == null)

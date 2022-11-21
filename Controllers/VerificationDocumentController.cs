@@ -8,12 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using chickadee.Data;
 using chickadee.Models;
 using System.Net;
+using chickadee.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
 namespace chickadee.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/documents/verification")]
     [ApiController]
     public class VerificationDocumentController : ControllerBase
     {
@@ -30,11 +31,56 @@ namespace chickadee.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<VerificationDocument>>> GetVerificationDocuments()
         {
-          if (_context.VerificationDocuments == null)
-          {
-              return NotFound();
-          }
-            return await _context.VerificationDocuments.ToListAsync();
+
+            var requestingUser = await _userManager.GetUserAsync(User);
+
+            if (_context.VerificationDocuments == null || requestingUser == null)
+            {
+                return NotFound();
+            }
+
+            var documents = _context.VerificationDocuments;
+
+            // SuperAdmin is both a superadmin and a tenant
+            if (User.IsInRole("SuperAdmin") && User.IsInRole("Tenant"))
+            {
+                return Ok(new
+                {
+                    leaseDocuments = documents.Where(d => d.DocumentType == DocumentType.LeaseAgreement),
+                    photoIDDocuments = documents.Where(d => d.DocumentType == DocumentType.PhotoIdentification),
+                });
+            }
+            
+            if (User.IsInRole("Tenant"))
+            {
+                var documentTenantHasAccessto = documents.Where(doc => doc.TenantId == requestingUser.Id);
+
+                return Ok(new
+                {
+                    leaseDocuments = documentTenantHasAccessto.Where(d => d.DocumentType == DocumentType.LeaseAgreement),
+                    photoIDDocuments = documentTenantHasAccessto.Where(d => d.DocumentType == DocumentType.PhotoIdentification),
+                });
+                
+            }
+
+
+            if (User.IsInRole("PropertyManager"))
+            {
+                if (_context.Tenant == null) return NotFound();
+               
+                var tenants = _context.Tenant.Where(t => t.Unit != null && t.Unit.PropertyManagerId == requestingUser.Id);
+                var documentsPmHasAccessTo = documents
+                    .Where(p => tenants.Any(t => t.Id == p.TenantId));
+            
+                return Ok(new
+                {
+                    leaseDocuments = documentsPmHasAccessTo.Where(d => d.DocumentType == DocumentType.LeaseAgreement),
+                    photoIDDocuments = documentsPmHasAccessTo.Where(d => d.DocumentType == DocumentType.PhotoIdentification),
+                });
+                
+            }
+            
+            return NotFound();
         }
 
         // GET: api/VerificationDocument/5
@@ -103,7 +149,7 @@ namespace chickadee.Controllers
           }
 
           var requestingUser = await _userManager.GetUserAsync(User);
-          var tenant = await _context.Tenant.FindAsync(verificationDocument.TenantId);
+          var tenant = await _context.Tenant.FindAsync(requestingUser.Id);
 
           if (tenant == null)
           {
@@ -112,12 +158,7 @@ namespace chickadee.Controllers
                return BadRequest("Tenant not found");
           }
 
-          if (verificationDocument.TenantId != requestingUser.Id)
-          {
-               // If tenant does not exist, they cannot 
-               HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-               return BadRequest("Your Id does not match Tenant Id");
-          }
+          verificationDocument.TenantId = requestingUser.Id;
 
           verificationDocument.Tenant = tenant;
 
@@ -138,7 +179,16 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(verificationDocument);
+            return Ok(new {
+                data = verificationDocument.Data,
+                documentType = verificationDocument.DocumentType,
+                tenantId = verificationDocument.TenantId,
+                tenant = new {
+                    firstName = verificationDocument.Tenant.FirstName,
+                    lastName = verificationDocument.Tenant.LastName,
+                    email = verificationDocument.Tenant.Email
+                }
+            });
         }
 
         // DELETE: api/VerificationDocument/5

@@ -4,12 +4,6 @@ services:
   chickadee-db:
     image: mcr.microsoft.com/azure-sql-edge
 
-    volumes:
-      - sqlsystem:/var/opt/mssql/
-      - sqldata:/var/opt/sqlserver/data
-      - sqllog:/var/opt/sqlserver/log
-      - sqlbackup:/var/opt/sqlserver/backup
-
     ports:
       - "1433:1433"
     restart: always
@@ -19,7 +13,7 @@ services:
       MSSQL_SA_PASSWORD: SqlPassword!
 
   chickadee:
-    image: chickadeeinvest/chickadee:1667802241
+    image: chickadeeinvest/chickadee:1668317222
     depends_on:
       - chickadee-db
     entrypoint: [ "/wait-for-it.sh", "chickadee-db:1433", "-t", "120", "--", "dotnet", "chickadee.dll" ]
@@ -35,9 +29,3 @@ services:
       - DBNAME=chickadee
       - ASPNETCORE_ENVIRONMENT=Development
       - ENV_HOST=https://chickadee-dev.azurewebsites.net
-
-volumes:
-  sqlsystem:
-  sqldata:
-  sqllog:
-  sqlbackup:

@@ -31,6 +31,7 @@ namespace chickadee.Controllers
 
         // GET: api/Properties
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Property>>> GetProperties(string? sort, string? param, string? query)
         {
             var requestingUser = await _userManager.GetUserAsync(User);
@@ -45,27 +46,28 @@ namespace chickadee.Controllers
                 {
                     PropertyId = x.PropertyId,
                     Name = x.Name,
-                    Address = x.Address,
                 })
                 .ToList();
-
+            if (requestingUser == null)
+            {
+                return Ok(anonymous);
+            }
+                
+            
+            
             var properties = _context.Property
-                .Include(x => x.Units)
                 .Where(p => p.Units != null && p.Units.Any(u =>
                         (u.PropertyManagerId == requestingUser.Id)
-                    // || u.UnitId == requestingUser.UnitId
+                    || u.UnitId == requestingUser.UnitId
                 ))
                 .Select(x => new
                 {
                     PropertyId = x.PropertyId,
                     Name = x.Name,
                     Address = x.Address,
-                    TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
+                    TenantsCount = _context.Tenant == null ? 0 : _context.Tenant.Count(t=>t.Unit != null && t.Unit.PropertyId == x.PropertyId),
                     UnitsCount = x.Units == null ? 0 : x.Units.Count,
-                    OutstandingTickets = x.Units == null
-                        ? 0
-                        : x.Units.Select(u => u.Tickets != null && u.Tickets.Any(t => t.Status == TicketStatus.Open))
-                            .Count(),
+                    OutstandingTickets = _context.Tickets == null ? 0 : _context.Tickets.Count(t=>t.Unit != null && t.Unit.PropertyId == x.PropertyId)
                 })
                 .ToList();
 
@@ -76,11 +78,10 @@ namespace chickadee.Controllers
                     PropertyId = x.PropertyId,
                     Name = x.Name,
                     Address = x.Address,
-                    TenantsCount = x.Units == null ? 0 : x.Units.Select(u => u.Tenants).Count(),
+                    TenantsCount = _context.Tenant == null ? 0 : _context.Tenant.Count(t=>t.Unit != null && t.Unit.PropertyId == x.PropertyId),
                     UnitsCount = x.Units == null ? 0 : x.Units.Count,
-                    OutstandingTickets = x.Units == null
-                        ? 0
-                        : x.Units.Select(u => u.Tickets.Any(t => t.Status == TicketStatus.Open)).Count(),
+                    OutstandingTickets = _context.Tickets == null ? 0 : _context.Tickets.Count(t=>t.Unit != null && t.Unit.PropertyId == x.PropertyId)
+
                 })
                 .ToList();
 
@@ -90,12 +91,10 @@ namespace chickadee.Controllers
                 case "asc" when param == "address":
                     propertiesSa = propertiesSa.OrderBy(s => s.Address).ToList();
                     properties = properties.OrderBy(s => s.Address).ToList();
-                    anonymous = anonymous.OrderBy(s => s.Address).ToList();
                     break;
                 case "asc" when param == "id":
                     propertiesSa = propertiesSa.OrderBy(s => s.PropertyId).ToList();
                     properties = properties.OrderBy(s => s.PropertyId).ToList();
-                    anonymous = anonymous.OrderBy(s => s.PropertyId).ToList();
                     break;
                 case "asc" when param == "open_count":
                     propertiesSa = propertiesSa.OrderBy(s => s.OutstandingTickets).ToList();
@@ -112,22 +111,18 @@ namespace chickadee.Controllers
                 case "asc" when param == "name":
                     propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
                     properties = properties.OrderBy(s => s.Name).ToList();
-                    anonymous = anonymous.OrderBy(s => s.Name).ToList();
                     break;
                 case "asc":
                     propertiesSa = propertiesSa.OrderBy(s => s.Name).ToList();
                     properties = properties.OrderBy(s => s.Name).ToList();
-                    anonymous = anonymous.OrderBy(s => s.Name).ToList();
                     break;
                 case "desc" when param == "address":
                     propertiesSa = propertiesSa.OrderByDescending(s => s.Address).ToList();
                     properties = properties.OrderByDescending(s => s.Address).ToList();
-                    anonymous = anonymous.OrderByDescending(s => s.Address).ToList();
                     break;
                 case "desc" when param == "id":
                     propertiesSa = propertiesSa.OrderByDescending(s => s.PropertyId).ToList();
                     properties = properties.OrderByDescending(s => s.PropertyId).ToList();
-                    anonymous = anonymous.OrderByDescending(s => s.PropertyId).ToList();
                     break;
                 case "desc" when param == "open_count":
                     propertiesSa = propertiesSa.OrderByDescending(s => s.OutstandingTickets).ToList();
@@ -144,21 +139,19 @@ namespace chickadee.Controllers
                 case "desc" when param == "name":
                     propertiesSa = propertiesSa.OrderByDescending(s => s.Name).ToList();
                     properties = properties.OrderByDescending(s => s.Name).ToList();
-                    anonymous = anonymous.OrderByDescending(s => s.Name).ToList();
                     break;
                 case "desc":
                     propertiesSa = propertiesSa.OrderByDescending(s => s.Name).ToList();
                     properties = properties.OrderByDescending(s => s.Name).ToList();
-                    anonymous = anonymous.OrderByDescending(s => s.Name).ToList();
+                    break;
+                default :
+                    propertiesSa = propertiesSa.OrderByDescending(s => s.Address).ToList();
+                    properties = properties.OrderByDescending(s => s.Address).ToList();
                     break;
             }
 
             if (query != null)
             {
-                if (requestingUser == null || User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin"))
-                    return Ok(anonymous.Where(s =>
-                        s.Address.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
-                        s.Name.Contains(query, StringComparison.InvariantCultureIgnoreCase)));
                 return Ok(User.IsInRole("SuperAdmin")
                     ? propertiesSa.Where(s => 
                         s.Address.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
@@ -167,10 +160,6 @@ namespace chickadee.Controllers
                         s.Address.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
                         s.Name.Contains(query, StringComparison.InvariantCultureIgnoreCase)));
             }
-
-            if (requestingUser == null || User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin"))
-                return Ok(anonymous);
-
 
             return Ok(User.IsInRole("SuperAdmin") ? propertiesSa : properties);
         }

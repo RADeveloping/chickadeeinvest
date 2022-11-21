@@ -1,0 +1,72 @@
+@using chickadee.Areas.Identity.Pages.Account.Manage
+@namespace chickadee.Areas.Identity.Pages
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    <link href="~/css/custom.css" rel="stylesheet" type="text/css" />
+
+    
+}
+
+@if (User.IsInRole("SuperAdmin"))
+{
+    <li class="nav-item">
+        <a class="nav-link text-yellow" href="/SACompany"><i class="fa fa-home fa-nav"></i>Companies</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-yellow" href="/SAProperty"><i class="fa fa-home fa-nav"></i>Properties</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-yellow" href="/SAPropertyManager"><i class="fa fa-home fa-nav"></i>Property Managers</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-yellow" href="/SATicket"><i class="fa fa-home fa-nav"></i>Tickets</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-yellow" href="/SAUnit"><i class="fa fa-home fa-nav"></i>Units</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-yellow" href="/SATenant"><i class="fa fa-home fa-nav"></i>Tenants</a>
+    </li>
+    <hr/>
+}
+
+<li class="nav-item">
+    <a class="nav-link text-yellow" href="/Dashboard"><i class="fa fa-home fa-nav"></i>Dashboard</a>
+</li>
+
+<li class="nav-item">
+    
+    <a class="nav-link text-yellow @ManageNavPages.IndexNavClass(ViewContext)" id="profile" href="/Identity/Account/Manage/Index"><i class="fa fa-user fa-nav"></i>Profile</a>
+</li>
+
+@if (User.IsInRole("Tenant") && !User.IsInRole("SuperAdmin"))
+{
+    <li class="nav-item" >
+        <a class="nav-link text-yellow @ManageNavPages.VerifyAccountNavClass(ViewContext)" id="verify" href="/Identity/Account/Manage/VerifyAccount"><i class="fa fa-check fa-nav"></i>Verify Account</a>
+    </li>
+}
+
+<li class="nav-item">
+   
+    <a class="nav-link text-yellow @ManageNavPages.EmailNavClass(ViewContext)" id="email" href="/Identity/Account/Manage/Email"><i class="fa fa-envelope fa-nav"></i> Email</a>
+</li>
+<li class="nav-item">
+   
+    <a class="nav-link text-yellow @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" href="/Identity/Account/Manage/ChangePassword"><i class="fa fa-lock fa-nav text-yellow"></i> Password</a>
+</li>
+@if (hasExternalLogins)
+{
+    <li id="external-logins" class="nav-item">
+       
+        <a id="external-login" class="nav-link text-yellow @ManageNavPages.ExternalLoginsNavClass(ViewContext)" href="/Identity/Account/Manage/ExternalLogins"> <i class="fa fa-lock fa-nav"></i> External logins</a>
+    </li>
+}
+<li class="nav-item">
+   
+    <a class="nav-link text-yellow @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" href="/Identity/Account/Manage/TwoFactorAuthentication"><i class="fa fa-key fa-nav"></i> 2FA Authentication</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link  text-yellow @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" href="/Identity/Account/Manage/PersonalData"><i class="fa fa-download fa-nav"></i> Personal data</a>
+</li>

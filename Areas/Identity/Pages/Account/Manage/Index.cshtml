@@ -1,18 +1,19 @@
 ﻿@page
 @model IndexModel
+
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3 class="headingFont">Manage @ViewData["Title"]</h3>
+<h3 class="lead">Manage @ViewData["Title"]</h3>
 <hr/>
 
 <partial name="_StatusMessage" for="StatusMessage" />
 @*<partial name="_StatusMessage" for="UserNameChangeLimitMessage" />*@
 <form id="profile-form" method="post" enctype="multipart/form-data">
     <div class="row">
-        <div class="container">
+        <div class="col-lg-9">
             @if (ViewData["address"] != null && ViewData["unit"] !=null)
             {
                 <p class="subheadingFont">Property Address: </p>
@@ -34,8 +35,7 @@
                     }
 
                 </div>
-
-                <div class="mb-3 w-50">
+                <div class="mb-3">
                     <p style="text-align: left">Click "Choose File" button to upload a profile picture:</p>
 
                                    <input type="file"
@@ -45,30 +45,36 @@
                                           onchange="document.getElementById('profilePicture').src = window.URL.createObjectURL(this.files[0]); document.getElementById('profilePicture').classList.remove('d-none')"/>
                                    <span asp-validation-for="Input.ProfilePicture" class="text-danger"></span>
                 </div>
-
-
             </div>
 
-            <div class="form-floating mb-3 w-50">
+            <div class="form-floating mb-3">
                 <input asp-for="Input.FirstName" id="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder="First Name"/>
                 <label asp-for="Input.FirstName" for="Input.FirstName"></label>
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-3 w-50">
+            <div class="form-floating mb-3">
                 <input asp-for="Input.LastName" id="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true" placeholder="Last Name"/>
                 <label asp-for="Input.LastName" for="Input.LastName"></label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-3 w-50">
+            <div class="form-floating mb-3">
                 <input asp-for="Username" id="username"class="form-control" disabled/>
                 <label asp-for="Username" for="username" class="form-label"></label>
             </div>
-            <div class="form-floating mb-3 w-50">
+            
+            <div class="form-floating mb-3">
+                    <input asp-for="Input.DateOfBirth" id="Input.DateOfBirth" class="form-control"  aria-required="true" placeholder="Date of Birth" />
+                    <label asp-for="Input.DateOfBirth" for="Input.DateOfBirth" class="form-label"></label>
+                    <div class="mt-1"><span asp-validation-for="Input.DateOfBirth" class="text-danger mt-1"></span></div>
+                </div>
+            
+            <div class="form-floating mb-3">
                 <input asp-for="Input.PhoneNumber" id="Input.PhoneNumber" class="form-control" placeholder="Phone Number"/>
                 <label asp-for="Input.PhoneNumber" for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-            <button id="update-profile-button" type="submit" class="btn btn-lg btn-primary w-50">Save</button>
+
+            <button id="update-profile-button" type="submit" class="btn btn-green mt-3 float-end">Save</button>
         </div>
     </div>
 </form>

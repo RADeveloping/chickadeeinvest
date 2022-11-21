@@ -14,10 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Faker.Net" Version="2.0.154" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.8" />
@@ -32,25 +34,16 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
-    <Content Include="ClientApp\public\static\landingpage\assets\newake.otf">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="ClientApp\public\static\landingpage\assets\SaphionLight.otf">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     <None Include="wwwroot\css\custom.css" />
     <None Include="wwwroot\images\logo.svg" />
+    <Content Remove="Pages\Units\Details.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Enums\" />
     <None Remove="Swashbuckle.AspNetCore" />
     <None Remove="Views\" />
-    <None Remove="Views\RoleManager\" />
-    <None Remove="Views\UserRoles\" />
     <None Remove="Settings\" />
     <None Remove="MailKit" />
     <None Remove="MimeKit" />
@@ -60,11 +53,19 @@
   <ItemGroup>
     <Folder Include="Enums\" />
     <Folder Include="Views\" />
-    <Folder Include="Views\RoleManager\" />
-    <Folder Include="Views\UserRoles\" />
     <Folder Include="Settings\" />
     <Folder Include="Services\" />
     <Folder Include="Templates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Pages\Units\Edit.cshtml.cs" />
+    <Compile Remove="Pages\Units\Details.cshtml.cs" />
+    <Compile Remove="Pages\Units\Delete.cshtml.cs" />
+    <Compile Remove="Pages\Units\Create.cshtml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="Areas\Identity\Pages\Account\Manage\_Layout.cshtml" />
+    <AdditionalFiles Include="Areas\Identity\Pages\_ManageNav.cshtml" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

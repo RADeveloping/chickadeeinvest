@@ -1,0 +1,118 @@
+@using chickadee.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model chickadee.Models.Ticket
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h3 class="lead">Create Tickets</h3>
+<hr/>
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-2">
+                <label asp-for="Problem" class="control-label"></label>
+                <input asp-for="Problem" class="form-control"/>
+                <span asp-validation-for="Problem" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control"/>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="EstimatedDate" class="control-label"></label>
+                <input asp-for="EstimatedDate" class="form-control"/>
+                <span asp-validation-for="EstimatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="@Model.Status" class="form-control" asp-items="Html.GetEnumSelectList<TicketStatus>()">Ticket Status</select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Severity" class="control-label"></label>
+                <select asp-for="@Model.Status" class="form-control" asp-items="Html.GetEnumSelectList<TicketSeverity>()">Ticket Status</select>
+                <span asp-validation-for="Severity" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="ClosedDate" class="control-label"></label>
+                <input asp-for="ClosedDate" class="form-control"/>
+                <span asp-validation-for="ClosedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label">Property</label>
+                @Html.DropDownList("properties", @ViewBag.properties as List<SelectListItem>, new { @class="form-control" })
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="UnitId" class="control-label"></label>
+                   <select asp-for="UnitId" id="units" class="form-control">
+                       <option selected></option>
+                   </select>   
+                <span asp-validation-for="UnitId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="CreatedById" class="control-label"></label>
+                <select asp-for="CreatedById" class="form-control" asp-items="ViewBag.CreatedById"></select>
+            </div>
+            <div class="form-group mb-2">
+                <input type="submit" value="Create" class="w-100 btn btn-lg btn-green"/>
+            </div>
+        </form>
+        <div>
+            <a asp-action="Index" class="w-100 btn btn-lg btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
+
+@{
+    <script>
+    var unitId = "";
+    var activities = document.getElementById("properties");
+    var propertiesDropDown = document.getElementById("properties"); 
+    var unitsDropDown = document.getElementById("units"); 
+   
+    activities.addEventListener("change", function() {
+    var str = propertiesDropDown.options[propertiesDropDown.selectedIndex].value;
+        document.getElementById("units").length = 0;
+        
+    function getUnits() {
+        if (str !== ""){
+            console.log(str)
+        fetch(`/api/properties/${str}/units`)
+                .then(response => response.json())
+                .then(data => updateUnitsDropDown(data))
+                .catch(error => console.error('Unable to get items.', error));     
+      }
+     }
+         getUnits()
+         
+     function updateUnitsDropDown(data){
+        console.log(data)
+        document.getElementById("units").add(new Option("", ""))   
+        data.forEach(d=> {
+        document.getElementById("units").add(new Option(d.unitNo, d.unitId))    
+        });
+
+     }
+        });
+    
+       
+      document.getElementById("units").addEventListener("change", function() {
+        unitId = unitsDropDown.options[unitsDropDown.selectedIndex].value;
+        });
+
+
+    </script>
+    
+    
+    
+}

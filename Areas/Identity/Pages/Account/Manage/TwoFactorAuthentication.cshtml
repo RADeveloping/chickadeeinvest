@@ -7,7 +7,7 @@
 }
 
 <partial name="_StatusMessage" for="StatusMessage" />
-<h3 class="headingFont">@ViewData["Title"]</h3>
+<h3 class="lead">@ViewData["Title"]</h3>
 <hr/>
 @{
     var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
@@ -40,22 +40,22 @@
             if (Model.IsMachineRemembered)
             {
                 <form method="post" style="display: inline-block">
-                    <button type="submit" class="btn btn-primary">Forget this browser</button>
+                    <button type="submit" class="btn btn-green">Forget this browser</button>
                 </form>
             }
-            <a asp-page="./Disable2fa" class="btn btn-primary">Disable 2FA</a>
-            <a asp-page="./GenerateRecoveryCodes" class="btn btn-primary">Reset recovery codes</a>
+            <a asp-page="./Disable2fa" class="btn btn-green">Disable 2FA</a>
+            <a asp-page="./GenerateRecoveryCodes" class="btn btn-green">Reset recovery codes</a>
         }
 
         <h4>Authenticator app</h4>
         @if (!Model.HasAuthenticator)
         {
-            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">Add authenticator app</a>
+            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-green">Add authenticator app</a>
         }
         else
         {
-            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">Set up authenticator app</a>
-            <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-primary">Reset authenticator app</a>
+            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-green">Set up authenticator app</a>
+            <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-green">Reset authenticator app</a>
         }
     }
     else

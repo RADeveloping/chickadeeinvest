@@ -21,8 +21,7 @@ namespace chickadee.Models {
         
         public int UsernameChangeLimit { get; set; } = 10;
 
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [DataType(DataType.Date)]
         [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
 
@@ -31,8 +30,13 @@ namespace chickadee.Models {
         public byte[]? ProfilePicture { get; set; }
         
         [Display(Name = "Unit ID")]
-        public String? UnitId { get; set;}
+        public string? UnitId { get; set;}
         [ForeignKey("UnitId")]
+        
+        [NotMapped]
+        [Display(Name = "Name")]
+        public string FullName => FirstName + " " + LastName;
+
 
         public ICollection<Message>? Messages { get; set; } = new List<Message>();
         

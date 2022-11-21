@@ -164,7 +164,11 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(message);
+            return Ok(new {
+                MessageId = message.MessageId,
+                Content = message.Content,
+                SenderId = message.SenderId
+            });
         }
 
         // DELETE: api/Message/5

@@ -4,7 +4,7 @@ namespace chickadee.Models {
 
     public class UnitNote {
         [Key]
-        public String UnitNoteId { get; set; } = Guid.NewGuid().ToString();
+        public string UnitNoteId { get; set; } = Guid.NewGuid().ToString();
         
         [Required]
         public string Message { get; set; }
@@ -12,10 +12,10 @@ namespace chickadee.Models {
         [Required]
         [Display(Name = "Upload Date")]
         [DataType(DataType.DateTime)]
-        public DateTime UploadDate { get; set; }
+        public DateTime UploadDate { get; set; } = DateTime.Now;
         
         [ForeignKey("UnitId")]
         public Unit? Unit { get; set; }
-        public String UnitId { get; set; }
+        public string UnitId { get; set; }
     }
 }

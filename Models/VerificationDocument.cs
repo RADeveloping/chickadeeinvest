@@ -6,10 +6,9 @@ namespace chickadee.Models {
     
     public class VerificationDocument {
         [Key]
-        public String VerificationDocumentId { get; set; } = Guid.NewGuid().ToString();
+        public string VerificationDocumentId { get; set; } = Guid.NewGuid().ToString();
         
-        [Required]
-        public byte[] data { get; set; }
+        public byte[]? Data { get; set; }
         
         [Required]
         public DocumentType DocumentType { get; set; }
@@ -18,6 +17,6 @@ namespace chickadee.Models {
         
         [ForeignKey("UserId")]
         public Tenant? Tenant { get; set; }
-        public String TenantId { get; set; }
+        public string? TenantId { get; set; }
     }
 }

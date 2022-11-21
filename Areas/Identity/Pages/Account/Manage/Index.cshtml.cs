@@ -83,6 +83,11 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "Profile Picture")]
             public byte[] ProfilePicture { get; set; }
+            
+            [DataType(DataType.Date)]
+            [Display(Name = "Date Of Birth")]
+            public DateTime DateOfBirth { get; set; }
+            
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -92,7 +97,8 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
             var firstName = user.FirstName;
             var lastName = user.LastName;
             var profilePicture = user.ProfilePicture;
-
+            var dateOfBirth = user.DateOfBirth;
+            
             try
            {
                // fetch data from route
@@ -120,7 +126,8 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
                 Username = userName,
                 FirstName = firstName,
                 LastName = lastName,
-                ProfilePicture = profilePicture
+                ProfilePicture = profilePicture,
+                DateOfBirth = dateOfBirth
             };
         }
 
@@ -180,6 +187,14 @@ namespace chickadee.Areas.Identity.Pages.Account.Manage
                 user.LastName = Input.LastName;
                 await _userManager.UpdateAsync(user);
             }
+            
+            var dateOfBirth = user.DateOfBirth;
+            if (Input.DateOfBirth != dateOfBirth)
+            {
+                user.DateOfBirth = Input.DateOfBirth;
+                await _userManager.UpdateAsync(user);
+            }
+            
             //if (user.UsernameChangeLimit > 0)
             //{
             //    if (Input.Username != user.UserName)

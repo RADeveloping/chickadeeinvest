@@ -23,11 +23,11 @@ namespace chickadee.Models
        
        [Required] 
        [Display(Name = "Created On")] 
-       [DataType(DataType.DateTime)]
-       public DateTime CreatedOn { get; set; }
+       [DataType(DataType.Date)]
+       public DateTime CreatedOn { get; set; } = DateTime.Now;
        
-       [Display(Name = "Estimated Completion Date")] 
-       [DataType(DataType.DateTime)]
+       [Display(Name = "Est. Completion")] 
+       [DataType(DataType.Date)]
        public DateTime? EstimatedDate { get; set; }
  
        [Display(Name = "Status")] 
@@ -37,21 +37,23 @@ namespace chickadee.Models
 
        public TicketSeverity Severity { get; set; }
        
+       [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "N/A")]
        [Display(Name = "Closed Date")] 
-       [DataType(DataType.DateTime)]
+       [DataType(DataType.Date)]
        public DateTime? ClosedDate { get; set; }
 
        
-       public String UnitId { get; set; }
+       public string? UnitId { get; set; }
        [ForeignKey("UnitId")]
        public Unit? Unit { get; set; }
        
-       public String CreatedById { get; set; } // OWNER OF TICKET. Anyone can create ticket
+       [Display(Name = "Created By")]
+       public string? CreatedById { get; set; } // OWNER OF TICKET. Anyone can create ticket
        [ForeignKey("CreatedById")]
        public ApplicationUser? CreatedBy { get; set; }
        
         
-        // public String ClosedById { get; set; }
+        // public string ClosedById { get; set; }
         // [ForeignKey("ClosedById")]
         // public virtual ApplicationUser ClosedBy { get; set; }
        

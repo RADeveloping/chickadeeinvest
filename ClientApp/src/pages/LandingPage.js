@@ -96,7 +96,8 @@ function LandingPage() {
                     <div className="row">
                         <div className="col-lg-4">
                             <div className="team-member">
-                                <img className="mx-auto rounded-circle" src="static/landingpage/assets/img/team/1.jpg" alt="..."/>
+                                <img className="mx-auto rounded-circle" src="static/landingpage/assets/img/team/1.jpg"
+                                     alt="..."/>
                                 <h4>Parveen Anand</h4>
                                 <p className="text-muted">Lead Designer</p>
                                 <a className="btn btn-dark btn-social mx-2" href="#!"
@@ -110,7 +111,8 @@ function LandingPage() {
                         </div>
                         <div className="col-lg-4">
                             <div className="team-member">
-                                <img className="mx-auto rounded-circle" src="static/landingpage/assets/img/team/2.jpg" alt="..."/>
+                                <img className="mx-auto rounded-circle" src="static/landingpage/assets/img/team/2.jpg"
+                                     alt="..."/>
                                 <h4>Diana Petersen</h4>
                                 <p className="text-muted">Lead Marketer</p>
                                 <a className="btn btn-dark btn-social mx-2" href="#!"
@@ -125,7 +127,8 @@ function LandingPage() {
                         </div>
                         <div className="col-lg-4">
                             <div className="team-member">
-                                <img className="mx-auto rounded-circle" src="static/landingpage/assets/img/team/3.jpg" alt="..."/>
+                                <img className="mx-auto rounded-circle" src="static/landingpage/assets/img/team/3.jpg"
+                                     alt="..."/>
                                 <h4>Larry Parker</h4>
                                 <p className="text-muted">Lead Developer</p>
                                 <a className="btn btn-dark btn-social mx-2" href="#!"
@@ -227,6 +230,6 @@ function LandingPage() {
             <script src="/landingpage/js/scripts.js"></script>
         </>
     );
-    }
+}
 
 export default LandingPage;

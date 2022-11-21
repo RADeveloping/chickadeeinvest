@@ -2,10 +2,29 @@
     background: #EEEFDF;
 }
 
+.text-green {
+    color: #103A31;
+}
 .green {
     background: #103A31;
 }
+.fa-table{
+    font-size: 2rem;
+    color: #103A31;
+}
 
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(90, 90, 90, 40%);
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
 
 .yellow {
     background: #FFC933;
@@ -51,9 +70,19 @@
     font-family: "chickadeeText", serif;
 }
 
-.p{
-    font-family: "chickadeeText", serif;
+
+.btn-green {
+    color: #fff;
+    background-color: #103A31;
+    border-color: #103a31;
 }
+
+.btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active, .open>.dropdown-toggle.btn-green {
+    color: #fff;
+    background-color: rgba(16, 58, 49, 0.95);
+    border-color: #103a31; /*set the color you want here*/
+}
+
 
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\
 for details on configuring this project to bundle and minify static web assets. */
@@ -63,14 +92,7 @@ a.navbar-brand {
     text-align: center;
     word-break: break-all;
 }
-body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-}
 
-html {
-    height: -webkit-fill-available;
-}
 
 .container-main {
     display: flex;
@@ -78,28 +100,12 @@ html {
     max-height: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
-
 }
 
 .green {
     background-color: #103A31;
 }
 
-@media only screen and (max-width: 768px) {
-
-
-}
-
-@media only screen and (min-width: 768px) {
-    .navbar{
-        width: 280px;
-        margin-left: 10px;
-        display: inline-block
-    }
-    .sidebar{
-        height: 100vh;
-    }
-}
 
 
 button.navbar-toggler span.navbar-toggler-icon {
@@ -114,7 +120,6 @@ button.navbar-toggler span.navbar-toggler-icon {
     --bs-nav-link-hover-color: #EEEFDF;
     font-size: 0.875rem;
     font-family: Public Sans,sans-serif;
-
 }
 
 
@@ -217,3 +222,77 @@ body {
     margin-bottom: 0px;
 }
 
+.nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+
+}
+body {
+    /* font-size: .875rem; */
+}
+
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 40px 0 0; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+@media (max-width: 767.98px) {
+    #logo{
+        display:none
+    }
+}
+
+.sidebar-sticky {
+    height: calc(100vh - 100px);
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
+.navbar .navbar-toggler {
+    /* top: .25rem; */
+    right: 1rem;
+}
+
+.navbar .form-control {
+    padding: .75rem 1rem;
+}
+ 

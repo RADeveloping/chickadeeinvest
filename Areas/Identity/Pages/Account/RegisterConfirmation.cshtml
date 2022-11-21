@@ -1,8 +1,6 @@
 ﻿@page
 @model RegisterConfirmationModel
-@{
-    ViewData["Title"] = "Register confirmation";
-}
+<link href="/css/auth.css" rel="stylesheet">
 
 <h1>@ViewData["Title"]</h1>
 @{
@@ -15,9 +13,17 @@
     }
     else
     {
-<p>
-        Please check your email to confirm your account.
-</p>
+
+<main class="form-signin w-100 m-auto">
+    <div class="text-center">
+        <img class="mb-2 float-left" src="/images/logo2.svg" alt="" width="180" height="100">
+        <h1 class="mb-3 headingFont">Email Confirmation</h1>
+        <p class="mb-3">Please check your email to confirm your account.</p>
+    </div>
+    <hr/>
+        <p class="text-muted">Return to <a id="login" class="text-decoration-none" asp-page="./login">Login</a></p>
+</main>
+
     }
 }
 

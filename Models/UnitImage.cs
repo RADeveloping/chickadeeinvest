@@ -4,17 +4,17 @@ namespace chickadee.Models {
 
     public class UnitImage {
         [Key]
-        public String UnitImageId { get; set; } = Guid.NewGuid().ToString();
+        public string UnitImageId { get; set; } = Guid.NewGuid().ToString();
         
         [Required]
         public byte[] data { get; set; }
         
         [Required]
         [Display(Name = "Upload Date")]
-        [DataType(DataType.DateTime)]
-        public DateTime UploadDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime UploadDate { get; set; } = DateTime.Now;
         
-        public String UnitId { get; set; }
+        public string UnitId { get; set; }
         [ForeignKey("UnitId")]
         public Unit? Unit { get; set; }
     }

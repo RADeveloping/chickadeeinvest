@@ -157,7 +157,13 @@ namespace chickadee.Controllers
                 }
             }
 
-            return Ok(propertyManager);
+            return Ok(new {
+                PropertyManagerId = propertyManager.Id,
+                Email = propertyManager.Email,
+                FirstName = propertyManager.FirstName,
+                LastName = propertyManager.LastName,
+                PhoneNumber = propertyManager.PhoneNumber
+            });
         }
 
         // DELETE: api/PropertyManager/5
