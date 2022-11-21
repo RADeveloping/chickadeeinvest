@@ -1,3 +1,4 @@
+using System.Net;
 using chickadee.Enums;
 using chickadee.Models;
 using chickadee.Settings;
@@ -88,6 +89,7 @@ public static class ModelBuilderExtensions
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar()
             }
         };
         foreach (ApplicationUser user in users)
@@ -136,6 +138,7 @@ public static class ModelBuilderExtensions
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar(),
                 CompanyId = companies[0].CompanyId
             },
             new PropertyManager
@@ -147,6 +150,7 @@ public static class ModelBuilderExtensions
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar(),
                 CompanyId = companies[1].CompanyId
             }
         };
@@ -226,6 +230,7 @@ public static class ModelBuilderExtensions
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar(),
                 UnitId = units[0].UnitId,
             },
             new Tenant
@@ -237,6 +242,7 @@ public static class ModelBuilderExtensions
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar(),
                 UnitId = units[1].UnitId,
             }
         };
@@ -385,5 +391,19 @@ public static class ModelBuilderExtensions
             }
         };
         return verificationDocuments;
+    }
+
+    private static byte[] GetRandomAvatar()
+    {
+        return GetImageBytesFromUrl($"https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/{Faker.RandomNumber.Next(1249)}.jpg");
+    }
+
+    private static byte[] GetImageBytesFromUrl(string url)
+    {
+        using (var webClient = new WebClient())
+        {
+            byte[] imageBytes = webClient.DownloadData(url);
+            return imageBytes;
+        }
     }
 }
