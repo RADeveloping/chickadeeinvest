@@ -1,3 +1,4 @@
+using System.Net;
 using chickadee.Enums;
 using chickadee.Models;
 using chickadee.Settings;
@@ -87,7 +88,8 @@ public static class ModelBuilderExtensions
                 LastName = userSettings.SuperAdminLastName,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar()
             }
         };
         foreach (ApplicationUser user in users)
@@ -106,17 +108,17 @@ public static class ModelBuilderExtensions
         {
             new Company
             {
-                Name = "Company One",
-                Address = "123 Main St",
-                Phone = "604-235-7890",
-                Email = "main@companyOne.com",
+                Name = Faker.Company.Name(),
+                Address = Faker.Address.StreetAddress(),
+                Phone = Faker.Phone.Number(),
+                Email = Faker.Internet.Email(),
             },
             new Company
             {
-                Name = "Company Two",
-                Address = "Wall street",
-                Phone = "778-334-4594",
-                Email = "main@companyTwo.com",
+                Name = Faker.Company.Name(),
+                Address = Faker.Address.StreetAddress(),
+                Phone = Faker.Phone.Number(),
+                Email = Faker.Internet.Email(),
             }
         };
         return companies;
@@ -131,22 +133,24 @@ public static class ModelBuilderExtensions
             {
                 UserName = "propertymanager@gmail.com",
                 Email = "propertymanager@gmail.com",
-                FirstName = "Property",
-                LastName = "Manager",
+                FirstName = Faker.Name.First(),
+                LastName = Faker.Name.Last(),
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar(),
                 CompanyId = companies[0].CompanyId
             },
             new PropertyManager
             {
                 UserName = "propertymanager2@gmail.com",
                 Email = "propertymanager2@gmail.com",
-                FirstName = "Manager",
-                LastName = "Property",
+                FirstName = Faker.Name.First(),
+                LastName = Faker.Name.Last(),
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-3).AddDays(-12),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar(),
                 CompanyId = companies[1].CompanyId
             }
         };
@@ -166,17 +170,17 @@ public static class ModelBuilderExtensions
         {
             new Property
             {
-                Name = "The Evergreen Managed By PM 1",
+                Name = "The Evergreen",
                 Address = "742 Evergreen Terrace",
             },
             new Property
             {
-                Name = "Montana Apartments Managed By PM 2",
+                Name = "Montana Apartments",
                 Address = "123 Sesame Street",
             },
             new Property
             {
-                Name = "Arcola Managed by PM 2",
+                Name = "Arcola",
                 Address = "7488 Hazel Street",
             }
         };
@@ -221,22 +225,24 @@ public static class ModelBuilderExtensions
             {
                 UserName = "tenant@gmail.com",
                 Email = "tenant@gmail.com",
-                FirstName = "Tenant",
-                LastName = "User",
+                FirstName = Faker.Name.First(),
+                LastName = Faker.Name.Last(),
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar(),
                 UnitId = units[0].UnitId,
             },
             new Tenant
             {
                 UserName = "tenant2@gmail.com",
                 Email = "tenant2@gmail.com",
-                FirstName = "User",
-                LastName = "Tenant",
+                FirstName = Faker.Name.First(),
+                LastName = Faker.Name.Last(),
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
+                ProfilePicture = GetRandomAvatar(),
                 UnitId = units[1].UnitId,
             }
         };
@@ -363,7 +369,7 @@ public static class ModelBuilderExtensions
         {
             new Message
             {
-                Content = "This is a message",
+                Content = Faker.Lorem.Sentence(),
                 SenderId = tenants[0].Id,
                 CreatedDate = DateTime.Now.AddHours(-23),
                 TicketId = tickets[0].TicketId,
@@ -385,5 +391,19 @@ public static class ModelBuilderExtensions
             }
         };
         return verificationDocuments;
+    }
+
+    private static byte[] GetRandomAvatar()
+    {
+        return GetImageBytesFromUrl($"https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/{Faker.RandomNumber.Next(1249)}.jpg");
+    }
+
+    private static byte[] GetImageBytesFromUrl(string url)
+    {
+        using (var webClient = new WebClient())
+        {
+            byte[] imageBytes = webClient.DownloadData(url);
+            return imageBytes;
+        }
     }
 }
