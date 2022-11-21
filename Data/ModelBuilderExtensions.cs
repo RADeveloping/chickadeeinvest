@@ -87,7 +87,7 @@ public static class ModelBuilderExtensions
                 LastName = userSettings.SuperAdminLastName,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
             }
         };
         foreach (ApplicationUser user in users)
@@ -106,17 +106,17 @@ public static class ModelBuilderExtensions
         {
             new Company
             {
-                Name = "Company One",
-                Address = "123 Main St",
-                Phone = "604-235-7890",
-                Email = "main@companyOne.com",
+                Name = Faker.Company.Name(),
+                Address = Faker.Address.StreetAddress(),
+                Phone = Faker.Phone.Number(),
+                Email = Faker.Internet.Email(),
             },
             new Company
             {
-                Name = "Company Two",
-                Address = "Wall street",
-                Phone = "778-334-4594",
-                Email = "main@companyTwo.com",
+                Name = Faker.Company.Name(),
+                Address = Faker.Address.StreetAddress(),
+                Phone = Faker.Phone.Number(),
+                Email = Faker.Internet.Email(),
             }
         };
         return companies;
@@ -131,22 +131,22 @@ public static class ModelBuilderExtensions
             {
                 UserName = "propertymanager@gmail.com",
                 Email = "propertymanager@gmail.com",
-                FirstName = "Property",
-                LastName = "Manager",
+                FirstName = Faker.Name.First(),
+                LastName = Faker.Name.Last(),
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-5).AddDays(-10),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
                 CompanyId = companies[0].CompanyId
             },
             new PropertyManager
             {
                 UserName = "propertymanager2@gmail.com",
                 Email = "propertymanager2@gmail.com",
-                FirstName = "Manager",
-                LastName = "Property",
+                FirstName = Faker.Name.First(),
+                LastName = Faker.Name.Last(),
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-30).AddMonths(-3).AddDays(-12),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
                 CompanyId = companies[1].CompanyId
             }
         };
@@ -221,22 +221,22 @@ public static class ModelBuilderExtensions
             {
                 UserName = "tenant@gmail.com",
                 Email = "tenant@gmail.com",
-                FirstName = "Tenant",
-                LastName = "User",
+                FirstName = Faker.Name.First(),
+                LastName = Faker.Name.Last(),
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
                 UnitId = units[0].UnitId,
             },
             new Tenant
             {
                 UserName = "tenant2@gmail.com",
                 Email = "tenant2@gmail.com",
-                FirstName = "User",
-                LastName = "Tenant",
+                FirstName = Faker.Name.First(),
+                LastName = Faker.Name.Last(),
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                DateOfBirth = DateTime.Today.AddYears(-20).AddMonths(-5).AddDays(-10),
+                DateOfBirth = Faker.Identification.DateOfBirth(),
                 UnitId = units[1].UnitId,
             }
         };
@@ -363,7 +363,7 @@ public static class ModelBuilderExtensions
         {
             new Message
             {
-                Content = "This is a message",
+                Content = Faker.Lorem.Sentence(),
                 SenderId = tenants[0].Id,
                 CreatedDate = DateTime.Now.AddHours(-23),
                 TicketId = tickets[0].TicketId,
