@@ -166,17 +166,17 @@ public static class ModelBuilderExtensions
         {
             new Property
             {
-                Name = "The Evergreen Managed By PM 1",
+                Name = "The Evergreen",
                 Address = "742 Evergreen Terrace",
             },
             new Property
             {
-                Name = "Montana Apartments Managed By PM 2",
+                Name = "Montana Apartments",
                 Address = "123 Sesame Street",
             },
             new Property
             {
-                Name = "Arcola Managed by PM 2",
+                Name = "Arcola",
                 Address = "7488 Hazel Street",
             }
         };
