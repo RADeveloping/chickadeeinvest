@@ -1,17 +1,23 @@
 ![Chickadee Logo](./wwwroot/images/logo.png)
 
-# chickadee
+chickadee
+---
 
 🐥 chickadee powers homes
+
+This repo has two major branches: `main` and `develop`, and feature branches for any feature in development.
+
+- `main` - Has the most recent stable version of the application
+- `develop` - Has the most recent in-development versions of the application; used for development and integration testing of front end and back end before merging to `main`
+
 <!-- TOC -->
 
-- [chickadee](#chickadee)
-    - [Local Environment Setup](#local-environment-setup)
-        - [Docker Compose](#docker-compose)
-        - [Manual](#manual)
-        - [Client Setup for Development Optional](#client-setup-for-development-optional)
-    - [Remote Environment Setup](#remote-environment-setup)
-        - [About Docker Compose Configuration Files](#about-docker-compose-configuration-files)
+- [Local Environment Setup](#local-environment-setup)
+    - [Docker Compose](#docker-compose)
+    - [Manual](#manual)
+    - [Client Setup for Development Optional](#client-setup-for-development-optional)
+- [Remote Environment Setup](#remote-environment-setup)
+    - [About Docker Compose Configuration Files](#about-docker-compose-configuration-files)
 - [SuperAdmin and Profile View](#superadmin-and-profile-view)
     - [Layout File](#layout-file)
     - [Profile Page View ASP.NET](#profile-page-view-aspnet)
@@ -38,16 +44,12 @@
     - [Improvements](#improvements)
 
 <!-- /TOC -->
-This repo has two major branches: `main` and `develop`, and feature branches for any feature in development.
 
-- `main` - Has the most recent stable version of the application
-- `develop` - Has the most recent in-development versions of the application; used for development and integration testing of front end and back end before merging to `main`
-
-## Local Environment Setup
+# Local Environment Setup
 
 Use the following instructions to start the project on your local machine:
 
-### Docker Compose
+## Docker Compose
 
 1. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 2. Serve both the front end and back end at https://localhost:8888.
@@ -56,7 +58,7 @@ Use the following instructions to start the project on your local machine:
 docker-compose up
 ```
 
-### Manual
+## Manual
 
 1. Download and install dependencies:
 
@@ -88,7 +90,7 @@ dotnet ef database update
 dotnet run
 ```
 
-### Client Setup for Development (Optional)
+## Client Setup for Development (Optional)
 
 ```bash
 # Go to the directory ClientApp.
@@ -103,7 +105,7 @@ npm start
 
 For a detailed explanation of how things work, check out the [guide](https://reactjs.org/docs/getting-started.html) and [API docs](https://reactjs.org/docs/react-api.html) for React; and the [guide](https://learn.microsoft.com/en-us/aspnet/tutorials) and [API docs](https://learn.microsoft.com/en-us/aspnet/core/) for ASP.NET.
 
-## Remote Environment Setup
+# Remote Environment Setup
 
 Use the following instructions to deploy the project to one of the two available remote environments on Azure - `dev` and `dev2` as of 11/18/2022:
 
@@ -141,7 +143,7 @@ Use the following instructions to deploy the project to one of the two available
 
    <img width="100" alt="Screenshot 2022-11-18 at 12 51 23 AM" src="https://user-images.githubusercontent.com/5898658/202660900-76acfbb4-3927-45da-9155-f8990879c1c6.png">
 
-### About Docker Compose Configuration Files
+## About Docker Compose Configuration Files
 
 A remote environment is provisioned as a multi-container app using a Docker Compose configuration. For your reference, a copy of the per environment configuration file is stored in `docker-compose.<env>.yml`.
 
