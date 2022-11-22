@@ -3,7 +3,41 @@
 # chickadee
 
 🐥 chickadee powers homes
+<!-- TOC -->
 
+- [chickadee](#chickadee)
+    - [Local Environment Setup](#local-environment-setup)
+        - [Docker Compose](#docker-compose)
+        - [Manual](#manual)
+        - [Client Setup for Development Optional](#client-setup-for-development-optional)
+    - [Remote Environment Setup](#remote-environment-setup)
+        - [About Docker Compose Configuration Files](#about-docker-compose-configuration-files)
+- [SuperAdmin and Profile View](#superadmin-and-profile-view)
+    - [Layout File](#layout-file)
+    - [Profile Page View ASP.NET](#profile-page-view-aspnet)
+    - [SuperAdmin View ASP.NET](#superadmin-view-aspnet)
+    - [Non-SA Back-End Controllers](#non-sa-back-end-controllers)
+    - [GET requests](#get-requests)
+    - [Property](#property)
+    - [Unit](#unit)
+    - [POST requests](#post-requests)
+    - [Company](#company)
+    - [Message](#message)
+    - [Property](#property)
+    - [Property Manager](#property-manager)
+    - [Tenants](#tenants)
+    - [Units](#units)
+    - [Tickets](#tickets)
+    - [TicketImages](#ticketimages)
+    - [UnitImages](#unitimages)
+    - [UnitNotes](#unitnotes)
+    - [VerificationDocuments](#verificationdocuments)
+    - [PATCH request](#patch-request)
+    - [DELETE request](#delete-request)
+    - [Navigation Menu](#navigation-menu)
+    - [Improvements](#improvements)
+
+<!-- /TOC -->
 This repo has two major branches: `main` and `develop`, and feature branches for any feature in development.
 
 - `main` - Has the most recent stable version of the application
