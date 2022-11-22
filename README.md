@@ -107,6 +107,17 @@ Use the following instructions to deploy the project to one of the two available
 
    <img width="100" alt="Screenshot 2022-11-18 at 12 51 23 AM" src="https://user-images.githubusercontent.com/5898658/202660900-76acfbb4-3927-45da-9155-f8990879c1c6.png">
 
+### About Docker Compose Configuration Files
+
+A remote environment is provisioned as a multi-container app using a Docker Compose configuration. For your reference, a copy of the per environment configuration file is stored in `docker-compose.<env>.yml`.
+
+Each configuration file defines services, as well as the Docker image and environment variables for each service. As of 21/11/2022, there are two services:
+
+- `chickadee` (React front end and ASP.NET back end)
+- `chickadee-db` (SQL Server database server)
+
+Always keep a copy of the configuration file known to be working so that you can revert to it at any time by simply choosing the file in the Azure App Service Deployment Center.
+
 ---
 
 # SuperAdmin and Profile View
