@@ -100,12 +100,23 @@ Use the following instructions to deploy the project to one of the two available
 
    <img width="250" alt="Screenshot 2022-11-18 at 12 45 22 AM" src="https://user-images.githubusercontent.com/5898658/202659664-660c9836-76fc-4912-b889-412f5d5886a2.png">
 
-8. In **Registry settings/Config**, replace the image tag at `services.chickadee.image` with the one you copied in step 4. You may want to choose a new **Configuration File** if it was changed since the last deployment.
+8. In **Registry settings/Config**, replace the image tag at `services.chickadee.image` with the one you copied in step 4. You may want to choose a new **Configuration File** if it was changed since the last deployment (see [About Docker Compose Configuration Files](#about-docker-compose-configuration-files)).
    <img width="720" alt="Screenshot 2022-11-18 at 12 49 13 AM" src="https://user-images.githubusercontent.com/5898658/202660511-ca06acd7-4fff-48a2-9426-b35645c4a5c0.png">
 
 9. Click **Save**. Your image is now being deployed. Allow 5-10 minutes for the deployment to complete.
 
    <img width="100" alt="Screenshot 2022-11-18 at 12 51 23 AM" src="https://user-images.githubusercontent.com/5898658/202660900-76acfbb4-3927-45da-9155-f8990879c1c6.png">
+
+### About Docker Compose Configuration Files
+
+A remote environment is provisioned as a multi-container app using a Docker Compose configuration. For your reference, a copy of the per environment configuration file is stored in `docker-compose.<env>.yml`.
+
+Each configuration file defines services, as well as the Docker image and environment variables for each service. As of 21/11/2022, there are two services:
+
+- `chickadee` (React front end and ASP.NET back end)
+- `chickadee-db` (SQL Server database server)
+
+Always keep a copy of the configuration file known to be working so that you can revert to it at any time by simply choosing the file in the Azure App Service Deployment Center.
 
 ---
 
