@@ -100,7 +100,7 @@ Use the following instructions to deploy the project to one of the two available
 
    <img width="250" alt="Screenshot 2022-11-18 at 12 45 22 AM" src="https://user-images.githubusercontent.com/5898658/202659664-660c9836-76fc-4912-b889-412f5d5886a2.png">
 
-8. In **Registry settings/Config**, replace the image tag at `services.chickadee.image` with the one you copied in step 4. You may want to choose a new **Configuration File** if it was changed since the last deployment.
+8. In **Registry settings/Config**, replace the image tag at `services.chickadee.image` with the one you copied in step 4. You may want to choose a new **Configuration File** if it was changed since the last deployment (see [About Docker Compose Configuration Files](#about-docker-compose-configuration-files)).
    <img width="720" alt="Screenshot 2022-11-18 at 12 49 13 AM" src="https://user-images.githubusercontent.com/5898658/202660511-ca06acd7-4fff-48a2-9426-b35645c4a5c0.png">
 
 9. Click **Save**. Your image is now being deployed. Allow 5-10 minutes for the deployment to complete.
