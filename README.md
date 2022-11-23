@@ -13,35 +13,35 @@ This repo has two major branches: `main` and `develop`, and feature branches for
 <!-- TOC -->
 
 - [Local Environment Setup](#local-environment-setup)
-    - [Docker Compose](#docker-compose)
-    - [Manual](#manual)
-    - [Client Setup for Development Optional](#client-setup-for-development-optional)
+  - [Docker Compose](#docker-compose)
+  - [Manual](#manual)
+  - [Client Setup for Development Optional](#client-setup-for-development-optional)
 - [Remote Environment Setup](#remote-environment-setup)
-    - [About Docker Compose Configuration Files](#about-docker-compose-configuration-files)
+  - [About Docker Compose Configuration Files](#about-docker-compose-configuration-files)
 - [SuperAdmin and Profile View](#superadmin-and-profile-view)
-    - [Layout File](#layout-file)
-    - [Profile Page View ASP.NET](#profile-page-view-aspnet)
-    - [SuperAdmin View ASP.NET](#superadmin-view-aspnet)
-    - [Non-SA Back-End Controllers](#non-sa-back-end-controllers)
-    - [GET requests](#get-requests)
-    - [Property](#property)
-    - [Unit](#unit)
-    - [POST requests](#post-requests)
-    - [Company](#company)
-    - [Message](#message)
-    - [Property](#property)
-    - [Property Manager](#property-manager)
-    - [Tenants](#tenants)
-    - [Units](#units)
-    - [Tickets](#tickets)
-    - [TicketImages](#ticketimages)
-    - [UnitImages](#unitimages)
-    - [UnitNotes](#unitnotes)
-    - [VerificationDocuments](#verificationdocuments)
-    - [PATCH request](#patch-request)
-    - [DELETE request](#delete-request)
-    - [Navigation Menu](#navigation-menu)
-    - [Improvements](#improvements)
+  - [Layout File](#layout-file)
+  - [Profile Page View ASP.NET](#profile-page-view-aspnet)
+  - [SuperAdmin View ASP.NET](#superadmin-view-aspnet)
+- [Non-SA Back-End Controllers](#non-sa-back-end-controllers)
+  - [GET requests](#get-requests)
+  - [Property](#property)
+  - [Unit](#unit)
+  - [POST requests](#post-requests)
+  - [Company](#company)
+  - [Message](#message)
+  - [Property](#property)
+  - [Property Manager](#property-manager)
+  - [Tenants](#tenants)
+  - [Units](#units)
+  - [Tickets](#tickets)
+  - [TicketImages](#ticketimages)
+  - [UnitImages](#unitimages)
+  - [UnitNotes](#unitnotes)
+  - [VerificationDocuments](#verificationdocuments)
+  - [PATCH request](#patch-request)
+  - [DELETE request](#delete-request)
+- [Navigation Menu](#navigation-menu)
+- [Improvements](#improvements)
 
 <!-- /TOC -->
 
@@ -198,7 +198,7 @@ The [bootstrap-table](https://bootstrap-table.com/) is being being used for the 
 
 There is too much to explain regarding the MVC in ASP.NET that wouldn't be beneficial to include here, however Microsoft's [Documentation](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/controller-methods-views?view=aspnetcore-6.0) is a great resource to refer to.
 
-## Non-SA Back-End Controllers
+# Non-SA Back-End Controllers
 
 The controllers are inside `/Controllers` folder. Inside each controller are CRUD-based functions that act as GET, POST, PUT/PATCH, and DELETE requests.
 
@@ -432,13 +432,13 @@ The `value` is 1 because the `status` field inside the Ticket object is an enum 
 
 The DELETE requests should work with just the specific `id` provisioned for the desired objects.
 
-## Navigation Menu
+# Navigation Menu
 
 The navigation menu for the ASP.NET side is included in the `/Areas/Identity/Pages/` directory, inside `_ManageNav.cshtml`
 
 FontAwesome is used for the navigation menu icons.
 
-## Improvements
+# Improvements
 
  - ASP.NET "partials" can be used to reduce the amount of duplicated code between the pages since most pages have similar content.
  - Depending on what the client wants, fields can be added or removed from each of the individual pages.
