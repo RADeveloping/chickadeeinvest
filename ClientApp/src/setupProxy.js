@@ -19,6 +19,8 @@ const context = [
     '/Identity/css',
     '/api/Account',
     '/css',
+    '/js',
+    '/lib',
     '/images',
     '/api',
     '/swagger',
