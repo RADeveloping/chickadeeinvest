@@ -17,7 +17,7 @@ import Page from "../components/common/Page";
 import Iconify from "../components/common/Iconify";
 import PageLoading from "../components/common/PageLoading";
 import useFetch, {usePost} from "../utils/fetch";
-import {ACCOUNTS_API, getApiTicketUri, isMemberOf, SEVERITY, STATUS} from "../utils/constants";
+import {ACCOUNTS_API, formatDate, getApiTicketUri, isMemberOf, SEVERITY, STATUS} from "../utils/constants";
 import Label from "../components/common/Label";
 import useResponsive from "../utils/responsive";
 import {useState} from "react";
@@ -121,20 +121,20 @@ export default function TicketDetail() {
                                             <Stack direction={'row'} alignItems={'center'} gap={1}>
                                                 <Label sx={{fontWeight: 'normal'}}>
                                                     <div>
-                                                        Opened: <b>{new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                        Opened: <b>{formatDate(createdOn)}</b>
                                                     </div>
                                                 </Label>
                                                 {estimatedDate && !closedDate &&
                                                     <Label sx={{fontWeight: 'normal'}}>
                                                         <div>
-                                                            Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                            Estimated: <b>{formatDate(estimatedDate)}</b>
                                                         </div>
                                                     </Label>
                                                 }
                                                 {closedDate &&
                                                     <Label color={'primary'} sx={{fontWeight: 'normal'}}>
                                                         <div>
-                                                            Closed: <b>{new Date(closedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                            Closed: <b>{formatDate(closedDate)}</b>
                                                         </div>
                                                     </Label>
                                                 }

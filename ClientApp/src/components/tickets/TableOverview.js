@@ -14,7 +14,7 @@ import {
 // components
 import * as React from "react";
 import useFetch from "../../utils/fetch";
-import {getTicketsUri, SEVERITY, STATUS} from "../../utils/constants";
+import {formatDate, getTicketsUri, SEVERITY, STATUS} from "../../utils/constants";
 import PageLoading from "../common/PageLoading";
 import SearchNotFound from "./SearchNotFound";
 import Label from "../common/Label";
@@ -188,9 +188,9 @@ export default function TableOverview() {
                                                 <TableCell align="left">{problem}</TableCell>
                                                 <TableCell align="left">{description}</TableCell>
                                                 <TableCell
-                                                    align="left">{createdOn.toLocaleDateString('en-CA', {dateStyle: 'medium'})} </TableCell>
+                                                    align="left">{formatDate(createdOn)} </TableCell>
                                                 <TableCell
-                                                    align="left">{estimatedDate ? estimatedDate.toLocaleDateString('en-CA', {dateStyle: 'medium'}) : null}</TableCell>
+                                                    align="left">{estimatedDate ? formatDate(estimatedDate) : null}</TableCell>
                                                 <TableCell align="left">
                                                     <Label
                                                         variant="ghost"

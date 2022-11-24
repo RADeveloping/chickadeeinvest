@@ -64,6 +64,11 @@ export const isMemberOf = (userRoles, roles) => {
     return false
 }
 
+/**
+ * Gets Ticket component for use in list views.
+ * @param ticket {object} Ticket object.
+ * @returns {JSX.Element}
+ */
 export const getTicketBox = (ticket) => {
     return (
         <>
@@ -77,7 +82,7 @@ export const getTicketBox = (ticket) => {
                         component="span"
                         variant="body2"
                         color="text.secondary">
-                        {new Date(ticket.createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
+                        {formatDate(ticket.createdOn)}
                     </Typography>
                 </Grid>
             </Grid>
@@ -100,6 +105,11 @@ export const getTicketBox = (ticket) => {
     )
 }
 
+/**
+ * Gets Unit component for use in list views. 
+ * @param unit {object} Unit object.
+ * @returns {JSX.Element}
+ */
 export const getUnitBox = (unit) => {
     return (
         <>
@@ -118,6 +128,11 @@ export const getUnitBox = (unit) => {
     )
 }
 
+/**
+ * Gets Property component for use in list views.
+ * @param property {object} Property object.
+ * @returns {JSX.Element}
+ */
 export const getPropertiesBox = (property) => {
     return (
         <>
@@ -189,4 +204,14 @@ export const filterTicket = (data) => {
         );
     })
     return simpleData;
+}
+
+/**
+ * Format date to local date string.
+ * @param date {string | date} Date object or string value.
+ * @returns {string} Formatted date string.
+ */
+export const formatDate = (date) => {
+    if (date instanceof Date) return date.toLocaleDateString('en-CA', {dateStyle: 'medium'})
+    return new Date(date).toLocaleDateString('en-CA', {dateStyle: 'medium'})
 }

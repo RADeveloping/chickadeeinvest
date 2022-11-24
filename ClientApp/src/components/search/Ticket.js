@@ -1,6 +1,6 @@
 ﻿import {Card, CardContent, Grid, Grow, Stack, Typography} from "@mui/material";
 import * as React from "react";
-import {getTicketsUri, SEVERITY, STATUS} from "../../utils/constants";
+import {formatDate, getTicketsUri, SEVERITY, STATUS} from "../../utils/constants";
 import Label from "../common/Label";
 
 /**
@@ -45,12 +45,12 @@ export default function Ticket({data, navigate}) {
                                 </Stack>
                                 <Stack direction={'row'} alignItems={'center'} gap={1}>
                                     <Label>
-                                        {new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
+                                        {formatDate(createdOn)}
                                     </Label>
                                     {estimatedDate &&
                                         <Label sx={{fontWeight: 'normal'}}>
                                             <div>
-                                                Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                Estimated: <b>{formatDate(estimatedDate)}</b>
                                             </div>
                                         </Label>
                                     }
