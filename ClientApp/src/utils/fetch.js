@@ -22,11 +22,11 @@ const useFetch = (url, filter, reset, callBack, resetOnNull) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [reload, setReload] = useState(0);
-    
+
     const reloadFetch = () => {
         setReload(reload + 1);
     }
-    
+
     useEffect(() => {
         if (url) {
             if (reset || resetOnNull) setLoading(true)

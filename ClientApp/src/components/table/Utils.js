@@ -1,4 +1,5 @@
 ﻿import {filter} from "lodash";
+import {formatDate} from "../../utils/constants";
 
 export function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -28,7 +29,7 @@ export function applySortFilter(array, comparator, query, filterProperty) {
             if (typeof data[filterProperty] == 'string') {
                 return data[filterProperty].toLowerCase().indexOf(query.toLowerCase()) !== -1
             } else if (data[filterProperty] instanceof Date) {
-                return data[filterProperty].toLocaleDateString('en-CA', {dateStyle: 'medium'}).toLowerCase().includes(query.toLowerCase());
+                return formatDate(data[filterProperty]).toLowerCase().includes(query.toLowerCase());
             } else {
                 return data[filterProperty].toString().toLowerCase().includes(query.toLowerCase());
             }

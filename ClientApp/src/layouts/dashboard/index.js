@@ -37,8 +37,8 @@ export default function DashboardLayout() {
     const [open, setOpen] = useState(false);
     const [authenticated, setAuthenticated] = useState(null);
 
-    useEffect(()=> {
-        authService.isAuthenticated().then((auth)=>{
+    useEffect(() => {
+        authService.isAuthenticated().then((auth) => {
             setAuthenticated(auth);
         })
     }, [])

@@ -2,10 +2,22 @@
 import * as React from "react";
 import Label from "../components/common/Label";
 
-export const ticketUri = '/api/tickets';
-export const unitUri = '/api/units';
-export const propertyUri = '/api/properties';
-export const accountUri = '/api/account';
+export const TICKETS_API = '/api/tickets';
+export const UNITS_API = '/api/units';
+export const PROPERTIES_API = '/api/properties';
+export const ACCOUNTS_API = '/api/account';
+export const getApiTicketUri = (pid, uid, id) =>
+    `/api/properties/${pid}/units/${uid}/tickets/${id}`;
+export const getApiTicketsUri = (pid, uid) =>
+    `/api/properties/${pid}/units/${uid}/tickets`;
+export const getApiUnitsUri = (pid) =>
+    `/api/properties/${pid}/units`;
+export const getTicketsUri = (ticket) =>
+    `tickets/${ticket.ticketId}?pid=${ticket.propertyId}&uid=${ticket.unitId}`;
+export const getPropertiesUri = (property) =>
+    `tickets?property=${property.propertyId}`;
+export const getUnitsUri = (unit) =>
+    `tickets?property=${unit.propertyId}&unit=${unit.unitId}`;
 
 export const SEVERITY = {
     0: {color: 'success', text: 'Low'},
@@ -18,7 +30,7 @@ export const STATUS = {
     1: {color: 'primary', text: 'Closed'},
 }
 
-export const propertyProperties = [
+export const PROPERTY_PROPS = [
     {id: 'address', label: 'Address'},
     {id: 'open_count', label: 'Open Ticket Count'},
     {id: 'unit_count', label: 'Unit Count'},
@@ -26,12 +38,12 @@ export const propertyProperties = [
     {id: 'name', label: 'Property Name'},
 ];
 
-export const unitProperties = [
+export const UNIT_PROPS = [
     {id: 'number', label: 'Unit Number'},
     {id: 'type', label: 'Unit Type'},
 ];
 
-export const ticketProperties = [
+export const TICKET_PROPS = [
     {id: 'id', label: 'Ticket Id'},
     {id: 'createdOn', label: 'Created On'},
     {id: 'estimatedDate', label: 'Estimated Date'},
@@ -52,6 +64,11 @@ export const isMemberOf = (userRoles, roles) => {
     return false
 }
 
+/**
+ * Gets Ticket component for use in list views.
+ * @param ticket {object} Ticket object.
+ * @returns {JSX.Element}
+ */
 export const getTicketBox = (ticket) => {
     return (
         <>
@@ -65,7 +82,7 @@ export const getTicketBox = (ticket) => {
                         component="span"
                         variant="body2"
                         color="text.secondary">
-                        {new Date(ticket.createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}
+                        {formatDate(ticket.createdOn)}
                     </Typography>
                 </Grid>
             </Grid>
@@ -88,6 +105,11 @@ export const getTicketBox = (ticket) => {
     )
 }
 
+/**
+ * Gets Unit component for use in list views. 
+ * @param unit {object} Unit object.
+ * @returns {JSX.Element}
+ */
 export const getUnitBox = (unit) => {
     return (
         <>
@@ -106,6 +128,11 @@ export const getUnitBox = (unit) => {
     )
 }
 
+/**
+ * Gets Property component for use in list views.
+ * @param property {object} Property object.
+ * @returns {JSX.Element}
+ */
 export const getPropertiesBox = (property) => {
     return (
         <>
@@ -179,14 +206,12 @@ export const filterTicket = (data) => {
     return simpleData;
 }
 
-export const getTicketsUri = (ticket) => {
-    return `tickets/${ticket.ticketId}?pid=${ticket.propertyId}&uid=${ticket.unitId}`
-}
-
-export const getPropertiesUri = (property) => {
-    return `tickets?property=${property.propertyId}`
-}
-
-export const getUnitsUri = (unit) => {
-    return `tickets?property=${unit.propertyId}&unit=${unit.unitId}`
+/**
+ * Format date to local date string.
+ * @param date {string | date} Date object or string value.
+ * @returns {string} Formatted date string.
+ */
+export const formatDate = (date) => {
+    if (date instanceof Date) return date.toLocaleDateString('en-CA', {dateStyle: 'medium'})
+    return new Date(date).toLocaleDateString('en-CA', {dateStyle: 'medium'})
 }
