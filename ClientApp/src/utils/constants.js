@@ -15,9 +15,9 @@ export const getApiUnitsUri = (pid) =>
 export const getTicketsUri = (ticket) =>
     `tickets/${ticket.ticketId}?pid=${ticket.propertyId}&uid=${ticket.unitId}`;
 export const getPropertiesUri = (property) =>
-    `tickets?property=${property.propertyId}`;
+    `tickets?pid=${property.propertyId}`;
 export const getUnitsUri = (unit) =>
-    `tickets?property=${unit.propertyId}&unit=${unit.unitId}`;
+    `tickets?pid=${unit.propertyId}&uid=${unit.unitId}`;
 
 export const SEVERITY = {
     0: {color: 'success', text: 'Low'},
