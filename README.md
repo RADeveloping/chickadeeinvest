@@ -1,7 +1,6 @@
 ![Chickadee Logo](./wwwroot/images/logo.png)
 
-chickadee
----
+## chickadee
 
 🐥 chickadee powers homes
 
@@ -110,15 +109,20 @@ For a detailed explanation of how things work, check out the [guide](https://rea
 Use the following instructions to deploy the project to one of the two available remote environments on Azure - `dev` and `dev2` as of 11/18/2022:
 
 1. Go to the CI action for your commit. Depending on which branch you are on, you can find it in different places.
+
    1. If you are on the `main` or `develop` branch
+
       1. Click on the build status indicator next to the commit hash.
-      
+
          <img width="320" alt="Screenshot 2022-11-18 at 12 05 23 AM" src="https://user-images.githubusercontent.com/5898658/202653247-c931e187-77a8-4fcc-a0ca-fcb1ec58815f.png">
+
       2. Find the CI job in the pop-up.
+
    2. If you are on your feature branch
       1. Open a pull request with either `develop` (recommended) or `main` as the base branch.
       2. Find the CI job at the bottom of your pull request. From now on, every commit you push to your branch will trigger a build action to run as a CI job.
-      <img width="900" alt="Screenshot 2022-11-18 at 1 13 34 AM" src="https://user-images.githubusercontent.com/5898658/202665501-71bdf882-93a6-4545-88e6-63b31d31c89c.png">
+         <img width="900" alt="Screenshot 2022-11-18 at 1 13 34 AM" src="https://user-images.githubusercontent.com/5898658/202665501-71bdf882-93a6-4545-88e6-63b31d31c89c.png">
+
 2. Click **Details**.
 
    <img width="500" alt="Screenshot 2022-11-18 at 12 06 53 AM" src="https://user-images.githubusercontent.com/5898658/202653363-638a8a93-0ca3-4f75-9538-aef822570532.png">
@@ -170,7 +174,7 @@ Anything related to the user profile, including changing password, email, etc ar
 
 Each page has a `.cshtml` file and a corresponding `.cshtml.cs` file.
 
-<i>For the most part, in this directory, you shouldn't really need to go inside the `.cshtml.cs` file.</i> Simply editing the ```.cshtml``` should be enough. 
+<i>For the most part, in this directory, you shouldn't really need to go inside the `.cshtml.cs` file.</i> Simply editing the `.cshtml` should be enough.
 
 ## SuperAdmin View ASP.NET
 
@@ -440,9 +444,14 @@ FontAwesome is used for the navigation menu icons.
 
 # Improvements
 
- - ASP.NET "partials" can be used to reduce the amount of duplicated code between the pages since most pages have similar content.
- - Depending on what the client wants, fields can be added or removed from each of the individual pages.
- - Update the html template that is used to send registration emails to users.
- - When creating a new ticket, add the ability to add images to the ticket. The backend has been setup, just need to connect it to react. Please refer to the ERD to see how images are related to tickets.
- - When displaying tickets, images should be displayed in the details page in a card (possibly inside a message)
- - Messaging/Commenting system should be implemented. The back end has been setup for this, however front end needs to be connected.
+- ASP.NET "partials" can be used to reduce the amount of duplicated code between the pages since most pages have similar content.
+- Depending on what the client wants, fields can be added or removed from each of the individual pages.
+- Update the html template that is used to send registration emails to users.
+- Currently, emails are being sent using a dummy Gmail account (chickadeeinvest@gmail.com) hard coded in `appsettings.Development.json`. To fix this, connect the web app to a production SMTP server; alternatively, bring back PR #62 and fix bug #69.
+  - PR #62 sets up the third container, `chickadee-smtp`, to send emails from the app.
+  - This PR has been tested to work well with some non-Gmail email providers such as iCloud.
+  - However, this PR was reverted due to the bug that prevented emails from `chickadee-smtp` from reaching Gmail Inbox.
+  - The issue is likely that Gmail might be rejecting emails from `chickadee-smtp`.
+- When creating a new ticket, add the ability to add images to the ticket. The backend has been setup, just need to connect it to react. Please refer to the ERD to see how images are related to tickets.
+- When displaying tickets, images should be displayed in the details page in a card (possibly inside a message)
+- Messaging/Commenting system should be implemented. The back end has been setup for this, however front end needs to be connected.
