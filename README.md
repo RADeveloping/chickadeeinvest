@@ -455,3 +455,5 @@ FontAwesome is used for the navigation menu icons.
 - When creating a new ticket, add the ability to add images to the ticket. The backend has been setup, just need to connect it to react. Please refer to the ERD to see how images are related to tickets.
 - When displaying tickets, images should be displayed in the details page in a card (possibly inside a message)
 - Messaging/Commenting system should be implemented. The back end has been setup for this, however front end needs to be connected.
+- Reintroduce CI linter actions (PR #21 and #25). These PRs were reverted due to a large amount of effort required to migrate the existing codebase and some misconfiguration incorrectly modifying code, breaking the app. ESLint/Prettier configurations should be fine-tuned for them to be effective.
+  - Once configured properly, they will ensure consistent code style across the app, help developers avoid potential bugs, and guide them towards best practices.
