@@ -11342,7 +11342,8 @@ p {
 #mainNav {
   padding-top: 1rem;
   padding-bottom: 1rem;
-  background-color: #103A31;
+  backdrop-filter: blur(10px) !important;
+  background-color: rgba(16, 58, 49, 0.8) !important;
 }
 #mainNav .navbar-toggler {
   padding: 0.75rem;

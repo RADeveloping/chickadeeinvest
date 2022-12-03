@@ -1,6 +1,6 @@
 ![Chickadee Logo](./wwwroot/images/logo.png)
 
-# chickadee
+## chickadee
 
 🐥 chickadee powers homes
 
@@ -9,11 +9,46 @@ This repo has two major branches: `main` and `develop`, and feature branches for
 - `main` - Has the most recent stable version of the application
 - `develop` - Has the most recent in-development versions of the application; used for development and integration testing of front end and back end before merging to `main`
 
-## Local Environment Setup
+<!-- TOC -->
+
+- [Local Environment Setup](#local-environment-setup)
+  - [Docker Compose](#docker-compose)
+  - [Manual](#manual)
+  - [Client Setup for Development Optional](#client-setup-for-development-optional)
+- [Remote Environment Setup](#remote-environment-setup)
+  - [About Docker Compose Configuration Files](#about-docker-compose-configuration-files)
+- [SuperAdmin and Profile View](#superadmin-and-profile-view)
+  - [Layout File](#layout-file)
+  - [Profile Page View ASP.NET](#profile-page-view-aspnet)
+  - [SuperAdmin View ASP.NET](#superadmin-view-aspnet)
+- [Non-SA Back-End Controllers](#non-sa-back-end-controllers)
+  - [GET requests](#get-requests)
+  - [Property](#property)
+  - [Unit](#unit)
+  - [POST requests](#post-requests)
+  - [Company](#company)
+  - [Message](#message)
+  - [Property](#property)
+  - [Property Manager](#property-manager)
+  - [Tenants](#tenants)
+  - [Units](#units)
+  - [Tickets](#tickets)
+  - [TicketImages](#ticketimages)
+  - [UnitImages](#unitimages)
+  - [UnitNotes](#unitnotes)
+  - [VerificationDocuments](#verificationdocuments)
+  - [PATCH request](#patch-request)
+  - [DELETE request](#delete-request)
+- [Navigation Menu](#navigation-menu)
+- [Improvements](#improvements)
+
+<!-- /TOC -->
+
+# Local Environment Setup
 
 Use the following instructions to start the project on your local machine:
 
-### Docker Compose
+## Docker Compose
 
 1. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 2. Serve both the front end and back end at https://localhost:8888.
@@ -22,7 +57,7 @@ Use the following instructions to start the project on your local machine:
 docker-compose up
 ```
 
-### Manual
+## Manual
 
 1. Download and install dependencies:
 
@@ -54,7 +89,7 @@ dotnet ef database update
 dotnet run
 ```
 
-### Client Setup for Development (Optional)
+## Client Setup for Development (Optional)
 
 ```bash
 # Go to the directory ClientApp.
@@ -69,20 +104,25 @@ npm start
 
 For a detailed explanation of how things work, check out the [guide](https://reactjs.org/docs/getting-started.html) and [API docs](https://reactjs.org/docs/react-api.html) for React; and the [guide](https://learn.microsoft.com/en-us/aspnet/tutorials) and [API docs](https://learn.microsoft.com/en-us/aspnet/core/) for ASP.NET.
 
-## Remote Environment Setup
+# Remote Environment Setup
 
 Use the following instructions to deploy the project to one of the two available remote environments on Azure - `dev` and `dev2` as of 11/18/2022:
 
 1. Go to the CI action for your commit. Depending on which branch you are on, you can find it in different places.
+
    1. If you are on the `main` or `develop` branch
+
       1. Click on the build status indicator next to the commit hash.
-      
+
          <img width="320" alt="Screenshot 2022-11-18 at 12 05 23 AM" src="https://user-images.githubusercontent.com/5898658/202653247-c931e187-77a8-4fcc-a0ca-fcb1ec58815f.png">
+
       2. Find the CI job in the pop-up.
+
    2. If you are on your feature branch
       1. Open a pull request with either `develop` (recommended) or `main` as the base branch.
       2. Find the CI job at the bottom of your pull request. From now on, every commit you push to your branch will trigger a build action to run as a CI job.
-      <img width="900" alt="Screenshot 2022-11-18 at 1 13 34 AM" src="https://user-images.githubusercontent.com/5898658/202665501-71bdf882-93a6-4545-88e6-63b31d31c89c.png">
+         <img width="900" alt="Screenshot 2022-11-18 at 1 13 34 AM" src="https://user-images.githubusercontent.com/5898658/202665501-71bdf882-93a6-4545-88e6-63b31d31c89c.png">
+
 2. Click **Details**.
 
    <img width="500" alt="Screenshot 2022-11-18 at 12 06 53 AM" src="https://user-images.githubusercontent.com/5898658/202653363-638a8a93-0ca3-4f75-9538-aef822570532.png">
@@ -100,16 +140,27 @@ Use the following instructions to deploy the project to one of the two available
 
    <img width="250" alt="Screenshot 2022-11-18 at 12 45 22 AM" src="https://user-images.githubusercontent.com/5898658/202659664-660c9836-76fc-4912-b889-412f5d5886a2.png">
 
-8. In **Registry settings/Config**, replace the image tag at `services.chickadee.image` with the one you copied in step 4. You may want to choose a new **Configuration File** if it was changed since the last deployment.
+8. In **Registry settings/Config**, replace the image tag at `services.chickadee.image` with the one you copied in step 4. You may want to choose a new **Configuration File** if it was changed since the last deployment (see [About Docker Compose Configuration Files](#about-docker-compose-configuration-files)).
    <img width="720" alt="Screenshot 2022-11-18 at 12 49 13 AM" src="https://user-images.githubusercontent.com/5898658/202660511-ca06acd7-4fff-48a2-9426-b35645c4a5c0.png">
 
 9. Click **Save**. Your image is now being deployed. Allow 5-10 minutes for the deployment to complete.
 
    <img width="100" alt="Screenshot 2022-11-18 at 12 51 23 AM" src="https://user-images.githubusercontent.com/5898658/202660900-76acfbb4-3927-45da-9155-f8990879c1c6.png">
 
+## About Docker Compose Configuration Files
+
+A remote environment is provisioned as a multi-container app using a Docker Compose configuration. For your reference, a copy of the per environment configuration file is stored in `docker-compose.<env>.yml`.
+
+Each configuration file defines services, as well as the Docker image and environment variables for each service. As of 21/11/2022, there are two services:
+
+- `chickadee` (React front end and ASP.NET back end)
+- `chickadee-db` (SQL Server database server)
+
+Always keep a copy of the configuration file known to be working so that you can revert to it at any time by simply choosing the file in the Azure App Service Deployment Center.
+
 ---
 
-# ASP.NET MVC
+# SuperAdmin and Profile View
 
 ## Layout File
 
@@ -123,7 +174,7 @@ Anything related to the user profile, including changing password, email, etc ar
 
 Each page has a `.cshtml` file and a corresponding `.cshtml.cs` file.
 
-<i>For the most part, in this directory, you shouldn't really need to go inside the `.cshtml.cs` file.</i>
+<i>For the most part, in this directory, you shouldn't really need to go inside the `.cshtml.cs` file.</i> Simply editing the `.cshtml` should be enough.
 
 ## SuperAdmin View ASP.NET
 
@@ -137,9 +188,9 @@ The controllers for the SuperAdmin are prefixed with "SA" followed by the page n
 
 For example: `SACompanyController`
 
-For each controller there is also a accompanying model in the `/Models` directory.
+For each controller there is also an accompanying model in the `/Models` directory.
 
-To make changes the views, simply go to `/View/{ControllerName}` directory and select the corresponding .cshtml file you would like to edit.
+To make changes the views, simply go to `/View/{ControllerName}` directory and select the corresponding .cshtml file you would like to edit. The page uses regular HTML but with the ability to use c# code.
 
 The pages use bootstrap, so updating them should be fairly simple.
 
@@ -147,11 +198,11 @@ For more information regarding how boostrap works, you can visit the official [b
 
 The [bootstrap-table](https://bootstrap-table.com/) is being being used for the index pages and is highly customizable as well.
 
-The SuperAdmin is not using the same API the front end is using. Therefore if the front end goes down, the SuperAdmin would still have access to the back end to make any changes.
+<i>The SuperAdmin is **not** using the same API the front end is using. Therefore if the front end goes down, the SuperAdmin would still have access to the back end to make any changes.</i>
 
 There is too much to explain regarding the MVC in ASP.NET that wouldn't be beneficial to include here, however Microsoft's [Documentation](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/controller-methods-views?view=aspnetcore-6.0) is a great resource to refer to.
 
-## Non-SA Back-End Controllers
+# Non-SA Back-End Controllers
 
 The controllers are inside `/Controllers` folder. Inside each controller are CRUD-based functions that act as GET, POST, PUT/PATCH, and DELETE requests.
 
@@ -385,13 +436,24 @@ The `value` is 1 because the `status` field inside the Ticket object is an enum 
 
 The DELETE requests should work with just the specific `id` provisioned for the desired objects.
 
-## Navigation Menu
+# Navigation Menu
 
 The navigation menu for the ASP.NET side is included in the `/Areas/Identity/Pages/` directory, inside `_ManageNav.cshtml`
 
-## Improvements
+FontAwesome is used for the navigation menu icons.
 
- - ASP.NET "partials" can be used to reduce the amount of code between the pages since most pages have similar content.
- - Depending on what the client wants, fields can be added or removed from each of the individual pages.
- - Update the registration email styling sent to users.
- - Update ticket details.
+# Improvements
+
+- ASP.NET "partials" can be used to reduce the amount of duplicated code between the pages since most pages have similar content.
+- Depending on what the client wants, fields can be added or removed from each of the individual pages.
+- Update the html template that is used to send registration emails to users.
+- Currently, emails are being sent using a dummy Gmail account (chickadeeinvest@gmail.com) hard coded in `appsettings.Development.json`. To fix this, connect the web app to a production SMTP server; alternatively, bring back PR #62 and fix bug #69.
+  - PR #62 sets up the third container, `chickadee-smtp`, to send emails from the app.
+  - This PR has been tested to work well with some non-Gmail email providers such as iCloud.
+  - However, this PR was reverted due to the bug that prevented emails from `chickadee-smtp` from reaching Gmail Inbox.
+  - The issue is likely that Gmail might be rejecting emails from `chickadee-smtp`.
+- When creating a new ticket, add the ability to add images to the ticket. The backend has been setup, just need to connect it to react. Please refer to the ERD to see how images are related to tickets.
+- When displaying tickets, images should be displayed in the details page in a card (possibly inside a message)
+- Messaging/Commenting system should be implemented. The back end has been setup for this, however front end needs to be connected.
+- Reintroduce CI linter actions (PR #21 and #25). These PRs were reverted due to a large amount of effort required to migrate the existing codebase and some misconfiguration incorrectly modifying code, breaking the app. ESLint/Prettier configurations should be fine-tuned for them to be effective.
+  - Once configured properly, they will ensure consistent code style across the app, help developers avoid potential bugs, and guide them towards best practices.

@@ -17,7 +17,7 @@ import Page from "../components/common/Page";
 import Iconify from "../components/common/Iconify";
 import PageLoading from "../components/common/PageLoading";
 import useFetch, {usePost} from "../utils/fetch";
-import {accountUri, isMemberOf, SEVERITY, STATUS} from "../utils/constants";
+import {ACCOUNTS_API, formatDate, getApiTicketUri, isMemberOf, SEVERITY, STATUS} from "../utils/constants";
 import Label from "../components/common/Label";
 import useResponsive from "../utils/responsive";
 import {useState} from "react";
@@ -36,18 +36,18 @@ export default function TicketDetail() {
     const onFetch = () => {
         setLoadingCompleteButton(false);
     }
-    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(`/api/properties/${pid}/units/${uid}/tickets/${id}`, undefined,
+    const [ticket, errorTicket, loadingTicket, reloadTicket] = useFetch(getApiTicketUri(pid, uid, id), undefined,
         true, onFetch);
-    
+
     const onPost = () => {
         reloadTicket()
     }
-    const [respPatch, errorPatch, loadingPatch] = usePost(`/api/properties/${pid}/units/${uid}/tickets/${id}`,
+    const [respPatch, errorPatch, loadingPatch] = usePost(getApiTicketUri(pid, uid, id),
         undefined, patchTicket, onPost);
-    
-    const [account] = useFetch(accountUri);
+
+    const [account] = useFetch(ACCOUNTS_API);
     const showComplete = account ? isMemberOf(account.roles, ["SuperAdmin", "PropertyManager"]) : null;
-    
+
     const [loadingCompleteButton, setLoadingCompleteButton] = useState(false);
     const {createdOn, description, estimatedDate, problem, severity, status, closedDate} = ticket;
     const firstLoad = ticket.length === 0;
@@ -121,20 +121,20 @@ export default function TicketDetail() {
                                             <Stack direction={'row'} alignItems={'center'} gap={1}>
                                                 <Label sx={{fontWeight: 'normal'}}>
                                                     <div>
-                                                        Opened: <b>{new Date(createdOn).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                        Opened: <b>{formatDate(createdOn)}</b>
                                                     </div>
                                                 </Label>
                                                 {estimatedDate && !closedDate &&
                                                     <Label sx={{fontWeight: 'normal'}}>
                                                         <div>
-                                                            Estimated: <b>{new Date(estimatedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                            Estimated: <b>{formatDate(estimatedDate)}</b>
                                                         </div>
                                                     </Label>
                                                 }
                                                 {closedDate &&
                                                     <Label color={'primary'} sx={{fontWeight: 'normal'}}>
                                                         <div>
-                                                            Closed: <b>{new Date(closedDate).toLocaleDateString('en-CA', {dateStyle: 'medium'})}</b>
+                                                            Closed: <b>{formatDate(closedDate)}</b>
                                                         </div>
                                                     </Label>
                                                 }
@@ -181,8 +181,8 @@ export default function TicketDetail() {
                                             </Typography>
                                             {ticket.unit.propertyManager &&
                                                 <Tooltip enterTouchDelay={0}
-                                                    title={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
-                                                    arrow>
+                                                         title={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
+                                                         arrow>
                                                     <Avatar
                                                         alt={`${ticket.unit.propertyManager.firstName} ${ticket.unit.propertyManager.lastName}`}
                                                         src={ticket.unit.propertyManager.profilePicture ? `data:image/jpeg;base64,${ticket.unit.propertyManager.profilePicture}` : 'd'}/>

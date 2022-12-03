@@ -12,7 +12,7 @@ import * as React from "react";
 import {useNavigate} from "react-router-dom";
 import {LoadingButton} from "@mui/lab";
 import useFetch, {usePost} from "../../utils/fetch";
-import {getTicketsUri, SEVERITY} from "../../utils/constants";
+import {getApiTicketsUri, getTicketsUri, PROPERTIES_API, SEVERITY, UNITS_API} from "../../utils/constants";
 import Label from "../common/Label";
 import Iconify from "../common/Iconify";
 
@@ -32,12 +32,12 @@ export default function AddTicket({title, propertyId, unitId, open, handleClose}
     const [description, setDescription] = useState('');
     const [severity, setSeverity] = useState(0);
     const [ticket, setTicket] = useState(null);
-    const [properties, errorProperties, loadingProperties] = useFetch('/api/properties/');
-    const [units, errorUnits, loadingUnits] = useFetch('/api/units/');
+    const [properties, errorProperties, loadingProperties] = useFetch(PROPERTIES_API);
+    const [units, errorUnits, loadingUnits] = useFetch(UNITS_API);
     if (!propertyId) propertyId = properties.length > 0 ? properties[0].propertyId : null;
     if (!unitId) unitId = units.length > 0 ? units[0].unitId : null;
     if (!title) title = units.length > 0 ? units[0].unitNo : null;
-    const [resp, error, loading] = usePost(propertyId && unitId ? `/api/properties/${propertyId}/units/${unitId}/tickets` : null, ticket)
+    const [resp, error, loading] = usePost(propertyId && unitId ? getApiTicketsUri(propertyId, unitId) : null, ticket)
     const navigate = useNavigate();
 
     const handleAdd = () => {
@@ -111,7 +111,8 @@ export default function AddTicket({title, propertyId, unitId, open, handleClose}
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
                 <LoadingButton loading={loading} disabled={description === '' || problem === '' || resp.ticketId}
-                               onClick={handleAdd}>{resp.ticketId ? <Iconify icon="akar-icons:check"/> : 'Add'}</LoadingButton>
+                               onClick={handleAdd}>{resp.ticketId ?
+                    <Iconify icon="akar-icons:check"/> : 'Add'}</LoadingButton>
             </DialogActions>
         </Dialog>
     )

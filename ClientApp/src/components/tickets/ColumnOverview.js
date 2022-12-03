@@ -5,10 +5,10 @@ import {useSearchParams} from "react-router-dom";
 import useFilter from "../../utils/filter";
 import {
     filterProperties, filterTicket,
-    filterUnit, getPropertiesUri, getTicketsUri, getUnitsUri,
-    propertyProperties,
-    ticketProperties,
-    unitProperties
+    filterUnit, getApiTicketsUri, getApiUnitsUri, getTicketsUri,
+    PROPERTY_PROPS,
+    TICKET_PROPS,
+    UNIT_PROPS
 } from "../../utils/constants";
 import useFetch from "../../utils/fetch";
 import SimpleList from "./SimpleList";
@@ -39,23 +39,23 @@ export default function ColumnOverview() {
 
     const [propertySearchParams,
         propertyOrderBy, propertySetOrderBy, propertyHandleOrderByChange,
-        propertyOrder, propertySetOrder, propertyHandleOrderChange] = useFilter(propertyProperties);
+        propertyOrder, propertySetOrder, propertyHandleOrderChange] = useFilter(PROPERTY_PROPS);
 
     const [unitSearchParams,
         unitOrderBy, unitSetOrderBy, unitHandleOrderByChange,
-        unitOrder, unitSetOrder, unitHandleOrderChange] = useFilter(unitProperties);
+        unitOrder, unitSetOrder, unitHandleOrderChange] = useFilter(UNIT_PROPS);
 
     const [ticketSearchParams,
         ticketOrderBy, ticketSetOrderBy, ticketHandleOrderByChange,
-        ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(ticketProperties);
+        ticketOrder, ticketSetOrder, ticketHandleOrderChange] = useFilter(TICKET_PROPS);
 
     const [properties, errorProperties, loadingProperties] = useFetch('/api/properties?' + propertySearchParams.toString(), filterProperties, undefined,
         mobileReadyRefresh, resetOnNull);
     const [units, errorUnits, loadingUnits] = useFetch(selectedPropertyId ?
-            `/api/properties/${selectedPropertyId}/units?` + unitSearchParams.toString() : null, filterUnit, undefined,
+            getApiUnitsUri(selectedPropertyId) + '?' + unitSearchParams.toString() : null, filterUnit, undefined,
         mobileReadyRefresh, resetOnNull);
     const [tickets, errorTickets, loadingTickets] = useFetch(selectedUnitId && selectedPropertyId ?
-            `/api/properties/${selectedPropertyId}/units/${selectedUnitId}/tickets?` + ticketSearchParams.toString() : null, filterTicket, undefined,
+            getApiTicketsUri(selectedPropertyId, selectedUnitId) + '?' + ticketSearchParams.toString() : null, filterTicket, undefined,
         mobileReadyRefresh, resetOnNull);
 
     const loadingData = loadingProperties || loadingUnits || loadingTickets;
@@ -69,10 +69,10 @@ export default function ColumnOverview() {
 
     const selectedProperty = getItem(properties, selectedPropertyId)
     const selectedUnit = getItem(units, selectedUnitId)
-    
+
     useEffect(() => {
-        let propertyId = searchParams.get('property')
-        let unitId = searchParams.get('unit')
+        let propertyId = searchParams.get('pid')
+        let unitId = searchParams.get('uid')
         if (propertyId) setSelectedPropertyId(propertyId)
         if (unitId) setSelectedUnitId(unitId)
     }, [])
@@ -83,8 +83,8 @@ export default function ColumnOverview() {
 
     useEffect(() => {
         let newSearchParams = new URLSearchParams();
-        if (selectedPropertyId) newSearchParams.set('property', selectedPropertyId);
-        if (selectedUnitId) newSearchParams.set('unit', selectedUnitId)
+        if (selectedPropertyId) newSearchParams.set('pid', selectedPropertyId);
+        if (selectedUnitId) newSearchParams.set('uid', selectedUnitId)
         if (!firstLoad) setSearchParams(newSearchParams)
     }, [selectedPropertyId, selectedUnitId])
 
@@ -126,20 +126,20 @@ export default function ColumnOverview() {
         <SimpleList key={isDesktop ? "sl-1" : undefined} leftRound items={properties} title={"Properties"}
                     setSelectedId={getSelect(false, setSelectedPropertyId)}
                     selectedId={selectedPropertyId}
-                    isDesktop={isDesktop} properties={propertyProperties} initialSort={propertyProperties[0].id}
+                    isDesktop={isDesktop} properties={PROPERTY_PROPS} initialSort={PROPERTY_PROPS[0].id}
                     loading={loadingProperties}
                     setOrderBy={propertySetOrderBy} order={propertyOrder} setOrder={propertySetOrder}/>,
         <SimpleList key={isDesktop ? "sl-2" : undefined} noRound skinny items={selectedPropertyId ?
             units : []}
                     title={"Units"} setNestedSelect={getSelect(true, setSelectedPropertyId)} path={path}
                     setSelectedId={getSelect(false, setSelectedUnitId)} selectedId={selectedUnitId}
-                    isDesktop={isDesktop} properties={unitProperties}
+                    isDesktop={isDesktop} properties={UNIT_PROPS}
                     loading={loadingUnits}
                     setOrderBy={unitSetOrderBy} order={unitOrder} setOrder={unitSetOrder}/>,
         <SimpleList key={isDesktop ? "sl-3" : undefined} rightRound immediateClick items={selectedUnitId ? tickets : []}
                     title={"Tickets"} setNestedSelect={getSelect(true, setSelectedUnitId)} path={path}
                     setSelectedId={setSelectedTicketId} selectedId={selectedTicketId}
-                    isDesktop={isDesktop} properties={ticketProperties}
+                    isDesktop={isDesktop} properties={TICKET_PROPS}
                     loading={loadingTickets} uri={getTicketsUri}
                     setOrderBy={ticketSetOrderBy} order={ticketOrder} setOrder={ticketSetOrder}
                     addComponent={selectedUnitId && selectedPropertyId ?

@@ -17,7 +17,7 @@ import NoItems from "../common/NoItems";
 /**
  * Generic widget component for dashboard.
  * @param title {string} Title of widget.
- * @param uri {string} URI string.
+ * @param uri {(a:object)=>string} URI method from utils/constants.js.
  * @param total {number} Count of items.
  * @param items {[object]} Array of items.
  * @param icon {string} Iconify icon string.

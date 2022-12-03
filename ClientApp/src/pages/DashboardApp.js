@@ -7,13 +7,13 @@ import {Link} from "react-router-dom";
 import PageLoading from "../components/common/PageLoading";
 import * as React from "react";
 import {
-    accountUri,
+    ACCOUNTS_API,
     filterProperties,
     filterTicket,
     filterUnit,
     getPropertiesUri,
     getTicketsUri,
-    getUnitsUri, isMemberOf, propertyUri, ticketUri, unitUri
+    getUnitsUri, isMemberOf, PROPERTIES_API, TICKETS_API, UNITS_API
 } from "../utils/constants";
 import AddTicket from "../components/overlay/AddTicket";
 import Widget from "../components/dashboard/Widget";
@@ -22,11 +22,11 @@ import UserWidget from "../components/dashboard/UserWidget";
 
 export default function DashboardApp() {
 
-    const [tickets, ticketsError, ticketsLoading] = useFetch(ticketUri, filterTicket);
-    const [units, unitsError, unitsLoading] = useFetch(unitUri, filterUnit);
-    const [properties, propertiesError, propertiesLoading] = useFetch(propertyUri + '?sort=desc&param=open_count', filterProperties);
+    const [tickets, ticketsError, ticketsLoading] = useFetch(TICKETS_API, filterTicket);
+    const [units, unitsError, unitsLoading] = useFetch(UNITS_API, filterUnit);
+    const [properties, propertiesError, propertiesLoading] = useFetch(PROPERTIES_API + '?sort=desc&param=open_count', filterProperties);
 
-    const [account, accountError, accountLoading] = useFetch(accountUri);
+    const [account, accountError, accountLoading] = useFetch(ACCOUNTS_API);
 
     const userLoading = accountLoading
     const loadingData = ticketsLoading && unitsLoading && propertiesLoading && userLoading
